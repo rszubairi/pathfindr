@@ -5,6 +5,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   variant?: 'primary' | 'secondary' | 'ghost' | 'link';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
+  asChild?: boolean;
   children: React.ReactNode;
 }
 
@@ -12,6 +13,7 @@ export function Button({
   variant = 'primary',
   size = 'md',
   isLoading = false,
+  asChild = false,
   className,
   children,
   disabled,
@@ -32,14 +34,23 @@ export function Button({
     lg: 'px-8 py-4 text-lg',
   };
 
+  const classNames = cn(
+    baseStyles,
+    variants[variant],
+    sizes[size],
+    className
+  );
+
+  // If asChild is true, clone the child element and apply button classes
+  if (asChild && React.isValidElement(children)) {
+    return React.cloneElement(children as React.ReactElement<any>, {
+      className: cn(classNames, (children as React.ReactElement<any>).props.className),
+    });
+  }
+
   return (
     <button
-      className={cn(
-        baseStyles,
-        variants[variant],
-        sizes[size],
-        className
-      )}
+      className={classNames}
       disabled={disabled || isLoading}
       {...props}
     >

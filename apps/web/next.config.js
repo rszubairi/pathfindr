@@ -11,9 +11,6 @@ const nextConfig = {
       },
     ],
   },
-  experimental: {
-    serverActions: true,
-  },
   // Environment variables
   env: {
     NEXT_PUBLIC_APP_NAME: 'Pathfindr',

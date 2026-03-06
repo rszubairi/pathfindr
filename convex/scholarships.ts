@@ -32,6 +32,40 @@ export const createOrUpdate = mutation({
     },
 });
 
+export const createMany = mutation({
+    args: {
+        data: v.array(v.object({
+            university: v.string(),
+            title: v.string(),
+            requirements: v.string(),
+            criteria: v.string(),
+            timePeriod: v.string(),
+            documentsNeeded: v.array(v.string()),
+            applicationLink: v.string(),
+            sourceUrl: v.string(),
+            lastUpdated: v.string(),
+            category: v.optional(v.string()),
+            amount: v.optional(v.string()),
+        }))
+    },
+    handler: async (ctx, args) => {
+        for (const item of args.data) {
+            const existing = await ctx.db
+                .query("scholarships")
+                .withIndex("by_university", (q) => q.eq("university", item.university))
+                .filter((q) => q.eq(q.field("title"), item.title))
+                .first();
+
+            if (existing) {
+                await ctx.db.patch(existing._id, item);
+            } else {
+                await ctx.db.insert("scholarships", item);
+            }
+        }
+        return args.data.length;
+    },
+});
+
 export const getByUniversity = query({
     args: { university: v.string() },
     handler: async (ctx, args) => {

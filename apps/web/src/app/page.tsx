@@ -1,98 +1,115 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, Award, Building2, Briefcase, GraduationCap } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import { MainLayout } from '@/components/layout/MainLayout';
+import { HeroSection } from '@/components/home/HeroSection';
+import { StatsSection } from '@/components/home/StatsSection';
+import { FeaturesSection } from '@/components/home/FeaturesSection';
+import { HowItWorksSection } from '@/components/home/HowItWorksSection';
+import { TestimonialsSection } from '@/components/home/TestimonialsSection';
+import { Container } from '@/components/ui/Container';
+import { Button } from '@/components/ui/Button';
+import { ScholarshipCard } from '@/components/scholarships/ScholarshipCard';
+import { mockScholarships } from '@/lib/mockData';
+
+export const metadata: Metadata = {
+  title: 'Pathfindr - Your Path to Global Educational Opportunities',
+  description:
+    'Connect with thousands of scholarships, universities, internships, and job opportunities across Southeast Asia and beyond. Start your educational journey today.',
+  keywords: [
+    'scholarships',
+    'study abroad',
+    'international education',
+    'Southeast Asia',
+    'student opportunities',
+    'university programs',
+    'internships',
+  ],
+  openGraph: {
+    title: 'Pathfindr - Your Path to Global Educational Opportunities',
+    description:
+      'Connect with thousands of scholarships, universities, internships, and job opportunities across Southeast Asia and beyond.',
+    type: 'website',
+  },
+};
 
 export default function HomePage() {
+  // Get featured scholarships (top 4 by value)
+  const featuredScholarships = mockScholarships
+    .filter((s) => s.status === 'active')
+    .sort((a, b) => b.value - a.value)
+    .slice(0, 4);
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+    <MainLayout>
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-20">
-        <div className="text-center max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-            Your Path to Global{' '}
-            <span className="text-primary-600">Educational Opportunities</span>
-          </h1>
-          <p className="text-xl text-gray-600 mb-8">
-            Connect with scholarships, university programmes, internships, and jobs across
-            Southeast Asia and beyond
-          </p>
-          <div className="flex gap-4 justify-center">
-            <Link
-              href="/register"
-              className="px-8 py-4 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition flex items-center gap-2"
-            >
-              Get Started
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-            <Link
-              href="/login"
-              className="px-8 py-4 border-2 border-primary-600 text-primary-600 rounded-lg font-semibold hover:bg-primary-50 transition"
-            >
-              Sign In
-            </Link>
-          </div>
-        </div>
-      </section>
+      <HeroSection />
+
+      {/* Stats Section */}
+      <StatsSection />
+
+      {/* How It Works Section */}
+      <HowItWorksSection />
 
       {/* Features Section */}
-      <section className="container mx-auto px-4 py-20">
-        <h2 className="text-3xl font-bold text-center mb-12">What We Offer</h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <FeatureCard
-            icon={<Award className="w-12 h-12 text-primary-600" />}
-            title="Scholarships"
-            description="Discover and apply for scholarships from governments, universities, and organizations"
-          />
-          <FeatureCard
-            icon={<GraduationCap className="w-12 h-12 text-primary-600" />}
-            title="University Programs"
-            description="Explore degree programmes from top universities worldwide"
-          />
-          <FeatureCard
-            icon={<Briefcase className="w-12 h-12 text-primary-600" />}
-            title="Internships"
-            description="Find internship opportunities to kickstart your career"
-          />
-          <FeatureCard
-            icon={<Building2 className="w-12 h-12 text-primary-600" />}
-            title="Graduate Jobs"
-            description="Access entry-level positions and graduate programmes"
-          />
-        </div>
+      <FeaturesSection />
+
+      {/* Featured Scholarships Section */}
+      <section className="py-20 bg-white">
+        <Container size="xl">
+          {/* Section Header */}
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              Featured Scholarships
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Explore our top scholarship opportunities. These high-value scholarships are currently
+              accepting applications.
+            </p>
+          </div>
+
+          {/* Scholarships Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+            {featuredScholarships.map((scholarship) => (
+              <ScholarshipCard key={scholarship.id} scholarship={scholarship} />
+            ))}
+          </div>
+
+          {/* View All Button */}
+          <div className="text-center">
+            <Button asChild variant="primary" size="lg">
+              <Link href="/scholarships" className="flex items-center gap-2">
+                View All Scholarships
+                <ArrowRight className="h-5 w-5" />
+              </Link>
+            </Button>
+          </div>
+        </Container>
       </section>
+
+      {/* Testimonials Section */}
+      <TestimonialsSection />
 
       {/* CTA Section */}
-      <section className="bg-primary-600 text-white py-16">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Start Your Journey?</h2>
-          <p className="text-xl mb-8">
-            Create your profile today and unlock access to thousands of opportunities
-          </p>
-          <Link
-            href="/register"
-            className="inline-block px-8 py-4 bg-white text-primary-600 rounded-lg font-semibold hover:bg-gray-100 transition"
-          >
-            Create Free Account
-          </Link>
-        </div>
+      <section className="py-20 bg-gradient-to-r from-primary-600 to-secondary-600 text-white">
+        <Container size="xl">
+          <div className="text-center max-w-3xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">Ready to Start Your Journey?</h2>
+            <p className="text-xl mb-8 text-primary-50">
+              Create your profile today and unlock access to thousands of opportunities. Join our
+              community of successful students achieving their dreams.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild variant="secondary" size="lg" className="bg-white text-primary-600 hover:bg-gray-100">
+                <Link href="/register">Create Free Account</Link>
+              </Button>
+              <Button asChild variant="ghost" size="lg" className="text-white border-2 border-white hover:bg-white/10">
+                <Link href="/scholarships">Browse Scholarships</Link>
+              </Button>
+            </div>
+          </div>
+        </Container>
       </section>
-    </div>
-  );
-}
-
-function FeatureCard({
-  icon,
-  title,
-  description,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-}) {
-  return (
-    <div className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition">
-      <div className="mb-4">{icon}</div>
-      <h3 className="text-xl font-semibold mb-2">{title}</h3>
-      <p className="text-gray-600">{description}</p>
-    </div>
+    </MainLayout>
   );
 }
