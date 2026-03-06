@@ -5,7 +5,10 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(npm run dev:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(npx convex dev:*)",
+      "Bash(/Users/raheelzubairi/Documents/projects/pathfindr/convex/schema.ts:*)",
+      "Bash(/Users/raheelzubairi/Documents/projects/pathfindr/convex/scholarships.ts:*)"
     ]
   }
 }

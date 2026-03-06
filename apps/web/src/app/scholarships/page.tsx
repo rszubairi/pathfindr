@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/Button';
 import { ScholarshipList } from '@/components/scholarships/ScholarshipList';
 import { ScholarshipFilters } from '@/components/scholarships/ScholarshipFilters';
 import { ScholarshipSearch } from '@/components/scholarships/ScholarshipSearch';
-import { useScholarshipSearch } from '@/lib/queries';
+import { useScholarshipSearch } from '@/lib/convexQueries';
 import type { ScholarshipFilters as Filters } from '@/types';
 
 const ITEMS_PER_PAGE = 20;
@@ -21,7 +21,17 @@ export default function ScholarshipsPage() {
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
   // Fetch scholarships with search and filters
-  const { data: scholarships = [], isLoading } = useScholarshipSearch(searchQuery, filters);
+  const { data: scholarshipsData = [], isLoading } = useScholarshipSearch(searchQuery, filters);
+
+  // Convert Convex _id to id for compatibility
+  const scholarships = useMemo(
+    () =>
+      scholarshipsData.map((s: any) => ({
+        ...s,
+        id: s._id,
+      })),
+    [scholarshipsData]
+  );
 
   // Sort scholarships
   const sortedScholarships = useMemo(() => {

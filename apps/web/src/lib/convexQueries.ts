@@ -1,0 +1,126 @@
+import { useQuery as useConvexQuery } from 'convex/react';
+import { api } from '../../convex/_generated/api';
+import type { ScholarshipFilters } from '@/types';
+import { useMemo } from 'react';
+
+/**
+ * Hook to get all scholarships with optional filters
+ */
+export function useScholarships(filters?: ScholarshipFilters) {
+  // Get all scholarships from Convex
+  const scholarships = useConvexQuery(
+    api.scholarships.filter,
+    filters
+      ? {
+          countries: filters.countries,
+          fields: filters.fields,
+          providerTypes: filters.providerTypes,
+          minValue: filters.minValue,
+          maxValue: filters.maxValue,
+          deadlineWithinMonths: filters.deadlineWithinMonths,
+          status: 'active',
+        }
+      : { status: 'active' }
+  );
+
+  return {
+    data: scholarships || [],
+    isLoading: scholarships === undefined,
+    error: null,
+  };
+}
+
+/**
+ * Hook to search scholarships by query and apply filters
+ */
+export function useScholarshipSearch(query: string, filters?: ScholarshipFilters) {
+  // Get search results from Convex
+  const searchResults = useConvexQuery(api.scholarships.search, {
+    searchQuery: query,
+    status: 'active',
+  });
+
+  // Get filtered results if filters are provided
+  const filteredResults = useConvexQuery(
+    api.scholarships.filter,
+    filters
+      ? {
+          countries: filters.countries,
+          fields: filters.fields,
+          providerTypes: filters.providerTypes,
+          minValue: filters.minValue,
+          maxValue: filters.maxValue,
+          deadlineWithinMonths: filters.deadlineWithinMonths,
+          status: 'active',
+        }
+      : { status: 'active' }
+  );
+
+  // Combine search and filter results
+  const data = useMemo(() => {
+    if (!searchResults || !filteredResults) return [];
+
+    // If there's a search query, filter the search results by the filter criteria
+    if (query) {
+      const filteredIds = new Set(filteredResults.map((s) => s._id));
+      return searchResults.filter((s) => filteredIds.has(s._id));
+    }
+
+    // If no search query, just return filtered results
+    return filteredResults;
+  }, [searchResults, filteredResults, query]);
+
+  return {
+    data,
+    isLoading: searchResults === undefined || filteredResults === undefined,
+    error: null,
+  };
+}
+
+/**
+ * Hook to get a single scholarship by ID
+ */
+export function useScholarship(id: string) {
+  const scholarship = useConvexQuery(api.scholarships.getById, { id: id as any });
+
+  return {
+    data: scholarship,
+    isLoading: scholarship === undefined,
+    error: null,
+  };
+}
+
+/**
+ * Hook to get featured scholarships (highest value, active)
+ */
+export function useFeaturedScholarships(limit: number = 4) {
+  const scholarships = useConvexQuery(api.scholarships.list, {
+    status: 'active',
+    limit,
+  });
+
+  // Sort by value descending
+  const sortedScholarships = useMemo(() => {
+    if (!scholarships) return [];
+    return [...scholarships].sort((a, b) => b.value - a.value);
+  }, [scholarships]);
+
+  return {
+    data: sortedScholarships.slice(0, limit),
+    isLoading: scholarships === undefined,
+    error: null,
+  };
+}
+
+/**
+ * Hook to get scholarship statistics
+ */
+export function useScholarshipStats() {
+  const stats = useConvexQuery(api.scholarships.stats);
+
+  return {
+    data: stats,
+    isLoading: stats === undefined,
+    error: null,
+  };
+}

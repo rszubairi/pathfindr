@@ -1,18 +1,39 @@
-import { defineSchema, defineTable } from "convex/server";
-import { v } from "convex/values";
+import { defineSchema, defineTable } from 'convex/server';
+import { v } from 'convex/values';
 
 export default defineSchema({
-    scholarships: defineTable({
-        university: v.string(),
-        title: v.string(),
-        requirements: v.string(),
-        criteria: v.string(),
-        timePeriod: v.string(),
-        documentsNeeded: v.array(v.string()),
-        applicationLink: v.string(),
-        sourceUrl: v.string(),
-        lastUpdated: v.string(),
-        category: v.optional(v.string()), // e.g., 'Merit', 'Need-based', 'Sports'
-        amount: v.optional(v.string()),
-    }).index("by_university", ["university"]),
+  scholarships: defineTable({
+    name: v.string(),
+    provider: v.string(),
+    providerType: v.union(
+      v.literal('government'),
+      v.literal('university'),
+      v.literal('corporate'),
+      v.literal('ngo'),
+      v.literal('foundation'),
+      v.literal('individual')
+    ),
+    value: v.number(),
+    currency: v.string(),
+    eligibleFields: v.array(v.string()),
+    eligibleCountries: v.array(v.string()),
+    deadline: v.string(),
+    eligibilityCriteria: v.any(),
+    matchScore: v.optional(v.number()),
+    status: v.union(v.literal('active'), v.literal('closed'), v.literal('pending')),
+    createdAt: v.string(),
+    updatedAt: v.string(),
+  })
+    .index('by_status', ['status'])
+    .index('by_deadline', ['deadline'])
+    .index('by_value', ['value'])
+    .index('by_created_at', ['createdAt'])
+    .searchIndex('search_name', {
+      searchField: 'name',
+      filterFields: ['status'],
+    })
+    .searchIndex('search_provider', {
+      searchField: 'provider',
+      filterFields: ['status'],
+    }),
 });
