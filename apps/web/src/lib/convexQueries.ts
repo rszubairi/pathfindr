@@ -1,5 +1,5 @@
 import { useQuery as useConvexQuery } from 'convex/react';
-import { api } from '../../convex/_generated/api';
+import { api } from '../../../../convex/_generated/api';
 import type { ScholarshipFilters } from '@/types';
 import { useMemo } from 'react';
 
@@ -12,14 +12,14 @@ export function useScholarships(filters?: ScholarshipFilters) {
     api.scholarships.filter,
     filters
       ? {
-          countries: filters.countries,
-          fields: filters.fields,
-          providerTypes: filters.providerTypes,
-          minValue: filters.minValue,
-          maxValue: filters.maxValue,
-          deadlineWithinMonths: filters.deadlineWithinMonths,
-          status: 'active',
-        }
+        countries: filters.countries,
+        fields: filters.fields,
+        providerTypes: filters.providerTypes,
+        minValue: filters.minValue,
+        maxValue: filters.maxValue,
+        deadlineWithinMonths: filters.deadlineWithinMonths,
+        status: 'active',
+      }
       : { status: 'active' }
   );
 
@@ -45,14 +45,14 @@ export function useScholarshipSearch(query: string, filters?: ScholarshipFilters
     api.scholarships.filter,
     filters
       ? {
-          countries: filters.countries,
-          fields: filters.fields,
-          providerTypes: filters.providerTypes,
-          minValue: filters.minValue,
-          maxValue: filters.maxValue,
-          deadlineWithinMonths: filters.deadlineWithinMonths,
-          status: 'active',
-        }
+        countries: filters.countries,
+        fields: filters.fields,
+        providerTypes: filters.providerTypes,
+        minValue: filters.minValue,
+        maxValue: filters.maxValue,
+        deadlineWithinMonths: filters.deadlineWithinMonths,
+        status: 'active',
+      }
       : { status: 'active' }
   );
 
@@ -62,8 +62,8 @@ export function useScholarshipSearch(query: string, filters?: ScholarshipFilters
 
     // If there's a search query, filter the search results by the filter criteria
     if (query) {
-      const filteredIds = new Set(filteredResults.map((s) => s._id));
-      return searchResults.filter((s) => filteredIds.has(s._id));
+      const filteredIds = new Set(filteredResults.map((s: any) => s._id));
+      return searchResults.filter((s: any) => filteredIds.has(s._id));
     }
 
     // If no search query, just return filtered results

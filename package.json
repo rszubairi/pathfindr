@@ -16,7 +16,13 @@
     "build:backend": "npm run build --workspace=@pathfindr/backend",
     "lint": "npm run lint --workspaces",
     "test": "npm run test --workspaces",
-    "clean": "rm -rf node_modules && rm -rf apps/*/node_modules && rm -rf packages/*/node_modules"
+    "clean": "rm -rf node_modules && rm -rf apps/*/node_modules && rm -rf packages/*/node_modules",
+    "convex:dev": "npx convex dev",
+    "convex:deploy": "npx convex deploy",
+    "convex:seed": "npx convex run seed:seedScholarships"
+  },
+  "devDependencies": {
+    "convex": "^1.32.0"
   },
   "engines": {
     "node": ">=18.0.0",

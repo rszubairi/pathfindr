@@ -30,6 +30,16 @@ export interface Scholarship {
   updatedAt: string;
 }
 
+export interface ScholarshipFilters {
+  countries?: string[];
+  fields?: string[];
+  providerTypes?: string[];
+  minValue?: number;
+  maxValue?: number;
+  deadlineWithinMonths?: number;
+  status?: string;
+}
+
 // University Types
 export interface University {
   id: string;

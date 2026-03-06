@@ -75,7 +75,7 @@ export function ScholarshipFilters({
   const handleDeadlineChange = (months: number | null) => {
     onFiltersChange({
       ...filters,
-      deadlineWithinMonths: months === filters.deadlineWithinMonths ? null : months,
+      deadlineWithinMonths: (months === null || months === filters.deadlineWithinMonths) ? undefined : months,
     });
   };
 
