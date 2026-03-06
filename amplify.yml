@@ -3,14 +3,16 @@ frontend:
   phases:
     preBuild:
       commands:
-        # Only install dependencies for the web app and root constants
-        - npm install --workspace=@pathfindr/web --include-workspace-root --legacy-peer-deps
+        # Full install to ensure root tools like 'convex' are available
+        - npm install --legacy-peer-deps
+        # Generate Convex types so they are available for the Next.js build
+        - npx convex codegen
     build:
       commands:
         - npm run build:web
   artifacts:
-    # Deployment is isolated to ONLY the build output of the web application.
-    # Unnecessary folders like 'mobile' or 'scraper' are NOT included in the artifacts.
+    # Build output is strictly isolated to the web application.
+    # Unnecessary folders like 'mobile' or 'scraper' are NOT included in the final hosting package.
     baseDirectory: apps/web/.next
     files:
       - '**/*'
