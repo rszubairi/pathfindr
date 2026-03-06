@@ -1,0 +1,37 @@
+{
+  "name": "pathfindr-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pathfindr - Student Opportunity Platform",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev --workspace=@pathfindr/web",
+    "dev:mobile": "npm run start --workspace=@pathfindr/mobile",
+    "dev:backend": "npm run dev --workspace=@pathfindr/backend",
+    "build:web": "npm run build --workspace=@pathfindr/web",
+    "build:mobile": "npm run build --workspace=@pathfindr/mobile",
+    "build:backend": "npm run build --workspace=@pathfindr/backend",
+    "lint": "npm run lint --workspaces",
+    "test": "npm run test --workspaces",
+    "clean": "rm -rf node_modules && rm -rf apps/*/node_modules && rm -rf packages/*/node_modules"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "keywords": [
+    "pathfindr",
+    "student",
+    "scholarship",
+    "university",
+    "internship",
+    "job",
+    "opportunity",
+    "platform"
+  ],
+  "author": "Pathfindr Team",
+  "license": "UNLICENSED"
+}

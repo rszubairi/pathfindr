@@ -1,0 +1,113 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+*.tsbuildinfo
+
+# IDE and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+coverage/
+.nyc_output/
+*.lcov
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# React Native
+apps/mobile/.expo/
+apps/mobile/.expo-shared/
+apps/mobile/android/app/build/
+apps/mobile/ios/Pods/
+apps/mobile/ios/build/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+
+# Android
+apps/mobile/android/.gradle/
+apps/mobile/android/local.properties
+apps/mobile/android/.idea/
+apps/mobile/android/captures/
+apps/mobile/android/.externalNativeBuild
+apps/mobile/android/.cxx/
+
+# iOS
+apps/mobile/ios/Pods/
+apps/mobile/ios/**/*.pbxuser
+apps/mobile/ios/**/*.mode1v3
+apps/mobile/ios/**/*.mode2v3
+apps/mobile/ios/**/*.perspectivev3
+apps/mobile/ios/**/**/xcuserdata
+apps/mobile/ios/**/.idea/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Uploads
+uploads/
+public/uploads/
+
+# Cache
+.cache/
+.parcel-cache/
+.eslintcache
+
+# Documentation (generated)
+docs/api/generated/
+
+# Sensitive files
+*.pem
+*.key
+*.cert
+secrets/
+config/secrets.json
+
+# Package manager locks (keep only one)
+# Uncomment the one you're NOT using
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
