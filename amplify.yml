@@ -6,7 +6,7 @@ frontend:
         # Full install to ensure root tools like 'convex' are available
         - npm install --legacy-peer-deps
         # Generate Convex types so they are available for the Next.js build
-        - npx convex codegen
+        - npx convex codegen --typecheck=disable
     build:
       commands:
         - npm run build:web

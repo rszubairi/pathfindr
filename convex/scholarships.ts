@@ -4,7 +4,9 @@ import { v } from 'convex/values';
 // Get all scholarships with optional filters
 export const list = query({
   args: {
-    status: v.optional(v.string()),
+    status: v.optional(
+      v.union(v.literal('active'), v.literal('closed'), v.literal('pending'))
+    ),
     limit: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
@@ -38,7 +40,9 @@ export const getById = query({
 export const search = query({
   args: {
     searchQuery: v.string(),
-    status: v.optional(v.string()),
+    status: v.optional(
+      v.union(v.literal('active'), v.literal('closed'), v.literal('pending'))
+    ),
   },
   handler: async (ctx, args) => {
     if (!args.searchQuery) {
@@ -89,7 +93,9 @@ export const filter = query({
     minValue: v.optional(v.number()),
     maxValue: v.optional(v.number()),
     deadlineWithinMonths: v.optional(v.number()),
-    status: v.optional(v.string()),
+    status: v.optional(
+      v.union(v.literal('active'), v.literal('closed'), v.literal('pending'))
+    ),
   },
   handler: async (ctx, args) => {
     let scholarships = await ctx.db.query('scholarships').collect();
