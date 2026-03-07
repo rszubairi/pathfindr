@@ -1,4 +1,4 @@
-import { useQuery as useConvexQuery } from 'convex/react';
+import { useQuery as useConvexQuery, useMutation } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import type { ScholarshipFilters } from '@/types';
 import { useMemo } from 'react';
@@ -123,4 +123,11 @@ export function useScholarshipStats() {
     isLoading: stats === undefined,
     error: null,
   };
+}
+
+/**
+ * Hook to increment application count when user clicks "Apply Now"
+ */
+export function useIncrementApplicationCount() {
+  return useMutation(api.scholarships.incrementApplicationCount);
 }

@@ -24,6 +24,9 @@ export interface Scholarship {
   eligibleCountries: string[];
   deadline: string;
   eligibilityCriteria: Record<string, any>;
+  description?: string;
+  applicationUrl?: string;
+  applicationCount?: number;
   matchScore?: number;
   status: 'active' | 'closed' | 'pending';
   createdAt: string;

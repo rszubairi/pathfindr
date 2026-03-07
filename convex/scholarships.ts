@@ -249,6 +249,23 @@ export const update = mutation({
   },
 });
 
+// Increment application count when a user clicks "Apply Now"
+export const incrementApplicationCount = mutation({
+  args: { id: v.id('scholarships') },
+  handler: async (ctx, args) => {
+    const scholarship = await ctx.db.get(args.id);
+    if (!scholarship) throw new Error('Scholarship not found');
+
+    const currentCount = scholarship.applicationCount ?? 0;
+    await ctx.db.patch(args.id, {
+      applicationCount: currentCount + 1,
+      updatedAt: new Date().toISOString(),
+    });
+
+    return currentCount + 1;
+  },
+});
+
 // Delete a scholarship
 export const remove = mutation({
   args: { id: v.id('scholarships') },
