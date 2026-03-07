@@ -8,7 +8,10 @@
       "Bash(npm install:*)",
       "Bash(npx convex dev:*)",
       "Bash(/Users/raheelzubairi/Documents/projects/pathfindr/convex/schema.ts:*)",
-      "Bash(/Users/raheelzubairi/Documents/projects/pathfindr/convex/scholarships.ts:*)"
+      "Bash(/Users/raheelzubairi/Documents/projects/pathfindr/convex/scholarships.ts:*)",
+      "Bash(npx convex run:*)",
+      "Bash(/Users/raheelzubairi/Documents/projects/pathfindr/convex/seedData.ts:*)",
+      "Bash(/Users/raheelzubairi/Documents/projects/pathfindr/convex/seed.ts:*)"
     ]
   }
 }

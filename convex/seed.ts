@@ -1,4 +1,5 @@
 import { mutation } from './_generated/server';
+import { seedScholarships as scholarshipData } from './seedData';
 
 // This mutation will seed the database with initial scholarship data
 export const seedScholarships = mutation({
@@ -9,16 +10,10 @@ export const seedScholarships = mutation({
       return { message: 'Database already seeded', count: 0 };
     }
 
-    // Import mock data (we'll populate this from our mockData.ts)
-    const scholarships = await import('../apps/web/src/lib/mockData');
-    const mockScholarships = scholarships.mockScholarships;
-
     // Insert all scholarships
     const ids = [];
-    for (const scholarship of mockScholarships) {
-      // Remove the id field since Convex generates its own
-      const { id, ...scholarshipData } = scholarship as any;
-      const newId = await ctx.db.insert('scholarships', scholarshipData);
+    for (const scholarship of scholarshipData) {
+      const newId = await ctx.db.insert('scholarships', scholarship);
       ids.push(newId);
     }
 

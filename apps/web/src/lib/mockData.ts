@@ -1,4 +1,4 @@
-import type { Scholarship } from '@/types';
+import type { Scholarship } from '../types';
 
 /**
  * Mock scholarship data for development
@@ -331,21 +331,21 @@ export const filterScholarships = (
       s =>
         s.name.toLowerCase().includes(query) ||
         s.provider.toLowerCase().includes(query) ||
-        s.eligibleFields.some(f => f.toLowerCase().includes(query))
+        s.eligibleFields.some((f: string) => f.toLowerCase().includes(query))
     );
   }
 
   // Country filter
   if (filters.countries && filters.countries.length > 0) {
     filtered = filtered.filter(s =>
-      s.eligibleCountries.some(c => filters.countries!.includes(c))
+      s.eligibleCountries.some((c: string) => filters.countries!.includes(c))
     );
   }
 
   // Field filter
   if (filters.fields && filters.fields.length > 0) {
     filtered = filtered.filter(s =>
-      s.eligibleFields.some(f => filters.fields!.includes(f))
+      s.eligibleFields.some((f: string) => filters.fields!.includes(f))
     );
   }
 

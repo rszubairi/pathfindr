@@ -10,6 +10,7 @@
 
 import type * as scholarships from "../scholarships.js";
 import type * as seed from "../seed.js";
+import type * as seedData from "../seedData.js";
 
 import type {
   ApiFromModules,
@@ -20,6 +21,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   scholarships: typeof scholarships;
   seed: typeof seed;
+  seedData: typeof seedData;
 }>;
 
 /**
