@@ -19,7 +19,9 @@ const preferencesSchema = z.object({
 type PreferencesData = z.infer<typeof preferencesSchema>;
 
 interface Props {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onNext: (data: any) => void;
   onBack: () => void;
 }
@@ -89,6 +91,7 @@ export default function PreferencesForm({ data, onBack }: Props) {
         gender: data.personalDetails?.gender,
         nationality: data.personalDetails?.nationality,
         country: data.personalDetails?.country,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         education: (data.education || []).map((edu: any) => ({
           id: edu.id,
           institutionName: edu.institutionName,
@@ -112,12 +115,14 @@ export default function PreferencesForm({ data, onBack }: Props) {
             ? Number(data.testScores.gmat)
             : undefined,
         },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         certificates: (data.certificates || []).map((cert: any) => ({
           id: cert.id,
           title: cert.title,
           issuer: cert.issuer,
           dateIssued: cert.dateIssued,
         })),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         projects: (data.projects || []).map((proj: any) => ({
           id: proj.id,
           title: proj.title,
@@ -136,8 +141,9 @@ export default function PreferencesForm({ data, onBack }: Props) {
       await markProfileCompleted({ userId: userId as Id<'users'> });
 
       router.push('/scholarships');
-    } catch (err: any) {
-      setError(err.message || 'Failed to save profile. Please try again.');
+    } catch (err: unknown) {
+      const error = err as Error;
+      setError(error.message || 'Failed to save profile. Please try again.');
     } finally {
       setIsSubmitting(false);
     }

@@ -30,7 +30,9 @@ const educationSchema = z.object({
 type EducationData = z.infer<typeof educationSchema>;
 
 interface Props {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onNext: (data: any) => void;
   onBack: () => void;
 }

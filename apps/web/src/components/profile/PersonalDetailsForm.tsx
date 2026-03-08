@@ -16,7 +16,9 @@ const personalDetailsSchema = z.object({
 type PersonalDetailsData = z.infer<typeof personalDetailsSchema>;
 
 interface Props {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onNext: (data: any) => void;
   onBack: () => void;
   isFirstStep: boolean;

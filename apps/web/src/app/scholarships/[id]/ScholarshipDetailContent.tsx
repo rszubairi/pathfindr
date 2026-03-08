@@ -44,6 +44,7 @@ export function ScholarshipDetailContent() {
 
         // Increment application count
         try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             await incrementCount({ id: id as any });
         } catch {
             // Silently fail - don't block the user from applying
