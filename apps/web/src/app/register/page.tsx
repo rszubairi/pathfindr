@@ -59,7 +59,8 @@ export default function RegisterPage() {
         fullName: data.fullName,
         phone: data.phone,
       });
-      router.push('/register/check-email');
+      // Bypassing check-email screen for development
+      router.push('/login?registered=true');
     } catch (err) {
       const error = err as Error;
       setError(error.message || 'Registration failed. Please try again.');

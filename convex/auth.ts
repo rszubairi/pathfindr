@@ -56,7 +56,7 @@ export const createUser = mutation({
       fullName: args.fullName,
       phone: args.phone,
       role: 'student',
-      emailVerified: false,
+      emailVerified: true,
       verificationToken: args.verificationToken,
       tokenExpiry,
       profileCompleted: false,

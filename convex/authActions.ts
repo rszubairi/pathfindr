@@ -106,9 +106,12 @@ export const loginUser = action({
       throw new Error('Invalid email or password');
     }
 
+    // Email verification check bypassed for development
+    /*
     if (!user.emailVerified) {
       throw new Error('Please verify your email before logging in');
     }
+    */
 
     const token = jwt.sign(
       {
