@@ -12,7 +12,8 @@
       "Bash(npx convex run:*)",
       "Bash(/Users/raheelzubairi/Documents/projects/pathfindr/convex/seedData.ts:*)",
       "Bash(/Users/raheelzubairi/Documents/projects/pathfindr/convex/seed.ts:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(pkill:*)"
     ]
   }
 }

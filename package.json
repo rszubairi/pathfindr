@@ -22,6 +22,8 @@
     "convex:seed": "npx convex run seed:seedScholarships"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "convex": "^1.32.0"
   },
   "engines": {
@@ -39,5 +41,10 @@
     "platform"
   ],
   "author": "Pathfindr Team",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "jsonwebtoken": "^9.0.3",
+    "resend": "^6.9.3"
+  }
 }

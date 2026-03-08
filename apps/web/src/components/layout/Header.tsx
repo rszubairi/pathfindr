@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { GraduationCap, Menu, X } from 'lucide-react';
+import { GraduationCap, Menu, X, ChevronDown, User, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/useAuth';
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -17,7 +18,10 @@ const navigation = [
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+  const { user, isAuthenticated, logout } = useAuth();
 
   // Handle scroll effect
   useEffect(() => {
@@ -33,6 +37,20 @@ export function Header() {
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [pathname]);
+
+  // Close user menu on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        userMenuRef.current &&
+        !userMenuRef.current.contains(event.target as Node)
+      ) {
+        setUserMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
@@ -90,12 +108,58 @@ export function Header() {
 
           {/* Auth Buttons - Desktop */}
           <div className="hidden md:flex md:items-center md:gap-4">
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="/login">Sign In</Link>
-            </Button>
-            <Button variant="primary" size="sm" asChild>
-              <Link href="/register">Get Started</Link>
-            </Button>
+            {isAuthenticated && user ? (
+              <div className="relative" ref={userMenuRef}>
+                <button
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition"
+                >
+                  <div className="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center text-white font-medium text-sm">
+                    {user.fullName.charAt(0).toUpperCase()}
+                  </div>
+                  <span className="text-sm font-medium text-gray-900 max-w-[120px] truncate">
+                    {user.fullName}
+                  </span>
+                  <ChevronDown className={cn('w-4 h-4 text-gray-600 transition-transform', userMenuOpen && 'rotate-180')} />
+                </button>
+
+                {userMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+                    <div className="px-4 py-2 border-b border-gray-100">
+                      <p className="text-sm font-medium text-gray-900 truncate">{user.fullName}</p>
+                      <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                    </div>
+                    <Link
+                      href="/profile/complete"
+                      className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                      onClick={() => setUserMenuOpen(false)}
+                    >
+                      <User className="w-4 h-4" />
+                      My Profile
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setUserMenuOpen(false);
+                        logout();
+                      }}
+                      className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link href="/login">Sign In</Link>
+                </Button>
+                <Button variant="primary" size="sm" asChild>
+                  <Link href="/register">Get Started</Link>
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -169,12 +233,42 @@ export function Header() {
 
               {/* Auth Buttons - Mobile */}
               <div className="p-4 border-t space-y-3">
-                <Button variant="secondary" size="md" className="w-full" asChild>
-                  <Link href="/login">Sign In</Link>
-                </Button>
-                <Button variant="primary" size="md" className="w-full" asChild>
-                  <Link href="/register">Get Started</Link>
-                </Button>
+                {isAuthenticated && user ? (
+                  <>
+                    <div className="flex items-center gap-3 px-4 py-2 mb-2">
+                      <div className="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center text-white font-medium">
+                        {user.fullName.charAt(0).toUpperCase()}
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">{user.fullName}</p>
+                        <p className="text-xs text-gray-500">{user.email}</p>
+                      </div>
+                    </div>
+                    <Button variant="secondary" size="md" className="w-full" asChild>
+                      <Link href="/profile/complete">My Profile</Link>
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="md"
+                      className="w-full text-red-600"
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        logout();
+                      }}
+                    >
+                      Sign Out
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button variant="secondary" size="md" className="w-full" asChild>
+                      <Link href="/login">Sign In</Link>
+                    </Button>
+                    <Button variant="primary" size="md" className="w-full" asChild>
+                      <Link href="/register">Get Started</Link>
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </div>

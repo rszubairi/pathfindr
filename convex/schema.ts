@@ -39,4 +39,83 @@ export default defineSchema({
       searchField: 'provider',
       filterFields: ['status'],
     }),
+
+  users: defineTable({
+    email: v.string(),
+    passwordHash: v.string(),
+    fullName: v.string(),
+    phone: v.string(),
+    role: v.union(
+      v.literal('student'),
+      v.literal('institution'),
+      v.literal('philanthropist'),
+      v.literal('admin')
+    ),
+    emailVerified: v.boolean(),
+    verificationToken: v.optional(v.string()),
+    tokenExpiry: v.optional(v.number()),
+    profileCompleted: v.boolean(),
+    createdAt: v.string(),
+    updatedAt: v.string(),
+  })
+    .index('by_email', ['email'])
+    .index('by_verification_token', ['verificationToken']),
+
+  academicProfiles: defineTable({
+    userId: v.id('users'),
+    dateOfBirth: v.optional(v.string()),
+    gender: v.optional(v.string()),
+    nationality: v.optional(v.string()),
+    country: v.optional(v.string()),
+    education: v.array(
+      v.object({
+        id: v.string(),
+        institutionName: v.string(),
+        qualificationTitle: v.string(),
+        fieldOfStudy: v.string(),
+        startDate: v.string(),
+        endDate: v.optional(v.string()),
+        grade: v.optional(v.string()),
+        gpa: v.optional(v.number()),
+      })
+    ),
+    testScores: v.object({
+      sat: v.optional(v.number()),
+      ielts: v.optional(v.number()),
+      toefl: v.optional(v.number()),
+      gre: v.optional(v.number()),
+      gmat: v.optional(v.number()),
+    }),
+    certificates: v.array(
+      v.object({
+        id: v.string(),
+        title: v.string(),
+        issuer: v.string(),
+        dateIssued: v.string(),
+      })
+    ),
+    projects: v.array(
+      v.object({
+        id: v.string(),
+        title: v.string(),
+        description: v.string(),
+        technologies: v.array(v.string()),
+        startDate: v.string(),
+        endDate: v.optional(v.string()),
+      })
+    ),
+    skills: v.array(v.string()),
+    interests: v.array(v.string()),
+    preferredCountries: v.array(v.string()),
+    availability: v.optional(v.string()),
+    profileStatus: v.union(
+      v.literal('incomplete'),
+      v.literal('pending_review'),
+      v.literal('verified')
+    ),
+    createdAt: v.string(),
+    updatedAt: v.string(),
+  })
+    .index('by_user_id', ['userId'])
+    .index('by_profile_status', ['profileStatus']),
 });

@@ -13,7 +13,7 @@ frontend:
   artifacts:
     # Build output is strictly isolated to the web application.
     # Unnecessary folders like 'mobile' or 'scraper' are NOT included in the final hosting package.
-    baseDirectory: apps/web/.next
+    baseDirectory: apps/web/out
     files:
       - '**/*'
   cache:
