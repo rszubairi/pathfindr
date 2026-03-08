@@ -28,9 +28,11 @@ export function useMediaQuery(query: string): boolean {
 
     const media = window.matchMedia(query);
 
-    // Set initial value
+    // Set initial value asynchronously to avoid cascading renders
     if (media.matches !== matches) {
-      setMatches(media.matches);
+      setTimeout(() => {
+        setMatches(media.matches);
+      }, 0);
     }
 
     // Create event listener

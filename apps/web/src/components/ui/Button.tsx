@@ -42,8 +42,11 @@ export function Button({
   );
 
   // If asChild is true, clone the child element and apply button classes
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   if (asChild && React.isValidElement(children)) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return React.cloneElement(children as React.ReactElement<any>, {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       className: cn(classNames, (children as React.ReactElement<any>).props.className),
     });
   }

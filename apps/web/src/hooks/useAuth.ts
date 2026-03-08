@@ -10,13 +10,16 @@ import type { Id } from '../../../../convex/_generated/dataModel';
 
 export function useAuth() {
   const dispatch = useAppDispatch();
-  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
+  const { user } = useAppSelector((state) => state.auth);
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
 
   // Read userId from localStorage on mount (client-side only)
   useEffect(() => {
-    setUserId(localStorage.getItem('userId'));
+    // Avoid cascading renders by setting state asynchronously
+    setTimeout(() => {
+      setUserId(localStorage.getItem('userId'));
+    }, 0);
   }, []);
 
   // Query current user from Convex
