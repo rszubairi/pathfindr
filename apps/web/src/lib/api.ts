@@ -41,6 +41,7 @@ api.interceptors.response.use(
 export const authApi = {
   login: (email: string, password: string) =>
     api.post('/auth/login', { email, password }),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register: (data: any) => api.post('/auth/register', data),
   logout: () => api.post('/auth/logout'),
   getCurrentUser: () => api.get('/auth/me'),
@@ -48,6 +49,7 @@ export const authApi = {
 
 export const uapApi = {
   getProfile: () => api.get('/uap/profile'),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateProfile: (data: any) => api.put('/uap/profile', data),
   uploadDocument: (file: File) => {
     const formData = new FormData();
@@ -59,15 +61,19 @@ export const uapApi = {
 };
 
 export const scholarshipApi = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getAll: (params?: any) => api.get('/scholarships', { params }),
   getById: (id: string) => api.get(`/scholarships/${id}`),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   search: (query: string, filters?: any) =>
     api.post('/scholarships/search', { query, filters }),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   apply: (scholarshipId: string, data: any) =>
     api.post(`/scholarships/${scholarshipId}/apply`, data),
 };
 
 export const universityApi = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getAll: (params?: any) => api.get('/universities', { params }),
   getById: (id: string) => api.get(`/universities/${id}`),
   getProgrammes: (universityId: string) =>
@@ -76,8 +82,10 @@ export const universityApi = {
 };
 
 export const jobApi = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getAll: (params?: any) => api.get('/jobs', { params }),
   getById: (id: string) => api.get(`/jobs/${id}`),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   apply: (jobId: string, data: any) => api.post(`/jobs/${jobId}/apply`, data),
 };
 

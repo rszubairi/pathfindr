@@ -29,7 +29,9 @@ export function useMediaQuery(query: string): boolean {
     const media = window.matchMedia(query);
 
     // Set initial value
-    setMatches(media.matches);
+    if (media.matches !== matches) {
+      setMatches(media.matches);
+    }
 
     // Create event listener
     const listener = (event: MediaQueryListEvent) => {
