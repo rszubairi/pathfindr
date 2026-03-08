@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useMutation } from 'convex/react';
 import { api } from '../../../../../../convex/_generated/api';
 import { Card } from '@/components/ui/Card';
@@ -11,8 +11,10 @@ import { MainLayout } from '@/components/layout/MainLayout';
 import Link from 'next/link';
 import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
 
-export function VerifyEmailContent({ token }: { token: string }) {
+export function VerifyEmailContent() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const token = searchParams.get('token') || '';
     const [status, setStatus] = useState<'verifying' | 'success' | 'error'>(
         'verifying'
     );
@@ -22,6 +24,7 @@ export function VerifyEmailContent({ token }: { token: string }) {
     useEffect(() => {
         const verify = async () => {
             try {
+                if (!token) throw new Error('No token provided');
                 await verifyEmail({ token });
                 setStatus('success');
                 setTimeout(() => {

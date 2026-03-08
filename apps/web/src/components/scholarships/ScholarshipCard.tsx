@@ -18,8 +18,8 @@ export function ScholarshipCard({ scholarship, showMatchScore = false }: Scholar
   // Get badge variant based on deadline urgency
   const deadlineBadgeVariant =
     deadlineUrgency === 'urgent' ? 'danger' :
-    deadlineUrgency === 'soon' ? 'warning' :
-    'default';
+      deadlineUrgency === 'soon' ? 'warning' :
+        'default';
 
   // Show first 2 countries, then count
   const displayCountries = scholarship.eligibleCountries.slice(0, 2);
@@ -119,7 +119,7 @@ export function ScholarshipCard({ scholarship, showMatchScore = false }: Scholar
 
       <CardFooter className="pt-4">
         <Button asChild variant="primary" size="md" className="w-full">
-          <Link href={`/scholarships/${scholarship.id}`}>
+          <Link href={`/scholarships/detail?id=${scholarship.id}`}>
             View Details
           </Link>
         </Button>

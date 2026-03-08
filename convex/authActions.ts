@@ -15,12 +15,12 @@ async function sendEmail(email: string, fullName: string, token: string) {
   const resendApiKey = process.env.RESEND_API_KEY;
 
   if (!resendApiKey) {
-    console.log(`[DEV] Verification link: ${APP_URL}/verify-email/${token}`);
+    console.log(`[DEV] Verification link: ${APP_URL}/verify-email/confirm?token=${token}`);
     return;
   }
 
   const resend = new Resend(resendApiKey);
-  const verificationUrl = `${APP_URL}/verify-email/${token}`;
+  const verificationUrl = `${APP_URL}/verify-email/confirm?token=${token}`;
 
   await resend.emails.send({
     from: 'Pathfindr <onboarding@resend.dev>',

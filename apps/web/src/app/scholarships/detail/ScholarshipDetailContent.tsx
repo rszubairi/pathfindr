@@ -2,7 +2,7 @@
 
 import React, { useCallback } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import {
     ChevronRight,
     Building2,
@@ -29,8 +29,8 @@ import { Scholarship } from '@/types';
 import { formatCurrency, formatDate, isDeadlinePassed } from '@/lib/utils';
 
 export function ScholarshipDetailContent() {
-    const params = useParams();
-    const id = params.id as string;
+    const searchParams = useSearchParams();
+    const id = searchParams.get('id') || '';
 
     const { data: scholarship, isLoading } = useScholarship(id);
     const { data: relatedScholarships } = useFeaturedScholarships(4);
