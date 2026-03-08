@@ -11,14 +11,20 @@ export interface DeadlineCountdownProps {
 }
 
 export function DeadlineCountdown({ deadline, className }: DeadlineCountdownProps) {
+  const [now, setNow] = React.useState<number | null>(null);
+
+  React.useEffect(() => {
+    setNow(Date.now());
+  }, []);
+
   const urgency = getDeadlineUrgency(deadline);
   const passed = isDeadlinePassed(deadline);
   const relativeText = getRelativeDeadline(deadline);
 
   // Calculate days remaining
-  const daysLeft = Math.ceil(
-    (new Date(deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
-  );
+  const daysLeft = now ? Math.ceil(
+    (new Date(deadline).getTime() - now) / (1000 * 60 * 60 * 24)
+  ) : 0;
 
   const colorMap = {
     urgent: {

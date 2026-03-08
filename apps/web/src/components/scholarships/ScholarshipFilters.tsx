@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { X, ChevronDown, ChevronUp } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { cn } from '@/lib/utils';
 import { filterOptions } from '@/lib/mockData';

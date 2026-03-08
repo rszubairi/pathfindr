@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { X, ArrowUpDown } from 'lucide-react';
+import { X } from 'lucide-react';
 import { SearchInput } from '@/components/ui/SearchInput';
 import { Badge } from '@/components/ui/Badge';
 import type { ScholarshipFilters } from '@/types';
