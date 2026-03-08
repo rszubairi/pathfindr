@@ -1,5 +1,6 @@
 import { mutation } from './_generated/server';
 import { seedScholarships as scholarshipData } from './seedData';
+import { scrapedScholarships } from './seedDataScraped';
 
 // This mutation will seed the database with initial scholarship data
 export const seedScholarships = mutation({
@@ -10,9 +11,12 @@ export const seedScholarships = mutation({
       return { message: 'Database already seeded', count: 0 };
     }
 
+    // Combine original mock data and newly scraped data
+    const allScholarships = [...scholarshipData, ...scrapedScholarships];
+
     // Insert all scholarships
     const ids = [];
-    for (const scholarship of scholarshipData) {
+    for (const scholarship of allScholarships) {
       const newId = await ctx.db.insert('scholarships', scholarship);
       ids.push(newId);
     }
