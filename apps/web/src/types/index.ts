@@ -23,6 +23,7 @@ export interface Scholarship {
   eligibleFields: string[];
   eligibleCountries: string[];
   deadline: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   eligibilityCriteria: Record<string, any>;
   description?: string;
   applicationUrl?: string;
@@ -67,6 +68,7 @@ export interface Programme {
   tuitionFee: number;
   currency: string;
   intakeDates: string[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   entryRequirements: Record<string, any>;
   suitabilityScore?: number;
 }

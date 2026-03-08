@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import type { Scholarship } from '@/types';
 import { fetchMockScholarships, filterScholarships } from './mockData';
 
 /**

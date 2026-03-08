@@ -62,7 +62,9 @@ export function useScholarshipSearch(query: string, filters?: ScholarshipFilters
 
     // If there's a search query, filter the search results by the filter criteria
     if (query) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const filteredIds = new Set(filteredResults.map((s: any) => s._id));
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return searchResults.filter((s: any) => filteredIds.has(s._id));
     }
 
@@ -81,6 +83,7 @@ export function useScholarshipSearch(query: string, filters?: ScholarshipFilters
  * Hook to get a single scholarship by ID
  */
 export function useScholarship(id: string) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const scholarship = useConvexQuery(api.scholarships.getById, { id: id as any });
 
   return {

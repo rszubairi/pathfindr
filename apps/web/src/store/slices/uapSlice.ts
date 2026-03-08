@@ -26,8 +26,11 @@ interface UAP {
     address: string;
   };
   academicQualifications: AcademicQualification[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   activities: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   awards: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   portfolio: any[];
   careerPreferences: {
     interests: string[];

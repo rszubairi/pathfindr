@@ -20,7 +20,7 @@ export function formatCurrency(amount: number, currency: string = 'USD'): string
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(amount);
-  } catch (error) {
+  } catch {
     // Fallback if currency is not recognized
     return `${currency} ${amount.toLocaleString()}`;
   }
@@ -169,6 +169,7 @@ export function range(start: number, end: number, step: number = 1): number[] {
 /**
  * Debounce function execution
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function debounce<T extends (...args: any[]) => any>(
   func: T,
   wait: number
