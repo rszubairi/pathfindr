@@ -70,8 +70,9 @@ export default function LoginPage() {
       } else {
         router.push('/scholarships');
       }
-    } catch (err: any) {
-      setError(err.message || 'Login failed. Please try again.');
+    } catch (err) {
+      const error = err as Error;
+      setError(error.message || 'Login failed. Please try again.');
     } finally {
       setIsSubmitting(false);
     }

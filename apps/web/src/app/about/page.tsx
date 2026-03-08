@@ -78,7 +78,7 @@ export default function AboutPage() {
               About Pathfindr
             </h1>
             <p className="text-xl text-gray-600 leading-relaxed">
-              We're on a mission to empower students across Southeast Asia and beyond to access
+              We&apos;re on a mission to empower students across Southeast Asia and beyond to access
               world-class educational opportunities and achieve their dreams.
             </p>
           </div>
@@ -134,7 +134,7 @@ export default function AboutPage() {
                 <p>
                   Pathfindr was born from a simple observation: talented students across Southeast
                   Asia were missing out on life-changing educational opportunities simply because
-                  they didn't know they existed or didn't know how to access them.
+                  they didn&apos;t know they existed or didn&apos;t know how to access them.
                 </p>
                 <p>
                   Our founders, themselves beneficiaries of international scholarships, experienced
@@ -145,11 +145,11 @@ export default function AboutPage() {
                 <p>
                   In 2022, we set out to change this. We built Pathfindr as a centralized platform
                   where students could discover, track, and apply for educational opportunities from
-                  around the world. Today, we've helped thousands of students secure scholarships
+                  around the world. Today, we&apos;ve helped thousands of students secure scholarships
                   worth over $50 million and counting.
                 </p>
                 <p>
-                  But we're just getting started. Every day, we're working to add more opportunities,
+                  But we&apos;re just getting started. Every day, we&apos;re working to add more opportunities,
                   improve our matching algorithms, and build tools that make the application process
                   easier and more successful.
                 </p>

@@ -22,6 +22,7 @@ const STEPS = [
 export default function CompleteProfilePage() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [formData, setFormData] = useState<Record<string, any>>({
     personalDetails: {},
     education: [],
@@ -42,6 +43,7 @@ export default function CompleteProfilePage() {
     }
   }, [router]);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleNext = (stepData: Record<string, any>) => {
     setFormData((prev) => ({ ...prev, ...stepData }));
     if (currentStep < STEPS.length) {
@@ -119,13 +121,12 @@ export default function CompleteProfilePage() {
                 onClick={() => {
                   if (step.id < currentStep) setCurrentStep(step.id);
                 }}
-                className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
-                  step.id === currentStep
+                className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${step.id === currentStep
                     ? 'bg-primary-600 text-white'
                     : step.id < currentStep
                       ? 'bg-primary-100 text-primary-700 hover:bg-primary-200 cursor-pointer'
                       : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                }`}
+                  }`}
                 disabled={step.id > currentStep}
               >
                 {step.name}

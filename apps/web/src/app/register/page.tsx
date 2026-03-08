@@ -60,8 +60,9 @@ export default function RegisterPage() {
         phone: data.phone,
       });
       router.push('/register/check-email');
-    } catch (err: any) {
-      setError(err.message || 'Registration failed. Please try again.');
+    } catch (err) {
+      const error = err as Error;
+      setError(error.message || 'Registration failed. Please try again.');
     } finally {
       setIsSubmitting(false);
     }

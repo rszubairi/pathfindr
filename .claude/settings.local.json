@@ -14,7 +14,8 @@
       "Bash(/Users/raheelzubairi/Documents/projects/pathfindr/convex/seed.ts:*)",
       "Bash(npx tsc:*)",
       "Bash(pkill:*)",
-      "Bash(test:*)"
+      "Bash(test:*)",
+      "Bash(npx expo install convex)"
     ]
   }
 }
