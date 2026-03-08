@@ -26,6 +26,7 @@ export default function ScholarshipsPage() {
   // Convert Convex _id to id for compatibility
   const scholarships = useMemo(
     () =>
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       scholarshipsData.map((s: any) => ({
         ...s,
         id: s._id,
@@ -55,8 +56,8 @@ export default function ScholarshipsPage() {
         return searchQuery
           ? sorted
           : sorted.sort(
-              (a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
-            );
+            (a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+          );
     }
   }, [scholarships, sortBy, searchQuery]);
 
@@ -221,11 +222,10 @@ export default function ScholarshipsPage() {
                         <button
                           key={pageNumber}
                           onClick={() => setCurrentPage(pageNumber)}
-                          className={`w-10 h-10 rounded-lg font-medium transition ${
-                            currentPage === pageNumber
+                          className={`w-10 h-10 rounded-lg font-medium transition ${currentPage === pageNumber
                               ? 'bg-primary-600 text-white'
                               : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
-                          }`}
+                            }`}
                         >
                           {pageNumber}
                         </button>

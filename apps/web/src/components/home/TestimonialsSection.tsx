@@ -65,7 +65,7 @@ export function TestimonialsSection() {
                 </div>
 
                 {/* Quote Text */}
-                <p className="text-gray-700 mb-6 leading-relaxed italic">"{testimonial.quote}"</p>
+                <p className="text-gray-700 mb-6 leading-relaxed italic">&quot;{testimonial.quote}&quot;</p>
 
                 {/* Rating Stars */}
                 <div className="flex gap-1 mb-4">

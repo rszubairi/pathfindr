@@ -32,7 +32,9 @@ const achievementsSchema = z.object({
 type AchievementsData = z.infer<typeof achievementsSchema>;
 
 interface Props {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onNext: (data: any) => void;
   onBack: () => void;
 }

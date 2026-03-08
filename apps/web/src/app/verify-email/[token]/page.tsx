@@ -31,10 +31,11 @@ export default function VerifyEmailPage({
         setTimeout(() => {
           router.push('/login');
         }, 3000);
-      } catch (err: any) {
+      } catch (err) {
+        const error = err as Error;
         setStatus('error');
         setErrorMessage(
-          err.message || 'Verification failed. The link may have expired.'
+          error.message || 'Verification failed. The link may have expired.'
         );
       }
     };

@@ -12,7 +12,7 @@ import { Card } from '@/components/ui/Card';
 import { Container } from '@/components/ui/Container';
 import { MainLayout } from '@/components/layout/MainLayout';
 import Link from 'next/link';
-import { CheckCircle, Mail } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 
 const resendSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
@@ -42,8 +42,9 @@ export default function ResendVerificationPage() {
     try {
       await resendVerification({ email: data.email });
       setSuccess(true);
-    } catch (err: any) {
-      setError(err.message || 'Failed to resend verification email');
+    } catch (err) {
+      const error = err as Error;
+      setError(error.message || 'Failed to resend verification email');
     } finally {
       setIsSubmitting(false);
     }

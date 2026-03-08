@@ -25,6 +25,7 @@ import { ScholarshipDetailSkeleton } from '@/components/scholarships/Scholarship
 import { DeadlineCountdown } from '@/components/scholarships/DeadlineCountdown';
 import { ShareButton } from '@/components/scholarships/ShareButton';
 import { useScholarship, useFeaturedScholarships, useIncrementApplicationCount } from '@/lib/convexQueries';
+import { Scholarship } from '@/types';
 import { formatCurrency, formatDate, isDeadlinePassed } from '@/lib/utils';
 
 export function ScholarshipDetailContent() {
@@ -35,11 +36,8 @@ export function ScholarshipDetailContent() {
     const { data: relatedScholarships } = useFeaturedScholarships(4);
     const incrementCount = useIncrementApplicationCount();
 
-    // Filter out current scholarship from related list
-    const filteredRelated = relatedScholarships
-        .filter((s: any) => s._id !== id)
-        .slice(0, 3)
-        .map((s: any) => ({ ...s, id: s._id }));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const filteredRelated = relatedScholarships.filter((s: any) => s._id !== id).slice(0, 3).map((s: any) => ({ ...s, id: s._id }));
 
     const handleApplyNow = useCallback(async () => {
         if (!scholarship) return;
@@ -352,7 +350,7 @@ export function ScholarshipDetailContent() {
                             Related Scholarships
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            {filteredRelated.map((s: any) => (
+                            {filteredRelated.map((s: Scholarship) => (
                                 <ScholarshipCard key={s.id} scholarship={s} />
                             ))}
                         </div>

@@ -33,10 +33,7 @@ export function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile menu when route changes
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [pathname]);
+
 
   // Close user menu on outside click
   useEffect(() => {
@@ -223,6 +220,7 @@ export function Header() {
                             ? 'bg-primary-50 text-primary-600'
                             : 'text-gray-700 hover:bg-gray-50'
                         )}
+                        onClick={() => setMobileMenuOpen(false)}
                       >
                         {item.name}
                       </Link>
