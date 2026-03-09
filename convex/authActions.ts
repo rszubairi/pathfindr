@@ -23,7 +23,7 @@ async function sendEmail(email: string, fullName: string, token: string) {
   const verificationUrl = `${APP_URL}/verify-email/confirm?token=${token}`;
 
   await resend.emails.send({
-    from: 'Pathfindr <onboarding@resend.dev>',
+    from: 'Pathfindr <noreply@pathfindr.com>',
     to: email,
     subject: 'Verify your Pathfindr account',
     html: `
@@ -107,11 +107,11 @@ export const loginUser = action({
     }
 
     // Email verification check bypassed for development
-    /*
+
     if (!user.emailVerified) {
       throw new Error('Please verify your email before logging in');
     }
-    */
+
 
     const token = jwt.sign(
       {
