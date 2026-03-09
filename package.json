@@ -51,11 +51,12 @@
   "license": "UNLICENSED",
   "dependencies": {
     "bcryptjs": "^3.0.3",
-    "jsonwebtoken": "^9.0.3",
-    "resend": "^6.9.3",
     "expo": "~54.0.33",
+    "jsonwebtoken": "^9.0.3",
     "react": "19.1.0",
-    "react-native": "0.81.5"
+    "react-native": "0.81.5",
+    "resend": "^6.9.3",
+    "stripe": "^20.4.1"
   },
   "overrides": {
     "react-native": "$react-native"

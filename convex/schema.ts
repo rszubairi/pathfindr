@@ -118,4 +118,47 @@ export default defineSchema({
   })
     .index('by_user_id', ['userId'])
     .index('by_profile_status', ['profileStatus']),
+
+  subscriptions: defineTable({
+    userId: v.id('users'),
+    tier: v.union(v.literal('pro'), v.literal('expert')),
+    status: v.union(
+      v.literal('active'),
+      v.literal('canceled'),
+      v.literal('past_due'),
+      v.literal('incomplete')
+    ),
+    stripeCustomerId: v.string(),
+    stripeSubscriptionId: v.string(),
+    stripePriceId: v.string(),
+    currentPeriodStart: v.string(),
+    currentPeriodEnd: v.string(),
+    cancelAtPeriodEnd: v.boolean(),
+    applicationsUsed: v.number(),
+    applicationsLimit: v.number(),
+    createdAt: v.string(),
+    updatedAt: v.string(),
+  })
+    .index('by_user_id', ['userId'])
+    .index('by_stripe_subscription_id', ['stripeSubscriptionId'])
+    .index('by_stripe_customer_id', ['stripeCustomerId'])
+    .index('by_status', ['status']),
+
+  applications: defineTable({
+    userId: v.id('users'),
+    scholarshipId: v.id('scholarships'),
+    status: v.union(
+      v.literal('applied'),
+      v.literal('under_review'),
+      v.literal('shortlisted'),
+      v.literal('rejected'),
+      v.literal('awarded'),
+      v.literal('withdrawn')
+    ),
+    appliedAt: v.string(),
+    updatedAt: v.string(),
+  })
+    .index('by_user_id', ['userId'])
+    .index('by_scholarship_id', ['scholarshipId'])
+    .index('by_user_and_scholarship', ['userId', 'scholarshipId']),
 });

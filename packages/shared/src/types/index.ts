@@ -1,6 +1,6 @@
 // User Types
 export type UserRole = 'student' | 'institution' | 'philanthropist' | 'admin';
-export type SubscriptionTier = 'free' | 'premium';
+export type SubscriptionTier = 'pro' | 'expert';
 export type UserStatus = 'active' | 'suspended' | 'pending';
 
 export interface User {
@@ -233,12 +233,15 @@ export interface Subscription {
   id: string;
   userId: string;
   tier: SubscriptionTier;
-  status: 'active' | 'canceled' | 'past_due' | 'trialing';
-  startDate: string;
-  endDate?: string;
-  autoRenew: boolean;
-  paymentMethod?: string;
-  stripeSubscriptionId?: string;
+  status: 'active' | 'canceled' | 'past_due' | 'incomplete';
+  stripeCustomerId: string;
+  stripeSubscriptionId: string;
+  stripePriceId: string;
+  currentPeriodStart: string;
+  currentPeriodEnd: string;
+  cancelAtPeriodEnd: boolean;
+  applicationsUsed: number;
+  applicationsLimit: number;
   createdAt: string;
   updatedAt: string;
 }

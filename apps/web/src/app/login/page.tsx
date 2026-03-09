@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAction } from 'convex/react';
 import { api } from '../../../../../convex/_generated/api';
 import { useAppDispatch } from '@/store';
@@ -23,8 +23,10 @@ const loginSchema = z.object({
 
 type LoginFormData = z.infer<typeof loginSchema>;
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get('redirect');
   const dispatch = useAppDispatch();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -64,9 +66,11 @@ export default function LoginPage() {
         })
       );
 
-      // Redirect based on profile completion
+      // Redirect based on profile completion, or to redirect param
       if (!result.user.profileCompleted) {
         router.push('/profile/complete');
+      } else if (redirectTo) {
+        router.push(redirectTo);
       } else {
         router.push('/scholarships');
       }
@@ -130,7 +134,7 @@ export default function LoginPage() {
             <p className="mt-6 text-center text-sm text-gray-600">
               Don&apos;t have an account?{' '}
               <Link
-                href="/register"
+                href={redirectTo ? `/register?redirect=${encodeURIComponent(redirectTo)}` : '/register'}
                 className="text-primary-600 hover:text-primary-700 font-medium"
               >
                 Create one
@@ -140,5 +144,13 @@ export default function LoginPage() {
         </div>
       </Container>
     </MainLayout>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginContent />
+    </Suspense>
   );
 }

@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import {
     ChevronRight,
     Building2,
@@ -24,17 +24,37 @@ import { ScholarshipCard } from '@/components/scholarships/ScholarshipCard';
 import { ScholarshipDetailSkeleton } from '@/components/scholarships/ScholarshipDetailSkeleton';
 import { DeadlineCountdown } from '@/components/scholarships/DeadlineCountdown';
 import { ShareButton } from '@/components/scholarships/ShareButton';
-import { useScholarship, useFeaturedScholarships, useIncrementApplicationCount } from '@/lib/convexQueries';
+import { SubscriptionGate, type GateReason } from '@/components/subscription/SubscriptionGate';
+import { ApplicationTracker } from '@/components/subscription/ApplicationTracker';
+import { useScholarship, useFeaturedScholarships } from '@/lib/convexQueries';
+import { useApplyGate } from '@/hooks/useApplyGate';
 import { Scholarship } from '@/types';
 import { formatCurrency, formatDate, isDeadlinePassed } from '@/lib/utils';
 
 export function ScholarshipDetailContent() {
     const searchParams = useSearchParams();
+    const router = useRouter();
     const id = searchParams.get('id') || '';
 
     const { data: scholarship, isLoading } = useScholarship(id);
     const { data: relatedScholarships } = useFeaturedScholarships(4);
-    const incrementCount = useIncrementApplicationCount();
+
+    const {
+        checkGate,
+        apply,
+        alreadyApplied,
+        loading: gateLoading,
+        tier,
+        applicationsUsed,
+        applicationsLimit,
+        isSubscribed,
+    } = useApplyGate(id);
+
+    const [gateModal, setGateModal] = useState<{
+        isOpen: boolean;
+        reason: GateReason;
+    }>({ isOpen: false, reason: 'auth' });
+    const [applying, setApplying] = useState(false);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const filteredRelated = relatedScholarships.filter((s: any) => s._id !== id).slice(0, 3).map((s: any) => ({ ...s, id: s._id }));
@@ -42,19 +62,31 @@ export function ScholarshipDetailContent() {
     const handleApplyNow = useCallback(async () => {
         if (!scholarship) return;
 
-        // Increment application count
-        try {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            await incrementCount({ id: id as any });
-        } catch {
-            // Silently fail - don't block the user from applying
+        const result = checkGate();
+
+        if (!result.allowed) {
+            if (result.reason === 'auth') {
+                router.push(`/register?redirect=${encodeURIComponent(`/scholarships/detail?id=${id}`)}`);
+                return;
+            }
+            setGateModal({ isOpen: true, reason: result.reason });
+            return;
         }
 
-        // Open application URL in new tab
-        if (scholarship.applicationUrl) {
-            window.open(scholarship.applicationUrl, '_blank', 'noopener,noreferrer');
+        // User is subscribed and within limits — proceed
+        setApplying(true);
+        try {
+            await apply();
+            // Open external URL after recording the application
+            if (scholarship.applicationUrl) {
+                window.open(scholarship.applicationUrl, '_blank', 'noopener,noreferrer');
+            }
+        } catch (err) {
+            console.error('Failed to apply:', err);
+        } finally {
+            setApplying(false);
         }
-    }, [scholarship, incrementCount, id]);
+    }, [scholarship, checkGate, apply, id, router]);
 
     if (isLoading || !scholarship) {
         return (
@@ -79,8 +111,29 @@ export function ScholarshipDetailContent() {
             .replace(/_/g, ' ');
     };
 
+    // Determine apply button text and state
+    const getApplyButtonProps = () => {
+        if (passed) return { text: 'Deadline Passed', disabled: true };
+        if (scholarship.status !== 'active') return { text: 'Not Available', disabled: true };
+        if (alreadyApplied) return { text: 'Already Applied', disabled: true };
+        if (isSubscribed && applicationsUsed >= applicationsLimit)
+            return { text: 'Limit Reached', disabled: false }; // clickable to show upgrade modal
+        return { text: 'Apply Now', disabled: false };
+    };
+
+    const applyBtnProps = getApplyButtonProps();
+
     return (
         <MainLayout>
+            {/* Subscription Gate Modal */}
+            <SubscriptionGate
+                isOpen={gateModal.isOpen}
+                onClose={() => setGateModal({ ...gateModal, isOpen: false })}
+                gateReason={gateModal.reason}
+                currentTier={tier}
+                redirectPath={`/scholarships/detail?id=${id}`}
+            />
+
             {/* Breadcrumb */}
             <div className="bg-gray-50 py-4 border-b border-gray-200">
                 <Container size="xl">
@@ -173,11 +226,12 @@ export function ScholarshipDetailContent() {
                             variant="primary"
                             size="lg"
                             onClick={handleApplyNow}
-                            disabled={passed || scholarship.status !== 'active'}
+                            disabled={applyBtnProps.disabled || applying || gateLoading}
+                            isLoading={applying}
                             className="flex items-center gap-2"
                         >
                             <ExternalLink className="h-5 w-5" />
-                            {passed ? 'Deadline Passed' : 'Apply Now'}
+                            {applyBtnProps.text}
                         </Button>
                         <ShareButton
                             scholarshipName={scholarship.name}
@@ -259,6 +313,22 @@ export function ScholarshipDetailContent() {
 
                         {/* Right Sidebar */}
                         <div className="space-y-6">
+                            {/* Application Tracker (for subscribed users) */}
+                            {isSubscribed && tier && (
+                                <Card>
+                                    <CardContent className="pt-6">
+                                        <h3 className="text-lg font-bold text-gray-900 mb-4">
+                                            Your Applications
+                                        </h3>
+                                        <ApplicationTracker
+                                            used={applicationsUsed}
+                                            limit={applicationsLimit}
+                                            tier={tier}
+                                        />
+                                    </CardContent>
+                                </Card>
+                            )}
+
                             {/* Eligible Countries */}
                             <Card>
                                 <CardContent className="pt-6">
@@ -320,7 +390,7 @@ export function ScholarshipDetailContent() {
                             </Card>
 
                             {/* Apply CTA (Sidebar) */}
-                            {!passed && scholarship.status === 'active' && (
+                            {!passed && scholarship.status === 'active' && !alreadyApplied && (
                                 <Card className="bg-primary-50 border-primary-200">
                                     <CardContent className="pt-6 text-center">
                                         <p className="text-primary-700 font-medium mb-4">
@@ -330,10 +400,12 @@ export function ScholarshipDetailContent() {
                                             variant="primary"
                                             size="lg"
                                             onClick={handleApplyNow}
+                                            disabled={applying || gateLoading}
+                                            isLoading={applying}
                                             className="w-full flex items-center justify-center gap-2"
                                         >
                                             <ExternalLink className="h-5 w-5" />
-                                            Apply Now
+                                            {applyBtnProps.text}
                                         </Button>
                                     </CardContent>
                                 </Card>

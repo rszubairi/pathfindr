@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAction } from 'convex/react';
 import { api } from '../../../../../convex/_generated/api';
 import { Input } from '@/components/ui/Input';
@@ -33,8 +33,10 @@ const registerSchema = z
 
 type RegisterFormData = z.infer<typeof registerSchema>;
 
-export default function RegisterPage() {
+function RegisterContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get('redirect');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -60,7 +62,10 @@ export default function RegisterPage() {
         phone: data.phone,
       });
       // Bypassing check-email screen for development
-      router.push('/login?registered=true');
+      const loginUrl = redirectTo
+        ? `/login?registered=true&redirect=${encodeURIComponent(redirectTo)}`
+        : '/login?registered=true';
+      router.push(loginUrl);
     } catch (err) {
       const error = err as Error;
       setError(error.message || 'Registration failed. Please try again.');
@@ -150,7 +155,7 @@ export default function RegisterPage() {
             <p className="mt-6 text-center text-sm text-gray-600">
               Already have an account?{' '}
               <Link
-                href="/login"
+                href={redirectTo ? `/login?redirect=${encodeURIComponent(redirectTo)}` : '/login'}
                 className="text-primary-600 hover:text-primary-700 font-medium"
               >
                 Sign in
@@ -160,5 +165,13 @@ export default function RegisterPage() {
         </div>
       </Container>
     </MainLayout>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense>
+      <RegisterContent />
+    </Suspense>
   );
 }

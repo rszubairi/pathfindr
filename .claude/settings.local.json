@@ -24,7 +24,9 @@
       "Bash(npx expo prebuild:*)",
       "Bash(git show:*)",
       "WebFetch(domain:logo.clearbit.com)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(npx convex codegen:*)",
+      "Bash(npx next build:*)"
     ]
   }
 }
