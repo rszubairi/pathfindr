@@ -23,7 +23,7 @@ async function sendEmail(email: string, fullName: string, token: string) {
   const verificationUrl = `${APP_URL}/verify-email/confirm?token=${token}`;
 
   await resend.emails.send({
-    from: 'Pathfindr <noreply@pathfindr.com>',
+    from: 'Pathfindr <noreply@thepathfindr.com>',
     to: email,
     subject: 'Verify your Pathfindr account',
     html: `

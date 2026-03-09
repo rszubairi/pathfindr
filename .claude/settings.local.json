@@ -26,7 +26,9 @@
       "WebFetch(domain:logo.clearbit.com)",
       "Bash(curl:*)",
       "Bash(npx convex codegen:*)",
-      "Bash(npx next build:*)"
+      "Bash(npx next build:*)",
+      "WebFetch(domain:en.wikipedia.org)",
+      "WebFetch(domain:infodaily.my)"
     ]
   }
 }
