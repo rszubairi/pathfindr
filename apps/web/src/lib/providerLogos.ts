@@ -5,39 +5,39 @@
 
 const PROVIDER_LOGO_MAP: Record<string, string> = {
     // Government
-    "government & public": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Flag_of_Malaysia.svg/320px-Flag_of_Malaysia.svg.png",
-    "mohe / govt": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Flag_of_Malaysia.svg/320px-Flag_of_Malaysia.svg.png",
-    "community colleges": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Flag_of_Malaysia.svg/320px-Flag_of_Malaysia.svg.png",
+    "government & public": "/logos/malaysia-flag.png",
+    "mohe / govt": "/logos/malaysia-flag.png",
+    "community colleges": "/logos/malaysia-flag.png",
 
     // Corporate
-    "petronas": "https://logo.clearbit.com/petronas.com",
-    "bank negara malaysia": "https://logo.clearbit.com/bnm.gov.my",
-    "shell malaysia": "https://logo.clearbit.com/shell.com",
-    "telekom malaysia": "https://logo.clearbit.com/tm.com.my",
-    "tenaga nasional": "https://logo.clearbit.com/tnb.com.my",
-    "gamuda": "https://logo.clearbit.com/gamuda.com.my",
-    "maybank / cimb / rhb": "https://logo.clearbit.com/maybank.com",
-    "maybank": "https://logo.clearbit.com/maybank.com",
-    "cimb": "https://logo.clearbit.com/cimb.com",
-    "rhb": "https://logo.clearbit.com/rhb.com.my",
-    "sime darby foundation": "https://logo.clearbit.com/simedarby.com",
-    "ocbc": "https://logo.clearbit.com/ocbc.com",
+    "petronas": "/logos/petronas.png",
+    "bank negara malaysia": "/logos/bnm.png",
+    "shell malaysia": "/logos/shell.png",
+    "telekom malaysia": "/logos/tm.png",
+    "tenaga nasional": "/logos/tnb.png",
+    "gamuda": "/logos/gamuda.png",
+    "maybank / cimb / rhb": "/logos/maybank.png",
+    "maybank": "/logos/maybank.png",
+    "cimb": "/logos/cimb.png",
+    "rhb": "/logos/rhb.png",
+    "sime darby foundation": "/logos/simedarby.png",
+    "ocbc": "/logos/ocbc.png",
 
     // Foundation / Leadership
-    "khazanah": "https://logo.clearbit.com/yayasankhazanah.com.my",
-    "yayasan tunku abdul rahman": "https://www.yayasantar.org.my/wp-content/uploads/2020/08/ytar-logo-300x300.jpg",
-    "yayasan employees provident fund": "https://logo.clearbit.com/kwsp.gov.my",
+    "khazanah": "/logos/khazanah.png",
+    "yayasan tunku abdul rahman": "/logos/ytar.png",
+    "yayasan employees provident fund": "/logos/kwsp.png",
 
     // Universities
-    "taylor's university": "https://logo.clearbit.com/taylors.edu.my",
-    "sunway university": "https://logo.clearbit.com/sunway.edu.my",
-    "monash university malaysia": "https://logo.clearbit.com/monash.edu.my",
-    "universiti malaya": "https://logo.clearbit.com/um.edu.my",
-    "universiti kebangsaan malaysia": "https://logo.clearbit.com/ukm.my",
-    "universiti putra malaysia": "https://logo.clearbit.com/upm.edu.my",
-    "universiti teknologi malaysia": "https://logo.clearbit.com/utm.my",
-    "universiti sains malaysia": "https://logo.clearbit.com/usm.my",
-    "universiti teknologi mara": "https://logo.clearbit.com/uitm.edu.my",
+    "taylor's university": "/logos/taylors.png",
+    "sunway university": "/logos/sunway.png",
+    "monash university malaysia": "/logos/monash.png",
+    "universiti malaya": "/logos/um.png",
+    "universiti kebangsaan malaysia": "/logos/ukm.png",
+    "universiti putra malaysia": "/logos/upm.png",
+    "universiti teknologi malaysia": "/logos/utm.png",
+    "universiti sains malaysia": "/logos/usm.png",
+    "universiti teknologi mara": "/logos/uitm.png",
 };
 
 /**

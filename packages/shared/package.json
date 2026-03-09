@@ -12,10 +12,17 @@
     "test": "jest"
   },
   "devDependencies": {
-    "typescript": "^5.3.3",
     "@types/node": "^20.11.20",
+    "@typescript-eslint/eslint-plugin": "^8.56.1",
+    "@typescript-eslint/parser": "^8.56.1",
     "eslint": "^8.56.0",
-    "@typescript-eslint/eslint-plugin": "^6.21.0",
-    "@typescript-eslint/parser": "^6.21.0"
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1693.0",
+    "bcrypt": "6.0.0",
+    "eslint-config-next": "16.1.6",
+    "next": "16.1.6",
+    "nodemailer": "8.0.1"
   }
 }

@@ -19,7 +19,9 @@
     "clean": "rm -rf node_modules && rm -rf apps/*/node_modules && rm -rf packages/*/node_modules",
     "convex:dev": "npx convex dev",
     "convex:deploy": "npx convex deploy",
-    "convex:seed": "npx convex run seed:seedScholarships"
+    "convex:seed": "npx convex run seed:seedScholarships",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -50,6 +52,12 @@
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "jsonwebtoken": "^9.0.3",
-    "resend": "^6.9.3"
+    "resend": "^6.9.3",
+    "expo": "~54.0.33",
+    "react": "19.1.0",
+    "react-native": "0.81.5"
+  },
+  "overrides": {
+    "react-native": "$react-native"
   }
 }

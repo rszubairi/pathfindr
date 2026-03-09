@@ -15,7 +15,16 @@
       "Bash(npx tsc:*)",
       "Bash(pkill:*)",
       "Bash(test:*)",
-      "Bash(npx expo install convex)"
+      "Bash(npx expo install convex)",
+      "Bash(node -e:*)",
+      "Bash(npm ls:*)",
+      "Bash(eas:*)",
+      "Bash(npx expo run:ios:*)",
+      "Bash(npx expo start:*)",
+      "Bash(npx expo prebuild:*)",
+      "Bash(git show:*)",
+      "WebFetch(domain:logo.clearbit.com)",
+      "Bash(curl:*)"
     ]
   }
 }
