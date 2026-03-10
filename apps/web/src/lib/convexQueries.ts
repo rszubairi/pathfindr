@@ -134,3 +134,67 @@ export function useScholarshipStats() {
 export function useIncrementApplicationCount() {
   return useMutation(api.scholarships.incrementApplicationCount);
 }
+
+// ============================================================
+// Boarding School Hooks
+// ============================================================
+
+/**
+ * Hook to get boarding schools with filters, combined with optional search
+ */
+export function useBoardingSchoolSearch(query: string, filters?: {
+  states?: string[];
+  categories?: string[];
+  gender?: string;
+  entryLevel?: string;
+  managedBy?: string;
+}) {
+  const searchResults = useConvexQuery(api.boardingSchools.search, {
+    searchQuery: query || 'MRSM',
+  });
+
+  const filteredResults = useConvexQuery(
+    api.boardingSchools.filter,
+    filters
+      ? {
+          states: filters.states,
+          categories: filters.categories,
+          gender: filters.gender,
+          entryLevel: filters.entryLevel,
+          managedBy: filters.managedBy,
+        }
+      : {}
+  );
+
+  const data = useMemo(() => {
+    if (!searchResults || !filteredResults) return [];
+
+    if (query) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const filteredIds = new Set(filteredResults.map((s: any) => s._id));
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return searchResults.filter((s: any) => filteredIds.has(s._id));
+    }
+
+    return filteredResults;
+  }, [searchResults, filteredResults, query]);
+
+  return {
+    data,
+    isLoading: searchResults === undefined || filteredResults === undefined,
+    error: null,
+  };
+}
+
+/**
+ * Hook to get boarding school statistics
+ */
+export function useBoardingSchoolStats() {
+  const stats = useConvexQuery(api.boardingSchools.stats);
+
+  return {
+    data: stats,
+    isLoading: stats === undefined,
+    error: null,
+  };
+}

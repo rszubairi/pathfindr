@@ -144,6 +144,41 @@ export default defineSchema({
     .index('by_stripe_customer_id', ['stripeCustomerId'])
     .index('by_status', ['status']),
 
+  boardingSchools: defineTable({
+    name: v.string(),
+    shortName: v.optional(v.string()),
+    category: v.union(
+      v.literal('SBP Premier'),
+      v.literal('SMS'),
+      v.literal('SBPI'),
+      v.literal('SMAP'),
+      v.literal('TMUA'),
+      v.literal('MRSM'),
+      v.literal('MRSM Premier')
+    ),
+    state: v.string(),
+    district: v.string(),
+    gender: v.union(v.literal('male'), v.literal('female'), v.literal('mixed')),
+    entryLevels: v.array(v.string()),
+    applicationPortal: v.string(),
+    applicationPeriod: v.string(),
+    description: v.optional(v.string()),
+    specialPrograms: v.array(v.string()),
+    managedBy: v.union(v.literal('KPM'), v.literal('MARA')),
+    status: v.union(v.literal('active'), v.literal('closed'), v.literal('upcoming')),
+    deadline: v.optional(v.string()),
+    createdAt: v.string(),
+    updatedAt: v.string(),
+  })
+    .index('by_category', ['category'])
+    .index('by_state', ['state'])
+    .index('by_status', ['status'])
+    .index('by_managed_by', ['managedBy'])
+    .searchIndex('search_name', {
+      searchField: 'name',
+      filterFields: ['category', 'state'],
+    }),
+
   applications: defineTable({
     userId: v.id('users'),
     scholarshipId: v.id('scholarships'),

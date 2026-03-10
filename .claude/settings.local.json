@@ -28,7 +28,8 @@
       "Bash(npx convex codegen:*)",
       "Bash(npx next build:*)",
       "WebFetch(domain:en.wikipedia.org)",
-      "WebFetch(domain:infodaily.my)"
+      "WebFetch(domain:infodaily.my)",
+      "Bash(find:*)"
     ]
   }
 }

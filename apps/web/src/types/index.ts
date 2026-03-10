@@ -44,6 +44,35 @@ export interface ScholarshipFilters {
   status?: string;
 }
 
+// Boarding School Types
+export interface BoardingSchool {
+  id: string;
+  name: string;
+  shortName?: string;
+  category: 'SBP Premier' | 'SMS' | 'SBPI' | 'SMAP' | 'TMUA' | 'MRSM' | 'MRSM Premier';
+  state: string;
+  district: string;
+  gender: 'male' | 'female' | 'mixed';
+  entryLevels: string[];
+  applicationPortal: string;
+  applicationPeriod: string;
+  description?: string;
+  specialPrograms: string[];
+  managedBy: 'KPM' | 'MARA';
+  status: 'active' | 'closed' | 'upcoming';
+  deadline?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BoardingSchoolFilters {
+  states?: string[];
+  categories?: string[];
+  gender?: string;
+  entryLevel?: string;
+  managedBy?: string;
+}
+
 // University Types
 export interface University {
   id: string;

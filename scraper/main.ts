@@ -2,6 +2,7 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 import * as fs from 'fs';
 import * as path from 'path';
+import { BoardingSchoolScraper } from './boardingSchools';
 
 /**
  * Scholarship interface matching Convex schema
@@ -360,6 +361,13 @@ class UniversalScholarshipScraper {
         await this.scrapeMonash();
         this.addResearchedScholarships();
         this.saveResults();
+
+        // Also scrape boarding schools
+        console.log('\n========================================');
+        console.log('Starting Boarding School Scraper...');
+        console.log('========================================\n');
+        const boardingSchoolScraper = new BoardingSchoolScraper();
+        await boardingSchoolScraper.runAll();
     }
 }
 
