@@ -7,7 +7,7 @@ import { useMemo } from 'react';
  * Hook to get all scholarships with optional filters
  */
 export function useScholarships(filters?: ScholarshipFilters) {
-  // Get all scholarships from Convex
+  // Get all scholarships from Convex (active + pending, excluding closed)
   const scholarships = useConvexQuery(
     api.scholarships.filter,
     filters
@@ -18,13 +18,19 @@ export function useScholarships(filters?: ScholarshipFilters) {
         minValue: filters.minValue,
         maxValue: filters.maxValue,
         deadlineWithinMonths: filters.deadlineWithinMonths,
-        status: 'active',
       }
-      : { status: 'active' }
+      : {}
   );
 
+  // Filter out closed scholarships
+  const filtered = useMemo(() => {
+    if (!scholarships) return [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return scholarships.filter((s: any) => s.status !== 'closed');
+  }, [scholarships]);
+
   return {
-    data: scholarships || [],
+    data: filtered,
     isLoading: scholarships === undefined,
     error: null,
   };
@@ -34,10 +40,9 @@ export function useScholarships(filters?: ScholarshipFilters) {
  * Hook to search scholarships by query and apply filters
  */
 export function useScholarshipSearch(query: string, filters?: ScholarshipFilters) {
-  // Get search results from Convex
+  // Get search results from Convex (no status filter — include active + pending)
   const searchResults = useConvexQuery(api.scholarships.search, {
     searchQuery: query,
-    status: 'active',
   });
 
   // Get filtered results if filters are provided
@@ -51,12 +56,11 @@ export function useScholarshipSearch(query: string, filters?: ScholarshipFilters
         minValue: filters.minValue,
         maxValue: filters.maxValue,
         deadlineWithinMonths: filters.deadlineWithinMonths,
-        status: 'active',
       }
-      : { status: 'active' }
+      : {}
   );
 
-  // Combine search and filter results
+  // Combine search and filter results, excluding closed scholarships
   const data = useMemo(() => {
     if (!searchResults || !filteredResults) return [];
 
@@ -64,12 +68,14 @@ export function useScholarshipSearch(query: string, filters?: ScholarshipFilters
     if (query) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const filteredIds = new Set(filteredResults.map((s: any) => s._id));
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return searchResults.filter((s: any) => filteredIds.has(s._id));
+      return searchResults
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .filter((s: any) => filteredIds.has(s._id) && s.status !== 'closed');
     }
 
-    // If no search query, just return filtered results
-    return filteredResults;
+    // If no search query, just return filtered results excluding closed
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return filteredResults.filter((s: any) => s.status !== 'closed');
   }, [searchResults, filteredResults, query]);
 
   return {
