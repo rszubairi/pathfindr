@@ -14,6 +14,9 @@ import {
     Globe,
     BookOpen,
     Tag,
+    Bell,
+    BellOff,
+    Clock,
 } from 'lucide-react';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Container } from '@/components/ui/Container';
@@ -28,6 +31,7 @@ import { SubscriptionGate, type GateReason } from '@/components/subscription/Sub
 import { ApplicationTracker } from '@/components/subscription/ApplicationTracker';
 import { useScholarship, useFeaturedScholarships } from '@/lib/convexQueries';
 import { useApplyGate } from '@/hooks/useApplyGate';
+import { useNotify } from '@/hooks/useNotify';
 import { Scholarship } from '@/types';
 import { formatCurrency, formatDate, isDeadlinePassed } from '@/lib/utils';
 
@@ -49,6 +53,12 @@ export function ScholarshipDetailContent() {
         applicationsLimit,
         isSubscribed,
     } = useApplyGate(id);
+
+    const {
+        isSubscribed: isNotifySubscribed,
+        toggleNotify,
+        loading: notifyLoading,
+    } = useNotify(id);
 
     const [gateModal, setGateModal] = useState<{
         isOpen: boolean;
@@ -111,8 +121,11 @@ export function ScholarshipDetailContent() {
             .replace(/_/g, ' ');
     };
 
+    const isPending = scholarship.status === 'pending';
+
     // Determine apply button text and state
     const getApplyButtonProps = () => {
+        if (isPending) return { text: 'Opening Soon', disabled: true };
         if (passed) return { text: 'Deadline Passed', disabled: true };
         if (scholarship.status !== 'active') return { text: 'Not Available', disabled: true };
         if (alreadyApplied) return { text: 'Already Applied', disabled: true };
@@ -222,17 +235,51 @@ export function ScholarshipDetailContent() {
             <section className="py-6 bg-white border-b border-gray-200">
                 <Container size="xl">
                     <div className="flex flex-wrap gap-4">
-                        <Button
-                            variant="primary"
-                            size="lg"
-                            onClick={handleApplyNow}
-                            disabled={applyBtnProps.disabled || applying || gateLoading}
-                            isLoading={applying}
-                            className="flex items-center gap-2"
-                        >
-                            <ExternalLink className="h-5 w-5" />
-                            {applyBtnProps.text}
-                        </Button>
+                        {isPending ? (
+                            <>
+                                <Button
+                                    variant="secondary"
+                                    size="lg"
+                                    disabled
+                                    className="flex items-center gap-2"
+                                >
+                                    <Clock className="h-5 w-5" />
+                                    Opening Soon
+                                </Button>
+                                <Button
+                                    variant={isNotifySubscribed ? 'ghost' : 'primary'}
+                                    size="lg"
+                                    onClick={toggleNotify}
+                                    disabled={notifyLoading}
+                                    isLoading={notifyLoading}
+                                    className="flex items-center gap-2"
+                                >
+                                    {isNotifySubscribed ? (
+                                        <>
+                                            <BellOff className="h-5 w-5" />
+                                            Notifications On
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Bell className="h-5 w-5" />
+                                            Notify Me
+                                        </>
+                                    )}
+                                </Button>
+                            </>
+                        ) : (
+                            <Button
+                                variant="primary"
+                                size="lg"
+                                onClick={handleApplyNow}
+                                disabled={applyBtnProps.disabled || applying || gateLoading}
+                                isLoading={applying}
+                                className="flex items-center gap-2"
+                            >
+                                <ExternalLink className="h-5 w-5" />
+                                {applyBtnProps.text}
+                            </Button>
+                        )}
                         <ShareButton
                             scholarshipName={scholarship.name}
                             scholarshipValue={formatCurrency(scholarship.value, scholarship.currency)}
@@ -389,8 +436,37 @@ export function ScholarshipDetailContent() {
                                 </CardContent>
                             </Card>
 
-                            {/* Apply CTA (Sidebar) */}
-                            {!passed && scholarship.status === 'active' && !alreadyApplied && (
+                            {/* CTA (Sidebar) */}
+                            {isPending ? (
+                                <Card className="bg-amber-50 border-amber-200">
+                                    <CardContent className="pt-6 text-center">
+                                        <Clock className="h-8 w-8 text-amber-600 mx-auto mb-2" />
+                                        <p className="text-amber-700 font-medium mb-4">
+                                            This scholarship is opening soon. Get notified when applications open!
+                                        </p>
+                                        <Button
+                                            variant={isNotifySubscribed ? 'secondary' : 'primary'}
+                                            size="lg"
+                                            onClick={toggleNotify}
+                                            disabled={notifyLoading}
+                                            isLoading={notifyLoading}
+                                            className="w-full flex items-center justify-center gap-2"
+                                        >
+                                            {isNotifySubscribed ? (
+                                                <>
+                                                    <BellOff className="h-5 w-5" />
+                                                    Notifications On
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Bell className="h-5 w-5" />
+                                                    Notify Me
+                                                </>
+                                            )}
+                                        </Button>
+                                    </CardContent>
+                                </Card>
+                            ) : !passed && scholarship.status === 'active' && !alreadyApplied ? (
                                 <Card className="bg-primary-50 border-primary-200">
                                     <CardContent className="pt-6 text-center">
                                         <p className="text-primary-700 font-medium mb-4">
@@ -409,7 +485,7 @@ export function ScholarshipDetailContent() {
                                         </Button>
                                     </CardContent>
                                 </Card>
-                            )}
+                            ) : null}
                         </div>
                     </div>
                 </Container>

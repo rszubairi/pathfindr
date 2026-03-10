@@ -179,6 +179,17 @@ export default defineSchema({
       filterFields: ['category', 'state'],
     }),
 
+  scholarshipNotifications: defineTable({
+    userId: v.id('users'),
+    scholarshipId: v.id('scholarships'),
+    email: v.string(),
+    notified: v.boolean(),
+    createdAt: v.string(),
+  })
+    .index('by_user_and_scholarship', ['userId', 'scholarshipId'])
+    .index('by_scholarship_id', ['scholarshipId'])
+    .index('by_user_id', ['userId']),
+
   applications: defineTable({
     userId: v.id('users'),
     scholarshipId: v.id('scholarships'),

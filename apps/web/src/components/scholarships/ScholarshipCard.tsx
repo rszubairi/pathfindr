@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Calendar, ExternalLink, MapPin, BookOpen, TrendingUp } from 'lucide-react';
+import { Calendar, ExternalLink, MapPin, BookOpen, TrendingUp, Clock, Bell } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { formatCurrency, formatDate, getDeadlineUrgency } from '@/lib/utils';
@@ -116,6 +116,13 @@ export function ScholarshipCard({ scholarship, showMatchScore = false }: Scholar
               {providerTypeLabel}
             </span>
 
+            {scholarship.status === 'pending' && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold border bg-amber-50 text-amber-700 border-amber-200">
+                <Clock className="w-3 h-3" />
+                Opening Soon
+              </span>
+            )}
+
             {showMatchScore && scholarship.matchScore && (
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold border bg-green-50 text-green-700 border-green-200">
                 <TrendingUp className="w-3 h-3" />
@@ -191,13 +198,21 @@ export function ScholarshipCard({ scholarship, showMatchScore = false }: Scholar
       </div>
 
       {/* Footer */}
-      <div className="px-5 pb-5">
+      <div className="px-5 pb-5 space-y-2">
         <Link href={`/scholarships/detail?id=${scholarship.id}`} className="block w-full">
           <button className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-primary-600 hover:bg-primary-700 active:scale-95 text-white text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md">
             View Details
             <ExternalLink className="w-3.5 h-3.5" />
           </button>
         </Link>
+        {scholarship.status === 'pending' && (
+          <Link href={`/scholarships/detail?id=${scholarship.id}`} className="block w-full">
+            <button className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-xl border border-amber-300 bg-amber-50 hover:bg-amber-100 active:scale-95 text-amber-700 text-sm font-semibold transition-all duration-200">
+              <Bell className="w-3.5 h-3.5" />
+              Notify Me
+            </button>
+          </Link>
+        )}
       </div>
     </div>
   );

@@ -12,6 +12,8 @@ import type * as auth from "../auth.js";
 import type * as authActions from "../authActions.js";
 import type * as boardingSchools from "../boardingSchools.js";
 import type * as http from "../http.js";
+import type * as notificationActions from "../notificationActions.js";
+import type * as notifications from "../notifications.js";
 import type * as profiles from "../profiles.js";
 import type * as scholarships from "../scholarships.js";
 import type * as seed from "../seed.js";
@@ -32,6 +34,8 @@ declare const fullApi: ApiFromModules<{
   authActions: typeof authActions;
   boardingSchools: typeof boardingSchools;
   http: typeof http;
+  notificationActions: typeof notificationActions;
+  notifications: typeof notifications;
   profiles: typeof profiles;
   scholarships: typeof scholarships;
   seed: typeof seed;

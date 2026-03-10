@@ -1,5 +1,6 @@
 import { query, mutation } from './_generated/server';
 import { v } from 'convex/values';
+import { api } from './_generated/api';
 
 // Get all scholarships with optional filters
 export const list = query({
@@ -240,10 +241,22 @@ export const update = mutation({
   handler: async (ctx, args) => {
     const { id, ...updates } = args;
 
+    // Check if status is changing from pending to active
+    const existing = await ctx.db.get(id);
+    const wasStatusPending = existing?.status === 'pending';
+    const isNowActive = updates.status === 'active';
+
     await ctx.db.patch(id, {
       ...updates,
       updatedAt: new Date().toISOString(),
     });
+
+    // Trigger notification emails when scholarship goes from pending -> active
+    if (wasStatusPending && isNowActive) {
+      await ctx.scheduler.runAfter(0, api.notificationActions.sendScholarshipOpenNotifications, {
+        scholarshipId: id,
+      });
+    }
 
     return id;
   },
@@ -272,6 +285,28 @@ export const remove = mutation({
   handler: async (ctx, args) => {
     await ctx.db.delete(args.id);
     return args.id;
+  },
+});
+
+// [DEV] Set first N active scholarships to pending status for testing
+export const setScholarshipsPending = mutation({
+  args: { count: v.optional(v.number()) },
+  handler: async (ctx, args) => {
+    const count = args.count ?? 2;
+    const activeScholarships = await ctx.db
+      .query('scholarships')
+      .filter((q) => q.eq(q.field('status'), 'active'))
+      .take(count);
+
+    const ids = [];
+    for (const s of activeScholarships) {
+      await ctx.db.patch(s._id, {
+        status: 'pending' as const,
+        updatedAt: new Date().toISOString(),
+      });
+      ids.push(s._id);
+    }
+    return ids;
   },
 });
 
