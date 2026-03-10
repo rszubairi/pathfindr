@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAction } from 'convex/react';
 import { api } from '../../../../../convex/_generated/api';
@@ -14,28 +14,42 @@ import type { Id } from '../../../../../convex/_generated/dataModel';
 
 export default function PricingPage() {
   const router = useRouter();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, loading: authLoading } = useAuth();
   const { tier: currentTier } = useSubscription();
   const createCheckout = useAction(api.stripeActions.createCheckoutSession);
   const [loadingTier, setLoadingTier] = useState<TierKey | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  // Also read userId directly from localStorage as fallback for the Convex query
+  const storedUserId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
 
   const handleSelect = async (tier: TierKey) => {
+    setError(null);
+
+    // If auth is still loading, wait — don't silently fail
+    if (authLoading) return;
+
     if (!isAuthenticated) {
       router.push(`/register?redirect=/pricing`);
       return;
     }
 
-    if (!user) return;
+    // Use Convex user._id if available, otherwise fall back to localStorage userId
+    const userId = user?._id ?? storedUserId;
+    if (!userId) return;
 
     setLoadingTier(tier);
     try {
       const { sessionUrl } = await createCheckout({
-        userId: user._id as Id<'users'>,
+        userId: userId as Id<'users'>,
         tier,
       });
       window.location.href = sessionUrl;
-    } catch (error) {
-      console.error('Failed to create checkout session:', error);
+    } catch (err) {
+      console.error('Failed to create checkout session:', err);
+      setError(
+        err instanceof Error ? err.message : 'Failed to start checkout. Please try again.'
+      );
       setLoadingTier(null);
     }
   };
@@ -60,6 +74,11 @@ export default function PricingPage() {
       {/* Pricing Cards */}
       <section className="py-16 bg-white">
         <Container size="lg">
+          {error && (
+            <div className="max-w-3xl mx-auto mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+              {error}
+            </div>
+          )}
           <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
             {(Object.entries(TIER_CONFIG) as [TierKey, (typeof TIER_CONFIG)[TierKey]][]).map(
               ([key, config]) => (
