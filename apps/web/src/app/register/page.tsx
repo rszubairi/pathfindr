@@ -88,6 +88,18 @@ function RegisterContent() {
           </div>
 
           <Card className="p-6">
+            <div className="mb-6 bg-primary-50 border border-primary-200 rounded-lg p-4 text-center">
+              <p className="text-sm text-primary-800">
+                Are you a scholarship provider or institution?{' '}
+                <Link
+                  href="/register/institution"
+                  className="font-bold underline hover:text-primary-900"
+                >
+                  Click here to register
+                </Link>
+              </p>
+            </div>
+
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               {error && (
                 <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
@@ -162,15 +174,6 @@ function RegisterContent() {
               </Link>
             </p>
 
-            <p className="mt-3 text-center text-sm text-gray-600">
-              Are you an institution?{' '}
-              <Link
-                href="/register/institution"
-                className="text-primary-600 hover:text-primary-700 font-medium"
-              >
-                Register here
-              </Link>
-            </p>
           </Card>
         </div>
       </Container>

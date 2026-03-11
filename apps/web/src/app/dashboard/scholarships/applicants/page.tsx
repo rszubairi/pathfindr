@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
-import { useParams } from 'next/navigation';
+import { Suspense, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { useQuery, useMutation } from 'convex/react';
-import { api } from '../../../../../../../../convex/_generated/api';
+import { api } from '../../../../../../../convex/_generated/api';
 import { Table, TableHead, TableBody, TableRow, TableCell, TableHeaderCell } from '@/components/ui/Table';
 import { Badge } from '@/components/ui/Badge';
 import { Select } from '@/components/ui/Select';
@@ -12,20 +12,20 @@ import { SearchInput } from '@/components/ui/SearchInput';
 import { ArrowLeft, Mail } from 'lucide-react';
 import Link from 'next/link';
 import { format } from 'date-fns';
-import type { Id } from '../../../../../../../../convex/_generated/dataModel';
+import type { Id } from '../../../../../../../convex/_generated/dataModel';
 
-export default function ApplicantsPage() {
-  const params = useParams();
-  const id = params.id as Id<'scholarships'>;
+function ApplicantsContent() {
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id') as Id<'scholarships'> | null;
   const { user } = useAuth();
   
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
 
-  const scholarship = useQuery(api.scholarships.getById, { id });
+  const scholarship = useQuery(api.scholarships.getById, id ? { id } : 'skip');
   const applicants = useQuery(
     api.institutionScholarships.getApplicants,
-    user?._id ? { userId: user._id as Id<'users'>, scholarshipId: id } : 'skip'
+    user?._id && id ? { userId: user._id as Id<'users'>, scholarshipId: id } : 'skip'
   );
   
   const updateStatus = useMutation(api.institutionScholarships.updateApplicantStatus);
@@ -171,5 +171,13 @@ export default function ApplicantsPage() {
         </Table>
       </div>
     </div>
+  );
+}
+
+export default function ApplicantsPage() {
+  return (
+    <Suspense fallback={<div className="flex justify-center py-20"><div className="animate-spin w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full" /></div>}>
+      <ApplicantsContent />
+    </Suspense>
   );
 }

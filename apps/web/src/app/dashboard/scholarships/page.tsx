@@ -197,7 +197,7 @@ export default function ScholarshipsPage() {
                     />
                   </TableCell>
                   <TableCell className="font-medium text-gray-900">
-                    <Link href={`/dashboard/scholarships/${scholarship._id}/edit`} className="hover:text-primary-600">
+                    <Link href={`/dashboard/scholarships/edit?id=${scholarship._id}`} className="hover:text-primary-600">
                       {scholarship.name}
                     </Link>
                   </TableCell>
@@ -215,10 +215,10 @@ export default function ScholarshipsPage() {
                   </TableCell>
                   <TableCell>
                     <div className="flex justify-end gap-2 items-center">
-                      <Link href={`/dashboard/scholarships/${scholarship._id}/applicants`} className="p-2 text-gray-400 hover:text-primary-600 rounded-md hover:bg-primary-50 transition-colors" title="View Applicants">
+                      <Link href={`/dashboard/scholarships/applicants?id=${scholarship._id}`} className="p-2 text-gray-400 hover:text-primary-600 rounded-md hover:bg-primary-50 transition-colors" title="View Applicants">
                         <Users className="w-4 h-4" />
                       </Link>
-                      <Link href={`/dashboard/scholarships/${scholarship._id}/edit`} className="p-2 text-gray-400 hover:text-blue-600 rounded-md hover:bg-blue-50 transition-colors" title="Edit">
+                      <Link href={`/dashboard/scholarships/edit?id=${scholarship._id}`} className="p-2 text-gray-400 hover:text-blue-600 rounded-md hover:bg-blue-50 transition-colors" title="Edit">
                         <Edit2 className="w-4 h-4" />
                       </Link>
                       <button 

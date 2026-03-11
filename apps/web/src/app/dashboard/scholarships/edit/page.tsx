@@ -1,26 +1,26 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { Suspense, useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { useQuery, useMutation } from 'convex/react';
-import { api } from '../../../../../../../../convex/_generated/api';
+import { api } from '../../../../../../../convex/_generated/api';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import type { Id } from '../../../../../../../../convex/_generated/dataModel';
+import type { Id } from '../../../../../../../convex/_generated/dataModel';
 
-export default function EditScholarshipPage() {
+function EditScholarshipContent() {
   const router = useRouter();
-  const params = useParams();
+  const searchParams = useSearchParams();
   const { user } = useAuth();
   
-  const id = params.id as Id<'scholarships'>;
+  const id = searchParams.get('id') as Id<'scholarships'> | null;
 
-  const scholarship = useQuery(api.scholarships.getById, { id });
+  const scholarship = useQuery(api.scholarships.getById, id ? { id } : 'skip');
   const updateScholarship = useMutation(api.institutionScholarships.updateForInstitution);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -73,6 +73,7 @@ export default function EditScholarshipPage() {
     setError('');
 
     try {
+      if (!id) throw new Error('No scholarship ID provided');
       await updateScholarship({
         userId: user._id as Id<'users'>,
         id,
@@ -255,5 +256,13 @@ export default function EditScholarshipPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function EditScholarshipPage() {
+  return (
+    <Suspense fallback={<div className="flex justify-center py-20"><div className="animate-spin w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full" /></div>}>
+      <EditScholarshipContent />
+    </Suspense>
   );
 }
