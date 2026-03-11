@@ -66,8 +66,12 @@ function LoginContent() {
         })
       );
 
-      // Redirect based on profile completion, or to redirect param
-      if (!result.user.profileCompleted) {
+      // Redirect based on role, profile completion, or redirect param
+      if (result.user.role === 'institution') {
+        router.push('/dashboard');
+      } else if (result.user.role === 'admin') {
+        router.push('/admin/institutions');
+      } else if (!result.user.profileCompleted) {
         router.push('/profile/complete');
       } else if (redirectTo) {
         router.push(redirectTo);

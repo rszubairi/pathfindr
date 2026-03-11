@@ -161,6 +161,16 @@ function RegisterContent() {
                 Sign in
               </Link>
             </p>
+
+            <p className="mt-3 text-center text-sm text-gray-600">
+              Are you an institution?{' '}
+              <Link
+                href="/register/institution"
+                className="text-primary-600 hover:text-primary-700 font-medium"
+              >
+                Register here
+              </Link>
+            </p>
           </Card>
         </div>
       </Container>

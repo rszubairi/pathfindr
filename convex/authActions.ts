@@ -112,6 +112,25 @@ export const loginUser = action({
       throw new Error('Please verify your email before logging in');
     }
 
+    // Block unapproved institution accounts
+    if (user.role === 'institution') {
+      const profile = await ctx.runQuery(
+        api.institutionAuth.getInstitutionProfile,
+        { userId: user._id }
+      );
+      if (!profile || profile.approvalStatus === 'pending') {
+        throw new Error(
+          'Your institution account is pending admin approval. You will be notified once approved.'
+        );
+      }
+      if (profile.approvalStatus === 'rejected') {
+        throw new Error(
+          'Your institution registration was not approved. Reason: ' +
+            (profile.rejectionReason || 'Not specified') +
+            '. Please contact support.'
+        );
+      }
+    }
 
     const token = jwt.sign(
       {

@@ -34,6 +34,25 @@ export interface Scholarship {
   updatedAt: string;
 }
 
+export interface InstitutionProfile {
+  id: string;
+  userId: string;
+  institutionName: string;
+  corporateIdentityNumber: string;
+  picName: string;
+  picEmail: string;
+  picPhone: string;
+  providerType: Scholarship['providerType'];
+  website?: string;
+  description?: string;
+  approvalStatus: 'pending' | 'approved' | 'rejected';
+  approvedBy?: string;
+  approvedAt?: string;
+  rejectionReason?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface ScholarshipFilters {
   countries?: string[];
   fields?: string[];

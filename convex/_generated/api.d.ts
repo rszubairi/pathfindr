@@ -8,10 +8,14 @@
  * @module
  */
 
+import type * as adminInstitutions from "../adminInstitutions.js";
 import type * as auth from "../auth.js";
 import type * as authActions from "../authActions.js";
 import type * as boardingSchools from "../boardingSchools.js";
 import type * as http from "../http.js";
+import type * as institutionAuth from "../institutionAuth.js";
+import type * as institutionAuthActions from "../institutionAuthActions.js";
+import type * as institutionScholarships from "../institutionScholarships.js";
 import type * as notificationActions from "../notificationActions.js";
 import type * as notifications from "../notifications.js";
 import type * as profiles from "../profiles.js";
@@ -30,10 +34,14 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  adminInstitutions: typeof adminInstitutions;
   auth: typeof auth;
   authActions: typeof authActions;
   boardingSchools: typeof boardingSchools;
   http: typeof http;
+  institutionAuth: typeof institutionAuth;
+  institutionAuthActions: typeof institutionAuthActions;
+  institutionScholarships: typeof institutionScholarships;
   notificationActions: typeof notificationActions;
   notifications: typeof notifications;
   profiles: typeof profiles;

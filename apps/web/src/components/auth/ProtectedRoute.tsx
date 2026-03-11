@@ -3,18 +3,21 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
+import type { UserRole } from '@/types';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
   requireProfileComplete?: boolean;
+  requiredRole?: UserRole | UserRole[];
 }
 
 export function ProtectedRoute({
   children,
   requireProfileComplete = false,
+  requiredRole,
 }: ProtectedRouteProps) {
   const router = useRouter();
-  const { isAuthenticated, profileCompleted, loading } = useAuth();
+  const { user, isAuthenticated, profileCompleted, loading } = useAuth();
 
   useEffect(() => {
     if (!loading) {
@@ -22,9 +25,14 @@ export function ProtectedRoute({
         router.push('/login');
       } else if (requireProfileComplete && !profileCompleted) {
         router.push('/profile/complete');
+      } else if (requiredRole && user) {
+        const allowedRoles = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
+        if (!allowedRoles.includes(user.role as UserRole)) {
+          router.push('/');
+        }
       }
     }
-  }, [isAuthenticated, profileCompleted, loading, requireProfileComplete, router]);
+  }, [isAuthenticated, profileCompleted, loading, requireProfileComplete, requiredRole, user, router]);
 
   if (loading) {
     return (
@@ -36,6 +44,10 @@ export function ProtectedRoute({
 
   if (!isAuthenticated) return null;
   if (requireProfileComplete && !profileCompleted) return null;
+  if (requiredRole && user) {
+    const allowedRoles = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
+    if (!allowedRoles.includes(user.role as UserRole)) return null;
+  }
 
   return <>{children}</>;
 }

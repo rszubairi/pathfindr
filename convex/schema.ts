@@ -23,6 +23,8 @@ export default defineSchema({
     applicationUrl: v.optional(v.string()),
     applicationCount: v.optional(v.number()),
     matchScore: v.optional(v.number()),
+    createdBy: v.optional(v.id('users')),
+    viewCount: v.optional(v.number()),
     status: v.union(v.literal('active'), v.literal('closed'), v.literal('pending')),
     createdAt: v.string(),
     updatedAt: v.string(),
@@ -31,6 +33,7 @@ export default defineSchema({
     .index('by_deadline', ['deadline'])
     .index('by_value', ['value'])
     .index('by_created_at', ['createdAt'])
+    .index('by_created_by', ['createdBy'])
     .searchIndex('search_name', {
       searchField: 'name',
       filterFields: ['status'],
@@ -118,6 +121,38 @@ export default defineSchema({
   })
     .index('by_user_id', ['userId'])
     .index('by_profile_status', ['profileStatus']),
+
+  institutionProfiles: defineTable({
+    userId: v.id('users'),
+    institutionName: v.string(),
+    corporateIdentityNumber: v.string(),
+    picName: v.string(),
+    picEmail: v.string(),
+    picPhone: v.string(),
+    providerType: v.union(
+      v.literal('government'),
+      v.literal('university'),
+      v.literal('corporate'),
+      v.literal('ngo'),
+      v.literal('foundation'),
+      v.literal('individual')
+    ),
+    website: v.optional(v.string()),
+    description: v.optional(v.string()),
+    approvalStatus: v.union(
+      v.literal('pending'),
+      v.literal('approved'),
+      v.literal('rejected')
+    ),
+    approvedBy: v.optional(v.id('users')),
+    approvedAt: v.optional(v.string()),
+    rejectionReason: v.optional(v.string()),
+    createdAt: v.string(),
+    updatedAt: v.string(),
+  })
+    .index('by_user_id', ['userId'])
+    .index('by_approval_status', ['approvalStatus'])
+    .index('by_corporate_id', ['corporateIdentityNumber']),
 
   subscriptions: defineTable({
     userId: v.id('users'),
