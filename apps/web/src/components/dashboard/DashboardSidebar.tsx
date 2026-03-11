@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, GraduationCap, PlusCircle, BarChart3, Menu, X } from 'lucide-react';
+import { LayoutDashboard, GraduationCap, PlusCircle, BarChart3, Menu, X, User } from 'lucide-react';
 import { useState } from 'react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -12,6 +12,7 @@ const navigation = [
   { name: 'Scholarships', href: '/dashboard/scholarships', icon: GraduationCap },
   { name: 'Create Scholarship', href: '/dashboard/scholarships/new', icon: PlusCircle },
   { name: 'Analytics', href: '/dashboard/analytics', icon: BarChart3 },
+  { name: 'Profile', href: '/dashboard/profile', icon: User },
 ];
 
 export function DashboardSidebar() {
@@ -20,8 +21,8 @@ export function DashboardSidebar() {
 
   return (
     <>
-      {/* Mobile menu button */}
-      <div className="lg:hidden fixed top-4 right-4 z-50">
+      {/* Mobile menu button - moved down to avoid overlap with main header */}
+      <div className="lg:hidden fixed top-20 right-4 z-50">
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           className="p-2 bg-white rounded-md shadow-md text-gray-600 hover:text-gray-900"

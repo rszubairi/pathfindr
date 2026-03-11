@@ -129,7 +129,7 @@ export function Header() {
                       <p className="text-xs text-gray-500 truncate">{user.email}</p>
                     </div>
                     <Link
-                      href="/profile/complete"
+                      href={user.role === 'admin' ? '/admin' : user.role === 'institution' ? '/dashboard/profile' : '/profile/complete'}
                       className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                       onClick={() => setUserMenuOpen(false)}
                     >
@@ -245,7 +245,7 @@ export function Header() {
                       </div>
                     </div>
                     <Button variant="secondary" size="md" className="w-full" asChild>
-                      <Link href="/profile/complete">My Profile</Link>
+                      <Link href={user.role === 'admin' ? '/admin' : user.role === 'institution' ? '/dashboard/profile' : '/profile/complete'}>My Profile</Link>
                     </Button>
                     <Button
                       variant="ghost"

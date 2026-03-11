@@ -30,8 +30,8 @@ export function AdminSidebar() {
 
   return (
     <>
-      {/* Mobile menu button */}
-      <div className="lg:hidden fixed top-4 right-4 z-50">
+      {/* Mobile menu button - moved down to avoid overlap with global header */}
+      <div className="lg:hidden fixed top-20 right-4 z-50">
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           className="p-2 bg-white rounded-md shadow-md text-gray-600 hover:text-gray-900 border border-gray-200"

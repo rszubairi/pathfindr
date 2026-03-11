@@ -110,6 +110,8 @@ export const updateInstitutionProfile = mutation({
     providerType: v.optional(providerTypeValidator),
     website: v.optional(v.string()),
     description: v.optional(v.string()),
+    logoUrl: v.optional(v.string()),
+    address: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const profile = await ctx.db

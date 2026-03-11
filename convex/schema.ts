@@ -139,6 +139,8 @@ export default defineSchema({
     ),
     website: v.optional(v.string()),
     description: v.optional(v.string()),
+    logoUrl: v.optional(v.string()),
+    address: v.optional(v.string()),
     approvalStatus: v.union(
       v.literal('pending'),
       v.literal('approved'),
