@@ -12,14 +12,11 @@ export function useAuth() {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
   const router = useRouter();
-  const [userId, setUserId] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null | undefined>(undefined);
 
   // Read userId from localStorage on mount (client-side only)
   useEffect(() => {
-    // Avoid cascading renders by setting state asynchronously
-    setTimeout(() => {
-      setUserId(localStorage.getItem('userId'));
-    }, 0);
+    setUserId(localStorage.getItem('userId'));
   }, []);
 
   // Query current user from Convex
@@ -60,6 +57,6 @@ export function useAuth() {
     isAuthenticated: !!userId && (!!currentUser || !!user),
     profileCompleted: currentUser?.profileCompleted ?? false,
     logout,
-    loading: userId !== null && currentUser === undefined,
+    loading: userId === undefined || (userId !== null && currentUser === undefined),
   };
 }

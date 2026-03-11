@@ -34,13 +34,13 @@ export default function ScholarshipsPage() {
   const updateStatus = useMutation(api.institutionScholarships.updateForInstitution);
   const removeScholarship = useMutation(api.institutionScholarships.removeForInstitution);
 
-  const filteredScholarships = scholarships?.filter(s => 
+  const filteredScholarships = scholarships?.filter((s: any) => 
     s.name.toLowerCase().includes(searchQuery.toLowerCase())
   ) || [];
 
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
-      setSelectedIds(new Set(filteredScholarships.map(s => s._id)));
+      setSelectedIds(new Set(filteredScholarships.map((s: any) => s._id)));
     } else {
       setSelectedIds(new Set());
     }
@@ -188,7 +188,7 @@ export default function ScholarshipsPage() {
                 </TableCell>
               </TableRow>
             ) : (
-              filteredScholarships.map((scholarship) => (
+              filteredScholarships.map((scholarship: any) => (
                 <TableRow key={scholarship._id}>
                   <TableCell>
                     <Checkbox 

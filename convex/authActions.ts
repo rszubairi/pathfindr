@@ -178,3 +178,12 @@ export const resendVerification = action({
     return { success: true };
   },
 });
+
+export const seedAdmin = action({
+  args: {},
+  handler: async (ctx): Promise<any> => {
+    const passwordHash = await bcrypt.hash('Admin123!', 10);
+    const result = await ctx.runMutation(api.seed.seedAdminUser, { passwordHash });
+    return result;
+  },
+});

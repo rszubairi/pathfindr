@@ -230,7 +230,7 @@ export default function ManageSubscriptionPage() {
                     </div>
                   ) : (
                     <div className="divide-y divide-gray-100">
-                      {applications.map((app) => (
+                      {applications.map((app: any) => (
                         <div
                           key={app._id}
                           className="py-4 flex items-center justify-between"

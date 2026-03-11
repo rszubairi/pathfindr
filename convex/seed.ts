@@ -1,4 +1,5 @@
 import { mutation } from './_generated/server';
+import { v } from 'convex/values';
 import { seedScholarships as scholarshipData } from './seedData';
 import { scrapedScholarships } from './seedDataScraped';
 import { boardingSchoolsData } from './seedDataBoardingSchools';
@@ -70,5 +71,35 @@ export const clearBoardingSchools = mutation({
       await ctx.db.delete(school._id);
     }
     return { message: 'All boarding schools cleared', count: schools.length };
+  },
+});
+
+// Seed an admin user
+export const seedAdminUser = mutation({
+  args: { passwordHash: v.string() },
+  handler: async (ctx, args) => {
+    const existing = await ctx.db
+      .query('users')
+      .withIndex('by_email', (q) => q.eq('email', 'admin@pathfindr.com'))
+      .first();
+
+    if (existing) {
+      await ctx.db.patch(existing._id, { role: 'admin', emailVerified: true });
+      return { message: 'Updated existing admin user account to admin role.' };
+    }
+
+    const newId = await ctx.db.insert('users', {
+      email: 'admin@pathfindr.com',
+      passwordHash: args.passwordHash,
+      fullName: 'System Admin',
+      phone: '0000000000',
+      role: 'admin',
+      emailVerified: true,
+      profileCompleted: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+
+    return { message: 'Created new admin user successfully.' };
   },
 });

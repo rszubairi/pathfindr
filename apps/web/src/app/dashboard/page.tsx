@@ -81,7 +81,7 @@ export default function DashboardOverviewPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {analytics?.perScholarship.slice(0, 5).map((scholarship) => (
+              {analytics?.perScholarship.slice(0, 5).map((scholarship: any) => (
                 <tr key={scholarship._id} className="hover:bg-gray-50/50 transition-colors">
                   <td className="px-6 py-4">
                     <div className="font-medium text-gray-900">{scholarship.name}</div>
