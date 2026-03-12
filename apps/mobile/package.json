@@ -45,8 +45,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.23.9",
-    "@testing-library/react-native": "^12.4.3",
-    "@types/react": "~19.1.0",
     "@typescript-eslint/eslint-plugin": "^8.56.1",
     "@typescript-eslint/parser": "^8.56.1",
     "eslint": "^8.56.0",

@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { DashboardSidebar } from '@/components/dashboard/DashboardSidebar';
 import { MainLayout } from '@/components/layout/MainLayout';
