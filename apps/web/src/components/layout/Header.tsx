@@ -27,6 +27,11 @@ export function Header() {
   const pathname = usePathname();
   const { user, isAuthenticated, logout } = useAuth();
   const { t, i18n } = useTranslation();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -106,7 +111,7 @@ export function Header() {
                       : 'text-gray-700 hover:text-primary-600'
                   )}
                 >
-                  {t(`nav.${item.name.toLowerCase().replace(' ', '')}`)}
+                  {mounted ? t(`nav.${item.name.toLowerCase().replace(' ', '')}`) : item.name}
                   {isActive && (
                     <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-600 rounded-full" />
                   )}
@@ -164,7 +169,7 @@ export function Header() {
                       onClick={() => setUserMenuOpen(false)}
                     >
                       <User className="w-4 h-4" />
-                      {t('nav.myProfile', { defaultValue: 'My Profile' })}
+                      {mounted ? t('nav.myProfile', { defaultValue: 'My Profile' }) : 'My Profile'}
                     </Link>
                     <button
                       onClick={() => {
@@ -174,7 +179,7 @@ export function Header() {
                       className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
                     >
                       <LogOut className="w-4 h-4" />
-                      {t('nav.signOut', { defaultValue: 'Sign Out' })}
+                      {mounted ? t('nav.signOut', { defaultValue: 'Sign Out' }) : 'Sign Out'}
                     </button>
                   </div>
                 )}
@@ -182,10 +187,10 @@ export function Header() {
             ) : (
               <>
                 <Button variant="ghost" size="sm" asChild>
-                  <Link href="/login">{t('nav.signIn')}</Link>
+                  <Link href="/login">{mounted ? t('nav.signIn') : 'Sign In'}</Link>
                 </Button>
                 <Button variant="primary" size="sm" asChild>
-                  <Link href="/register">{t('nav.getStarted')}</Link>
+                  <Link href="/register">{mounted ? t('nav.getStarted') : 'Get Started'}</Link>
                 </Button>
               </>
             )}
@@ -257,7 +262,7 @@ export function Header() {
                         )}
                         onClick={() => setMobileMenuOpen(false)}
                       >
-                        {t(`nav.${item.name.toLowerCase().replace(' ', '')}`)}
+                        {mounted ? t(`nav.${item.name.toLowerCase().replace(' ', '')}`) : item.name}
                       </Link>
                     );
                   })}
@@ -315,7 +320,7 @@ export function Header() {
                               : '/profile/complete'
                         }
                       >
-                        {t('nav.myProfile', { defaultValue: 'My Profile' })}
+                        {mounted ? t('nav.myProfile', { defaultValue: 'My Profile' }) : 'My Profile'}
                       </Link>
                     </Button>
                     <Button
@@ -327,7 +332,7 @@ export function Header() {
                         logout();
                       }}
                     >
-                      {t('nav.signOut', { defaultValue: 'Sign Out' })}
+                      {mounted ? t('nav.signOut', { defaultValue: 'Sign Out' }) : 'Sign Out'}
                     </Button>
                   </>
                 ) : (
@@ -338,7 +343,7 @@ export function Header() {
                       className="w-full"
                       asChild
                     >
-                      <Link href="/login">{t('nav.signIn')}</Link>
+                      <Link href="/login">{mounted ? t('nav.signIn') : 'Sign In'}</Link>
                     </Button>
                     <Button
                       variant="primary"
@@ -346,7 +351,7 @@ export function Header() {
                       className="w-full"
                       asChild
                     >
-                      <Link href="/register">{t('nav.getStarted')}</Link>
+                      <Link href="/register">{mounted ? t('nav.getStarted') : 'Get Started'}</Link>
                     </Button>
                   </>
                 )}

@@ -9,6 +9,11 @@ import { useTranslation } from 'react-i18next';
 
 export function HeroSection() {
   const { t } = useTranslation();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <section className="relative bg-gradient-to-br from-primary-50 via-white to-secondary-50 pt-20 pb-24 overflow-hidden">
@@ -25,21 +30,21 @@ export function HeroSection() {
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-sm border border-gray-200 mb-6">
             <Sparkles className="h-4 w-4 text-primary-600" />
             <span className="text-sm font-medium text-gray-700">
-              {t('hero.badge')}
+              {mounted ? t('hero.badge') : 'Discover Your Global Educational Journey'}
             </span>
           </div>
 
           {/* Main Heading */}
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-            {t('hero.titlePart1')}
+            {mounted ? t('hero.titlePart1') : 'Find Your Perfect '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-secondary-600">
-              {t('hero.titlePart2')}
+              {mounted ? t('hero.titlePart2') : 'Scholarship'}
             </span>
           </h1>
 
           {/* Subheading */}
           <p className="text-lg sm:text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-            {t('hero.subtitle')}
+            {mounted ? t('hero.subtitle') : 'Connect with thousands of scholarships, universities, internships, and job opportunities across Southeast Asia and beyond. Your future starts here.'}
           </p>
 
           {/* CTA Buttons */}
@@ -47,12 +52,12 @@ export function HeroSection() {
             <Button asChild variant="primary" size="lg" className="shadow-lg hover:shadow-xl">
               <Link href="/scholarships" className="flex items-center gap-2">
                 <Search className="h-5 w-5" />
-                {t('hero.browseBtn')}
+                {mounted ? t('hero.browseBtn') : 'Browse Scholarships'}
               </Link>
             </Button>
             <Button asChild variant="secondary" size="lg">
               <Link href="/about" className="flex items-center gap-2">
-                {t('hero.learnMoreBtn')}
+                {mounted ? t('hero.learnMoreBtn') : 'Learn More'}
                 <ArrowRight className="h-5 w-5" />
               </Link>
             </Button>
@@ -72,12 +77,12 @@ export function HeroSection() {
                   ML
                 </div>
               </div>
-              <span className="font-medium">{t('hero.trustedBy')}</span>
+              <span className="font-medium">{mounted ? t('hero.trustedBy') : 'Trusted by 5,000+ students'}</span>
             </div>
             <span className="text-gray-300">|</span>
-            <span className="font-medium">{t('hero.available')}</span>
+            <span className="font-medium">{mounted ? t('hero.available') : '10,000+ scholarships available'}</span>
             <span className="text-gray-300">|</span>
-            <span className="font-medium">{t('hero.countriesCount')}</span>
+            <span className="font-medium">{mounted ? t('hero.countriesCount') : '50+ countries'}</span>
           </div>
         </div>
       </Container>
