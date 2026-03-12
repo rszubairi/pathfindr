@@ -1,30 +1,33 @@
+'use client';
+import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { GraduationCap, Facebook, Twitter, Instagram, Linkedin, Mail } from 'lucide-react';
 
-const platformLinks = [
-  { name: 'Scholarships', href: '/scholarships' },
-  { name: 'Universities', href: '/universities' },
-  { name: 'Internships', href: '/internships' },
-  { name: 'Jobs', href: '/jobs' },
-];
-
-const resourceLinks = [
-  { name: 'About Us', href: '/about' },
-  { name: 'Features', href: '/features' },
-  { name: 'Help Center', href: '/help' },
-  { name: 'Privacy Policy', href: '/privacy' },
-  { name: 'Terms of Service', href: '/terms' },
-];
-
-const socialLinks = [
-  { name: 'Facebook', href: 'https://facebook.com', icon: Facebook },
-  { name: 'Twitter', href: 'https://twitter.com', icon: Twitter },
-  { name: 'Instagram', href: 'https://instagram.com', icon: Instagram },
-  { name: 'LinkedIn', href: 'https://linkedin.com', icon: Linkedin },
-];
-
 export function Footer() {
+  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
+
+  const platformLinks = [
+    { name: t('nav.scholarships'), href: '/scholarships' },
+    { name: t('footer.links.universities'), href: '/universities' },
+    { name: t('footer.links.internships'), href: '/internships' },
+    { name: t('footer.links.jobs'), href: '/jobs' },
+  ];
+
+  const resourceLinks = [
+    { name: t('nav.about'), href: '/about' },
+    { name: t('nav.features'), href: '/features' },
+    { name: t('footer.links.helpCenter'), href: '/help' },
+    { name: t('footer.links.privacyPolicy'), href: '/privacy' },
+    { name: t('footer.links.termsOfService'), href: '/terms' },
+  ];
+
+  const socialLinks = [
+    { name: 'Facebook', href: 'https://facebook.com', icon: Facebook },
+    { name: 'Twitter', href: 'https://twitter.com', icon: Twitter },
+    { name: 'Instagram', href: 'https://instagram.com', icon: Instagram },
+    { name: 'LinkedIn', href: 'https://linkedin.com', icon: Linkedin },
+  ];
 
   return (
     <footer className="bg-gray-50 border-t border-gray-200">
@@ -37,17 +40,16 @@ export function Footer() {
               <span className="text-xl font-bold text-gray-900">Pathfindr</span>
             </Link>
             <p className="text-sm text-gray-600 leading-relaxed">
-              Your path to global educational opportunities. Connect with scholarships, universities,
-              internships, and jobs across Southeast Asia and beyond.
+              {t('footer.description')}
             </p>
           </div>
 
           {/* Platform Links */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-4">Platform</h3>
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">{t('footer.platform')}</h3>
             <ul className="space-y-3">
               {platformLinks.map((link) => (
-                <li key={link.name}>
+                <li key={link.href}>
                   <Link
                     href={link.href}
                     className="text-sm text-gray-600 hover:text-primary-600 transition"
@@ -61,10 +63,10 @@ export function Footer() {
 
           {/* Resources */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-4">Resources</h3>
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">{t('footer.resources')}</h3>
             <ul className="space-y-3">
               {resourceLinks.map((link) => (
-                <li key={link.name}>
+                <li key={link.href}>
                   <Link
                     href={link.href}
                     className="text-sm text-gray-600 hover:text-primary-600 transition"
@@ -78,7 +80,7 @@ export function Footer() {
 
           {/* Connect */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-4">Connect</h3>
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">{t('footer.connect')}</h3>
 
             {/* Social Media */}
             <div className="flex gap-3 mb-4">
@@ -116,10 +118,10 @@ export function Footer() {
         <div className="mt-12 pt-8 border-t border-gray-200">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <p className="text-sm text-gray-500">
-              &copy; {currentYear} Pathfindr. All rights reserved.
+              &copy; {currentYear} Pathfindr. {t('footer.allRightsReserved')}
             </p>
             <p className="text-sm text-gray-500">
-              Made with <span className="text-red-500">❤️</span> in Southeast Asia
+              {t('footer.madeWith')} <span className="text-red-500">❤️</span> {t('footer.inSEA')}
             </p>
           </div>
         </div>

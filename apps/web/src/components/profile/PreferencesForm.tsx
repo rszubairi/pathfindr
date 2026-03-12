@@ -22,16 +22,18 @@ interface Props {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onNext: (data: any) => void;
+  onNext: (data: any) => Promise<void>;
   onBack: () => void;
 }
 
-export default function PreferencesForm({ data, onBack }: Props) {
+import { useTranslation } from 'react-i18next';
+
+export default function PreferencesForm({ data, onNext, onBack }: Props) {
+  const { t } = useTranslation();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const upsertProfile = useMutation(api.profiles.upsert);
   const markProfileCompleted = useMutation(api.auth.markProfileCompleted);
 
   const [interests, setInterests] = useState<string[]>(data.interests || []);
@@ -82,63 +84,16 @@ export default function PreferencesForm({ data, onBack }: Props) {
     setError(null);
 
     try {
-      const userId = localStorage.getItem('userId');
-      if (!userId) throw new Error('Please log in again to continue');
-
-      const profilePayload = {
-        userId: userId as Id<'users'>,
-        dateOfBirth: data.personalDetails?.dateOfBirth,
-        gender: data.personalDetails?.gender,
-        nationality: data.personalDetails?.nationality,
-        country: data.personalDetails?.country,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        education: (data.education || []).map((edu: any) => ({
-          id: edu.id,
-          institutionName: edu.institutionName,
-          qualificationTitle: edu.qualificationTitle,
-          fieldOfStudy: edu.fieldOfStudy,
-          startDate: edu.startDate,
-          endDate: edu.endDate || undefined,
-          grade: edu.grade || undefined,
-          gpa: edu.gpa ? Number(edu.gpa) : undefined,
-        })),
-        testScores: {
-          sat: data.testScores?.sat ? Number(data.testScores.sat) : undefined,
-          ielts: data.testScores?.ielts
-            ? Number(data.testScores.ielts)
-            : undefined,
-          toefl: data.testScores?.toefl
-            ? Number(data.testScores.toefl)
-            : undefined,
-          gre: data.testScores?.gre ? Number(data.testScores.gre) : undefined,
-          gmat: data.testScores?.gmat
-            ? Number(data.testScores.gmat)
-            : undefined,
-        },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        certificates: (data.certificates || []).map((cert: any) => ({
-          id: cert.id,
-          title: cert.title,
-          issuer: cert.issuer,
-          dateIssued: cert.dateIssued,
-        })),
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        projects: (data.projects || []).map((proj: any) => ({
-          id: proj.id,
-          title: proj.title,
-          description: proj.description,
-          technologies: proj.technologies || [],
-          startDate: proj.startDate,
-          endDate: proj.endDate || undefined,
-        })),
-        skills: data.skills || [],
+      await onNext({
         interests,
         preferredCountries: countries,
         availability: formData.availability || undefined,
-      };
+      });
 
-      await upsertProfile(profilePayload);
-      await markProfileCompleted({ userId: userId as Id<'users'> });
+      const userId = localStorage.getItem('userId');
+      if (userId) {
+        await markProfileCompleted({ userId: userId as Id<'users'> });
+      }
 
       router.push('/scholarships');
     } catch (err: unknown) {
@@ -153,11 +108,10 @@ export default function PreferencesForm({ data, onBack }: Props) {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div>
         <h2 className="text-xl font-bold text-gray-900 mb-1">
-          Career Preferences
+          {t('profile.forms.preferences.title')}
         </h2>
         <p className="text-gray-600 text-sm mb-6">
-          Tell us about your interests so we can match you with the right
-          scholarships
+          {t('profile.forms.preferences.subtitle')}
         </p>
       </div>
 
@@ -170,7 +124,8 @@ export default function PreferencesForm({ data, onBack }: Props) {
       {/* ─── Interests ─────────────────────────────────────── */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Interests <span className="text-red-500">*</span>
+          {t('profile.forms.preferences.interests.label')}{' '}
+          <span className="text-red-500">*</span>
         </label>
         <div className="flex gap-2 mb-3">
           <input
@@ -184,10 +139,10 @@ export default function PreferencesForm({ data, onBack }: Props) {
               }
             }}
             className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            placeholder="e.g., Technology, Healthcare, Education"
+            placeholder={t('profile.forms.preferences.interests.placeholder')}
           />
           <Button type="button" variant="secondary" onClick={addInterest}>
-            Add
+            {t('profile.forms.common.add')}
           </Button>
         </div>
         {interests.length > 0 && (
@@ -215,7 +170,8 @@ export default function PreferencesForm({ data, onBack }: Props) {
       {/* ─── Preferred Countries ───────────────────────────── */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Preferred Study Countries <span className="text-red-500">*</span>
+          {t('profile.forms.preferences.studyCountries.label')}{' '}
+          <span className="text-red-500">*</span>
         </label>
         <div className="flex gap-2 mb-3">
           <input
@@ -229,10 +185,12 @@ export default function PreferencesForm({ data, onBack }: Props) {
               }
             }}
             className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            placeholder="e.g., United States, United Kingdom, Germany"
+            placeholder={t(
+              'profile.forms.preferences.studyCountries.placeholder'
+            )}
           />
           <Button type="button" variant="secondary" onClick={addCountry}>
-            Add
+            {t('profile.forms.common.add')}
           </Button>
         </div>
         {countries.length > 0 && (
@@ -259,15 +217,15 @@ export default function PreferencesForm({ data, onBack }: Props) {
 
       {/* ─── Availability ──────────────────────────────────── */}
       <Input
-        label="When are you planning to start?"
+        label={t('profile.forms.preferences.availability.label')}
         {...register('availability')}
         error={errors.availability?.message}
-        placeholder="e.g., Fall 2026, January 2027, Immediately"
+        placeholder={t('profile.forms.preferences.availability.placeholder')}
       />
 
       <div className="flex justify-between pt-4">
         <Button type="button" variant="ghost" onClick={onBack}>
-          Back
+          {t('profile.forms.common.back')}
         </Button>
         <Button
           type="submit"
@@ -275,7 +233,9 @@ export default function PreferencesForm({ data, onBack }: Props) {
           disabled={isSubmitting}
           isLoading={isSubmitting}
         >
-          {isSubmitting ? 'Saving profile...' : 'Complete Profile'}
+          {isSubmitting
+            ? t('profile.forms.preferences.saving')
+            : t('profile.forms.preferences.complete')}
         </Button>
       </div>
     </form>

@@ -8,6 +8,8 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Plus, Trash2, X } from 'lucide-react';
 
+import { useTranslation } from 'react-i18next';
+
 const certificateSchema = z.object({
   id: z.string(),
   title: z.string().min(1, 'Title is required'),
@@ -40,6 +42,7 @@ interface Props {
 }
 
 export default function AchievementsForm({ data, onNext, onBack }: Props) {
+  const { t } = useTranslation();
   const [skills, setSkills] = useState<string[]>(data.skills || []);
   const [skillInput, setSkillInput] = useState('');
 
@@ -92,17 +95,18 @@ export default function AchievementsForm({ data, onNext, onBack }: Props) {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
       <div>
         <h2 className="text-xl font-bold text-gray-900 mb-1">
-          Achievements & Skills
+          {t('profile.forms.achievements.title')}
         </h2>
         <p className="text-gray-600 text-sm mb-6">
-          Showcase your certificates, projects, and skills. All sections are
-          optional.
+          {t('profile.forms.achievements.subtitle')}
         </p>
       </div>
 
       {/* ─── Certificates ─────────────────────────────────── */}
       <div>
-        <h3 className="font-semibold text-gray-900 mb-4">Certificates</h3>
+        <h3 className="font-semibold text-gray-900 mb-4">
+          {t('profile.forms.achievements.certificates.title')}
+        </h3>
         {certFields.map((field, index) => (
           <div
             key={field.id}
@@ -110,7 +114,9 @@ export default function AchievementsForm({ data, onNext, onBack }: Props) {
           >
             <div className="flex justify-between items-center">
               <span className="text-sm font-medium text-gray-700">
-                Certificate {index + 1}
+                {t('profile.forms.achievements.certificates.entry', {
+                  index: index + 1,
+                })}
               </span>
               <Button
                 type="button"
@@ -124,22 +130,22 @@ export default function AchievementsForm({ data, onNext, onBack }: Props) {
             </div>
             <input type="hidden" {...register(`certificates.${index}.id`)} />
             <Input
-              label="Certificate Title"
+              label={t('profile.forms.achievements.certificates.itemTitle')}
               {...register(`certificates.${index}.title`)}
               error={errors.certificates?.[index]?.title?.message}
-              placeholder="e.g., AWS Solutions Architect"
+              placeholder={t('profile.forms.achievements.certificates.placeholder')}
               required
             />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <Input
-                label="Issuer"
+                label={t('profile.forms.achievements.certificates.issuer')}
                 {...register(`certificates.${index}.issuer`)}
                 error={errors.certificates?.[index]?.issuer?.message}
                 placeholder="e.g., Amazon Web Services"
                 required
               />
               <Input
-                label="Date Issued"
+                label={t('profile.forms.achievements.certificates.dateIssued')}
                 type="date"
                 {...register(`certificates.${index}.dateIssued`)}
                 error={errors.certificates?.[index]?.dateIssued?.message}
@@ -162,14 +168,14 @@ export default function AchievementsForm({ data, onNext, onBack }: Props) {
           }
         >
           <Plus className="w-4 h-4 mr-2" />
-          Add Certificate
+          {t('profile.forms.achievements.certificates.addAnother')}
         </Button>
       </div>
 
       {/* ─── Projects ─────────────────────────────────────── */}
       <div>
         <h3 className="font-semibold text-gray-900 mb-4">
-          Academic / Personal Projects
+          {t('profile.forms.achievements.projects.title')}
         </h3>
         {projFields.map((field, index) => (
           <div
@@ -178,7 +184,9 @@ export default function AchievementsForm({ data, onNext, onBack }: Props) {
           >
             <div className="flex justify-between items-center">
               <span className="text-sm font-medium text-gray-700">
-                Project {index + 1}
+                {t('profile.forms.achievements.projects.entry', {
+                  index: index + 1,
+                })}
               </span>
               <Button
                 type="button"
@@ -192,21 +200,24 @@ export default function AchievementsForm({ data, onNext, onBack }: Props) {
             </div>
             <input type="hidden" {...register(`projects.${index}.id`)} />
             <Input
-              label="Project Title"
+              label={t('profile.forms.achievements.projects.itemTitle')}
               {...register(`projects.${index}.title`)}
               error={errors.projects?.[index]?.title?.message}
-              placeholder="e.g., AI-Powered Scholarship Matcher"
+              placeholder={t('profile.forms.achievements.projects.placeholder')}
               required
             />
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Description <span className="text-red-500">*</span>
+                {t('profile.forms.achievements.projects.description')}{' '}
+                <span className="text-red-500">*</span>
               </label>
               <textarea
                 {...register(`projects.${index}.description`)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 rows={3}
-                placeholder="Briefly describe the project and your role"
+                placeholder={t(
+                  'profile.forms.achievements.projects.descPlaceholder'
+                )}
               />
               {errors.projects?.[index]?.description && (
                 <p className="mt-1 text-sm text-red-600">
@@ -216,14 +227,14 @@ export default function AchievementsForm({ data, onNext, onBack }: Props) {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <Input
-                label="Start Date"
+                label={t('profile.forms.achievements.projects.startDate')}
                 type="date"
                 {...register(`projects.${index}.startDate`)}
                 error={errors.projects?.[index]?.startDate?.message}
                 required
               />
               <Input
-                label="End Date"
+                label={t('profile.forms.achievements.projects.endDate')}
                 type="date"
                 {...register(`projects.${index}.endDate`)}
                 helperText="Leave empty if ongoing"
@@ -247,13 +258,15 @@ export default function AchievementsForm({ data, onNext, onBack }: Props) {
           }
         >
           <Plus className="w-4 h-4 mr-2" />
-          Add Project
+          {t('profile.forms.achievements.projects.addAnother')}
         </Button>
       </div>
 
       {/* ─── Skills ───────────────────────────────────────── */}
       <div>
-        <h3 className="font-semibold text-gray-900 mb-4">Skills</h3>
+        <h3 className="font-semibold text-gray-900 mb-4">
+          {t('profile.forms.achievements.skills.title')}
+        </h3>
         <div className="flex gap-2 mb-3">
           <input
             type="text"
@@ -266,10 +279,10 @@ export default function AchievementsForm({ data, onNext, onBack }: Props) {
               }
             }}
             className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            placeholder="Type a skill and press Enter (e.g., Python, Leadership)"
+            placeholder={t('profile.forms.achievements.skills.placeholder')}
           />
           <Button type="button" variant="secondary" onClick={addSkill}>
-            Add
+            {t('profile.forms.common.add')}
           </Button>
         </div>
         {skills.length > 0 && (
@@ -295,10 +308,10 @@ export default function AchievementsForm({ data, onNext, onBack }: Props) {
 
       <div className="flex justify-between pt-4">
         <Button type="button" variant="ghost" onClick={onBack}>
-          Back
+          {t('profile.forms.common.back')}
         </Button>
         <Button type="submit" variant="primary">
-          Next
+          {t('profile.forms.common.next')}
         </Button>
       </div>
     </form>

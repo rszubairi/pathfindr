@@ -1,7 +1,10 @@
+'use client';
+
 import React from 'react';
 import { Quote, Star } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { Card, CardContent } from '@/components/ui/Card';
+import { useTranslation } from 'react-i18next';
 
 const testimonials = [
   {
@@ -37,16 +40,18 @@ const testimonials = [
 ];
 
 export function TestimonialsSection() {
+  const { t } = useTranslation();
+
   return (
     <section className="py-20 bg-white">
       <Container size="xl">
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Success Stories from Our Students
+            {t('home.testimonials.title')}
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Join thousands of students who have found their perfect scholarship through Pathfindr.
+            {t('home.testimonials.subtitle')}
           </p>
         </div>
 

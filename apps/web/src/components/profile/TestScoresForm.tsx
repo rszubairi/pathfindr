@@ -6,6 +6,8 @@ import { z } from 'zod';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 
+import { useTranslation } from 'react-i18next';
+
 const testScoresSchema = z.object({
   sat: z.preprocess(
     (val) => (val === '' || val === undefined ? undefined : Number(val)),
@@ -40,6 +42,7 @@ interface Props {
 }
 
 export default function TestScoresForm({ data, onNext, onBack }: Props) {
+  const { t } = useTranslation();
   const {
     register,
     handleSubmit,
@@ -53,7 +56,8 @@ export default function TestScoresForm({ data, onNext, onBack }: Props) {
     // Clean undefined values
     const cleaned: Record<string, number | undefined> = {};
     for (const [key, value] of Object.entries(formData)) {
-      cleaned[key] = value === undefined || isNaN(value as number) ? undefined : value;
+      cleaned[key] =
+        value === undefined || isNaN(value as number) ? undefined : value;
     }
     onNext({ testScores: cleaned });
   };
@@ -62,29 +66,28 @@ export default function TestScoresForm({ data, onNext, onBack }: Props) {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div>
         <h2 className="text-xl font-bold text-gray-900 mb-1">
-          Standardized Test Scores
+          {t('profile.forms.testScores.title')}
         </h2>
         <p className="text-gray-600 text-sm mb-6">
-          Add scores for any tests you&apos;ve taken. All fields are optional —
-          only fill in tests you&apos;ve completed.
+          {t('profile.forms.testScores.subtitle')}
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Input
-          label="SAT Score"
+          label={t('profile.forms.testScores.sat.label')}
           type="number"
           {...register('sat', {
             setValueAs: (v) =>
               v === '' || v === undefined ? undefined : parseInt(v),
           })}
           error={errors.sat?.message}
-          placeholder="e.g., 1450"
-          helperText="Total score (400–1600)"
+          placeholder={t('profile.forms.testScores.sat.placeholder')}
+          helperText={t('profile.forms.testScores.sat.helper')}
         />
 
         <Input
-          label="IELTS Score"
+          label={t('profile.forms.testScores.ielts.label')}
           type="number"
           step="0.5"
           {...register('ielts', {
@@ -92,53 +95,53 @@ export default function TestScoresForm({ data, onNext, onBack }: Props) {
               v === '' || v === undefined ? undefined : parseFloat(v),
           })}
           error={errors.ielts?.message}
-          placeholder="e.g., 7.5"
-          helperText="Overall band score (0–9)"
+          placeholder={t('profile.forms.testScores.ielts.placeholder')}
+          helperText={t('profile.forms.testScores.ielts.helper')}
         />
 
         <Input
-          label="TOEFL Score"
+          label={t('profile.forms.testScores.toefl.label')}
           type="number"
           {...register('toefl', {
             setValueAs: (v) =>
               v === '' || v === undefined ? undefined : parseInt(v),
           })}
           error={errors.toefl?.message}
-          placeholder="e.g., 105"
-          helperText="Total score (0–120)"
+          placeholder={t('profile.forms.testScores.toefl.placeholder')}
+          helperText={t('profile.forms.testScores.toefl.helper')}
         />
 
         <Input
-          label="GRE Score"
+          label={t('profile.forms.testScores.gre.label')}
           type="number"
           {...register('gre', {
             setValueAs: (v) =>
               v === '' || v === undefined ? undefined : parseInt(v),
           })}
           error={errors.gre?.message}
-          placeholder="e.g., 325"
-          helperText="Verbal + Quant combined (260–340)"
+          placeholder={t('profile.forms.testScores.gre.placeholder')}
+          helperText={t('profile.forms.testScores.gre.helper')}
         />
 
         <Input
-          label="GMAT Score"
+          label={t('profile.forms.testScores.gmat.label')}
           type="number"
           {...register('gmat', {
             setValueAs: (v) =>
               v === '' || v === undefined ? undefined : parseInt(v),
           })}
           error={errors.gmat?.message}
-          placeholder="e.g., 720"
-          helperText="Total score (200–800)"
+          placeholder={t('profile.forms.testScores.gmat.placeholder')}
+          helperText={t('profile.forms.testScores.gmat.helper')}
         />
       </div>
 
       <div className="flex justify-between pt-4">
         <Button type="button" variant="ghost" onClick={onBack}>
-          Back
+          {t('profile.forms.common.back')}
         </Button>
         <Button type="submit" variant="primary">
-          Next
+          {t('profile.forms.common.next')}
         </Button>
       </div>
     </form>

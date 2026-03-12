@@ -7,6 +7,8 @@ import { GraduationCap, Menu, X, ChevronDown, User, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
+import { useTranslation } from 'react-i18next';
+import { Globe } from 'lucide-react';
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -24,6 +26,11 @@ export function Header() {
   const userMenuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const { user, isAuthenticated, logout } = useAuth();
+  const { t, i18n } = useTranslation();
+
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+  };
 
   // Handle scroll effect
   useEffect(() => {
@@ -79,6 +86,9 @@ export function Header() {
           <Link href="/" className="flex items-center gap-2 group">
             <GraduationCap className="h-8 w-8 text-primary-600 group-hover:text-primary-700 transition" />
             <span className="text-xl font-bold text-gray-900">Pathfindr</span>
+            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-primary-100 text-primary-700 uppercase tracking-wider">
+              Beta
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -96,7 +106,7 @@ export function Header() {
                       : 'text-gray-700 hover:text-primary-600'
                   )}
                 >
-                  {item.name}
+                  {t(`nav.${item.name.toLowerCase().replace(' ', '')}`)}
                   {isActive && (
                     <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-600 rounded-full" />
                   )}
@@ -107,6 +117,20 @@ export function Header() {
 
           {/* Auth Buttons - Desktop */}
           <div className="hidden md:flex md:items-center md:gap-4">
+            {/* Language Switcher */}
+            <div className="flex items-center gap-2 mr-2 border-r pr-4 border-gray-200">
+              <Globe className="w-4 h-4 text-gray-400" />
+              <select
+                onChange={(e) => changeLanguage(e.target.value)}
+                value={i18n.language}
+                className="text-sm font-medium bg-transparent border-none focus:ring-0 cursor-pointer text-gray-700 hover:text-primary-600 transition-colors"
+              >
+                <option value="en">EN</option>
+                <option value="ms">BM</option>
+                <option value="zh">ZH</option>
+              </select>
+            </div>
+
             {isAuthenticated && user ? (
               <div className="relative" ref={userMenuRef}>
                 <button
@@ -129,12 +153,18 @@ export function Header() {
                       <p className="text-xs text-gray-500 truncate">{user.email}</p>
                     </div>
                     <Link
-                      href={user.role === 'admin' ? '/admin' : user.role === 'institution' ? '/dashboard/profile' : '/profile/complete'}
+                      href={
+                        user.role === 'admin'
+                          ? '/admin'
+                          : user.role === 'institution'
+                            ? '/dashboard/profile'
+                            : '/profile/complete'
+                      }
                       className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                       onClick={() => setUserMenuOpen(false)}
                     >
                       <User className="w-4 h-4" />
-                      My Profile
+                      {t('nav.myProfile', { defaultValue: 'My Profile' })}
                     </Link>
                     <button
                       onClick={() => {
@@ -144,7 +174,7 @@ export function Header() {
                       className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
                     >
                       <LogOut className="w-4 h-4" />
-                      Sign Out
+                      {t('nav.signOut', { defaultValue: 'Sign Out' })}
                     </button>
                   </div>
                 )}
@@ -152,10 +182,10 @@ export function Header() {
             ) : (
               <>
                 <Button variant="ghost" size="sm" asChild>
-                  <Link href="/login">Sign In</Link>
+                  <Link href="/login">{t('nav.signIn')}</Link>
                 </Button>
                 <Button variant="primary" size="sm" asChild>
-                  <Link href="/register">Get Started</Link>
+                  <Link href="/register">{t('nav.getStarted')}</Link>
                 </Button>
               </>
             )}
@@ -196,6 +226,9 @@ export function Header() {
                 <div className="flex items-center gap-2">
                   <GraduationCap className="h-6 w-6 text-primary-600" />
                   <span className="text-lg font-bold text-gray-900">Pathfindr</span>
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-primary-100 text-primary-700 uppercase tracking-wider">
+                    Beta
+                  </span>
                 </div>
                 <button
                   type="button"
@@ -224,10 +257,33 @@ export function Header() {
                         )}
                         onClick={() => setMobileMenuOpen(false)}
                       >
-                        {item.name}
+                        {t(`nav.${item.name.toLowerCase().replace(' ', '')}`)}
                       </Link>
                     );
                   })}
+                </div>
+
+                {/* Mobile Language Switcher */}
+                <div className="mt-8 px-4">
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                    Select Language
+                  </p>
+                  <div className="flex gap-2">
+                    {['en', 'ms', 'zh'].map((lng) => (
+                      <button
+                        key={lng}
+                        onClick={() => changeLanguage(lng)}
+                        className={cn(
+                          'px-4 py-2 rounded-lg text-sm font-medium border transition-all',
+                          i18n.language === lng
+                            ? 'bg-primary-600 text-white border-primary-600'
+                            : 'bg-white text-gray-700 border-gray-200 hover:border-primary-600'
+                        )}
+                      >
+                        {lng === 'en' ? 'English' : lng === 'ms' ? 'Bahasa' : '中文'}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
@@ -244,8 +300,23 @@ export function Header() {
                         <p className="text-xs text-gray-500">{user.email}</p>
                       </div>
                     </div>
-                    <Button variant="secondary" size="md" className="w-full" asChild>
-                      <Link href={user.role === 'admin' ? '/admin' : user.role === 'institution' ? '/dashboard/profile' : '/profile/complete'}>My Profile</Link>
+                    <Button
+                      variant="secondary"
+                      size="md"
+                      className="w-full"
+                      asChild
+                    >
+                      <Link
+                        href={
+                          user.role === 'admin'
+                            ? '/admin'
+                            : user.role === 'institution'
+                              ? '/dashboard/profile'
+                              : '/profile/complete'
+                        }
+                      >
+                        {t('nav.myProfile', { defaultValue: 'My Profile' })}
+                      </Link>
                     </Button>
                     <Button
                       variant="ghost"
@@ -256,16 +327,26 @@ export function Header() {
                         logout();
                       }}
                     >
-                      Sign Out
+                      {t('nav.signOut', { defaultValue: 'Sign Out' })}
                     </Button>
                   </>
                 ) : (
                   <>
-                    <Button variant="secondary" size="md" className="w-full" asChild>
-                      <Link href="/login">Sign In</Link>
+                    <Button
+                      variant="secondary"
+                      size="md"
+                      className="w-full"
+                      asChild
+                    >
+                      <Link href="/login">{t('nav.signIn')}</Link>
                     </Button>
-                    <Button variant="primary" size="md" className="w-full" asChild>
-                      <Link href="/register">Get Started</Link>
+                    <Button
+                      variant="primary"
+                      size="md"
+                      className="w-full"
+                      asChild
+                    >
+                      <Link href="/register">{t('nav.getStarted')}</Link>
                     </Button>
                   </>
                 )}

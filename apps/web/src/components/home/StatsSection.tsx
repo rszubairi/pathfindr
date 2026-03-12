@@ -1,35 +1,41 @@
+'use client';
+
 import React from 'react';
 import { BookOpen, Globe, Users, TrendingUp } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
+import { useTranslation } from 'react-i18next';
 
-const stats = [
-  {
-    icon: BookOpen,
-    value: '10,000+',
-    label: 'Scholarships Available',
-    description: 'Diverse opportunities across all fields',
-  },
-  {
-    icon: Globe,
-    value: '50+',
-    label: 'Countries',
-    description: 'Global reach across Southeast Asia and beyond',
-  },
-  {
-    icon: Users,
-    value: '5,000+',
-    label: 'Students Helped',
-    description: 'Success stories from our community',
-  },
-  {
-    icon: TrendingUp,
-    value: '$50M+',
-    label: 'Scholarships Awarded',
-    description: 'Total value facilitated through our platform',
-  },
-];
 
 export function StatsSection() {
+  const { t } = useTranslation();
+
+  const stats = [
+    {
+      icon: BookOpen,
+      value: '10,000+',
+      label: t('home.stats.scholarships.label'),
+      description: t('home.stats.scholarships.desc'),
+    },
+    {
+      icon: Globe,
+      value: '50+',
+      label: t('home.stats.countries.label'),
+      description: t('home.stats.countries.desc'),
+    },
+    {
+      icon: Users,
+      value: '5,000+',
+      label: t('home.stats.students.label'),
+      description: t('home.stats.students.desc'),
+    },
+    {
+      icon: TrendingUp,
+      value: '$50M+',
+      label: t('home.stats.awarded.label'),
+      description: t('home.stats.awarded.desc'),
+    },
+  ];
+
   return (
     <section className="py-16 bg-white">
       <Container size="xl">

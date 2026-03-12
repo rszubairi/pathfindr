@@ -6,6 +6,9 @@ import { z } from 'zod';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Plus, Trash2 } from 'lucide-react';
+import { UNIVERSITIES, FIELDS_OF_STUDY } from '@/lib/constants';
+
+import { useTranslation } from 'react-i18next';
 
 const educationItemSchema = z.object({
   id: z.string(),
@@ -49,6 +52,7 @@ const emptyEducation = () => ({
 });
 
 export default function EducationForm({ data, onNext, onBack }: Props) {
+  const { t } = useTranslation();
   const {
     register,
     handleSubmit,
@@ -75,10 +79,10 @@ export default function EducationForm({ data, onNext, onBack }: Props) {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div>
         <h2 className="text-xl font-bold text-gray-900 mb-1">
-          Education History
+          {t('profile.forms.education.title')}
         </h2>
         <p className="text-gray-600 text-sm mb-6">
-          Add your academic qualifications (most recent first)
+          {t('profile.forms.education.subtitle')}
         </p>
       </div>
 
@@ -86,7 +90,7 @@ export default function EducationForm({ data, onNext, onBack }: Props) {
         <div key={field.id} className="p-4 bg-gray-50 rounded-lg space-y-4">
           <div className="flex justify-between items-center">
             <h3 className="font-semibold text-gray-900">
-              Education {index + 1}
+              {t('profile.forms.education.entry', { index: index + 1 })}
             </h3>
             {fields.length > 1 && (
               <Button
@@ -103,36 +107,63 @@ export default function EducationForm({ data, onNext, onBack }: Props) {
 
           <input type="hidden" {...register(`education.${index}.id`)} />
 
-          <Input
-            label="Institution Name"
-            {...register(`education.${index}.institutionName`)}
-            error={errors.education?.[index]?.institutionName?.message}
-            placeholder="e.g., Harvard University"
-            required
-          />
+          <div className="relative">
+            <Input
+              label={t('profile.forms.education.institution.label')}
+              {...register(`education.${index}.institutionName`)}
+              error={errors.education?.[index]?.institutionName?.message}
+              placeholder={t('profile.forms.education.institution.placeholder')}
+              required
+              list={`uni-list-${index}`}
+            />
+            <datalist id={`uni-list-${index}`}>
+              {UNIVERSITIES.map((u) => (
+                <option key={u} value={u} />
+              ))}
+            </datalist>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Qualification <span className="text-red-500">*</span>
+                {t('profile.forms.education.qualification.label')}{' '}
+                <span className="text-red-500">*</span>
               </label>
               <select
                 {...register(`education.${index}.qualificationTitle`)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
-                <option value="">Select qualification</option>
-                <option value="High School Diploma">High School Diploma</option>
-                <option value="Associate Degree">Associate Degree</option>
-                <option value="Bachelor of Arts">Bachelor of Arts</option>
-                <option value="Bachelor of Science">Bachelor of Science</option>
-                <option value="Bachelor of Engineering">
-                  Bachelor of Engineering
+                <option value="">
+                  {t('profile.forms.education.qualification.placeholder')}
                 </option>
-                <option value="Master of Arts">Master of Arts</option>
-                <option value="Master of Science">Master of Science</option>
-                <option value="MBA">MBA</option>
-                <option value="PhD">PhD</option>
-                <option value="Other">Other</option>
+                <option value="High School Diploma">
+                  {t('profile.forms.education.qualifications.highSchool')}
+                </option>
+                <option value="Associate Degree">
+                  {t('profile.forms.education.qualifications.associate')}
+                </option>
+                <option value="Bachelor of Arts">
+                  {t('profile.forms.education.qualifications.bachelorArts')}
+                </option>
+                <option value="Bachelor of Science">
+                  {t('profile.forms.education.qualifications.bachelorScience')}
+                </option>
+                <option value="Bachelor of Engineering">
+                  {t('profile.forms.education.qualifications.bachelorEng')}
+                </option>
+                <option value="Master of Arts">
+                  {t('profile.forms.education.qualifications.masterArts')}
+                </option>
+                <option value="Master of Science">
+                  {t('profile.forms.education.qualifications.masterScience')}
+                </option>
+                <option value="MBA">
+                  {t('profile.forms.education.qualifications.mba')}
+                </option>
+                <option value="PhD">
+                  {t('profile.forms.education.qualifications.phd')}
+                </option>
+                <option value="Other">{t('profile.forms.common.other')}</option>
               </select>
               {errors.education?.[index]?.qualificationTitle && (
                 <p className="mt-1 text-sm text-red-600">
@@ -141,16 +172,26 @@ export default function EducationForm({ data, onNext, onBack }: Props) {
               )}
             </div>
 
-            <Input
-              label="Field of Study"
-              {...register(`education.${index}.fieldOfStudy`)}
-              error={errors.education?.[index]?.fieldOfStudy?.message}
-              placeholder="e.g., Computer Science"
-              required
-            />
+            <div className="relative">
+              <Input
+                label={t('profile.forms.education.fieldOfStudy.label')}
+                {...register(`education.${index}.fieldOfStudy`)}
+                error={errors.education?.[index]?.fieldOfStudy?.message}
+                placeholder={t(
+                  'profile.forms.education.fieldOfStudy.placeholder'
+                )}
+                required
+                list={`field-list-${index}`}
+              />
+              <datalist id={`field-list-${index}`}>
+                {FIELDS_OF_STUDY.map((f) => (
+                  <option key={f} value={f} />
+                ))}
+              </datalist>
+            </div>
 
             <Input
-              label="Start Date"
+              label={t('profile.forms.education.startDate')}
               type="date"
               {...register(`education.${index}.startDate`)}
               error={errors.education?.[index]?.startDate?.message}
@@ -158,20 +199,20 @@ export default function EducationForm({ data, onNext, onBack }: Props) {
             />
 
             <Input
-              label="End Date"
+              label={t('profile.forms.education.endDate.label')}
               type="date"
               {...register(`education.${index}.endDate`)}
-              helperText="Leave empty if currently studying"
+              helperText={t('profile.forms.education.endDate.helper')}
             />
 
             <Input
-              label="Grade"
+              label={t('profile.forms.education.grade.label')}
               {...register(`education.${index}.grade`)}
-              placeholder="e.g., First Class, A+, Distinction"
+              placeholder={t('profile.forms.education.grade.placeholder')}
             />
 
             <Input
-              label="GPA (out of 4.0)"
+              label={t('profile.forms.education.gpa.label')}
               type="number"
               step="0.01"
               {...register(`education.${index}.gpa`, {
@@ -179,7 +220,7 @@ export default function EducationForm({ data, onNext, onBack }: Props) {
                   v === '' || v === undefined ? undefined : parseFloat(v),
               })}
               error={errors.education?.[index]?.gpa?.message}
-              placeholder="e.g., 3.8"
+              placeholder={t('profile.forms.education.gpa.placeholder')}
             />
           </div>
         </div>
@@ -192,7 +233,7 @@ export default function EducationForm({ data, onNext, onBack }: Props) {
         className="w-full"
       >
         <Plus className="w-4 h-4 mr-2" />
-        Add Another Education
+        {t('profile.forms.education.addAnother')}
       </Button>
 
       {errors.education?.root && (
@@ -201,10 +242,10 @@ export default function EducationForm({ data, onNext, onBack }: Props) {
 
       <div className="flex justify-between pt-4">
         <Button type="button" variant="ghost" onClick={onBack}>
-          Back
+          {t('profile.forms.common.back')}
         </Button>
         <Button type="submit" variant="primary">
-          Next
+          {t('profile.forms.common.next')}
         </Button>
       </div>
     </form>

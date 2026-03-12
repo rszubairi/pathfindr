@@ -1,50 +1,51 @@
+'use client';
+
 import React from 'react';
 import { UserPlus, Search, FileCheck, Award } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
+import { useTranslation } from 'react-i18next';
 
-const steps = [
-  {
-    icon: UserPlus,
-    number: '01',
-    title: 'Create Your Profile',
-    description:
-      'Sign up and tell us about your academic background, interests, and goals. The more we know, the better we can match you.',
-  },
-  {
-    icon: Search,
-    number: '02',
-    title: 'Discover Opportunities',
-    description:
-      'Browse through thousands of scholarships using our smart filters or get personalized recommendations based on your profile.',
-  },
-  {
-    icon: FileCheck,
-    number: '03',
-    title: 'Apply with Confidence',
-    description:
-      'Track your applications, manage deadlines, and access helpful resources to strengthen your submissions.',
-  },
-  {
-    icon: Award,
-    number: '04',
-    title: 'Achieve Your Dreams',
-    description:
-      'Secure your scholarship and embark on your educational journey. Join our community of successful scholars.',
-  },
-];
 
 export function HowItWorksSection() {
+  const { t } = useTranslation();
+
+  const steps = [
+    {
+      icon: UserPlus,
+      number: '01',
+      title: t('home.howItWorks.steps.step1.title'),
+      description: t('home.howItWorks.steps.step1.desc'),
+    },
+    {
+      icon: Search,
+      number: '02',
+      title: t('home.howItWorks.steps.step2.title'),
+      description: t('home.howItWorks.steps.step2.desc'),
+    },
+    {
+      icon: FileCheck,
+      number: '03',
+      title: t('home.howItWorks.steps.step3.title'),
+      description: t('home.howItWorks.steps.step3.desc'),
+    },
+    {
+      icon: Award,
+      number: '04',
+      title: t('home.howItWorks.steps.step4.title'),
+      description: t('home.howItWorks.steps.step4.desc'),
+    },
+  ];
+
   return (
     <section className="py-20 bg-gradient-to-br from-primary-50 to-secondary-50">
       <Container size="xl">
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            How Pathfindr Works
+            {t('home.howItWorks.title')}
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Your journey to a global education starts here. Follow these simple steps to find and
-            secure your perfect scholarship.
+            {t('home.howItWorks.subtitle')}
           </p>
         </div>
 

@@ -1,7 +1,8 @@
 export const TIER_CONFIG = {
   pro: {
     name: 'Pro',
-    price: 29,
+    price: 9.99,
+    originalPrice: 25,
     currency: 'USD',
     interval: 'year' as const,
     applicationsLimit: 5,

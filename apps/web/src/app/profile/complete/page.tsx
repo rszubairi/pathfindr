@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useQuery, useMutation } from 'convex/react';
+import { useTranslation } from 'react-i18next';
+import { api } from '../../../../../../convex/_generated/api';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 import { MainLayout } from '@/components/layout/MainLayout';
@@ -10,19 +13,31 @@ import EducationForm from '@/components/profile/EducationForm';
 import TestScoresForm from '@/components/profile/TestScoresForm';
 import AchievementsForm from '@/components/profile/AchievementsForm';
 import PreferencesForm from '@/components/profile/PreferencesForm';
+import type { Id } from '../../../../../../convex/_generated/dataModel';
 
 const STEPS = [
-  { id: 1, name: 'Personal Details' },
-  { id: 2, name: 'Education' },
-  { id: 3, name: 'Test Scores' },
-  { id: 4, name: 'Achievements' },
-  { id: 5, name: 'Preferences' },
+  { id: 1, name: 'personalDetails', labelKey: 'profile.steps.personalDetails' },
+  { id: 2, name: 'education', labelKey: 'profile.steps.education' },
+  { id: 3, name: 'testScores', labelKey: 'profile.steps.testScores' },
+  { id: 4, name: 'achievements', labelKey: 'profile.steps.achievements' },
+  { id: 5, name: 'preferences', labelKey: 'profile.steps.preferences' },
 ];
 
 export default function CompleteProfilePage() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(1);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+
+  // Get userId from localStorage
+  const storedUserId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
+
+  // Fetch existing profile
+  const existingProfile = useQuery(
+    api.profiles.getByUserId,
+    storedUserId ? { userId: storedUserId as Id<'users'> } : 'skip'
+  );
+
   const [formData, setFormData] = useState<Record<string, any>>({
     personalDetails: {},
     education: [],
@@ -34,6 +49,31 @@ export default function CompleteProfilePage() {
     preferredCountries: [],
   });
 
+  // Populate form with existing data
+  useEffect(() => {
+    if (existingProfile) {
+      setFormData({
+        personalDetails: {
+          dateOfBirth: existingProfile.dateOfBirth || '',
+          gender: existingProfile.gender || '',
+          nationality: existingProfile.nationality || '',
+          country: existingProfile.country || '',
+        },
+        education: existingProfile.education || [],
+        testScores: existingProfile.testScores || {},
+        certificates: existingProfile.certificates || [],
+        projects: existingProfile.projects || [],
+        skills: existingProfile.skills || [],
+        interests: existingProfile.interests || [],
+        preferredCountries: existingProfile.preferredCountries || [],
+        availability: existingProfile.availability || '',
+      });
+      setIsInitialLoading(false);
+    } else if (existingProfile === null) {
+      setIsInitialLoading(false);
+    }
+  }, [existingProfile]);
+
   // Check auth on mount
   useEffect(() => {
     const userId = localStorage.getItem('userId');
@@ -43,9 +83,68 @@ export default function CompleteProfilePage() {
     }
   }, [router]);
 
+  const upsertProfile = useMutation(api.profiles.upsert);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleNext = (stepData: Record<string, any>) => {
-    setFormData((prev) => ({ ...prev, ...stepData }));
+  const handleNext = async (stepData: Record<string, any>) => {
+    const updatedData = { ...formData, ...stepData };
+    setFormData(updatedData);
+
+    // Incremental saving
+    try {
+      if (storedUserId) {
+        const profilePayload = {
+          userId: storedUserId as Id<'users'>,
+          dateOfBirth: updatedData.personalDetails?.dateOfBirth,
+          gender: updatedData.personalDetails?.gender,
+          nationality: updatedData.personalDetails?.nationality,
+          country: updatedData.personalDetails?.country,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          education: (updatedData.education || []).map((edu: any) => ({
+            id: edu.id,
+            institutionName: edu.institutionName,
+            qualificationTitle: edu.qualificationTitle,
+            fieldOfStudy: edu.fieldOfStudy,
+            startDate: edu.startDate,
+            endDate: edu.endDate || undefined,
+            grade: edu.grade || undefined,
+            gpa: edu.gpa !== undefined && edu.gpa !== '' ? Number(edu.gpa) : undefined,
+          })),
+          testScores: {
+            sat: updatedData.testScores?.sat ? Number(updatedData.testScores.sat) : undefined,
+            ielts: updatedData.testScores?.ielts ? Number(updatedData.testScores.ielts) : undefined,
+            toefl: updatedData.testScores?.toefl ? Number(updatedData.testScores.toefl) : undefined,
+            gre: updatedData.testScores?.gre ? Number(updatedData.testScores.gre) : undefined,
+            gmat: updatedData.testScores?.gmat ? Number(updatedData.testScores.gmat) : undefined,
+          },
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          certificates: (updatedData.certificates || []).map((cert: any) => ({
+            id: cert.id,
+            title: cert.title,
+            issuer: cert.issuer,
+            dateIssued: cert.dateIssued,
+          })),
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          projects: (updatedData.projects || []).map((proj: any) => ({
+            id: proj.id,
+            title: proj.title,
+            description: proj.description,
+            technologies: proj.technologies || [],
+            startDate: proj.startDate,
+            endDate: proj.endDate || undefined,
+          })),
+          skills: updatedData.skills || [],
+          interests: updatedData.interests || [],
+          preferredCountries: updatedData.preferredCountries || [],
+          availability: updatedData.availability || undefined,
+        };
+
+        await upsertProfile(profilePayload);
+      }
+    } catch (err) {
+      console.error('Failed to auto-save profile progress:', err);
+    }
+
     if (currentStep < STEPS.length) {
       setCurrentStep(currentStep + 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -82,6 +181,16 @@ export default function CompleteProfilePage() {
     }
   };
 
+  if (isInitialLoading) {
+    return (
+      <MainLayout>
+        <div className="flex justify-center items-center min-h-[60vh]">
+          <div className="animate-spin w-10 h-10 border-4 border-primary-600 border-t-transparent rounded-full" />
+        </div>
+      </MainLayout>
+    );
+  }
+
   return (
     <MainLayout>
       <Container className="py-12">
@@ -91,10 +200,10 @@ export default function CompleteProfilePage() {
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">
-                  Complete Your Academic Profile
+                  {t('profile.complete.title')}
                 </h1>
                 <p className="text-gray-600 text-sm mt-1">
-                  Help us match you with the best scholarships
+                  {t('profile.complete.subtitle')}
                 </p>
               </div>
               <span className="text-sm font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
@@ -129,7 +238,7 @@ export default function CompleteProfilePage() {
                   }`}
                 disabled={step.id > currentStep}
               >
-                {step.name}
+                {t(step.labelKey)}
               </button>
             ))}
           </div>
