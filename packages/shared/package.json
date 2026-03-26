@@ -19,10 +19,5 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "aws-sdk": "^2.1693.0",
-    "bcrypt": "6.0.0",
-    "eslint-config-next": "16.1.6",
-    "next": "16.1.6",
-    "nodemailer": "8.0.1"
   }
 }
