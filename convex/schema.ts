@@ -58,6 +58,7 @@ export default defineSchema({
     verificationToken: v.optional(v.string()),
     tokenExpiry: v.optional(v.number()),
     profileCompleted: v.boolean(),
+    profileImageId: v.optional(v.id('_storage')),
     createdAt: v.string(),
     updatedAt: v.string(),
   })
@@ -235,6 +236,26 @@ export default defineSchema({
     createdAt: v.string(),
   })
     .index('by_user_id', ['userId']),
+
+  internationalSchools: defineTable({
+    name: v.string(),
+    country: v.string(),
+    city: v.string(),
+    curriculum: v.array(v.string()),
+    grades: v.string(),
+    annualFees: v.string(),
+    website: v.string(),
+    description: v.optional(v.string()),
+    status: v.union(v.literal('active'), v.literal('closed')),
+    createdAt: v.string(),
+    updatedAt: v.string(),
+  })
+    .index('by_country', ['country'])
+    .index('by_status', ['status'])
+    .searchIndex('search_name', {
+      searchField: 'name',
+      filterFields: ['country'],
+    }),
 
   applications: defineTable({
     userId: v.id('users'),

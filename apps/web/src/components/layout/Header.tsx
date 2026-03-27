@@ -14,6 +14,7 @@ const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Scholarships', href: '/scholarships' },
   { name: 'Boarding Schools', href: '/boarding-schools' },
+  { name: 'International Schools', href: '/international-schools' },
   { name: 'Pricing', href: '/pricing' },
   { name: 'Features', href: '/features' },
   { name: 'About', href: '/about' },
@@ -142,9 +143,13 @@ export function Header() {
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
                   className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition"
                 >
-                  <div className="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center text-white font-medium text-sm">
-                    {user.fullName.charAt(0).toUpperCase()}
-                  </div>
+                  {user.profileImageUrl ? (
+                    <img src={user.profileImageUrl} alt={user.fullName} className="w-8 h-8 rounded-full object-cover" />
+                  ) : (
+                    <div className="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center text-white font-medium text-sm">
+                      {user.fullName.charAt(0).toUpperCase()}
+                    </div>
+                  )}
                   <span className="text-sm font-medium text-gray-900 max-w-[120px] truncate">
                     {user.fullName}
                   </span>
@@ -297,9 +302,13 @@ export function Header() {
                 {isAuthenticated && user ? (
                   <>
                     <div className="flex items-center gap-3 px-4 py-2 mb-2">
-                      <div className="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center text-white font-medium">
-                        {user.fullName.charAt(0).toUpperCase()}
-                      </div>
+                      {user.profileImageUrl ? (
+                        <img src={user.profileImageUrl} alt={user.fullName} className="w-10 h-10 rounded-full object-cover" />
+                      ) : (
+                        <div className="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center text-white font-medium">
+                          {user.fullName.charAt(0).toUpperCase()}
+                        </div>
+                      )}
                       <div>
                         <p className="text-sm font-medium text-gray-900">{user.fullName}</p>
                         <p className="text-xs text-gray-500">{user.email}</p>

@@ -17,6 +17,8 @@ import type * as http from "../http.js";
 import type * as institutionAuth from "../institutionAuth.js";
 import type * as institutionAuthActions from "../institutionAuthActions.js";
 import type * as institutionScholarships from "../institutionScholarships.js";
+import type * as internationalSchools from "../internationalSchools.js";
+import type * as internationalSchoolsSeed from "../internationalSchoolsSeed.js";
 import type * as notificationActions from "../notificationActions.js";
 import type * as notifications from "../notifications.js";
 import type * as profiles from "../profiles.js";
@@ -25,6 +27,7 @@ import type * as seed from "../seed.js";
 import type * as seedData from "../seedData.js";
 import type * as seedDataBoardingSchools from "../seedDataBoardingSchools.js";
 import type * as seedDataScraped from "../seedDataScraped.js";
+import type * as storage from "../storage.js";
 import type * as stripeActions from "../stripeActions.js";
 import type * as subscriptions from "../subscriptions.js";
 
@@ -44,6 +47,8 @@ declare const fullApi: ApiFromModules<{
   institutionAuth: typeof institutionAuth;
   institutionAuthActions: typeof institutionAuthActions;
   institutionScholarships: typeof institutionScholarships;
+  internationalSchools: typeof internationalSchools;
+  internationalSchoolsSeed: typeof internationalSchoolsSeed;
   notificationActions: typeof notificationActions;
   notifications: typeof notifications;
   profiles: typeof profiles;
@@ -52,6 +57,7 @@ declare const fullApi: ApiFromModules<{
   seedData: typeof seedData;
   seedDataBoardingSchools: typeof seedDataBoardingSchools;
   seedDataScraped: typeof seedDataScraped;
+  storage: typeof storage;
   stripeActions: typeof stripeActions;
   subscriptions: typeof subscriptions;
 }>;

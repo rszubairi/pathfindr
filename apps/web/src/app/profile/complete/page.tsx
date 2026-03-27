@@ -228,23 +228,26 @@ export default function CompleteProfilePage() {
 
           {/* Step navigation pills */}
           <div className="flex gap-2 mb-8 overflow-x-auto pb-2 scrollbar-hide">
-            {STEPS.map((step) => (
-              <button
-                key={step.id}
-                onClick={() => {
-                  if (step.id < currentStep) setCurrentStep(step.id);
-                }}
-                className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${step.id === currentStep
-                    ? 'bg-primary-600 text-white'
-                    : step.id < currentStep
-                      ? 'bg-primary-100 text-primary-700 hover:bg-primary-200 cursor-pointer'
-                      : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                  }`}
-                disabled={step.id > currentStep}
-              >
-                {t(step.labelKey)}
-              </button>
-            ))}
+            {STEPS.map((step) => {
+              const canNavigate = !!existingProfile || step.id <= currentStep;
+              return (
+                <button
+                  key={step.id}
+                  onClick={() => {
+                    if (canNavigate) setCurrentStep(step.id);
+                  }}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${step.id === currentStep
+                      ? 'bg-primary-600 text-white'
+                      : canNavigate
+                        ? 'bg-primary-100 text-primary-700 hover:bg-primary-200 cursor-pointer'
+                        : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    }`}
+                  disabled={!canNavigate}
+                >
+                  {t(step.labelKey)}
+                </button>
+              );
+            })}
           </div>
 
           {/* Current step form */}

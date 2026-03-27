@@ -10,7 +10,13 @@ export const getCurrentUser = query({
     if (!user) return null;
 
     const { passwordHash, verificationToken, tokenExpiry, ...safeUser } = user;
-    return safeUser;
+
+    let profileImageUrl: string | null = null;
+    if (user.profileImageId) {
+      profileImageUrl = await ctx.storage.getUrl(user.profileImageId);
+    }
+
+    return { ...safeUser, profileImageUrl };
   },
 });
 

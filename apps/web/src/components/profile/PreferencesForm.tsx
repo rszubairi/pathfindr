@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { X } from 'lucide-react';
 import type { Id } from '../../../../../convex/_generated/dataModel';
-import { INTERESTS } from '@/lib/constants';
+import { INTERESTS, COUNTRIES } from '@/lib/constants';
 
 const preferencesSchema = z.object({
   availability: z.string().optional(),
@@ -183,6 +183,7 @@ export default function PreferencesForm({ data, onNext, onBack }: Props) {
         <div className="flex gap-2 mb-3">
           <input
             type="text"
+            list="country-suggestions"
             value={countryInput}
             onChange={(e) => setCountryInput(e.target.value)}
             onKeyDown={(e) => {
@@ -196,6 +197,11 @@ export default function PreferencesForm({ data, onNext, onBack }: Props) {
               'profile.forms.preferences.studyCountries.placeholder'
             )}
           />
+          <datalist id="country-suggestions">
+            {COUNTRIES.filter((c) => !countries.includes(c)).map((country) => (
+              <option key={country} value={country} />
+            ))}
+          </datalist>
           <Button type="button" variant="secondary" onClick={addCountry}>
             {t('profile.forms.common.add')}
           </Button>

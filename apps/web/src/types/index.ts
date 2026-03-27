@@ -92,6 +92,27 @@ export interface BoardingSchoolFilters {
   managedBy?: string;
 }
 
+// International School Types
+export interface InternationalSchool {
+  id: string;
+  name: string;
+  country: string;
+  city: string;
+  curriculum: string[];
+  grades: string;
+  annualFees: string;
+  website: string;
+  description?: string;
+  status: 'active' | 'closed';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface InternationalSchoolFilters {
+  countries?: string[];
+  curriculums?: string[];
+}
+
 // University Types
 export interface University {
   id: string;

@@ -102,9 +102,13 @@ export default function StudentProfileViewPage() {
           <Card className="p-8">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-primary-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
-                  {user.fullName.charAt(0).toUpperCase()}
-                </div>
+                {user.profileImageUrl ? (
+                  <img src={user.profileImageUrl} alt={user.fullName} className="w-16 h-16 rounded-full object-cover" />
+                ) : (
+                  <div className="w-16 h-16 bg-primary-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                    {user.fullName.charAt(0).toUpperCase()}
+                  </div>
+                )}
                 <div>
                   <h1 className="text-2xl font-bold text-gray-900">
                     {user.fullName}

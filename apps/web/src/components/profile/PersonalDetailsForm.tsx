@@ -1,11 +1,17 @@
 'use client';
 
+import { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useMutation } from 'convex/react';
+import { api } from '../../../../../convex/_generated/api';
+import type { Id } from '../../../../../convex/_generated/dataModel';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
+import { Camera, Loader2 } from 'lucide-react';
 import { COUNTRIES, COUNTRY_CODES } from '@/lib/constants';
+import { useAuth } from '@/hooks/useAuth';
 
 import { useTranslation } from 'react-i18next';
 
@@ -36,6 +42,14 @@ export default function PersonalDetailsForm({
   isFirstStep,
 }: Props) {
   const { t } = useTranslation();
+  const { user } = useAuth();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  const generateUploadUrl = useMutation(api.storage.generateUploadUrl);
+  const saveProfileImage = useMutation(api.storage.saveProfileImage);
+
   const {
     register,
     handleSubmit,
@@ -48,6 +62,47 @@ export default function PersonalDetailsForm({
       phone: data.personalDetails?.phone || '',
     },
   });
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file
+    if (!file.type.startsWith('image/')) return;
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Image must be less than 5MB');
+      return;
+    }
+
+    const userId = localStorage.getItem('userId');
+    if (!userId) return;
+
+    // Show preview immediately
+    setPreviewUrl(URL.createObjectURL(file));
+    setUploading(true);
+
+    try {
+      const uploadUrl = await generateUploadUrl();
+      const result = await fetch(uploadUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': file.type },
+        body: file,
+      });
+      const { storageId } = await result.json();
+      await saveProfileImage({
+        userId: userId as Id<'users'>,
+        storageId,
+      });
+    } catch (err) {
+      console.error('Failed to upload image:', err);
+      setPreviewUrl(null);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const currentImageUrl = previewUrl || (user as any)?.profileImageUrl;
 
   const onSubmit = (formData: PersonalDetailsData) => {
     onNext({ personalDetails: formData });
@@ -62,6 +117,45 @@ export default function PersonalDetailsForm({
         <p className="text-gray-600 text-sm mb-6">
           {t('profile.forms.personalDetails.subtitle')}
         </p>
+      </div>
+
+      {/* ─── Profile Picture ───────────────────────────────── */}
+      <div className="flex flex-col items-center gap-3">
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          className="relative group"
+          disabled={uploading}
+        >
+          <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-gray-200 group-hover:border-primary-400 transition-colors">
+            {currentImageUrl ? (
+              <img
+                src={currentImageUrl}
+                alt="Profile"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full bg-primary-600 flex items-center justify-center text-white text-3xl font-bold">
+                {user?.fullName?.charAt(0).toUpperCase() || '?'}
+              </div>
+            )}
+          </div>
+          <div className="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            {uploading ? (
+              <Loader2 className="w-6 h-6 text-white animate-spin" />
+            ) : (
+              <Camera className="w-6 h-6 text-white" />
+            )}
+          </div>
+        </button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleImageUpload}
+          className="hidden"
+        />
+        <p className="text-xs text-gray-500">Click to upload profile photo</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

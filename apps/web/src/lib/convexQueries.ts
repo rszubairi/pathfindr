@@ -204,3 +204,61 @@ export function useBoardingSchoolStats() {
     error: null,
   };
 }
+
+// ============================================================
+// International School Hooks
+// ============================================================
+
+/**
+ * Hook to get international schools with filters, combined with optional search
+ */
+export function useInternationalSchoolSearch(query: string, filters?: {
+  countries?: string[];
+  curriculums?: string[];
+}) {
+  const searchResults = useConvexQuery(api.internationalSchools.search, {
+    searchQuery: query || 'International',
+  });
+
+  const filteredResults = useConvexQuery(
+    api.internationalSchools.filter,
+    filters
+      ? {
+          countries: filters.countries,
+          curriculums: filters.curriculums,
+        }
+      : {}
+  );
+
+  const data = useMemo(() => {
+    if (!searchResults || !filteredResults) return [];
+
+    if (query) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const filteredIds = new Set(filteredResults.map((s: any) => s._id));
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return searchResults.filter((s: any) => filteredIds.has(s._id));
+    }
+
+    return filteredResults;
+  }, [searchResults, filteredResults, query]);
+
+  return {
+    data,
+    isLoading: searchResults === undefined || filteredResults === undefined,
+    error: null,
+  };
+}
+
+/**
+ * Hook to get international school statistics
+ */
+export function useInternationalSchoolStats() {
+  const stats = useConvexQuery(api.internationalSchools.stats);
+
+  return {
+    data: stats,
+    isLoading: stats === undefined,
+    error: null,
+  };
+}
