@@ -20,93 +20,95 @@ export default function InternshipsPage() {
 
   return (
     <MainLayout>
-      <div className="bg-blue-600 py-12 text-white">
+      {/* Hero Banner */}
+      <div className="bg-blue-600 py-10 sm:py-14 text-white">
         <Container>
-          <h1 className="text-4xl font-bold mb-4">Find Corporate Internships</h1>
-          <p className="text-blue-100 text-lg max-w-2xl">
+          <h1 className="text-3xl sm:text-4xl font-bold mb-3">Find Corporate Internships</h1>
+          <p className="text-blue-100 text-base sm:text-lg max-w-2xl">
             Launch your career with internships from top global companies.
           </p>
         </Container>
       </div>
 
-      <Container className="py-12">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Filters Sidebar (Simplified) */}
-          <div className="w-full lg:w-64 space-y-6">
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Type</h3>
-              <div className="space-y-2">
-                {['Full-time', 'Part-time', 'Remote'].map((type) => (
-                  <label key={type} className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                    <input type="checkbox" className="rounded text-blue-600 focus:ring-blue-500" />
-                    {type}
-                  </label>
-                ))}
-              </div>
-            </div>
+      <Container className="py-8 sm:py-12">
+        {/* Filters */}
+        <div className="mb-6">
+          <h3 className="font-semibold text-gray-900 mb-3 text-sm uppercase tracking-wider">Filter by type</h3>
+          <div className="flex flex-wrap gap-2">
+            {['Full-time', 'Part-time', 'Remote'].map((type) => (
+              <label
+                key={type}
+                className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 bg-white border border-gray-200 rounded-lg cursor-pointer hover:border-blue-400 hover:text-blue-600 transition-colors"
+              >
+                <input type="checkbox" className="rounded text-blue-600 focus:ring-blue-500" />
+                {type}
+              </label>
+            ))}
           </div>
+        </div>
 
-          {/* Internship Listings */}
-          <div className="flex-1 space-y-6">
-            {!internships ? (
-              <div className="space-y-4">
-                {[1, 2, 3].map((i) => (
-                  <Card key={i} className="p-6 h-48 animate-pulse bg-gray-50">
-                    <div className="h-full bg-gray-100/50 rounded-lg" />
-                  </Card>
-                ))}
-              </div>
-            ) : internships.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-gray-500">No active internships found.</p>
-              </div>
-            ) : (
-              internships.map((internship) => (
-                <Card key={internship._id} className="p-6 hover:shadow-md transition-shadow">
-                  <div className="flex justify-between items-start gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        {internship.companyName === 'Private Company' ? (
-                          <div className="flex items-center gap-1.5 text-orange-600 bg-orange-50 px-2.5 py-1 rounded-full text-xs font-medium">
-                            <Lock className="w-3 h-3" />
-                            Premium subscribers only
-                          </div>
-                        ) : (
-                          <span className="text-blue-600 font-semibold">{internship.companyName}</span>
-                        )}
-                        <Badge variant="outline">{internship.type}</Badge>
-                      </div>
-                      <h2 className="text-xl font-bold text-gray-900 mb-2">{internship.title}</h2>
-                      
-                      <div className="flex flex-wrap gap-4 text-sm text-gray-500 mb-4">
-                        <div className="flex items-center gap-1">
-                          <MapPin className="w-4 h-4" />
-                          {internship.location}
+        {/* Internship Listings */}
+        <div className="space-y-4">
+          {!internships ? (
+            <div className="space-y-4">
+              {[1, 2, 3].map((i) => (
+                <Card key={i} className="p-6 h-40 animate-pulse bg-gray-50">
+                  <div className="h-full bg-gray-100/50 rounded-lg" />
+                </Card>
+              ))}
+            </div>
+          ) : internships.length === 0 ? (
+            <div className="text-center py-16">
+              <p className="text-gray-500">No active internships found.</p>
+            </div>
+          ) : (
+            internships.map((internship) => (
+              <Card key={internship._id} className="p-5 sm:p-6 hover:shadow-md transition-shadow">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 mb-2">
+                      {internship.companyName === 'Private Company' ? (
+                        <div className="flex items-center gap-1.5 text-orange-600 bg-orange-50 px-2.5 py-1 rounded-full text-xs font-medium">
+                          <Lock className="w-3 h-3 shrink-0" />
+                          Premium subscribers only
                         </div>
-                        <div className="flex items-center gap-1">
-                          <Calendar className="w-4 h-4" />
-                          Deadline: {new Date(internship.deadline).toLocaleDateString()}
-                        </div>
-                        {internship.salaryRange && (
-                          <div className="flex items-center gap-1">
-                            <Briefcase className="w-4 h-4" />
-                            {internship.salaryRange}
-                          </div>
-                        )}
-                      </div>
+                      ) : (
+                        <span className="text-blue-600 font-semibold truncate">{internship.companyName}</span>
+                      )}
+                      <Badge variant="outline" className="capitalize shrink-0">{internship.type}</Badge>
+                    </div>
+                    <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3">{internship.title}</h2>
 
-                      <div className="flex items-center gap-2">
-                        <Link href={`/internships/${internship._id}`}>
-                          <Button variant="secondary" size="sm">View Details</Button>
-                        </Link>
+                    <div className="flex flex-wrap gap-3 text-sm text-gray-500 mb-4">
+                      <div className="flex items-center gap-1">
+                        <MapPin className="w-4 h-4 shrink-0" />
+                        <span className="truncate">{internship.location}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Calendar className="w-4 h-4 shrink-0" />
+                        Deadline: {new Date(internship.deadline).toLocaleDateString()}
+                      </div>
+                      {internship.salaryRange && (
+                        <div className="flex items-center gap-1">
+                          <Briefcase className="w-4 h-4 shrink-0" />
+                          {internship.salaryRange}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Link href={`/internships/${internship._id}`}>
+                        <Button variant="secondary" size="sm">View Details</Button>
+                      </Link>
+                      <Link href={`/internships/${internship._id}`}>
                         <Button size="sm">Apply Now</Button>
-                      </div>
+                      </Link>
                     </div>
                   </div>
-                </Card>
-              ))
-            )}
-          </div>
+                </div>
+              </Card>
+            ))
+          )}
         </div>
       </Container>
     </MainLayout>

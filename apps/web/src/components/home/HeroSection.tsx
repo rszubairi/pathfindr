@@ -64,7 +64,7 @@ export function HeroSection() {
           </div>
 
           {/* Trust Indicators */}
-          <div className="flex flex-wrap justify-center items-center gap-8 text-sm text-gray-600">
+          <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-3 text-sm text-gray-600">
             <div className="flex items-center gap-2">
               <div className="flex -space-x-2">
                 <div className="w-8 h-8 rounded-full bg-primary-100 border-2 border-white flex items-center justify-center text-xs font-semibold text-primary-700">
@@ -79,9 +79,9 @@ export function HeroSection() {
               </div>
               <span className="font-medium">{mounted ? t('hero.trustedBy') : 'Trusted by 5,000+ students'}</span>
             </div>
-            <span className="text-gray-300">|</span>
+            <span className="hidden sm:block text-gray-300">|</span>
             <span className="font-medium">{mounted ? t('hero.available') : '10,000+ scholarships available'}</span>
-            <span className="text-gray-300">|</span>
+            <span className="hidden sm:block text-gray-300">|</span>
             <span className="font-medium">{mounted ? t('hero.countriesCount') : '50+ countries'}</span>
           </div>
         </div>

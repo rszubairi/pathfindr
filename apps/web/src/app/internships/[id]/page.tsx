@@ -106,11 +106,11 @@ export default function InternshipDetailPage() {
         </Container>
       </div>
 
-      <Container className="py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <Container className="py-6 sm:py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-8">
-            <Card className="p-8">
+          <div className="lg:col-span-2 space-y-6 lg:space-y-8 order-2 lg:order-1">
+            <Card className="p-5 sm:p-8">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
                 <div>
                   <div className="flex items-center gap-2 mb-3">
@@ -122,7 +122,7 @@ export default function InternshipDetailPage() {
                       </Badge>
                     )}
                   </div>
-                  <h1 className="text-3xl font-bold text-gray-900 mb-2">{internship.title}</h1>
+                  <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">{internship.title}</h1>
                   <div className="flex items-center gap-2 text-lg text-gray-600">
                     <Building2 className="w-5 h-5" />
                     <span className={isAnonymized ? 'italic text-gray-400' : 'font-medium'}>
@@ -186,8 +186,8 @@ export default function InternshipDetailPage() {
           </div>
 
           {/* Sidebar Action */}
-          <div className="space-y-6">
-            <Card className="p-6 sticky top-6 border-t-4 border-primary-600">
+          <div className="space-y-4 lg:space-y-6 order-1 lg:order-2">
+            <Card className="p-5 sm:p-6 lg:sticky lg:top-6 border-t-4 border-primary-600">
               {applySuccess ? (
                 <div className="text-center py-4">
                   <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">

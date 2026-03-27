@@ -76,10 +76,10 @@ function RegisterContent() {
 
   return (
     <MainLayout>
-      <Container className="py-12">
-        <div className="max-w-md mx-auto">
+      <Container className="py-8 sm:py-16">
+        <div className="max-w-md mx-auto px-1 sm:px-0">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
               Create your account
             </h1>
             <p className="text-gray-600">
