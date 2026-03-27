@@ -8,20 +8,26 @@ import { GraduationCap, FileText, Eye, Users, FilePlus } from 'lucide-react';
 import Link from 'next/link';
 import type { Id } from '../../../../../convex/_generated/dataModel';
 
+import { CorporateOverview } from '@/components/dashboard/CorporateOverview';
+
 export default function DashboardOverviewPage() {
   const { user, loading: authLoading } = useAuth();
 
   const analytics = useQuery(
     api.institutionScholarships.getScholarshipAnalytics,
-    user?._id ? { userId: user._id as Id<'users'> } : 'skip'
+    user?._id && user.role === 'institution' ? { userId: user._id as Id<'users'> } : 'skip'
   );
 
-  if (authLoading || analytics === undefined) {
+  if (authLoading || (user?.role === 'institution' && analytics === undefined)) {
     return (
       <div className="flex justify-center items-center min-h-[50vh]">
         <div className="animate-spin w-10 h-10 border-4 border-primary-600 border-t-transparent rounded-full" />
       </div>
     );
+  }
+
+  if (user?.role === 'corporate') {
+    return <CorporateOverview />;
   }
 
   return (

@@ -34,6 +34,8 @@ export default function InstitutionProfilePage() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const accountType = user?.role === 'corporate' ? 'Company' : 'Institution';
+
   const profile = useQuery(
     api.institutionAuth.getInstitutionProfile,
     user?._id ? { userId: user._id as Id<'users'> } : 'skip'
@@ -94,8 +96,8 @@ export default function InstitutionProfilePage() {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Institution Profile</h1>
-        <p className="mt-1 text-sm text-gray-500">Update your institution details and contact information</p>
+        <h1 className="text-2xl font-bold text-gray-900">{accountType} Profile</h1>
+        <p className="mt-1 text-sm text-gray-500">Update your {accountType.toLowerCase()} details and contact information</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
@@ -103,15 +105,15 @@ export default function InstitutionProfilePage() {
         <Card className="p-6">
           <div className="flex items-center gap-2 mb-6 border-b border-gray-100 pb-4">
             <Building2 className="w-5 h-5 text-primary-600" />
-            <h2 className="text-lg font-semibold text-gray-900">Institution Details</h2>
+            <h2 className="text-lg font-semibold text-gray-900">{accountType} Details</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Input
-              label="Institution Name"
+              label={`${accountType} Name`}
               {...register('institutionName')}
               error={errors.institutionName?.message}
-              placeholder="Enter name of your institution"
+              placeholder={`Enter name of your ${accountType.toLowerCase()}`}
             />
 
             <Select

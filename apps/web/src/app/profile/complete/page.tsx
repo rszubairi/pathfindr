@@ -14,6 +14,7 @@ import TestScoresForm from '@/components/profile/TestScoresForm';
 import AchievementsForm from '@/components/profile/AchievementsForm';
 import PreferencesForm from '@/components/profile/PreferencesForm';
 import type { Id } from '../../../../../../convex/_generated/dataModel';
+import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/components/ui/Toast';
 
 const STEPS = [
@@ -28,6 +29,7 @@ export default function CompleteProfilePage() {
   const router = useRouter();
   const { t } = useTranslation();
   const { showToast } = useToast();
+  const { user, loading: authLoading } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
 
@@ -78,14 +80,19 @@ export default function CompleteProfilePage() {
     }
   }, [existingProfile]);
 
-  // Check auth on mount
+  // Check auth and role on mount
   useEffect(() => {
-    const userId = localStorage.getItem('userId');
-    const token = localStorage.getItem('token');
-    if (!userId || !token) {
-      router.push('/login');
+    if (!authLoading) {
+      if (!user) {
+        router.push('/login');
+        return;
+      }
+
+      if (user.role !== 'student') {
+        router.push('/dashboard');
+      }
     }
-  }, [router]);
+  }, [router, user, authLoading]);
 
   const upsertProfile = useMutation(api.profiles.upsert);
 

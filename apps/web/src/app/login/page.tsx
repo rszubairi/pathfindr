@@ -67,7 +67,7 @@ function LoginContent() {
       );
 
       // Redirect based on role, profile completion, or redirect param
-      if (result.user.role === 'institution') {
+      if (result.user.role === 'institution' || result.user.role === 'corporate') {
         router.push('/dashboard');
       } else if (result.user.role === 'admin') {
         router.push('/admin/institutions');

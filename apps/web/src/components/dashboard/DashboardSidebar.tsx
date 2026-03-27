@@ -2,22 +2,52 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, GraduationCap, PlusCircle, BarChart3, Menu, X, User } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { 
+  LayoutDashboard, 
+  GraduationCap, 
+  PlusCircle, 
+  BarChart3, 
+  Menu, 
+  X, 
+  User,
+  Briefcase,
+  FilePlus
+} from 'lucide-react';
+
 import { useState } from 'react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
-const navigation = [
-  { name: 'Overview', href: '/dashboard', icon: LayoutDashboard },
-  { name: 'Scholarships', href: '/dashboard/scholarships', icon: GraduationCap },
-  { name: 'Create Scholarship', href: '/dashboard/scholarships/new', icon: PlusCircle },
-  { name: 'Analytics', href: '/dashboard/analytics', icon: BarChart3 },
-  { name: 'Profile', href: '/dashboard/profile', icon: User },
-];
-
 export function DashboardSidebar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user } = useAuth();
+
+  const getNavigation = () => {
+    const common = [
+      { name: 'Overview', href: '/dashboard', icon: LayoutDashboard },
+    ];
+
+    if (user?.role === 'corporate') {
+      return [
+        ...common,
+        { name: 'Internships', href: '/dashboard/internships', icon: Briefcase },
+        { name: 'Post Internship', href: '/dashboard/internships/create', icon: FilePlus },
+        { name: 'Profile', href: '/dashboard/profile', icon: User },
+      ];
+    }
+
+    return [
+      ...common,
+      { name: 'Scholarships', href: '/dashboard/scholarships', icon: GraduationCap },
+      { name: 'Create Scholarship', href: '/dashboard/scholarships/new', icon: PlusCircle },
+      { name: 'Analytics', href: '/dashboard/analytics', icon: BarChart3 },
+      { name: 'Profile', href: '/dashboard/profile', icon: User },
+    ];
+  };
+
+  const currentNavigation = getNavigation();
 
   return (
     <>
@@ -48,7 +78,7 @@ export function DashboardSidebar() {
       )}>
         <div className="h-full flex flex-col pt-16 lg:pt-0">
           <div className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
-            {navigation.map((item) => {
+            {currentNavigation.map((item) => {
               const isActive = pathname === item.href || (pathname.startsWith(item.href) && item.href !== '/dashboard');
               
               return (

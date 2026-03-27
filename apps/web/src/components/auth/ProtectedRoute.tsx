@@ -23,7 +23,7 @@ export function ProtectedRoute({
     if (!loading) {
       if (!isAuthenticated) {
         router.push('/login');
-      } else if (requireProfileComplete && !profileCompleted) {
+      } else if (requireProfileComplete && !profileCompleted && user?.role === 'student') {
         router.push('/profile/complete');
       } else if (requiredRole && user) {
         const allowedRoles = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
