@@ -30,7 +30,6 @@ import type * as seed from "../seed.js";
 import type * as seedData from "../seedData.js";
 import type * as seedDataBoardingSchools from "../seedDataBoardingSchools.js";
 import type * as seedDataScraped from "../seedDataScraped.js";
-import type * as seedInternships from "../seedInternships.js";
 import type * as storage from "../storage.js";
 import type * as stripeActions from "../stripeActions.js";
 import type * as subscriptions from "../subscriptions.js";
@@ -64,7 +63,6 @@ declare const fullApi: ApiFromModules<{
   seedData: typeof seedData;
   seedDataBoardingSchools: typeof seedDataBoardingSchools;
   seedDataScraped: typeof seedDataScraped;
-  seedInternships: typeof seedInternships;
   storage: typeof storage;
   stripeActions: typeof stripeActions;
   subscriptions: typeof subscriptions;
