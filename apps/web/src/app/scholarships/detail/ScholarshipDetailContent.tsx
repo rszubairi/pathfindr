@@ -234,7 +234,7 @@ export function ScholarshipDetailContent() {
             {/* Action Row */}
             <section className="py-6 bg-white border-b border-gray-200">
                 <Container size="xl">
-                    <div className="flex flex-wrap gap-4">
+                    <div className="flex flex-col sm:flex-row flex-wrap gap-3">
                         {isPending ? (
                             <>
                                 <Button
@@ -291,7 +291,7 @@ export function ScholarshipDetailContent() {
             {/* Main Content */}
             <section className="py-10 bg-gray-50">
                 <Container size="xl">
-                    <div className="grid md:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
                         {/* Left Column */}
                         <div className="md:col-span-2 space-y-8">
                             {/* Description */}
@@ -331,25 +331,31 @@ export function ScholarshipDetailContent() {
                             <Card>
                                 <CardContent className="pt-6">
                                     <h2 className="text-2xl font-bold text-gray-900 mb-4">Key Dates</h2>
-                                    <div className="space-y-3">
-                                        <div className="flex items-center gap-3">
-                                            <Calendar className="h-5 w-5 text-gray-400" />
-                                            <span className="text-sm font-medium text-gray-500 w-32">Application Deadline</span>
-                                            <span className="text-gray-900 font-medium">
+                                    <div className="space-y-4">
+                                        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
+                                            <div className="flex items-center gap-2">
+                                                <Calendar className="h-4 w-4 text-gray-400 shrink-0" />
+                                                <span className="text-sm font-medium text-gray-500">Application Deadline</span>
+                                            </div>
+                                            <span className="text-gray-900 font-medium sm:ml-auto">
                                                 {formatDate(scholarship.deadline, 'long')}
                                             </span>
                                         </div>
-                                        <div className="flex items-center gap-3">
-                                            <Calendar className="h-5 w-5 text-gray-400" />
-                                            <span className="text-sm font-medium text-gray-500 w-32">Date Posted</span>
-                                            <span className="text-gray-900 font-medium">
+                                        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
+                                            <div className="flex items-center gap-2">
+                                                <Calendar className="h-4 w-4 text-gray-400 shrink-0" />
+                                                <span className="text-sm font-medium text-gray-500">Date Posted</span>
+                                            </div>
+                                            <span className="text-gray-900 font-medium sm:ml-auto">
                                                 {formatDate(scholarship.createdAt, 'long')}
                                             </span>
                                         </div>
-                                        <div className="flex items-center gap-3">
-                                            <Calendar className="h-5 w-5 text-gray-400" />
-                                            <span className="text-sm font-medium text-gray-500 w-32">Last Updated</span>
-                                            <span className="text-gray-900 font-medium">
+                                        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
+                                            <div className="flex items-center gap-2">
+                                                <Calendar className="h-4 w-4 text-gray-400 shrink-0" />
+                                                <span className="text-sm font-medium text-gray-500">Last Updated</span>
+                                            </div>
+                                            <span className="text-gray-900 font-medium sm:ml-auto">
                                                 {formatDate(scholarship.updatedAt, 'long')}
                                             </span>
                                         </div>
@@ -358,7 +364,7 @@ export function ScholarshipDetailContent() {
                             </Card>
                         </div>
 
-                        {/* Right Sidebar */}
+                        {/* Right Sidebar - shown below on mobile, right column on desktop */}
                         <div className="space-y-6">
                             {/* Application Tracker (for subscribed users) */}
                             {isSubscribed && tier && (

@@ -222,7 +222,7 @@ export default function CompleteProfilePage() {
 
   return (
     <MainLayout>
-      <Container className="py-12">
+      <Container className="py-6 sm:py-12">
         <div className="max-w-3xl mx-auto">
           {/* Header */}
           <div className="mb-8">
@@ -276,7 +276,7 @@ export default function CompleteProfilePage() {
           </div>
 
           {/* Current step form */}
-          <Card className="p-6">{renderStep()}</Card>
+          <Card className="p-4 sm:p-6">{renderStep()}</Card>
         </div>
       </Container>
     </MainLayout>

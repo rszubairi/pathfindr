@@ -96,47 +96,47 @@ export default function StudentProfileViewPage() {
 
   return (
     <MainLayout>
-      <Container className="py-12">
-        <div className="max-w-3xl mx-auto space-y-6">
+      <Container className="py-6 sm:py-12">
+        <div className="max-w-3xl mx-auto space-y-4 sm:space-y-6">
           {/* ─── Header ────────────────────────────────────────── */}
-          <Card className="p-8">
-            <div className="flex items-start justify-between">
+          <Card className="p-5 sm:p-8">
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
               <div className="flex items-center gap-4">
                 {user.profileImageUrl ? (
-                  <img src={user.profileImageUrl} alt={user.fullName} className="w-16 h-16 rounded-full object-cover" />
+                  <img src={user.profileImageUrl} alt={user.fullName} className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover" />
                 ) : (
-                  <div className="w-16 h-16 bg-primary-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 bg-primary-600 rounded-full flex items-center justify-center text-white text-2xl font-bold shrink-0">
                     {user.fullName.charAt(0).toUpperCase()}
                   </div>
                 )}
-                <div>
-                  <h1 className="text-2xl font-bold text-gray-900">
+                <div className="min-w-0">
+                  <h1 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">
                     {user.fullName}
                   </h1>
-                  <p className="text-gray-500 text-sm">{user.email}</p>
-                  <div className="flex items-center gap-2 mt-2">
+                  <p className="text-gray-500 text-sm truncate">{user.email}</p>
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2">
                     {profile.nationality && (
                       <span className="inline-flex items-center gap-1 text-sm text-gray-600">
-                        <Flag className="w-3.5 h-3.5" />
+                        <Flag className="w-3.5 h-3.5 shrink-0" />
                         {profile.nationality}
                       </span>
                     )}
                     {profile.country && (
                       <span className="inline-flex items-center gap-1 text-sm text-gray-600">
-                        <MapPin className="w-3.5 h-3.5" />
+                        <MapPin className="w-3.5 h-3.5 shrink-0" />
                         {profile.country}
                       </span>
                     )}
                     {profile.phone && (
                       <span className="inline-flex items-center gap-1 text-sm text-gray-600">
-                        <Phone className="w-3.5 h-3.5" />
+                        <Phone className="w-3.5 h-3.5 shrink-0" />
                         {profile.countryCode ? `${profile.countryCode} ` : ''}{profile.phone}
                       </span>
                     )}
                   </div>
                 </div>
               </div>
-              <Button variant="secondary" size="sm" asChild>
+              <Button variant="secondary" size="sm" asChild className="self-start mt-1 shrink-0">
                 <Link href="/profile/complete" className="flex items-center gap-1.5">
                   <Pencil className="w-4 h-4" />
                   Edit Profile
@@ -146,9 +146,9 @@ export default function StudentProfileViewPage() {
           </Card>
 
           {/* ─── Personal Details ───────────────────────────────── */}
-          <Card className="p-6">
+          <Card className="p-5 sm:p-6">
             <SectionHeader icon={User} title="Personal Details" />
-            <div className="grid grid-cols-2 gap-4 mt-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
               <DetailItem label="Date of Birth" value={profile.dateOfBirth} />
               <DetailItem
                 label="Gender"
