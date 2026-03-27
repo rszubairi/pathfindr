@@ -58,6 +58,8 @@ export default function CompleteProfilePage() {
           gender: existingProfile.gender || '',
           nationality: existingProfile.nationality || '',
           country: existingProfile.country || '',
+          countryCode: existingProfile.countryCode || '+60',
+          phone: existingProfile.phone || '',
         },
         education: existingProfile.education || [],
         testScores: existingProfile.testScores || {},
@@ -99,6 +101,8 @@ export default function CompleteProfilePage() {
           gender: updatedData.personalDetails?.gender,
           nationality: updatedData.personalDetails?.nationality,
           country: updatedData.personalDetails?.country,
+          countryCode: updatedData.personalDetails?.countryCode || undefined,
+          phone: updatedData.personalDetails?.phone || undefined,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           education: (updatedData.education || []).map((edu: any) => ({
             id: edu.id,

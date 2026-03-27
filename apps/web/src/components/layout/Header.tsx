@@ -163,7 +163,7 @@ export function Header() {
                           ? '/admin'
                           : user.role === 'institution'
                             ? '/dashboard/profile'
-                            : '/profile/complete'
+                            : '/profile/view'
                       }
                       className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                       onClick={() => setUserMenuOpen(false)}
@@ -317,7 +317,7 @@ export function Header() {
                             ? '/admin'
                             : user.role === 'institution'
                               ? '/dashboard/profile'
-                              : '/profile/complete'
+                              : '/profile/view'
                         }
                       >
                         {mounted ? t('nav.myProfile', { defaultValue: 'My Profile' }) : 'My Profile'}

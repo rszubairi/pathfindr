@@ -10,6 +10,7 @@ export interface ScholarshipListProps {
   isLoading?: boolean;
   showMatchScore?: boolean;
   onClearFilters?: () => void;
+  userCountry?: string;
 }
 
 export function ScholarshipList({
@@ -17,6 +18,7 @@ export function ScholarshipList({
   isLoading = false,
   showMatchScore = false,
   onClearFilters,
+  userCountry,
 }: ScholarshipListProps) {
   // Loading state - show skeletons
   if (isLoading) {
@@ -58,6 +60,7 @@ export function ScholarshipList({
           key={scholarship.id}
           scholarship={scholarship}
           showMatchScore={showMatchScore}
+          userCountry={userCountry}
         />
       ))}
     </div>

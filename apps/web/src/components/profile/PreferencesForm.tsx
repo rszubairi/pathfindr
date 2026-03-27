@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { X } from 'lucide-react';
 import type { Id } from '../../../../../convex/_generated/dataModel';
+import { INTERESTS } from '@/lib/constants';
 
 const preferencesSchema = z.object({
   availability: z.string().optional(),
@@ -130,6 +131,7 @@ export default function PreferencesForm({ data, onNext, onBack }: Props) {
         <div className="flex gap-2 mb-3">
           <input
             type="text"
+            list="interest-suggestions"
             value={interestInput}
             onChange={(e) => setInterestInput(e.target.value)}
             onKeyDown={(e) => {
@@ -141,6 +143,11 @@ export default function PreferencesForm({ data, onNext, onBack }: Props) {
             className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             placeholder={t('profile.forms.preferences.interests.placeholder')}
           />
+          <datalist id="interest-suggestions">
+            {INTERESTS.filter((i) => !interests.includes(i)).map((interest) => (
+              <option key={interest} value={interest} />
+            ))}
+          </datalist>
           <Button type="button" variant="secondary" onClick={addInterest}>
             {t('profile.forms.common.add')}
           </Button>

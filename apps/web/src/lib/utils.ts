@@ -213,3 +213,16 @@ export function getInitials(name: string): string {
   }
   return name.substring(0, 2);
 }
+
+import { LOCAL_UNIVERSITIES_BY_COUNTRY } from '@/lib/constants';
+
+export function isLocalProvider(provider: string, userCountry?: string): boolean {
+  if (!userCountry) return false;
+  const localSet = LOCAL_UNIVERSITIES_BY_COUNTRY[userCountry];
+  if (!localSet) return false;
+  const providerLower = provider.toLowerCase();
+  for (const uni of localSet) {
+    if (uni.toLowerCase() === providerLower) return true;
+  }
+  return false;
+}

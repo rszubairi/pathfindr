@@ -57,6 +57,8 @@ export const upsert = mutation({
     gender: v.optional(v.string()),
     nationality: v.optional(v.string()),
     country: v.optional(v.string()),
+    countryCode: v.optional(v.string()),
+    phone: v.optional(v.string()),
     education: v.array(educationSchema),
     testScores: testScoresSchema,
     certificates: v.array(certificateSchema),

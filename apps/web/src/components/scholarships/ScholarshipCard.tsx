@@ -2,16 +2,18 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Calendar, ExternalLink, MapPin, BookOpen, TrendingUp, Clock, Bell } from 'lucide-react';
+import { Calendar, ExternalLink, MapPin, BookOpen, TrendingUp, Clock, Bell, Home } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { formatCurrency, formatDate, getDeadlineUrgency } from '@/lib/utils';
 import { getProviderLogo, getProviderTypeColor, getProviderInitials } from '@/lib/providerLogos';
+import { isLocalProvider } from '@/lib/utils';
 import type { Scholarship } from '@/types';
 
 export interface ScholarshipCardProps {
   scholarship: Scholarship;
   showMatchScore?: boolean;
+  userCountry?: string;
 }
 
 /**
@@ -67,7 +69,7 @@ function ProviderLogo({
   );
 }
 
-export function ScholarshipCard({ scholarship, showMatchScore = false }: ScholarshipCardProps) {
+export function ScholarshipCard({ scholarship, showMatchScore = false, userCountry }: ScholarshipCardProps) {
   const deadlineUrgency = getDeadlineUrgency(scholarship.deadline);
   const colors = getProviderTypeColor(scholarship.providerType);
 
@@ -115,6 +117,13 @@ export function ScholarshipCard({ scholarship, showMatchScore = false }: Scholar
             >
               {providerTypeLabel}
             </span>
+
+            {isLocalProvider(scholarship.provider, userCountry) && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold border bg-emerald-50 text-emerald-700 border-emerald-200">
+                <Home className="w-3 h-3" />
+                Local
+              </span>
+            )}
 
             {scholarship.status === 'pending' && (
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold border bg-amber-50 text-amber-700 border-amber-200">

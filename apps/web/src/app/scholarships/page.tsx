@@ -1,7 +1,10 @@
 'use client';
 
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { Filter, X } from 'lucide-react';
+import { useQuery as useConvexQuery } from 'convex/react';
+import { api } from '../../../../../convex/_generated/api';
+import type { Id } from '../../../../../convex/_generated/dataModel';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
@@ -19,6 +22,17 @@ export default function ScholarshipsPage() {
   const [sortBy, setSortBy] = useState<'relevant' | 'deadline' | 'value' | 'recent'>('relevant');
   const [currentPage, setCurrentPage] = useState(1);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+
+  // Get user's country from profile for "Local" tags
+  const [storedUserId, setStoredUserId] = useState<string | null>(null);
+  useEffect(() => {
+    setStoredUserId(localStorage.getItem('userId'));
+  }, []);
+  const userProfile = useConvexQuery(
+    api.profiles.getByUserId,
+    storedUserId ? { userId: storedUserId as Id<'users'> } : 'skip'
+  );
+  const userCountry = userProfile?.country;
 
   // Fetch scholarships with search and filters
   const { data: scholarshipsData = [], isLoading } = useScholarshipSearch(searchQuery, filters);
@@ -191,6 +205,7 @@ export default function ScholarshipsPage() {
                 scholarships={paginatedScholarships}
                 isLoading={isLoading}
                 onClearFilters={handleClearFilters}
+                userCountry={userCountry}
               />
 
               {/* Pagination */}

@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
-import { COUNTRIES } from '@/lib/constants';
+import { COUNTRIES, COUNTRY_CODES } from '@/lib/constants';
 
 import { useTranslation } from 'react-i18next';
 
@@ -14,6 +14,8 @@ const personalDetailsSchema = z.object({
   gender: z.string().min(1, 'Please select your gender'),
   nationality: z.string().min(1, 'Nationality is required'),
   country: z.string().min(1, 'Country of residence is required'),
+  countryCode: z.string().optional(),
+  phone: z.string().optional(),
 });
 
 type PersonalDetailsData = z.infer<typeof personalDetailsSchema>;
@@ -40,7 +42,11 @@ export default function PersonalDetailsForm({
     formState: { errors },
   } = useForm<PersonalDetailsData>({
     resolver: zodResolver(personalDetailsSchema),
-    defaultValues: data.personalDetails || {},
+    defaultValues: {
+      ...(data.personalDetails || {}),
+      countryCode: data.personalDetails?.countryCode || '+60',
+      phone: data.personalDetails?.phone || '',
+    },
   });
 
   const onSubmit = (formData: PersonalDetailsData) => {
@@ -129,6 +135,32 @@ export default function PersonalDetailsForm({
               <option key={c} value={c} />
             ))}
           </datalist>
+        </div>
+      </div>
+
+      {/* ─── Phone Number ────────────────────────────────────── */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Phone Number
+        </label>
+        <div className="flex gap-2">
+          <select
+            {...register('countryCode')}
+            className="w-[140px] px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+          >
+            {COUNTRY_CODES.map((cc) => (
+              <option key={`${cc.code}-${cc.country}`} value={cc.code}>
+                {cc.code} {cc.country}
+              </option>
+            ))}
+          </select>
+          <Input
+            type="tel"
+            {...register('phone')}
+            error={errors.phone?.message}
+            placeholder="123456789"
+            className="flex-1"
+          />
         </div>
       </div>
 

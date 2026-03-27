@@ -70,6 +70,8 @@ export default defineSchema({
     gender: v.optional(v.string()),
     nationality: v.optional(v.string()),
     country: v.optional(v.string()),
+    countryCode: v.optional(v.string()),
+    phone: v.optional(v.string()),
     education: v.array(
       v.object({
         id: v.string(),
@@ -225,6 +227,13 @@ export default defineSchema({
   })
     .index('by_user_and_scholarship', ['userId', 'scholarshipId'])
     .index('by_scholarship_id', ['scholarshipId'])
+    .index('by_user_id', ['userId']),
+
+  boardingSchoolNotifications: defineTable({
+    userId: v.id('users'),
+    email: v.string(),
+    createdAt: v.string(),
+  })
     .index('by_user_id', ['userId']),
 
   applications: defineTable({
