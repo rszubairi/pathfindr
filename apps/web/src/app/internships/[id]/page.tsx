@@ -1,6 +1,6 @@
 'use client';
 
-import { useQuery, useMutation } from 'convex/react';
+import { useQuery, useMutation, useAction } from 'convex/react';
 import { useParams, useRouter } from 'next/navigation';
 import { api } from '@convex/_generated/api';
 import { Container } from '@/components/ui/Container';
@@ -43,6 +43,7 @@ export default function InternshipDetailPage() {
   });
 
   const applyMutation = useMutation(api.internshipApplications.apply);
+  const notifyApplication = useAction(api.internshipApplications.notifyApplication);
 
   const handleApply = async () => {
     if (!isAuthenticated) {
@@ -60,10 +61,15 @@ export default function InternshipDetailPage() {
     try {
       if (!user?._id) throw new Error('You must be logged in to apply');
       
-      await applyMutation({ 
+      const result = await applyMutation({ 
         internshipId: internshipId as Id<'internships'>,
         userId: user._id as Id<'users'>,
       });
+
+      if (result?.applicationId) {
+        notifyApplication({ applicationId: result.applicationId }).catch(console.error);
+      }
+
       setApplySuccess(true);
     } catch (err: any) {
       setApplyError(err.message || 'Failed to apply.');

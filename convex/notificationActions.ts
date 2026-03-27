@@ -101,3 +101,53 @@ export const sendScholarshipOpenNotifications = action({
     );
   },
 });
+
+export const sendPaymentSuccessEmail = action({
+  args: {
+    userId: v.id('users'),
+    tier: v.union(v.literal('pro'), v.literal('expert')),
+  },
+  handler: async (ctx, args) => {
+    const user = await ctx.runQuery(api.auth.getCurrentUser, { userId: args.userId });
+    if (!user) return;
+
+    const resendApiKey = process.env.RESEND_API_KEY;
+    if (!resendApiKey) return;
+
+    const resend = new Resend(resendApiKey);
+    const whatsappLink = 'https://chat.whatsapp.com/L8h933w4nVP8yB6jXm1T7H?mode=gi_t';
+
+    try {
+      await resend.emails.send({
+        from: 'Pathfindr <noreply@thepathfindr.com>',
+        to: user.email,
+        subject: `Welcome to Pathfindr! ${args.tier === 'pro' ? 'Pro' : 'Expert'} Subscription Confirmed 🎓`,
+        html: `
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #edf2f7; border-radius: 12px;">
+            <h2 style="color: #2b6cb0;">Payment Successful!</h2>
+            <p>Hi ${user.fullName},</p>
+            <p>Thank you for choosing Pathfindr! Your annual <strong>${args.tier.toUpperCase()}</strong> subscription is now active.</p>
+            
+            <div style="background: #ebf8ff; padding: 20px; border-radius: 8px; margin: 20px 0;">
+              <h3 style="margin-top: 0; color: #2c5282;">Exclusive Community Access</h3>
+              <p>As a premium member, you can now join our exclusive WhatsApp community for real-time updates and support:</p>
+              <a href="${whatsappLink}" style="display: inline-block; background: #25d366; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold;">Join WhatsApp Group</a>
+            </div>
+
+            <p>You now have access to:</p>
+            <ul>
+              <li>Unlimited scholarship notifications</li>
+              <li>Priority internship applications</li>
+              <li>Exclusive career development resources</li>
+            </ul>
+
+            <p>If you have any questions, simply reply to this email.</p>
+            <p>Best regards,<br/>The Pathfindr Team</p>
+          </div>
+        `,
+      });
+    } catch (err) {
+      console.error('Failed to send payment success email:', err);
+    }
+  },
+});

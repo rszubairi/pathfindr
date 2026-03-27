@@ -313,6 +313,12 @@ export const handleWebhook = action({
             cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end,
             applicationsLimit: getTierConfig(tier).applicationsLimit,
           });
+
+          // Send confirmation email
+          await ctx.runAction(api.notificationActions.sendPaymentSuccessEmail, {
+            userId: userId as Id<'users'>,
+            tier,
+          });
         }
         break;
       }
