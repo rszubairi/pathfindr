@@ -15,8 +15,6 @@ const navigation = [
   { name: 'Scholarships', href: '/scholarships' },
   { name: 'Boarding Schools', href: '/boarding-schools' },
   { name: 'International Schools', href: '/international-schools' },
-  { name: 'Pricing', href: '/pricing' },
-  { name: 'Features', href: '/features' },
 ];
 
 export function Header() {

@@ -15,8 +15,8 @@ export function Footer() {
   ];
 
   const resourceLinks = [
-    { name: t('nav.about'), href: '/about' },
-    { name: t('nav.features'), href: '/features' },
+    { name: t('nav.features'), href: '/#features' },
+    { name: t('nav.pricing'), href: '/#pricing' },
     { name: t('footer.links.helpCenter'), href: '/help' },
     { name: t('footer.links.privacyPolicy'), href: '/privacy' },
     { name: t('footer.links.termsOfService'), href: '/terms' },
