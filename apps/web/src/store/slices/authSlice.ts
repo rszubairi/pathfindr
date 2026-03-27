@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { UserRole } from '../../types';
 
 interface User {
   id: string;
   email: string;
   fullName: string;
-  role: 'student' | 'institution' | 'philanthropist' | 'admin';
+  role: UserRole;
   subscriptionTier?: 'free' | 'premium';
 }
 
