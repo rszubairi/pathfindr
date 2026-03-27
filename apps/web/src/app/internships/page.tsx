@@ -7,11 +7,16 @@ import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { MainLayout } from '@/components/layout/MainLayout';
-import { MapPin, Calendar, Briefcase, GraduationCap, Lock } from 'lucide-react';
+import { MapPin, Calendar, Briefcase, Lock } from 'lucide-react';
 import Link from 'next/link';
+import { useAuth } from '@/hooks/useAuth';
+import type { Id } from '@convex/_generated/dataModel';
 
 export default function InternshipsPage() {
-  const internships = useQuery(api.internships.listActive);
+  const { user } = useAuth();
+  const internships = useQuery(api.internships.listActive, {
+    userId: user?._id as Id<'users'> | undefined,
+  });
 
   return (
     <MainLayout>
@@ -64,7 +69,7 @@ export default function InternshipsPage() {
                         {internship.companyName === 'Private Company' ? (
                           <div className="flex items-center gap-1.5 text-orange-600 bg-orange-50 px-2.5 py-1 rounded-full text-xs font-medium">
                             <Lock className="w-3 h-3" />
-                            Registered users only
+                            Premium subscribers only
                           </div>
                         ) : (
                           <span className="text-blue-600 font-semibold">{internship.companyName}</span>

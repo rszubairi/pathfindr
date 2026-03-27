@@ -39,7 +39,8 @@ export default function InternshipDetailPage() {
 
   const internshipId = params.id as string;
   const internship = useQuery(api.internships.getById, { 
-    id: internshipId as Id<'internships'> 
+    id: internshipId as Id<'internships'>,
+    userId: user?._id as Id<'users'> | undefined,
   });
 
   const applyMutation = useMutation(api.internshipApplications.apply);

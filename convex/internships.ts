@@ -66,21 +66,30 @@ export const getByCompany = query({
 });
 
 export const listActive = query({
-  args: {},
-  handler: async (ctx) => {
+  args: { userId: v.optional(v.id('users')) },
+  handler: async (ctx, args) => {
     const internships = await ctx.db
       .query('internships')
       .withIndex('by_status', (q) => q.eq('status', 'active'))
       .order('desc')
       .collect();
 
-    const identity = await ctx.auth.getUserIdentity();
-    
-    // Anonymize company if not logged in
+    // Check if user is subscribed
+    let isSubscribed = false;
+    if (args.userId) {
+      const subscription = await ctx.db
+        .query('subscriptions')
+        .withIndex('by_user_id', (q) => q.eq('userId', args.userId!))
+        .filter((q) => q.eq(q.field('status'), 'active'))
+        .first();
+      isSubscribed = !!subscription;
+    }
+
+    // Anonymize company if not subscribed
     const results = await Promise.all(
       internships.map(async (internship) => {
         const company = await ctx.db.get(internship.companyId);
-        if (!identity) {
+        if (!isSubscribed) {
           return {
             ...internship,
             companyName: 'Private Company',
@@ -100,15 +109,28 @@ export const listActive = query({
 });
 
 export const getById = query({
-  args: { id: v.id('internships') },
+  args: { 
+    id: v.id('internships'),
+    userId: v.optional(v.id('users')),
+  },
   handler: async (ctx, args) => {
     const internship = await ctx.db.get(args.id);
     if (!internship) return null;
 
     const company = await ctx.db.get(internship.companyId);
-    const identity = await ctx.auth.getUserIdentity();
 
-    if (!identity) {
+    // Check if user is subscribed
+    let isSubscribed = false;
+    if (args.userId) {
+      const subscription = await ctx.db
+        .query('subscriptions')
+        .withIndex('by_user_id', (q) => q.eq('userId', args.userId!))
+        .filter((q) => q.eq(q.field('status'), 'active'))
+        .first();
+      isSubscribed = !!subscription;
+    }
+
+    if (!isSubscribed) {
       return {
         ...internship,
         companyName: 'Private Company',

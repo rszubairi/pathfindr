@@ -103,6 +103,8 @@ export interface InternationalSchool {
   annualFees: string;
   website: string;
   description?: string;
+  latitude?: number;
+  longitude?: number;
   status: 'active' | 'closed';
   createdAt: string;
   updatedAt: string;

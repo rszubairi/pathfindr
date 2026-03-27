@@ -2,7 +2,8 @@
 
 import React, { useState, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Filter, X, SearchX, Globe2 } from 'lucide-react';
+import { Filter, X, SearchX, Globe2, MapPin, Navigation, XCircle } from 'lucide-react';
+import { calculateDistance, MAJOR_CITIES } from '@/lib/distance';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
@@ -20,15 +21,29 @@ export default function InternationalSchoolsPage() {
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState<Filters>({});
-  const [sortBy, setSortBy] = useState<'name' | 'country' | 'city'>('name');
+  const [sortBy, setSortBy] = useState<'name' | 'country' | 'city' | 'distance'>('name');
   const [currentPage, setCurrentPage] = useState(1);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number; label: string } | null>(null);
+  const [isLocating, setIsLocating] = useState(false);
 
   const { data: schoolsData = [], isLoading } = useInternationalSchoolSearch(searchQuery, filters);
   const { data: stats } = useInternationalSchoolStats();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const schools = useMemo(() => schoolsData.map((s: any) => ({ ...s, id: s._id })), [schoolsData]);
+
+  // Distance map
+  const distanceMap = useMemo(() => {
+    if (!userLocation) return new Map<string, number>();
+    const map = new Map<string, number>();
+    for (const school of schools) {
+      if (school.latitude != null && school.longitude != null) {
+        map.set(school.id, calculateDistance(userLocation.lat, userLocation.lng, school.latitude, school.longitude));
+      }
+    }
+    return map;
+  }, [schools, userLocation]);
 
   // Sort
   const sortedSchools = useMemo(() => {
@@ -40,10 +55,12 @@ export default function InternationalSchoolsPage() {
         return sorted.sort((a, b) => a.country.localeCompare(b.country));
       case 'city':
         return sorted.sort((a, b) => a.city.localeCompare(b.city));
+      case 'distance':
+        return sorted.sort((a, b) => (distanceMap.get(a.id) ?? Infinity) - (distanceMap.get(b.id) ?? Infinity));
       default:
         return sorted;
     }
-  }, [schools, sortBy]);
+  }, [schools, sortBy, distanceMap]);
 
   // Pagination
   const totalPages = Math.ceil(sortedSchools.length / ITEMS_PER_PAGE);
@@ -60,6 +77,33 @@ export default function InternationalSchoolsPage() {
     setFilters({});
     setSearchQuery('');
   }, []);
+
+  const handleUseMyLocation = useCallback(() => {
+    if (!navigator.geolocation) return;
+    setIsLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude, label: 'My Location' });
+        setSortBy('distance');
+        setIsLocating(false);
+      },
+      () => setIsLocating(false),
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  }, []);
+
+  const handleSelectCity = useCallback((cityName: string) => {
+    const city = MAJOR_CITIES.find((c) => c.name === cityName);
+    if (city) {
+      setUserLocation({ lat: city.lat, lng: city.lng, label: city.name });
+      setSortBy('distance');
+    }
+  }, []);
+
+  const handleClearLocation = useCallback(() => {
+    setUserLocation(null);
+    if (sortBy === 'distance') setSortBy('name');
+  }, [sortBy]);
 
   const toggleMobileFilter = useCallback(() => {
     setIsMobileFilterOpen((prev) => !prev);
@@ -125,6 +169,56 @@ export default function InternationalSchoolsPage() {
         </Container>
       </section>
 
+      {/* Location Bar */}
+      <section className="bg-white border-b border-gray-200 py-4">
+        <Container size="xl">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+            <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
+              <MapPin className="w-4 h-4 text-gray-500" />
+              <span>Your Location</span>
+            </div>
+
+            {userLocation ? (
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-50 text-green-700 text-sm font-medium border border-green-200">
+                  <Navigation className="w-3.5 h-3.5" />
+                  {userLocation.label}
+                </span>
+                <button
+                  onClick={handleClearLocation}
+                  className="p-1 hover:bg-gray-100 rounded-full transition"
+                  title="Clear location"
+                >
+                  <XCircle className="w-4 h-4 text-gray-400 hover:text-gray-600" />
+                </button>
+              </div>
+            ) : (
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                <button
+                  onClick={handleUseMyLocation}
+                  disabled={isLocating}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary-50 text-primary-700 text-sm font-medium border border-primary-200 hover:bg-primary-100 transition disabled:opacity-50"
+                >
+                  <Navigation className="w-3.5 h-3.5" />
+                  {isLocating ? 'Locating...' : 'Use My Location'}
+                </button>
+                <span className="text-xs text-gray-400">or</span>
+                <select
+                  onChange={(e) => { if (e.target.value) handleSelectCity(e.target.value); }}
+                  defaultValue=""
+                  className="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white"
+                >
+                  <option value="" disabled>Select a city</option>
+                  {MAJOR_CITIES.map((city) => (
+                    <option key={city.name} value={city.name}>{city.name}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+          </div>
+        </Container>
+      </section>
+
       {/* Main Content */}
       <section className="py-8">
         <Container size="xl">
@@ -147,12 +241,13 @@ export default function InternationalSchoolsPage() {
                   <select
                     id="sort"
                     value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value as 'name' | 'country' | 'city')}
+                    onChange={(e) => setSortBy(e.target.value as 'name' | 'country' | 'city' | 'distance')}
                     className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white"
                   >
                     <option value="name">{t('internationalSchools.sort.name')}</option>
                     <option value="country">{t('internationalSchools.sort.country')}</option>
                     <option value="city">{t('internationalSchools.sort.city')}</option>
+                    {userLocation && <option value="distance">Distance</option>}
                   </select>
                 </div>
               </div>
@@ -238,7 +333,7 @@ export default function InternationalSchoolsPage() {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {paginatedSchools.map((school) => (
-                    <InternationalSchoolCard key={school.id} school={school} />
+                    <InternationalSchoolCard key={school.id} school={school} distance={distanceMap.get(school.id)} />
                   ))}
                 </div>
               )}

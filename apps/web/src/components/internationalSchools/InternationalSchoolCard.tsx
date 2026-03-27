@@ -8,6 +8,7 @@ import type { InternationalSchool } from '@/types';
 
 export interface InternationalSchoolCardProps {
   school: InternationalSchool;
+  distance?: number;
 }
 
 const countryColors: Record<string, { bg: string; text: string; border: string; gradient: string; flag: string }> = {
@@ -26,7 +27,7 @@ const curriculumColors: Record<string, { bg: string; text: string }> = {
   Singapore: { bg: 'bg-emerald-50', text: 'text-emerald-700' },
 };
 
-export function InternationalSchoolCard({ school }: InternationalSchoolCardProps) {
+export function InternationalSchoolCard({ school, distance }: InternationalSchoolCardProps) {
   const { t } = useTranslation();
   const colors = countryColors[school.country] || countryColors['Malaysia'];
 
@@ -58,6 +59,11 @@ export function InternationalSchoolCard({ school }: InternationalSchoolCardProps
         <div className="flex items-center gap-1.5 mb-2">
           <MapPin className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
           <span className="text-sm text-gray-600">{school.city}, {school.country}</span>
+          {distance !== undefined && (
+            <span className="ml-auto inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-green-50 text-green-700 border border-green-200">
+              {distance < 1 ? `${Math.round(distance * 1000)}m` : `${distance.toFixed(1)} km`}
+            </span>
+          )}
         </div>
 
         {/* Curriculum */}

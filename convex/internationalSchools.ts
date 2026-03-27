@@ -155,3 +155,25 @@ export const seedData = mutation({
     return { message: 'Seed data inserted', count };
   },
 });
+
+// Reseed data — deletes all existing records and reinserts with latest seed data
+export const reseedData = mutation({
+  handler: async (ctx) => {
+    const existing = await ctx.db.query('internationalSchools').collect();
+    for (const school of existing) {
+      await ctx.db.delete(school._id);
+    }
+
+    const now = new Date().toISOString();
+    let count = 0;
+    for (const school of INTERNATIONAL_SCHOOLS_SEED) {
+      await ctx.db.insert('internationalSchools', {
+        ...school,
+        createdAt: now,
+        updatedAt: now,
+      });
+      count++;
+    }
+    return { message: 'Data reseeded', count };
+  },
+});
