@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { MapPin, BookOpen, GraduationCap, DollarSign, ExternalLink } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import type { InternationalSchool } from '@/types';
@@ -26,6 +27,7 @@ const curriculumColors: Record<string, { bg: string; text: string }> = {
 };
 
 export function InternationalSchoolCard({ school }: InternationalSchoolCardProps) {
+  const { t } = useTranslation();
   const colors = countryColors[school.country] || countryColors['Malaysia'];
 
   return (
@@ -83,7 +85,7 @@ export function InternationalSchoolCard({ school }: InternationalSchoolCardProps
         {/* Fees */}
         <div className="flex items-center gap-2 py-3 border-t border-gray-100">
           <DollarSign className="w-4 h-4 text-gray-400" />
-          <span className="text-xs text-gray-500">Fees:</span>
+          <span className="text-xs text-gray-500">{t('internationalSchools.card.fees')}</span>
           <Badge variant="default" size="sm">
             {school.annualFees}
           </Badge>
@@ -98,7 +100,7 @@ export function InternationalSchoolCard({ school }: InternationalSchoolCardProps
           rel="noopener noreferrer"
           className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-primary-600 hover:bg-primary-700 active:scale-95 text-white text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md"
         >
-          Visit Website
+          {t('internationalSchools.card.visitWebsite')}
           <ExternalLink className="w-3.5 h-3.5" />
         </a>
       </div>

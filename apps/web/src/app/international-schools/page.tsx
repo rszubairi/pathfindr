@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Filter, X, SearchX, Globe2 } from 'lucide-react';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Container } from '@/components/ui/Container';
@@ -16,6 +17,7 @@ import type { InternationalSchoolFilters as Filters } from '@/types';
 const ITEMS_PER_PAGE = 21;
 
 export default function InternationalSchoolsPage() {
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState<Filters>({});
   const [sortBy, setSortBy] = useState<'name' | 'country' | 'city'>('name');
@@ -104,19 +106,18 @@ export default function InternationalSchoolsPage() {
               </div>
               <div>
                 <h1 className="text-4xl sm:text-5xl font-bold text-gray-900">
-                  International Schools
+                  {t('internationalSchools.title')}
                 </h1>
               </div>
             </div>
             <p className="text-lg text-gray-600">
-              Explore {stats?.total || '60+'} top international schools across Malaysia, Indonesia, and China.
-              Compare curricula, fees, and find the perfect school for your education journey.
+              {t('internationalSchools.subtitle', { count: stats?.total || '60+' })}
             </p>
             <div className="mt-4 flex flex-wrap gap-3">
               {stats?.byCountry && Object.entries(stats.byCountry).map(([country, count]) => (
                 <div key={country} className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-lg px-3 py-2 text-sm">
                   <span className="font-semibold text-blue-600">{country}</span>
-                  <span className="text-gray-500">{count as number} schools</span>
+                  <span className="text-gray-500">{t('internationalSchools.schoolsCount', { count: count as number })}</span>
                 </div>
               ))}
             </div>
@@ -133,7 +134,7 @@ export default function InternationalSchoolsPage() {
               <div className="flex flex-col sm:flex-row gap-3">
                 <div className="flex-1">
                   <SearchInput
-                    placeholder="Search schools by name, e.g. ISKL, Dulwich, JIS..."
+                    placeholder={t('internationalSchools.search.placeholder')}
                     onSearch={setSearchQuery}
                     debounceMs={400}
                     showClearButton
@@ -141,7 +142,7 @@ export default function InternationalSchoolsPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <label htmlFor="sort" className="text-sm font-medium text-gray-700 whitespace-nowrap">
-                    Sort by:
+                    {t('internationalSchools.sort.label')}
                   </label>
                   <select
                     id="sort"
@@ -149,9 +150,9 @@ export default function InternationalSchoolsPage() {
                     onChange={(e) => setSortBy(e.target.value as 'name' | 'country' | 'city')}
                     className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white"
                   >
-                    <option value="name">Name</option>
-                    <option value="country">Country</option>
-                    <option value="city">City</option>
+                    <option value="name">{t('internationalSchools.sort.name')}</option>
+                    <option value="country">{t('internationalSchools.sort.country')}</option>
+                    <option value="city">{t('internationalSchools.sort.city')}</option>
                   </select>
                 </div>
               </div>
@@ -160,7 +161,7 @@ export default function InternationalSchoolsPage() {
               {(activeFilters.length > 0 || searchQuery) && (
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-sm text-gray-600 font-medium">
-                    {sortedSchools.length} {sortedSchools.length === 1 ? 'school' : 'schools'} found
+                    {t(sortedSchools.length === 1 ? 'internationalSchools.results.school' : 'internationalSchools.results.schools', { count: sortedSchools.length })}
                   </span>
                   {activeFilters.length > 0 && <span className="text-gray-300">|</span>}
                   {activeFilters.map((filter, index) => (
@@ -189,7 +190,7 @@ export default function InternationalSchoolsPage() {
               className="w-full flex items-center justify-center gap-2"
             >
               <Filter className="h-5 w-5" />
-              Filters
+              {t('internationalSchools.mobile.filters')}
               {activeFilters.length > 0 && (
                 <span className="bg-primary-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                   {activeFilters.length}
@@ -226,12 +227,12 @@ export default function InternationalSchoolsPage() {
                   <div className="bg-gray-100 rounded-full p-6 mb-4">
                     <SearchX className="h-12 w-12 text-gray-400" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">No schools found</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">{t('internationalSchools.empty.title')}</h3>
                   <p className="text-gray-600 text-center mb-6 max-w-md">
-                    We couldn&apos;t find any international schools matching your criteria. Try adjusting your filters or search query.
+                    {t('internationalSchools.empty.description')}
                   </p>
                   <Button variant="primary" size="md" onClick={handleClearFilters}>
-                    Clear All Filters
+                    {t('internationalSchools.empty.clearAll')}
                   </Button>
                 </div>
               ) : (
@@ -251,7 +252,7 @@ export default function InternationalSchoolsPage() {
                     onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
                     disabled={currentPage === 1}
                   >
-                    Previous
+                    {t('internationalSchools.pagination.previous')}
                   </Button>
 
                   <div className="flex items-center gap-2">
@@ -289,7 +290,7 @@ export default function InternationalSchoolsPage() {
                     onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
                     disabled={currentPage === totalPages}
                   >
-                    Next
+                    {t('internationalSchools.pagination.next')}
                   </Button>
                 </div>
               )}
@@ -304,7 +305,7 @@ export default function InternationalSchoolsPage() {
           <div className="absolute inset-0 bg-black/50" onClick={toggleMobileFilter}></div>
           <div className="absolute inset-y-0 right-0 w-full max-w-sm bg-white shadow-2xl overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-gray-200 px-4 py-4 flex items-center justify-between z-10">
-              <h2 className="text-lg font-bold text-gray-900">Filters</h2>
+              <h2 className="text-lg font-bold text-gray-900">{t('internationalSchools.filters.title')}</h2>
               <button onClick={toggleMobileFilter} className="p-2 hover:bg-gray-100 rounded-lg transition">
                 <X className="h-6 w-6 text-gray-600" />
               </button>
@@ -320,7 +321,7 @@ export default function InternationalSchoolsPage() {
             </div>
             <div className="sticky bottom-0 bg-white border-t border-gray-200 px-4 py-4">
               <Button variant="primary" size="lg" onClick={toggleMobileFilter} className="w-full">
-                Show {sortedSchools.length} Results
+                {t('internationalSchools.mobile.showResults', { count: sortedSchools.length })}
               </Button>
             </div>
           </div>

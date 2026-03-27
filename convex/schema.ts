@@ -246,6 +246,8 @@ export default defineSchema({
     annualFees: v.string(),
     website: v.string(),
     description: v.optional(v.string()),
+    latitude: v.optional(v.number()),
+    longitude: v.optional(v.number()),
     status: v.union(v.literal('active'), v.literal('closed')),
     createdAt: v.string(),
     updatedAt: v.string(),

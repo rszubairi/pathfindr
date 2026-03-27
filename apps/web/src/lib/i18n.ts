@@ -9,6 +9,7 @@ const resources = {
         home: 'Home',
         scholarships: 'Scholarships',
         boardingschools: 'Boarding Schools',
+        internationalschools: 'International Schools',
         pricing: 'Pricing',
         features: 'Features',
         about: 'About',
@@ -282,6 +283,48 @@ const resources = {
         madeWith: 'Made with',
         inSEA: 'in Southeast Asia',
       },
+      internationalSchools: {
+        title: 'International Schools',
+        subtitle: 'Explore {{count}} top international schools across Malaysia, Indonesia, and China. Compare curricula, fees, and find the perfect school for your education journey.',
+        schoolsCount: '{{count}} schools',
+        search: {
+          placeholder: 'Search schools by name, e.g. ISKL, Dulwich, JIS...',
+        },
+        sort: {
+          label: 'Sort by:',
+          name: 'Name',
+          country: 'Country',
+          city: 'City',
+        },
+        results: {
+          school: '{{count}} school found',
+          schools: '{{count}} schools found',
+        },
+        empty: {
+          title: 'No schools found',
+          description: "We couldn't find any international schools matching your criteria. Try adjusting your filters or search query.",
+          clearAll: 'Clear All Filters',
+        },
+        filters: {
+          title: 'Filters',
+          clearAll: 'Clear all',
+          clearAllBtn: 'Clear All Filters',
+          country: 'Country',
+          curriculum: 'Curriculum',
+        },
+        card: {
+          fees: 'Fees:',
+          visitWebsite: 'Visit Website',
+        },
+        pagination: {
+          previous: 'Previous',
+          next: 'Next',
+        },
+        mobile: {
+          filters: 'Filters',
+          showResults: 'Show {{count}} Results',
+        },
+      },
     },
   },
   ms: {
@@ -290,6 +333,7 @@ const resources = {
         home: 'Utama',
         scholarships: 'Biasiswa',
         boardingschools: 'Sekolah Berasrama',
+        internationalschools: 'Sekolah Antarabangsa',
         pricing: 'Harga',
         features: 'Ciri-ciri',
         about: 'Tentang Kami',
@@ -563,6 +607,48 @@ const resources = {
         madeWith: 'Dibuat dengan',
         inSEA: 'di Asia Tenggara',
       },
+      internationalSchools: {
+        title: 'Sekolah Antarabangsa',
+        subtitle: 'Terokai {{count}} sekolah antarabangsa terbaik di Malaysia, Indonesia, dan China. Bandingkan kurikulum, yuran, dan cari sekolah yang sempurna untuk perjalanan pendidikan anda.',
+        schoolsCount: '{{count}} sekolah',
+        search: {
+          placeholder: 'Cari sekolah mengikut nama, cth. ISKL, Dulwich, JIS...',
+        },
+        sort: {
+          label: 'Susun mengikut:',
+          name: 'Nama',
+          country: 'Negara',
+          city: 'Bandar',
+        },
+        results: {
+          school: '{{count}} sekolah ditemui',
+          schools: '{{count}} sekolah ditemui',
+        },
+        empty: {
+          title: 'Tiada sekolah ditemui',
+          description: 'Kami tidak dapat mencari sekolah antarabangsa yang sepadan dengan kriteria anda. Cuba laraskan penapis atau carian anda.',
+          clearAll: 'Kosongkan Semua Penapis',
+        },
+        filters: {
+          title: 'Penapis',
+          clearAll: 'Kosongkan semua',
+          clearAllBtn: 'Kosongkan Semua Penapis',
+          country: 'Negara',
+          curriculum: 'Kurikulum',
+        },
+        card: {
+          fees: 'Yuran:',
+          visitWebsite: 'Lawati Laman Web',
+        },
+        pagination: {
+          previous: 'Sebelumnya',
+          next: 'Seterusnya',
+        },
+        mobile: {
+          filters: 'Penapis',
+          showResults: 'Tunjukkan {{count}} Keputusan',
+        },
+      },
     },
   },
   zh: {
@@ -571,6 +657,7 @@ const resources = {
         home: '首页',
         scholarships: '奖学金',
         boardingschools: '寄宿学校',
+        internationalschools: '国际学校',
         pricing: '价格',
         features: '功能',
         about: '关于我们',
@@ -843,6 +930,48 @@ const resources = {
         allRightsReserved: '版权所有。',
         madeWith: '精心制作',
         inSEA: '在东南亚',
+      },
+      internationalSchools: {
+        title: '国际学校',
+        subtitle: '探索马来西亚、印度尼西亚和中国的 {{count}} 所顶级国际学校。比较课程、学费，为您的教育之旅找到最合适的学校。',
+        schoolsCount: '{{count}} 所学校',
+        search: {
+          placeholder: '按名称搜索学校，如 ISKL、Dulwich、JIS...',
+        },
+        sort: {
+          label: '排序方式：',
+          name: '名称',
+          country: '国家',
+          city: '城市',
+        },
+        results: {
+          school: '找到 {{count}} 所学校',
+          schools: '找到 {{count}} 所学校',
+        },
+        empty: {
+          title: '未找到学校',
+          description: '未找到符合您条件的国际学校。请尝试调整筛选条件或搜索关键词。',
+          clearAll: '清除所有筛选',
+        },
+        filters: {
+          title: '筛选',
+          clearAll: '清除所有',
+          clearAllBtn: '清除所有筛选',
+          country: '国家',
+          curriculum: '课程体系',
+        },
+        card: {
+          fees: '学费：',
+          visitWebsite: '访问网站',
+        },
+        pagination: {
+          previous: '上一页',
+          next: '下一页',
+        },
+        mobile: {
+          filters: '筛选',
+          showResults: '显示 {{count}} 个结果',
+        },
       },
     },
   },
