@@ -30,6 +30,7 @@ export const registerInstitution = action({
     picPhone: v.string(),
     providerType: providerTypeValidator,
     website: v.optional(v.string()),
+    role: v.optional(v.union(v.literal('institution'), v.literal('corporate'))),
   },
   handler: async (ctx, args): Promise<{ userId: string; success: boolean }> => {
     // Hash password
@@ -54,14 +55,18 @@ export const registerInstitution = action({
         picPhone: args.picPhone,
         providerType: args.providerType,
         website: args.website,
+        role: args.role,
       }
     );
 
     // Send confirmation email
     const resendApiKey = process.env.RESEND_API_KEY;
+    const isCorporate = args.role === 'corporate';
+    const entityName = isCorporate ? 'Corporate' : 'Institution';
+
     if (!resendApiKey) {
       console.log(
-        `[DEV] Institution registered: ${args.institutionName} (${args.email}) - awaiting admin approval`
+        `[DEV] ${entityName} registered: ${args.institutionName} (${args.email}) - awaiting admin approval`
       );
     } else {
       try {
@@ -69,7 +74,7 @@ export const registerInstitution = action({
         await resend.emails.send({
           from: 'Pathfindr <noreply@thepathfindr.com>',
           to: args.email,
-          subject: 'Institution Registration Received - Pathfindr',
+          subject: `${entityName} Registration Received - Pathfindr`,
           html: `
             <!DOCTYPE html>
             <html>
@@ -79,10 +84,10 @@ export const registerInstitution = action({
               </div>
               <h2 style="color: #111827; font-size: 20px;">Registration Received</h2>
               <p style="color: #4b5563; font-size: 16px; line-height: 1.5;">
-                Thank you for registering <strong>${args.institutionName}</strong> on Pathfindr.
+                Thank you for registering <strong>${args.institutionName}</strong> on Pathfindr as a ${entityName.toLowerCase()}.
               </p>
               <p style="color: #4b5563; font-size: 16px; line-height: 1.5;">
-                Your registration is currently under review. Our team will verify your institution details
+                Your registration is currently under review. Our team will verify your ${entityName.toLowerCase()} details
                 and you will receive an email once your account has been approved.
               </p>
               <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 12px; padding: 20px; margin: 24px 0;">
@@ -100,9 +105,10 @@ export const registerInstitution = action({
           `,
         });
       } catch (err) {
-        console.error('Failed to send institution registration email:', err);
+        console.error(`Failed to send ${entityName.toLowerCase()} registration email:`, err);
       }
     }
+
 
     return { userId, success: true };
   },

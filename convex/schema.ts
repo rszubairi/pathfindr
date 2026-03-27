@@ -52,7 +52,8 @@ export default defineSchema({
       v.literal('student'),
       v.literal('institution'),
       v.literal('philanthropist'),
-      v.literal('admin')
+      v.literal('admin'),
+      v.literal('corporate')
     ),
     emailVerified: v.boolean(),
     verificationToken: v.optional(v.string()),
@@ -276,4 +277,60 @@ export default defineSchema({
     .index('by_user_id', ['userId'])
     .index('by_scholarship_id', ['scholarshipId'])
     .index('by_user_and_scholarship', ['userId', 'scholarshipId']),
+
+  internships: defineTable({
+    companyId: v.id('institutionProfiles'),
+    title: v.string(),
+    description: v.string(),
+    location: v.string(),
+    type: v.union(v.literal('full-time'), v.literal('part-time'), v.literal('remote')),
+    requirements: v.array(v.string()),
+    responsibilities: v.array(v.string()),
+    salaryRange: v.optional(v.string()),
+    duration: v.optional(v.string()),
+    deadline: v.string(),
+    status: v.union(
+      v.literal('draft'),
+      v.literal('pending_payment'),
+      v.literal('active'),
+      v.literal('closed')
+    ),
+    paymentStatus: v.union(v.literal('unpaid'), v.literal('paid')),
+    listingPrice: v.number(),
+    createdAt: v.string(),
+    updatedAt: v.string(),
+  })
+    .index('by_company', ['companyId'])
+    .index('by_status', ['status'])
+    .index('by_payment_status', ['paymentStatus']),
+
+  internshipApplications: defineTable({
+    internshipId: v.id('internships'),
+    userId: v.id('users'),
+    status: v.union(
+      v.literal('applied'),
+      v.literal('under_review'),
+      v.literal('shortlisted'),
+      v.literal('rejected'),
+      v.literal('accepted')
+    ),
+    appliedAt: v.string(),
+    updatedAt: v.string(),
+  })
+    .index('by_internship', ['internshipId'])
+    .index('by_user', ['userId'])
+    .index('by_internship_and_user', ['internshipId', 'userId']),
+
+  internshipPayments: defineTable({
+    companyId: v.id('institutionProfiles'),
+    internshipIds: v.array(v.id('internships')),
+    amount: v.number(),
+    currency: v.string(),
+    status: v.union(v.literal('pending'), v.literal('completed'), v.literal('failed')),
+    stripePaymentIntentId: v.optional(v.string()),
+    createdAt: v.string(),
+  })
+    .index('by_company', ['companyId'])
+    .index('by_stripe_id', ['stripePaymentIntentId']),
+
 });

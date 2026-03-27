@@ -25,6 +25,7 @@ export const createInstitutionUser = mutation({
     picPhone: v.string(),
     providerType: providerTypeValidator,
     website: v.optional(v.string()),
+    role: v.optional(v.union(v.literal('institution'), v.literal('corporate'))),
   },
   handler: async (ctx, args) => {
     const email = args.email.toLowerCase();
@@ -54,14 +55,15 @@ export const createInstitutionUser = mutation({
     const now = new Date().toISOString();
     const tokenExpiry = Date.now() + 24 * 60 * 60 * 1000;
 
-    // Create user with institution role
+    // Create user with specified role (default to institution)
     const userId = await ctx.db.insert('users', {
       email,
       passwordHash: args.passwordHash,
       fullName: args.institutionName,
       phone: args.phone,
-      role: 'institution',
+      role: args.role || 'institution',
       emailVerified: true,
+
       verificationToken: args.verificationToken,
       tokenExpiry,
       profileCompleted: true,
@@ -132,5 +134,12 @@ export const updateInstitutionProfile = mutation({
       ...cleanUpdates,
       updatedAt: new Date().toISOString(),
     });
+  },
+});
+
+export const getInstitutionProfileById = query({
+  args: { profileId: v.id('institutionProfiles') },
+  handler: async (ctx, args) => {
+    return await ctx.db.get(args.profileId);
   },
 });

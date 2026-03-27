@@ -11,7 +11,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ProtectedRoute requiredRole="institution">
+    <ProtectedRoute requiredRole={['institution', 'corporate']}>
       <MainLayout showFooter={false}>
         <div className="flex min-h-[calc(100vh-64px)] bg-gray-50">
           <DashboardSidebar />

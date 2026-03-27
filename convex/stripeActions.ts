@@ -4,6 +4,7 @@ import { action } from './_generated/server';
 import { v } from 'convex/values';
 import { api } from './_generated/api';
 import Stripe from 'stripe';
+import { Id } from './_generated/dataModel';
 
 // Lazy-init to avoid module-level errors during Convex analysis
 let _stripe: Stripe | null = null;
@@ -193,6 +194,54 @@ export const verifyCheckoutSession = action({
   },
 });
 
+// ─── Create Internship Checkout Session ─────────────────────
+
+export const createInternshipCheckoutSession = action({
+  args: {
+    userId: v.id('users'),
+    companyId: v.id('institutionProfiles'),
+    internshipIds: v.array(v.id('internships')),
+  },
+  handler: async (ctx, args): Promise<{ sessionUrl: string }> => {
+    const stripe = getStripe();
+    const appUrl = getAppUrl();
+    const user = await ctx.runQuery(api.auth.getCurrentUser, { userId: args.userId });
+    if (!user) throw new Error('User not found');
+
+    // RM15 per listing
+    const internshipIdsStr = args.internshipIds.join(',');
+    const session = await stripe.checkout.sessions.create({
+      mode: 'payment',
+      customer: (await stripe.customers.list({ email: user.email, limit: 1 })).data[0]?.id || 
+               (await stripe.customers.create({ email: user.email, name: user.fullName, metadata: { userId: args.userId } })).id,
+      line_items: [
+        {
+          price_data: {
+            currency: 'myr',
+            product_data: {
+              name: 'Internship Listing(s)',
+              description: `Payment for ${args.internshipIds.length} internship listing(s) on Pathfindr.`,
+            },
+            unit_amount: 1500, // 15 MYR in cents
+          },
+          quantity: args.internshipIds.length,
+        },
+      ],
+      success_url: `${appUrl}/dashboard/internships/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${appUrl}/dashboard/internships/billing`,
+      metadata: {
+        userId: args.userId,
+        companyId: args.companyId,
+        internshipIds: internshipIdsStr,
+        paymentType: 'internship_listing',
+      },
+    });
+
+    if (!session.url) throw new Error('Failed to create checkout session');
+    return { sessionUrl: session.url };
+  },
+});
+
 // ─── Handle Webhook ─────────────────────────────────────────
 
 export const handleWebhook = action({
@@ -218,32 +267,53 @@ export const handleWebhook = action({
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
-        const userId = session.metadata?.userId;
-        const tier = session.metadata?.tier as 'pro' | 'expert';
+        const paymentType = session.metadata?.paymentType;
 
-        if (!userId || !tier) break;
+        if (paymentType === 'internship_listing') {
+          const companyId = session.metadata?.companyId;
+          const internshipIdsString = session.metadata?.internshipIds;
+          if (!companyId || !internshipIdsString) break;
 
-        // Retrieve the subscription to get period details
-        const stripeSubscription = await stripe.subscriptions.retrieve(
-          session.subscription as string
-        );
+          const internshipIds = internshipIdsString.split(',') as Id<'internships'>[];
+          const amount = (session.amount_total || 0) / 100;
 
-        const priceId = stripeSubscription.items.data[0].price.id;
-        const period = getSubscriptionPeriod(stripeSubscription);
+          const paymentId = await ctx.runMutation(api.internshipPayments.createPayment, {
+            companyId: companyId as Id<'institutionProfiles'>,
+            internshipIds,
+            amount,
+          });
 
-        await ctx.runMutation(api.subscriptions.upsertSubscription, {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          userId: userId as any,
-          tier,
-          status: 'active',
-          stripeCustomerId: session.customer as string,
-          stripeSubscriptionId: stripeSubscription.id,
-          stripePriceId: priceId,
-          currentPeriodStart: period.start,
-          currentPeriodEnd: period.end,
-          cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end,
-          applicationsLimit: getTierConfig(tier).applicationsLimit,
-        });
+          await ctx.runMutation(api.internshipPayments.markAsPaid, {
+            paymentId,
+            stripePaymentIntentId: session.payment_intent as string,
+          });
+        } else {
+          // Subscription logic
+          const userId = session.metadata?.userId;
+          const tier = session.metadata?.tier as 'pro' | 'expert';
+
+          if (!userId || !tier) break;
+
+          const stripeSubscription = await stripe.subscriptions.retrieve(
+            session.subscription as string
+          );
+
+          const priceId = stripeSubscription.items.data[0].price.id;
+          const period = getSubscriptionPeriod(stripeSubscription);
+
+          await ctx.runMutation(api.subscriptions.upsertSubscription, {
+            userId: userId as Id<'users'>,
+            tier,
+            status: 'active',
+            stripeCustomerId: session.customer as string,
+            stripeSubscriptionId: stripeSubscription.id,
+            stripePriceId: priceId,
+            currentPeriodStart: period.start,
+            currentPeriodEnd: period.end,
+            cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end,
+            applicationsLimit: getTierConfig(tier).applicationsLimit,
+          });
+        }
         break;
       }
 
@@ -253,15 +323,13 @@ export const handleWebhook = action({
 
         if (!subscriptionId) break;
 
-        // On renewal, reset application count and update period
         if (invoice.billing_reason === 'subscription_cycle') {
           await ctx.runMutation(api.subscriptions.resetApplicationCount, {
             stripeSubscriptionId: subscriptionId,
           });
         }
 
-        const stripeSubscription =
-          await stripe.subscriptions.retrieve(subscriptionId);
+        const stripeSubscription = await stripe.subscriptions.retrieve(subscriptionId);
         const period = getSubscriptionPeriod(stripeSubscription);
 
         await ctx.runMutation(api.subscriptions.updateSubscriptionStatus, {

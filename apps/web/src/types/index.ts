@@ -1,5 +1,5 @@
 // User Types
-export type UserRole = 'student' | 'institution' | 'philanthropist' | 'admin';
+export type UserRole = 'student' | 'institution' | 'philanthropist' | 'admin' | 'corporate';
 export type SubscriptionTier = 'free' | 'premium';
 
 export interface User {
