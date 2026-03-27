@@ -2,7 +2,7 @@
 
 import { useQuery } from 'convex/react';
 import { useParams, useRouter } from 'next/navigation';
-import { api } from '../../../../../../convex/_generated/api';
+import { api } from '@convex/_generated/api';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -10,7 +10,7 @@ import { Table, TableHead, TableBody, TableRow, TableCell, TableHeaderCell } fro
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Mail, Phone, ChevronLeft, User, Calendar, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
-import type { Id } from '../../../../../../convex/_generated/dataModel';
+import type { Id } from '@convex/_generated/dataModel';
 
 export default function InternshipResponsesPage() {
   const params = useParams();
@@ -21,7 +21,7 @@ export default function InternshipResponsesPage() {
     id: internshipId as Id<'internships'> 
   });
 
-  const applications = useQuery(api.internshipApplications.listByInternship, { 
+  const applications = useQuery(api.internshipApplications.getByInternship, { 
     internshipId: internshipId as Id<'internships'> 
   });
 
@@ -62,7 +62,7 @@ export default function InternshipResponsesPage() {
                 </TableCell>
               </TableRow>
             ) : (
-              applications.map((app) => (
+              (applications as any[]).map((app: any) => (
                 <TableRow key={app._id} className="hover:bg-gray-50 transition-colors">
                   <TableCell>
                     <div className="flex items-center gap-4 py-2">

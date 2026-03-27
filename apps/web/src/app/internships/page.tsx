@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from 'convex/react';
-import { api } from '../../../../convex/_generated/api';
+import { api } from '@convex/_generated/api';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -46,7 +46,9 @@ export default function InternshipsPage() {
             {!internships ? (
               <div className="space-y-4">
                 {[1, 2, 3].map((i) => (
-                  <Card key={i} className="p-6 h-48 animate-pulse bg-gray-50" />
+                  <Card key={i} className="p-6 h-48 animate-pulse bg-gray-50">
+                    <div className="h-full bg-gray-100/50 rounded-lg" />
+                  </Card>
                 ))}
               </div>
             ) : internships.length === 0 ? (

@@ -2,7 +2,7 @@
 
 import { useQuery, useMutation } from 'convex/react';
 import { useParams, useRouter } from 'next/navigation';
-import { api } from '../../../../convex/_generated/api';
+import { api } from '@convex/_generated/api';
 import { Container } from '@/components/ui/Container';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
-import type { Id } from '../../../../convex/_generated/dataModel';
+import type { Id } from '@convex/_generated/dataModel';
 
 export default function InternshipDetailPage() {
   const params = useParams();

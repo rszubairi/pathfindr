@@ -2,14 +2,14 @@
 
 import { useAuth } from '@/hooks/useAuth';
 import { useQuery } from 'convex/react';
-import { api } from '../../../../../../convex/_generated/api';
+import { api } from '@convex/_generated/api';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Table, TableHead, TableBody, TableRow, TableCell, TableHeaderCell } from '@/components/ui/Table';
 import { Plus, Users, CreditCard, ChevronRight, Briefcase, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
-import type { Id } from '../../../../../../convex/_generated/dataModel';
+import type { Id } from '@convex/_generated/dataModel';
 
 export default function CorporateInternshipsPage() {
   const { user } = useAuth();
@@ -58,7 +58,7 @@ export default function CorporateInternshipsPage() {
             </div>
             <div>
               <div className="text-sm font-medium text-gray-500 uppercase">Active Listings</div>
-              <div className="text-2xl font-bold">{internships?.filter(i => i.status === 'active').length || 0}</div>
+              <div className="text-2xl font-bold">{(internships as any[])?.filter((i: any) => i.status === 'active').length || 0}</div>
             </div>
           </div>
         </Card>
@@ -80,7 +80,7 @@ export default function CorporateInternshipsPage() {
             </div>
             <div>
               <div className="text-sm font-medium text-gray-500 uppercase">Drafts</div>
-              <div className="text-2xl font-bold">{internships?.filter(i => i.status === 'draft').length || 0}</div>
+              <div className="text-2xl font-bold">{(internships as any[])?.filter((i: any) => i.status === 'draft').length || 0}</div>
             </div>
           </div>
         </Card>
@@ -146,7 +146,7 @@ export default function CorporateInternshipsPage() {
       </div>
 
       {/* Payment Call to Action */}
-      {internships?.some(i => i.status === 'draft') && (
+      {internships?.some((i: any) => i.status === 'draft') && (
         <div className="bg-primary-600 rounded-xl p-6 text-white flex flex-col md:flex-row items-center justify-between gap-4 shadow-lg shadow-primary-200">
           <div>
             <h3 className="text-xl font-bold">Unpaid Listings Found</h3>

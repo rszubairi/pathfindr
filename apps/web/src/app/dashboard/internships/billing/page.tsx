@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/hooks/useAuth';
 import { useQuery, useAction } from 'convex/react';
-import { api } from '../../../../../../convex/_generated/api';
+import { api } from '@convex/_generated/api';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -11,7 +11,7 @@ import { CreditCard, ShieldCheck, ChevronRight, Briefcase } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Link from 'next/link';
-import type { Id } from '../../../../../../convex/_generated/dataModel';
+import type { Id } from '@convex/_generated/dataModel';
 
 export default function InternshipBillingPage() {
   const { user } = useAuth();
