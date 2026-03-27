@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -37,6 +38,8 @@ interface Props {
   data: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onNext: (data: any) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onSave: (data: any) => void;
   onBack: () => void;
 }
 
@@ -51,8 +54,9 @@ const emptyEducation = () => ({
   gpa: undefined as number | undefined,
 });
 
-export default function EducationForm({ data, onNext, onBack }: Props) {
+export default function EducationForm({ data, onNext, onSave, onBack }: Props) {
   const { t } = useTranslation();
+  const [isSaving, setIsSaving] = useState(false);
   const {
     register,
     handleSubmit,
@@ -73,6 +77,17 @@ export default function EducationForm({ data, onNext, onBack }: Props) {
 
   const onSubmit = (formData: EducationData) => {
     onNext({ education: formData.education });
+  };
+
+  const handleSaveProgress = async () => {
+    await handleSubmit(async (formData) => {
+      setIsSaving(true);
+      try {
+        await onSave({ education: formData.education });
+      } finally {
+        setIsSaving(false);
+      }
+    })();
   };
 
   return (
@@ -230,9 +245,9 @@ export default function EducationForm({ data, onNext, onBack }: Props) {
         type="button"
         variant="secondary"
         onClick={() => append(emptyEducation())}
-        className="w-full"
+        className="w-full py-4 border-dashed border-2 bg-transparent hover:bg-gray-50 text-gray-600 font-bold"
       >
-        <Plus className="w-4 h-4 mr-2" />
+        <Plus className="w-5 h-5 mr-2" />
         {t('profile.forms.education.addAnother')}
       </Button>
 
@@ -240,13 +255,25 @@ export default function EducationForm({ data, onNext, onBack }: Props) {
         <p className="text-sm text-red-600">{errors.education.root.message}</p>
       )}
 
-      <div className="flex justify-between pt-4">
-        <Button type="button" variant="ghost" onClick={onBack}>
-          {t('profile.forms.common.back')}
-        </Button>
-        <Button type="submit" variant="primary">
-          {t('profile.forms.common.next')}
-        </Button>
+      <div className="flex items-center justify-between pt-6 border-t border-gray-100">
+        <div>
+          <Button type="button" variant="ghost" onClick={onBack}>
+            {t('profile.forms.common.back')}
+          </Button>
+        </div>
+        <div className="flex gap-3">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={handleSaveProgress}
+            isLoading={isSaving}
+          >
+            {t('profile.forms.common.saveProgress', { defaultValue: 'Save Progress' })}
+          </Button>
+          <Button type="submit" variant="primary">
+            {t('profile.forms.common.next')}
+          </Button>
+        </div>
       </div>
     </form>
   );

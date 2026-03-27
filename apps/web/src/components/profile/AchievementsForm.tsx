@@ -38,13 +38,16 @@ interface Props {
   data: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onNext: (data: any) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onSave: (data: any) => void;
   onBack: () => void;
 }
 
-export default function AchievementsForm({ data, onNext, onBack }: Props) {
+export default function AchievementsForm({ data, onNext, onSave, onBack }: Props) {
   const { t } = useTranslation();
   const [skills, setSkills] = useState<string[]>(data.skills || []);
   const [skillInput, setSkillInput] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
 
   const {
     register,
@@ -83,12 +86,25 @@ export default function AchievementsForm({ data, onNext, onBack }: Props) {
     setSkills(skills.filter((s) => s !== skill));
   };
 
+  const getFormPayload = (formData: AchievementsData) => ({
+    certificates: formData.certificates,
+    projects: formData.projects,
+    skills,
+  });
+
   const onSubmit = (formData: AchievementsData) => {
-    onNext({
-      certificates: formData.certificates,
-      projects: formData.projects,
-      skills,
-    });
+    onNext(getFormPayload(formData));
+  };
+
+  const handleSaveProgress = async () => {
+    await handleSubmit(async (formData) => {
+      setIsSaving(true);
+      try {
+        await onSave(getFormPayload(formData));
+      } finally {
+        setIsSaving(false);
+      }
+    })();
   };
 
   return (
@@ -110,7 +126,7 @@ export default function AchievementsForm({ data, onNext, onBack }: Props) {
         {certFields.map((field, index) => (
           <div
             key={field.id}
-            className="p-4 bg-gray-50 rounded-lg space-y-3 mb-3"
+            className="p-4 bg-gray-50 rounded-lg space-y-3 mb-3 border border-gray-100"
           >
             <div className="flex justify-between items-center">
               <span className="text-sm font-medium text-gray-700">
@@ -123,7 +139,7 @@ export default function AchievementsForm({ data, onNext, onBack }: Props) {
                 variant="ghost"
                 size="sm"
                 onClick={() => removeCert(index)}
-                className="text-red-600 hover:bg-red-50"
+                className="text-red-600 hover:bg-red-50 hover:text-red-700"
               >
                 <Trash2 className="w-4 h-4" />
               </Button>
@@ -166,6 +182,7 @@ export default function AchievementsForm({ data, onNext, onBack }: Props) {
               dateIssued: '',
             })
           }
+          className="w-full py-3 border-dashed border-2 bg-transparent hover:bg-gray-50 text-gray-600"
         >
           <Plus className="w-4 h-4 mr-2" />
           {t('profile.forms.achievements.certificates.addAnother')}
@@ -180,7 +197,7 @@ export default function AchievementsForm({ data, onNext, onBack }: Props) {
         {projFields.map((field, index) => (
           <div
             key={field.id}
-            className="p-4 bg-gray-50 rounded-lg space-y-3 mb-3"
+            className="p-4 bg-gray-50 rounded-lg space-y-3 mb-3 border border-gray-100"
           >
             <div className="flex justify-between items-center">
               <span className="text-sm font-medium text-gray-700">
@@ -193,7 +210,7 @@ export default function AchievementsForm({ data, onNext, onBack }: Props) {
                 variant="ghost"
                 size="sm"
                 onClick={() => removeProj(index)}
-                className="text-red-600 hover:bg-red-50"
+                className="text-red-600 hover:bg-red-50 hover:text-red-700"
               >
                 <Trash2 className="w-4 h-4" />
               </Button>
@@ -256,6 +273,7 @@ export default function AchievementsForm({ data, onNext, onBack }: Props) {
               endDate: '',
             })
           }
+          className="w-full py-3 border-dashed border-2 bg-transparent hover:bg-gray-50 text-gray-600"
         >
           <Plus className="w-4 h-4 mr-2" />
           {t('profile.forms.achievements.projects.addAnother')}
@@ -281,7 +299,7 @@ export default function AchievementsForm({ data, onNext, onBack }: Props) {
             className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             placeholder={t('profile.forms.achievements.skills.placeholder')}
           />
-          <Button type="button" variant="secondary" onClick={addSkill}>
+          <Button type="button" variant="secondary" onClick={addSkill} className="font-bold">
             {t('profile.forms.common.add')}
           </Button>
         </div>
@@ -290,15 +308,15 @@ export default function AchievementsForm({ data, onNext, onBack }: Props) {
             {skills.map((skill) => (
               <span
                 key={skill}
-                className="inline-flex items-center gap-1 px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm"
+                className="inline-flex items-center gap-1.5 px-3 py-1 bg-primary-50 text-primary-700 rounded-full text-sm font-medium border border-primary-100"
               >
                 {skill}
                 <button
                   type="button"
                   onClick={() => removeSkill(skill)}
-                  className="hover:text-primary-900"
+                  className="hover:text-primary-900 transition-colors"
                 >
-                  <X className="w-3 h-3" />
+                  <X className="w-3.5 h-3.5" />
                 </button>
               </span>
             ))}
@@ -306,13 +324,25 @@ export default function AchievementsForm({ data, onNext, onBack }: Props) {
         )}
       </div>
 
-      <div className="flex justify-between pt-4">
-        <Button type="button" variant="ghost" onClick={onBack}>
-          {t('profile.forms.common.back')}
-        </Button>
-        <Button type="submit" variant="primary">
-          {t('profile.forms.common.next')}
-        </Button>
+      <div className="flex items-center justify-between pt-6 border-t border-gray-100">
+        <div>
+          <Button type="button" variant="ghost" onClick={onBack}>
+            {t('profile.forms.common.back')}
+          </Button>
+        </div>
+        <div className="flex gap-3">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={handleSaveProgress}
+            isLoading={isSaving}
+          >
+            {t('profile.forms.common.saveProgress', { defaultValue: 'Save Progress' })}
+          </Button>
+          <Button type="submit" variant="primary">
+            {t('profile.forms.common.next')}
+          </Button>
+        </div>
       </div>
     </form>
   );

@@ -13,6 +13,8 @@ import { X } from 'lucide-react';
 import type { Id } from '../../../../../convex/_generated/dataModel';
 import { INTERESTS, COUNTRIES } from '@/lib/constants';
 
+import { useTranslation } from 'react-i18next';
+
 const preferencesSchema = z.object({
   availability: z.string().optional(),
 });
@@ -24,15 +26,16 @@ interface Props {
   data: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onNext: (data: any) => Promise<void>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onSave: (data: any) => void;
   onBack: () => void;
 }
 
-import { useTranslation } from 'react-i18next';
-
-export default function PreferencesForm({ data, onNext, onBack }: Props) {
+export default function PreferencesForm({ data, onNext, onSave, onBack }: Props) {
   const { t } = useTranslation();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const markProfileCompleted = useMutation(api.auth.markProfileCompleted);
@@ -71,6 +74,12 @@ export default function PreferencesForm({ data, onNext, onBack }: Props) {
     }
   };
 
+  const getFormPayload = (formData: PreferencesData) => ({
+    interests,
+    preferredCountries: countries,
+    availability: formData.availability || undefined,
+  });
+
   const onSubmit = async (formData: PreferencesData) => {
     if (interests.length === 0) {
       setError('Please add at least one interest');
@@ -85,11 +94,7 @@ export default function PreferencesForm({ data, onNext, onBack }: Props) {
     setError(null);
 
     try {
-      await onNext({
-        interests,
-        preferredCountries: countries,
-        availability: formData.availability || undefined,
-      });
+      await onNext(getFormPayload(formData));
 
       const userId = localStorage.getItem('userId');
       if (userId) {
@@ -103,6 +108,21 @@ export default function PreferencesForm({ data, onNext, onBack }: Props) {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleSaveProgress = async () => {
+    await handleSubmit(async (formData) => {
+      setIsSaving(true);
+      setError(null);
+      try {
+        await onSave(getFormPayload(formData));
+      } catch (err: unknown) {
+        const error = err as Error;
+        setError(error.message || 'Failed to save progress.');
+      } finally {
+        setIsSaving(false);
+      }
+    })();
   };
 
   return (
@@ -148,7 +168,7 @@ export default function PreferencesForm({ data, onNext, onBack }: Props) {
               <option key={interest} value={interest} />
             ))}
           </datalist>
-          <Button type="button" variant="secondary" onClick={addInterest}>
+          <Button type="button" variant="secondary" onClick={addInterest} className="font-bold">
             {t('profile.forms.common.add')}
           </Button>
         </div>
@@ -157,7 +177,7 @@ export default function PreferencesForm({ data, onNext, onBack }: Props) {
             {interests.map((interest) => (
               <span
                 key={interest}
-                className="inline-flex items-center gap-1 px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm"
+                className="inline-flex items-center gap-1.5 px-3 py-1 bg-primary-50 text-primary-700 rounded-full text-sm font-medium border border-primary-100"
               >
                 {interest}
                 <button
@@ -165,8 +185,9 @@ export default function PreferencesForm({ data, onNext, onBack }: Props) {
                   onClick={() =>
                     setInterests(interests.filter((i) => i !== interest))
                   }
+                  className="hover:text-primary-900 transition-colors"
                 >
-                  <X className="w-3 h-3" />
+                  <X className="w-3.5 h-3.5" />
                 </button>
               </span>
             ))}
@@ -202,7 +223,7 @@ export default function PreferencesForm({ data, onNext, onBack }: Props) {
               <option key={country} value={country} />
             ))}
           </datalist>
-          <Button type="button" variant="secondary" onClick={addCountry}>
+          <Button type="button" variant="secondary" onClick={addCountry} className="font-bold">
             {t('profile.forms.common.add')}
           </Button>
         </div>
@@ -211,7 +232,7 @@ export default function PreferencesForm({ data, onNext, onBack }: Props) {
             {countries.map((country) => (
               <span
                 key={country}
-                className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm"
+                className="inline-flex items-center gap-1.5 px-3 py-1 bg-green-50 text-green-700 rounded-full text-sm font-medium border border-green-100"
               >
                 {country}
                 <button
@@ -219,8 +240,9 @@ export default function PreferencesForm({ data, onNext, onBack }: Props) {
                   onClick={() =>
                     setCountries(countries.filter((c) => c !== country))
                   }
+                  className="hover:text-green-900 transition-colors"
                 >
-                  <X className="w-3 h-3" />
+                  <X className="w-3.5 h-3.5" />
                 </button>
               </span>
             ))}
@@ -236,20 +258,32 @@ export default function PreferencesForm({ data, onNext, onBack }: Props) {
         placeholder={t('profile.forms.preferences.availability.placeholder')}
       />
 
-      <div className="flex justify-between pt-4">
-        <Button type="button" variant="ghost" onClick={onBack}>
-          {t('profile.forms.common.back')}
-        </Button>
-        <Button
-          type="submit"
-          variant="primary"
-          disabled={isSubmitting}
-          isLoading={isSubmitting}
-        >
-          {isSubmitting
-            ? t('profile.forms.preferences.saving')
-            : t('profile.forms.preferences.complete')}
-        </Button>
+      <div className="flex items-center justify-between pt-6 border-t border-gray-100">
+        <div>
+          <Button type="button" variant="ghost" onClick={onBack}>
+            {t('profile.forms.common.back')}
+          </Button>
+        </div>
+        <div className="flex gap-3">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={handleSaveProgress}
+            isLoading={isSaving}
+          >
+            {t('profile.forms.common.saveProgress', { defaultValue: 'Save Progress' })}
+          </Button>
+          <Button
+            type="submit"
+            variant="primary"
+            disabled={isSubmitting}
+            isLoading={isSubmitting}
+          >
+            {isSubmitting
+              ? t('profile.forms.preferences.saving')
+              : t('profile.forms.preferences.complete')}
+          </Button>
+        </div>
       </div>
     </form>
   );

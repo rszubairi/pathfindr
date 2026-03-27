@@ -31,6 +31,8 @@ interface Props {
   data: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onNext: (data: any) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onSave: (data: any) => void;
   onBack: () => void;
   isFirstStep: boolean;
 }
@@ -38,6 +40,7 @@ interface Props {
 export default function PersonalDetailsForm({
   data,
   onNext,
+  onSave,
   onBack,
   isFirstStep,
 }: Props) {
@@ -45,6 +48,7 @@ export default function PersonalDetailsForm({
   const { user } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const generateUploadUrl = useMutation(api.storage.generateUploadUrl);
@@ -106,6 +110,17 @@ export default function PersonalDetailsForm({
 
   const onSubmit = (formData: PersonalDetailsData) => {
     onNext({ personalDetails: formData });
+  };
+
+  const handleSaveProgress = async () => {
+    await handleSubmit(async (formData) => {
+      setIsSaving(true);
+      try {
+        await onSave({ personalDetails: formData });
+      } finally {
+        setIsSaving(false);
+      }
+    })();
   };
 
   return (
@@ -258,7 +273,7 @@ export default function PersonalDetailsForm({
         </div>
       </div>
 
-      <div className="flex justify-between pt-4">
+      <div className="flex items-center justify-between pt-6 border-t border-gray-100">
         <div>
           {!isFirstStep && (
             <Button type="button" variant="ghost" onClick={onBack}>
@@ -266,9 +281,19 @@ export default function PersonalDetailsForm({
             </Button>
           )}
         </div>
-        <Button type="submit" variant="primary">
-          {t('profile.forms.common.next')}
-        </Button>
+        <div className="flex gap-3">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={handleSaveProgress}
+            isLoading={isSaving}
+          >
+            {t('profile.forms.common.saveProgress', { defaultValue: 'Save Progress' })}
+          </Button>
+          <Button type="submit" variant="primary">
+            {t('profile.forms.common.next')}
+          </Button>
+        </div>
       </div>
     </form>
   );

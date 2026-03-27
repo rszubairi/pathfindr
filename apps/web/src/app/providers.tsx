@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { store } from '@/store';
 import { useState } from 'react';
 import { ConvexClientProvider } from '@/providers/ConvexClientProvider';
+import { ToastProvider } from '@/components/ui/Toast';
 import '@/lib/i18n';
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -23,7 +24,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <Provider store={store}>
       <ConvexClientProvider>
-        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+        <QueryClientProvider client={queryClient}>
+          <ToastProvider>{children}</ToastProvider>
+        </QueryClientProvider>
       </ConvexClientProvider>
     </Provider>
   );

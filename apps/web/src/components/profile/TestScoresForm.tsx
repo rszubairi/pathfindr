@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -67,6 +68,8 @@ interface Props {
   data: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onNext: (data: any) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onSave: (data: any) => void;
   onBack: () => void;
 }
 
@@ -87,8 +90,9 @@ function ExamLink({ examKey }: { examKey: string }) {
   );
 }
 
-export default function TestScoresForm({ data, onNext, onBack }: Props) {
+export default function TestScoresForm({ data, onNext, onSave, onBack }: Props) {
   const { t } = useTranslation();
+  const [isSaving, setIsSaving] = useState(false);
   const {
     register,
     handleSubmit,
@@ -101,14 +105,28 @@ export default function TestScoresForm({ data, onNext, onBack }: Props) {
 
   const values = watch();
 
-  const onSubmit = (formData: TestScoresData) => {
-    // Clean undefined values
+  const getCleanedData = (formData: TestScoresData) => {
     const cleaned: Record<string, number | undefined> = {};
     for (const [key, value] of Object.entries(formData)) {
       cleaned[key] =
         value === undefined || isNaN(value as number) ? undefined : value;
     }
-    onNext({ testScores: cleaned });
+    return { testScores: cleaned };
+  };
+
+  const onSubmit = (formData: TestScoresData) => {
+    onNext(getCleanedData(formData));
+  };
+
+  const handleSaveProgress = async () => {
+    await handleSubmit(async (formData) => {
+      setIsSaving(true);
+      try {
+        await onSave(getCleanedData(formData));
+      } finally {
+        setIsSaving(false);
+      }
+    })();
   };
 
   return (
@@ -224,13 +242,25 @@ export default function TestScoresForm({ data, onNext, onBack }: Props) {
         </div>
       </div>
 
-      <div className="flex justify-between pt-4">
-        <Button type="button" variant="ghost" onClick={onBack}>
-          {t('profile.forms.common.back')}
-        </Button>
-        <Button type="submit" variant="primary">
-          {t('profile.forms.common.next')}
-        </Button>
+      <div className="flex items-center justify-between pt-6 border-t border-gray-100">
+        <div>
+          <Button type="button" variant="ghost" onClick={onBack}>
+            {t('profile.forms.common.back')}
+          </Button>
+        </div>
+        <div className="flex gap-3">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={handleSaveProgress}
+            isLoading={isSaving}
+          >
+            {t('profile.forms.common.saveProgress', { defaultValue: 'Save Progress' })}
+          </Button>
+          <Button type="submit" variant="primary">
+            {t('profile.forms.common.next')}
+          </Button>
+        </div>
       </div>
     </form>
   );

@@ -17,7 +17,6 @@ const navigation = [
   { name: 'International Schools', href: '/international-schools' },
   { name: 'Pricing', href: '/pricing' },
   { name: 'Features', href: '/features' },
-  { name: 'About', href: '/about' },
 ];
 
 export function Header() {

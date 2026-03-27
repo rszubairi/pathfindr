@@ -14,6 +14,7 @@ import TestScoresForm from '@/components/profile/TestScoresForm';
 import AchievementsForm from '@/components/profile/AchievementsForm';
 import PreferencesForm from '@/components/profile/PreferencesForm';
 import type { Id } from '../../../../../../convex/_generated/dataModel';
+import { useToast } from '@/components/ui/Toast';
 
 const STEPS = [
   { id: 1, name: 'personalDetails', labelKey: 'profile.steps.personalDetails' },
@@ -26,6 +27,7 @@ const STEPS = [
 export default function CompleteProfilePage() {
   const router = useRouter();
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
 
@@ -87,71 +89,86 @@ export default function CompleteProfilePage() {
 
   const upsertProfile = useMutation(api.profiles.upsert);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleNext = async (stepData: Record<string, any>) => {
+  const saveProfileData = async (stepData: Record<string, any>) => {
     const updatedData = { ...formData, ...stepData };
     setFormData(updatedData);
 
-    // Incremental saving
-    try {
-      if (storedUserId) {
-        const profilePayload = {
-          userId: storedUserId as Id<'users'>,
-          dateOfBirth: updatedData.personalDetails?.dateOfBirth,
-          gender: updatedData.personalDetails?.gender,
-          nationality: updatedData.personalDetails?.nationality,
-          country: updatedData.personalDetails?.country,
-          countryCode: updatedData.personalDetails?.countryCode || undefined,
-          phone: updatedData.personalDetails?.phone || undefined,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          education: (updatedData.education || []).map((edu: any) => ({
-            id: edu.id,
-            institutionName: edu.institutionName,
-            qualificationTitle: edu.qualificationTitle,
-            fieldOfStudy: edu.fieldOfStudy,
-            startDate: edu.startDate,
-            endDate: edu.endDate || undefined,
-            grade: edu.grade || undefined,
-            gpa: edu.gpa !== undefined && edu.gpa !== '' ? Number(edu.gpa) : undefined,
-          })),
-          testScores: {
-            sat: updatedData.testScores?.sat ? Number(updatedData.testScores.sat) : undefined,
-            ielts: updatedData.testScores?.ielts ? Number(updatedData.testScores.ielts) : undefined,
-            toefl: updatedData.testScores?.toefl ? Number(updatedData.testScores.toefl) : undefined,
-            gre: updatedData.testScores?.gre ? Number(updatedData.testScores.gre) : undefined,
-            gmat: updatedData.testScores?.gmat ? Number(updatedData.testScores.gmat) : undefined,
-          },
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          certificates: (updatedData.certificates || []).map((cert: any) => ({
-            id: cert.id,
-            title: cert.title,
-            issuer: cert.issuer,
-            dateIssued: cert.dateIssued,
-          })),
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          projects: (updatedData.projects || []).map((proj: any) => ({
-            id: proj.id,
-            title: proj.title,
-            description: proj.description,
-            technologies: proj.technologies || [],
-            startDate: proj.startDate,
-            endDate: proj.endDate || undefined,
-          })),
-          skills: updatedData.skills || [],
-          interests: updatedData.interests || [],
-          preferredCountries: updatedData.preferredCountries || [],
-          availability: updatedData.availability || undefined,
-        };
+    if (storedUserId) {
+      const profilePayload = {
+        userId: storedUserId as Id<'users'>,
+        dateOfBirth: updatedData.personalDetails?.dateOfBirth,
+        gender: updatedData.personalDetails?.gender,
+        nationality: updatedData.personalDetails?.nationality,
+        country: updatedData.personalDetails?.country,
+        countryCode: updatedData.personalDetails?.countryCode || undefined,
+        phone: updatedData.personalDetails?.phone || undefined,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        education: (updatedData.education || []).map((edu: any) => ({
+          id: edu.id,
+          institutionName: edu.institutionName,
+          qualificationTitle: edu.qualificationTitle,
+          fieldOfStudy: edu.fieldOfStudy,
+          startDate: edu.startDate,
+          endDate: edu.endDate || undefined,
+          grade: edu.grade || undefined,
+          gpa: edu.gpa !== undefined && edu.gpa !== '' ? Number(edu.gpa) : undefined,
+        })),
+        testScores: {
+          sat: updatedData.testScores?.sat ? Number(updatedData.testScores.sat) : undefined,
+          ielts: updatedData.testScores?.ielts ? Number(updatedData.testScores.ielts) : undefined,
+          toefl: updatedData.testScores?.toefl ? Number(updatedData.testScores.toefl) : undefined,
+          gre: updatedData.testScores?.gre ? Number(updatedData.testScores.gre) : undefined,
+          gmat: updatedData.testScores?.gmat ? Number(updatedData.testScores.gmat) : undefined,
+        },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        certificates: (updatedData.certificates || []).map((cert: any) => ({
+          id: cert.id,
+          title: cert.title,
+          issuer: cert.issuer,
+          dateIssued: cert.dateIssued,
+        })),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        projects: (updatedData.projects || []).map((proj: any) => ({
+          id: proj.id,
+          title: proj.title,
+          description: proj.description,
+          technologies: proj.technologies || [],
+          startDate: proj.startDate,
+          endDate: proj.endDate || undefined,
+        })),
+        skills: updatedData.skills || [],
+        interests: updatedData.interests || [],
+        preferredCountries: updatedData.preferredCountries || [],
+        availability: updatedData.availability || undefined,
+      };
 
-        await upsertProfile(profilePayload);
+      await upsertProfile(profilePayload);
+      return updatedData;
+    }
+    return updatedData;
+  };
+
+  const handleNext = async (stepData: Record<string, any>) => {
+    try {
+      await saveProfileData(stepData);
+      
+      if (currentStep < STEPS.length) {
+        setCurrentStep(currentStep + 1);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     } catch (err) {
-      console.error('Failed to auto-save profile progress:', err);
+      console.error('Failed to save profile progress:', err);
+      showToast('Failed to save progress', 'error');
     }
+  };
 
-    if (currentStep < STEPS.length) {
-      setCurrentStep(currentStep + 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+  const handleSave = async (stepData: Record<string, any>) => {
+    try {
+      await saveProfileData(stepData);
+      showToast('Profile progress saved successfully!');
+    } catch (err) {
+      console.error('Failed to save profile:', err);
+      showToast('Failed to save profile', 'error');
     }
   };
 
@@ -166,6 +183,7 @@ export default function CompleteProfilePage() {
     const commonProps = {
       data: formData,
       onNext: handleNext,
+      onSave: handleSave,
       onBack: handleBack,
     };
 
