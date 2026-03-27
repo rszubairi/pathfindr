@@ -23,13 +23,19 @@ import Link from 'next/link';
 import { useState } from 'react';
 import type { Id } from '@convex/_generated/dataModel';
 
+import { useSubscription } from '@/hooks/useSubscription';
+import { SubscriptionModal } from '@/components/subscription/SubscriptionModal';
+
 export default function InternshipDetailPage() {
   const params = useParams();
   const router = useRouter();
   const { isAuthenticated, user } = useAuth();
+  const { isSubscribed, isLoading: subLoading } = useSubscription();
+
   const [isApplying, setIsApplying] = useState(false);
   const [applyError, setApplyError] = useState<string | null>(null);
   const [applySuccess, setApplySuccess] = useState(false);
+  const [isSubModalOpen, setIsSubModalOpen] = useState(false);
 
   const internshipId = params.id as string;
   const internship = useQuery(api.internships.getById, { 
@@ -41,6 +47,11 @@ export default function InternshipDetailPage() {
   const handleApply = async () => {
     if (!isAuthenticated) {
       router.push(`/login?redirect=/internships/${internshipId}`);
+      return;
+    }
+
+    if (!isSubscribed) {
+      setIsSubModalOpen(true);
       return;
     }
 
@@ -210,14 +221,16 @@ export default function InternshipDetailPage() {
                           className="w-full" 
                           size="lg" 
                           onClick={handleApply}
-                          isLoading={isApplying}
-                          disabled={isApplying}
+                          isLoading={isApplying || subLoading}
+                          disabled={isApplying || subLoading}
                         >
                           Send Application
                         </Button>
-                        <p className="text-xs text-center text-gray-500">
-                          By applying, your profile details will be shared with the employer.
-                        </p>
+                        {!isSubscribed && !subLoading && (
+                          <p className="text-xs text-center text-amber-600 font-medium">
+                            Premium subscription required to apply
+                          </p>
+                        )}
                       </>
                     )}
                   </div>
@@ -244,6 +257,13 @@ export default function InternshipDetailPage() {
           </div>
         </div>
       </Container>
+
+      <SubscriptionModal 
+        isOpen={isSubModalOpen} 
+        onClose={() => setIsSubModalOpen(false)} 
+        description="Internship applications require an active Pro or Expert subscription. Choose a plan below to continue."
+      />
     </MainLayout>
   );
 }
+
