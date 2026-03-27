@@ -15,7 +15,7 @@ export const TIER_CONFIG = {
   },
   expert: {
     name: 'Expert',
-    price: 79,
+    price: 49.99,
     currency: 'USD',
     interval: 'year' as const,
     applicationsLimit: 20,

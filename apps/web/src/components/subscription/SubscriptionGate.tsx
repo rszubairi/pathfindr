@@ -125,16 +125,16 @@ function SubscribeContent() {
               <h4 className="font-extrabold text-gray-900 text-lg">Expert</h4>
               <p className="text-xs text-gray-500">For ambitious students</p>
             </div>
-            <div className="text-right">
-              <div className="flex items-baseline">
-                <span className="text-2xl font-black text-gray-900">$79</span>
-                <span className="text-xs text-gray-500 font-medium whitespace-nowrap">/ year</span>
+              <div className="text-right">
+                <div className="flex items-baseline">
+                  <span className="text-2xl font-black text-gray-900">${TIER_CONFIG.expert.price}</span>
+                  <span className="text-xs text-gray-500 font-medium whitespace-nowrap">/ {TIER_CONFIG.expert.interval}</span>
+                </div>
               </div>
-            </div>
           </div>
           <div className="flex items-center gap-2 text-primary-700 font-bold text-sm">
             <CheckCircle2 className="h-4 w-4 fill-primary-500 text-white" />
-            20 Scholarship Applications
+            {TIER_CONFIG.expert.applicationsLimit} Scholarship Applications
           </div>
         </div>
 
@@ -145,19 +145,21 @@ function SubscribeContent() {
               <h4 className="font-bold text-gray-900 text-lg group-hover:text-primary-600 transition-colors">Pro</h4>
               <p className="text-xs text-gray-500">Essential features</p>
             </div>
-            <div className="text-right">
-              <div className="flex flex-col items-end">
-                <span className="text-[10px] text-gray-400 line-through">$25</span>
-                <div className="flex items-baseline">
-                  <span className="text-xl font-bold text-gray-900">$9.99</span>
-                  <span className="text-xs text-gray-500 font-medium whitespace-nowrap">/ year</span>
+              <div className="text-right">
+                <div className="flex flex-col items-end">
+                  {TIER_CONFIG.pro.originalPrice && (
+                    <span className="text-[10px] text-gray-400 line-through">${TIER_CONFIG.pro.originalPrice}</span>
+                  )}
+                  <div className="flex items-baseline">
+                    <span className="text-xl font-bold text-gray-900">${TIER_CONFIG.pro.price}</span>
+                    <span className="text-xs text-gray-500 font-medium whitespace-nowrap">/ {TIER_CONFIG.pro.interval}</span>
+                  </div>
                 </div>
               </div>
-            </div>
           </div>
           <div className="flex items-center gap-2 text-gray-700 font-semibold text-sm">
             <CheckCircle2 className="h-4 w-4 text-green-500" />
-            5 Scholarship Applications
+            {TIER_CONFIG.pro.applicationsLimit} Scholarship Applications
           </div>
         </div>
       </div>
