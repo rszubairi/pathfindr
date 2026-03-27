@@ -47,7 +47,12 @@ export default function InternshipDetailPage() {
     setIsApplying(true);
     setApplyError(null);
     try {
-      await applyMutation({ internshipId: internshipId as Id<'internships'> });
+      if (!user?._id) throw new Error('You must be logged in to apply');
+      
+      await applyMutation({ 
+        internshipId: internshipId as Id<'internships'>,
+        userId: user._id as Id<'users'>,
+      });
       setApplySuccess(true);
     } catch (err: any) {
       setApplyError(err.message || 'Failed to apply.');

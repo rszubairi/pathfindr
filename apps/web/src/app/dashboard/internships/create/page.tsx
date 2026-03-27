@@ -13,6 +13,8 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Container } from '@/components/ui/Container';
 import { MapPin, Calendar, Briefcase, Plus, Trash2 } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import type { Id } from '@convex/_generated/dataModel';
 
 const internshipSchema = z.object({
   title: z.string().min(5, 'Title must be at least 5 characters'),
@@ -28,6 +30,7 @@ type InternshipFormData = z.infer<typeof internshipSchema>;
 
 export default function CreateInternshipPage() {
   const router = useRouter();
+  const { user, loading } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
@@ -61,10 +64,15 @@ export default function CreateInternshipPage() {
     }
 
     try {
+      if (!user?._id) {
+        throw new Error('Please log in again building your internship draft.');
+      }
+
       await createInternship({
         ...data,
         requirements: filteredRequirements,
         responsibilities: filteredResponsibilities,
+        userId: user._id as Id<'users'>,
       });
       router.push('/dashboard/internships');
     } catch (err: any) {

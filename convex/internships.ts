@@ -13,17 +13,10 @@ export const create = mutation({
     salaryRange: v.optional(v.string()),
     duration: v.optional(v.string()),
     deadline: v.string(),
+    userId: v.id('users'),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      throw new Error('Not authenticated');
-    }
-
-    const user = await ctx.db
-      .query('users')
-      .withIndex('by_email', (q) => q.eq('email', identity.email!))
-      .first();
+    const user = await ctx.db.get(args.userId);
 
     if (!user || user.role !== 'corporate') {
       throw new Error('Only corporate users can create internships');

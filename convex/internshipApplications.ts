@@ -6,17 +6,10 @@ import { Resend } from 'resend';
 export const apply = mutation({
   args: {
     internshipId: v.id('internships'),
+    userId: v.id('users'),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      throw new Error('Not authenticated');
-    }
-
-    const user = await ctx.db
-      .query('users')
-      .withIndex('by_email', (q) => q.eq('email', identity.email!))
-      .first();
+    const user = await ctx.db.get(args.userId);
 
     if (!user || user.role !== 'student') {
       throw new Error('Only students can apply for internships');
