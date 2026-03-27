@@ -9,6 +9,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'RM 45,000 - RM 95,000',
     website: 'https://www.alice-smith.edu.my',
     description: 'One of the oldest British international schools in Southeast Asia, established in 1946.',
+    latitude: 3.1631,
+    longitude: 101.7352,
     status: 'active' as const,
   },
   {
@@ -20,6 +22,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'RM 30,000 - RM 78,000',
     website: 'https://www.gardenschool.edu.my',
     description: 'A leading British curriculum school known for academic excellence and diverse student body.',
+    latitude: 3.1605,
+    longitude: 101.7157,
     status: 'active' as const,
   },
   {
@@ -31,6 +35,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'RM 60,000 - RM 115,000',
     website: 'https://www.iskl.edu.my',
     description: 'A premier American-curriculum international school with a world-class campus in Ampang Hilir.',
+    latitude: 3.1579,
+    longitude: 101.7535,
     status: 'active' as const,
   },
   {
@@ -42,6 +48,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'RM 40,000 - RM 85,000',
     website: 'https://www.mkis.edu.my',
     description: 'An IB World School offering all three IB programmes in the heart of Mont Kiara.',
+    latitude: 3.1718,
+    longitude: 101.6517,
     status: 'active' as const,
   },
   {
@@ -53,6 +61,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'RM 25,000 - RM 68,000',
     website: 'https://www.nexus.edu.my',
     description: 'An IB World School with a modern campus in Putrajaya offering holistic education.',
+    latitude: 2.9264,
+    longitude: 101.6964,
     status: 'active' as const,
   },
   {
@@ -64,6 +74,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'RM 20,000 - RM 48,000',
     website: 'https://www.gems.edu.my',
     description: 'Part of the global GEMS Education network, offering British curriculum education.',
+    latitude: 3.1390,
+    longitude: 101.6869,
     status: 'active' as const,
   },
   {
@@ -75,6 +87,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'RM 50,000 - RM 100,000',
     website: 'https://www.epsomcollege.edu.my',
     description: 'A British boarding and day school set on a 50-acre campus near KLIA.',
+    latitude: 2.8050,
+    longitude: 101.7560,
     status: 'active' as const,
   },
   {
@@ -86,6 +100,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'RM 55,000 - RM 110,000',
     website: 'https://www.marlboroughcollegemalaysia.org',
     description: 'The first overseas campus of the prestigious UK boarding school, Marlborough College.',
+    latitude: 1.4225,
+    longitude: 103.6400,
     status: 'active' as const,
   },
   {
@@ -97,6 +113,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'RM 18,000 - RM 42,000',
     website: 'https://www.tenby.edu.my',
     description: 'Part of the International Schools Partnership, offering affordable British education.',
+    latitude: 3.1110,
+    longitude: 101.5870,
     status: 'active' as const,
   },
   {
@@ -108,6 +126,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'RM 22,000 - RM 52,000',
     website: 'https://www.fairview.edu.my',
     description: 'The largest group of IB World Schools in Malaysia with multiple campuses.',
+    latitude: 3.1750,
+    longitude: 101.7090,
     status: 'active' as const,
   },
   {
@@ -119,6 +139,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'RM 25,000 - RM 45,000',
     website: 'https://www.sis.sunway.edu.my',
     description: 'Located within the Sunway township, offering a blend of international curricula.',
+    latitude: 3.0682,
+    longitude: 101.6046,
     status: 'active' as const,
   },
   {
@@ -130,6 +152,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'RM 20,000 - RM 55,000',
     website: 'https://www.srikdu.edu.my',
     description: 'A well-established school offering both British and IB curriculum pathways.',
+    latitude: 3.1548,
+    longitude: 101.5852,
     status: 'active' as const,
   },
   {
@@ -141,6 +165,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'RM 22,000 - RM 60,000',
     website: 'https://www.uplands.org',
     description: 'A leading international school in Penang with a hilltop campus and strong IB programme.',
+    latitude: 5.3700,
+    longitude: 100.2520,
     status: 'active' as const,
   },
   {
@@ -152,6 +178,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'RM 18,000 - RM 42,000',
     website: 'https://www.elc.edu.my',
     description: 'A British international school with multiple campuses across Kuala Lumpur.',
+    latitude: 3.1450,
+    longitude: 101.7100,
     status: 'active' as const,
   },
   {
@@ -163,6 +191,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'RM 15,000 - RM 40,000',
     website: 'https://www.powiis.edu.my',
     description: 'An established British curriculum school on Penang island.',
+    latitude: 5.3545,
+    longitude: 100.2978,
     status: 'active' as const,
   },
   {
@@ -174,6 +204,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'RM 35,000 - RM 65,000',
     website: 'https://www.ktj.edu.my',
     description: 'A premier co-educational boarding school with strong academic traditions.',
+    latitude: 2.7297,
+    longitude: 101.9381,
     status: 'active' as const,
   },
   {
@@ -185,6 +217,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'RM 22,000 - RM 55,000',
     website: 'https://www.tis.edu.my',
     description: 'Part of the Taylor\'s Education Group, offering multiple curriculum pathways.',
+    latitude: 3.0454,
+    longitude: 101.6178,
     status: 'active' as const,
   },
   {
@@ -196,6 +230,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'RM 35,000 - RM 80,000',
     website: 'https://www.igbis.edu.my',
     description: 'A purpose-built IB World School offering all three IB programmes.',
+    latitude: 3.1185,
+    longitude: 101.6355,
     status: 'active' as const,
   },
   {
@@ -207,6 +243,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'RM 15,000 - RM 38,000',
     website: 'https://www.straits.edu.my',
     description: 'A British curriculum school in Penang known for its community-focused approach.',
+    latitude: 5.4141,
+    longitude: 100.3288,
     status: 'active' as const,
   },
   {
@@ -218,6 +256,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'RM 12,000 - RM 35,000',
     website: 'https://www.real.edu.my',
     description: 'An affordable international school offering quality British education.',
+    latitude: 3.0733,
+    longitude: 101.5185,
     status: 'active' as const,
   },
 
@@ -231,6 +271,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'IDR 200M - IDR 450M',
     website: 'https://www.jisedu.or.id',
     description: 'One of the largest and most prestigious international schools in Southeast Asia.',
+    latitude: -6.2615,
+    longitude: 106.8106,
     status: 'active' as const,
   },
   {
@@ -242,6 +284,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'IDR 150M - IDR 380M',
     website: 'https://www.bsj.sch.id',
     description: 'A leading British curriculum school in Jakarta with a strong international community.',
+    latitude: -6.2650,
+    longitude: 106.7850,
     status: 'active' as const,
   },
   {
@@ -253,6 +297,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'IDR 80M - IDR 180M',
     website: 'https://www.bfranchise-serpong.bfranchise.net',
     description: 'Part of the BINUS education group, offering international curriculum education.',
+    latitude: -6.3120,
+    longitude: 106.6430,
     status: 'active' as const,
   },
   {
@@ -264,6 +310,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'IDR 70M - IDR 160M',
     website: 'https://www.globaljaya.com',
     description: 'An IB World School offering all three IB programmes with a multicultural environment.',
+    latitude: -6.3025,
+    longitude: 106.6529,
     status: 'active' as const,
   },
   {
@@ -275,6 +323,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'IDR 100M - IDR 250M',
     website: 'https://www.acsjakarta.sch.id',
     description: 'An international school offering the full IB programme from PYP to DP.',
+    latitude: -6.2277,
+    longitude: 106.8320,
     status: 'active' as const,
   },
   {
@@ -286,6 +336,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'IDR 120M - IDR 280M',
     website: 'https://www.njis.org',
     description: 'A well-established international school in North Jakarta serving diverse communities.',
+    latitude: -6.1280,
+    longitude: 106.8450,
     status: 'active' as const,
   },
   {
@@ -297,6 +349,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'IDR 80M - IDR 200M',
     website: 'https://www.sph.edu',
     description: 'One of Indonesia\'s leading Christian international schools with multiple campuses.',
+    latitude: -6.2944,
+    longitude: 106.6630,
     status: 'active' as const,
   },
   {
@@ -308,6 +362,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'IDR 100M - IDR 250M',
     website: 'https://www.swa-jkt.com',
     description: 'A modern IB World School with state-of-the-art facilities in BSD City.',
+    latitude: -6.3000,
+    longitude: 106.6500,
     status: 'active' as const,
   },
   {
@@ -319,6 +375,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'IDR 60M - IDR 150M',
     website: 'https://www.mentarischool.com',
     description: 'A Cambridge-accredited international school with a focus on holistic development.',
+    latitude: -6.2400,
+    longitude: 106.7800,
     status: 'active' as const,
   },
   {
@@ -330,6 +388,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'IDR 50M - IDR 120M',
     website: 'https://www.bfranchise.net',
     description: 'An IB World School in Bandung offering international education in West Java.',
+    latitude: -6.8855,
+    longitude: 107.6100,
     status: 'active' as const,
   },
   {
@@ -341,6 +401,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'IDR 80M - IDR 200M',
     website: 'https://www.bfranchise.com',
     description: 'An international school on the island of Bali offering the IB programme.',
+    latitude: -8.6725,
+    longitude: 115.2126,
     status: 'active' as const,
   },
   {
@@ -352,6 +414,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'IDR 70M - IDR 160M',
     website: 'https://www.sis-surabaya.org',
     description: 'A well-established international school in East Java serving the Surabaya community.',
+    latitude: -7.2905,
+    longitude: 112.7488,
     status: 'active' as const,
   },
   {
@@ -363,6 +427,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'IDR 90M - IDR 220M',
     website: 'https://www.acg-school.com',
     description: 'Part of the ACG Education group, offering IB programmes in South Jakarta.',
+    latitude: -6.2835,
+    longitude: 106.8215,
     status: 'active' as const,
   },
   {
@@ -374,6 +440,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'IDR 40M - IDR 100M',
     website: 'https://www.sampoernaacademy.sch.id',
     description: 'An affordable international school with a STEAM-focused curriculum.',
+    latitude: -6.2183,
+    longitude: 106.8456,
     status: 'active' as const,
   },
   {
@@ -385,6 +453,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'IDR 50M - IDR 130M',
     website: 'https://www.raffles-sch.com',
     description: 'A Cambridge-affiliated Christian school with campuses in Jakarta.',
+    latitude: -6.1755,
+    longitude: 106.8920,
     status: 'active' as const,
   },
   {
@@ -396,6 +466,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'IDR 60M - IDR 140M',
     website: 'https://www.sis.sch.id',
     description: 'An international school offering Singapore and Cambridge curriculum pathways.',
+    latitude: -6.2263,
+    longitude: 106.6510,
     status: 'active' as const,
   },
   {
@@ -407,6 +479,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'IDR 60M - IDR 150M',
     website: 'https://www.ciputraschool.sch.id',
     description: 'Part of the Ciputra Group, offering IB and Cambridge programmes in Surabaya.',
+    latitude: -7.2860,
+    longitude: 112.6830,
     status: 'active' as const,
   },
   {
@@ -418,6 +492,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'IDR 30M - IDR 80M',
     website: 'https://www.gmis.org',
     description: 'One of the oldest international schools in Jakarta, offering Indian and British curricula.',
+    latitude: -6.1920,
+    longitude: 106.8230,
     status: 'active' as const,
   },
   {
@@ -429,6 +505,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'IDR 30M - IDR 80M',
     website: 'https://www.mis.sch.id',
     description: 'An international school in Medan serving the expatriate and local community.',
+    latitude: 3.5852,
+    longitude: 98.6722,
     status: 'active' as const,
   },
   {
@@ -440,6 +518,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'IDR 40M - IDR 100M',
     website: 'https://www.jiks.com',
     description: 'A Korean international school serving the Korean community in Jakarta.',
+    latitude: -6.2370,
+    longitude: 106.7950,
     status: 'active' as const,
   },
 
@@ -453,6 +533,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'CNY 180,000 - CNY 310,000',
     website: 'https://www.dulwich-beijing.cn',
     description: 'Part of the Dulwich College International network, offering British and IB education.',
+    latitude: 39.8900,
+    longitude: 116.4730,
     status: 'active' as const,
   },
   {
@@ -464,6 +546,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'CNY 200,000 - CNY 320,000',
     website: 'https://www.wab.edu',
     description: 'A leading IB World School in Beijing known for its inquiry-based learning approach.',
+    latitude: 40.0000,
+    longitude: 116.4530,
     status: 'active' as const,
   },
   {
@@ -475,6 +559,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'CNY 190,000 - CNY 320,000',
     website: 'https://www.isb.bj.edu.cn',
     description: 'One of Beijing\'s premier international schools with a strong academic reputation.',
+    latitude: 40.0036,
+    longitude: 116.4610,
     status: 'active' as const,
   },
   {
@@ -486,6 +572,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'CNY 200,000 - CNY 350,000',
     website: 'https://www.harrowbeijing.cn',
     description: 'The first Harrow School in Asia, offering the full British boarding school experience.',
+    latitude: 40.0800,
+    longitude: 116.5700,
     status: 'active' as const,
   },
   {
@@ -497,6 +585,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'CNY 150,000 - CNY 260,000',
     website: 'https://www.bfranchise.cn',
     description: 'An IB World School in Beijing offering a supportive learning community.',
+    latitude: 39.9560,
+    longitude: 116.4550,
     status: 'active' as const,
   },
   {
@@ -508,6 +598,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'CNY 180,000 - CNY 310,000',
     website: 'https://www.ycis-sh.com',
     description: 'A bilingual international school known for integrating Eastern and Western cultures.',
+    latitude: 31.2074,
+    longitude: 121.4316,
     status: 'active' as const,
   },
   {
@@ -519,6 +611,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'CNY 200,000 - CNY 330,000',
     website: 'https://www.saschina.org',
     description: 'One of the largest and most established American international schools in China.',
+    latitude: 31.2200,
+    longitude: 121.3340,
     status: 'active' as const,
   },
   {
@@ -530,6 +624,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'CNY 180,000 - CNY 300,000',
     website: 'https://www.concordiashanghai.org',
     description: 'An American-curriculum school in Pudong with a Lutheran heritage.',
+    latitude: 31.2260,
+    longitude: 121.5440,
     status: 'active' as const,
   },
   {
@@ -541,6 +637,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'CNY 150,000 - CNY 280,000',
     website: 'https://www.scis-china.org',
     description: 'An IB World School with multiple campuses across Shanghai.',
+    latitude: 31.2155,
+    longitude: 121.4491,
     status: 'active' as const,
   },
   {
@@ -552,6 +650,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'CNY 180,000 - CNY 320,000',
     website: 'https://www.bisspuxi.com',
     description: 'Part of the Nord Anglia Education group, offering British and IB education.',
+    latitude: 31.2085,
+    longitude: 121.3780,
     status: 'active' as const,
   },
   {
@@ -563,6 +663,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'CNY 190,000 - CNY 330,000',
     website: 'https://www.dulwich-shanghai.cn',
     description: 'The Shanghai campus of the Dulwich College International network.',
+    latitude: 31.1830,
+    longitude: 121.5540,
     status: 'active' as const,
   },
   {
@@ -574,6 +676,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'CNY 140,000 - CNY 260,000',
     website: 'https://www.bfranchise-gz.com',
     description: 'A leading British curriculum school in Guangzhou serving the international community.',
+    latitude: 23.1290,
+    longitude: 113.3250,
     status: 'active' as const,
   },
   {
@@ -585,6 +689,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'CNY 130,000 - CNY 240,000',
     website: 'https://www.aisgz.org',
     description: 'An American-curriculum school in Guangzhou with a focus on college preparation.',
+    latitude: 23.0900,
+    longitude: 113.3590,
     status: 'active' as const,
   },
   {
@@ -596,6 +702,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'CNY 80,000 - CNY 180,000',
     website: 'https://www.cliffordschool.cn',
     description: 'An international school in Clifford Estates offering IB and Cambridge programmes.',
+    latitude: 22.9920,
+    longitude: 113.4400,
     status: 'active' as const,
   },
   {
@@ -607,6 +715,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'CNY 120,000 - CNY 220,000',
     website: 'https://www.scie.com.cn',
     description: 'One of the top-ranked international schools in Shenzhen for university preparation.',
+    latitude: 22.5431,
+    longitude: 114.0579,
     status: 'active' as const,
   },
   {
@@ -618,6 +728,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'CNY 100,000 - CNY 200,000',
     website: 'https://www.qsi.org/shenzhen',
     description: 'Part of the QSI International Schools network, offering American-style education.',
+    latitude: 22.5350,
+    longitude: 114.0540,
     status: 'active' as const,
   },
   {
@@ -629,6 +741,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'CNY 120,000 - CNY 230,000',
     website: 'https://www.nfranchise.edu.cn',
     description: 'An IB World School in Nanjing with a diverse international student community.',
+    latitude: 32.0603,
+    longitude: 118.7969,
     status: 'active' as const,
   },
   {
@@ -640,6 +754,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'CNY 100,000 - CNY 200,000',
     website: 'https://www.cdis.org',
     description: 'An American-curriculum school serving the international community in Chengdu.',
+    latitude: 30.6280,
+    longitude: 104.0657,
     status: 'active' as const,
   },
   {
@@ -651,6 +767,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'CNY 130,000 - CNY 250,000',
     website: 'https://www.isaschool.com',
     description: 'A modern IB World School in Guangzhou Science City with cutting-edge facilities.',
+    latitude: 23.1800,
+    longitude: 113.4560,
     status: 'active' as const,
   },
   {
@@ -662,6 +780,8 @@ export const INTERNATIONAL_SCHOOLS_SEED = [
     annualFees: 'CNY 80,000 - CNY 180,000',
     website: 'https://www.isd-gz.com',
     description: 'An international school in Dongguan offering IB and American curriculum programmes.',
+    latitude: 23.0207,
+    longitude: 113.7518,
     status: 'active' as const,
   },
 ];

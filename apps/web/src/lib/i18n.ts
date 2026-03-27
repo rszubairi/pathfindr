@@ -285,7 +285,7 @@ const resources = {
       },
       internationalSchools: {
         title: 'International Schools',
-        subtitle: 'Explore {{count}} top international schools across Malaysia, Indonesia, and China. Compare curricula, fees, and find the perfect school for your education journey.',
+        subtitle: 'Explore {{total}} top international schools across Malaysia, Indonesia, and China. Compare curricula, fees, and find the perfect school for your education journey.',
         schoolsCount: '{{count}} schools',
         search: {
           placeholder: 'Search schools by name, e.g. ISKL, Dulwich, JIS...',
@@ -609,7 +609,7 @@ const resources = {
       },
       internationalSchools: {
         title: 'Sekolah Antarabangsa',
-        subtitle: 'Terokai {{count}} sekolah antarabangsa terbaik di Malaysia, Indonesia, dan China. Bandingkan kurikulum, yuran, dan cari sekolah yang sempurna untuk perjalanan pendidikan anda.',
+        subtitle: 'Terokai {{total}} sekolah antarabangsa terbaik di Malaysia, Indonesia, dan China. Bandingkan kurikulum, yuran, dan cari sekolah yang sempurna untuk perjalanan pendidikan anda.',
         schoolsCount: '{{count}} sekolah',
         search: {
           placeholder: 'Cari sekolah mengikut nama, cth. ISKL, Dulwich, JIS...',
@@ -933,7 +933,7 @@ const resources = {
       },
       internationalSchools: {
         title: '国际学校',
-        subtitle: '探索马来西亚、印度尼西亚和中国的 {{count}} 所顶级国际学校。比较课程、学费，为您的教育之旅找到最合适的学校。',
+        subtitle: '探索马来西亚、印度尼西亚和中国的 {{total}} 所顶级国际学校。比较课程、学费，为您的教育之旅找到最合适的学校。',
         schoolsCount: '{{count}} 所学校',
         search: {
           placeholder: '按名称搜索学校，如 ISKL、Dulwich、JIS...',

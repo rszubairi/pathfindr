@@ -111,7 +111,7 @@ export default function InternationalSchoolsPage() {
               </div>
             </div>
             <p className="text-lg text-gray-600">
-              {t('internationalSchools.subtitle', { count: stats?.total || '60+' })}
+              {t('internationalSchools.subtitle', { total: stats?.total || '60+' })}
             </p>
             <div className="mt-4 flex flex-wrap gap-3">
               {stats?.byCountry && Object.entries(stats.byCountry).map(([country, count]) => (
