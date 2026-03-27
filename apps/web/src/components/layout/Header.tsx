@@ -13,6 +13,7 @@ import { Globe } from 'lucide-react';
 const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Scholarships', href: '/scholarships' },
+  { name: 'Internships', href: '/internships' },
   { name: 'Boarding Schools', href: '/boarding-schools' },
   { name: 'International Schools', href: '/international-schools' },
 ];
