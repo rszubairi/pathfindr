@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Calendar, ExternalLink, MapPin, BookOpen, TrendingUp, Clock, Bell, Home } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
-import { formatCurrency, formatDate, getDeadlineUrgency } from '@/lib/utils';
+import { cn, formatCurrency, formatDate, getDeadlineUrgency } from '@/lib/utils';
 import { getProviderLogo, getProviderTypeColor, getProviderInitials } from '@/lib/providerLogos';
 import { isLocalProvider } from '@/lib/utils';
 import type { Scholarship } from '@/types';
@@ -142,7 +142,12 @@ export function ScholarshipCard({ scholarship, showMatchScore = false, userCount
         </div>
 
         {/* Provider name */}
-        <p className="text-xs font-medium text-gray-500 mb-1 truncate">{scholarship.provider}</p>
+        <p className={cn(
+          "font-semibold text-gray-500 mb-1 truncate",
+          scholarship.providerType === 'government' ? "text-sm" : "text-xs"
+        )}>
+          {scholarship.provider}
+        </p>
 
         {/* Scholarship name */}
         <h3 className="text-base font-bold text-gray-900 mb-3 line-clamp-2 leading-snug group-hover:text-primary-600 transition-colors duration-200">

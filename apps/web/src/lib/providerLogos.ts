@@ -84,10 +84,47 @@ export function getProviderTypeColor(
     }
 }
 
+const COUNTRY_TO_CODE: Record<string, string> = {
+    australia: "AU",
+    malaysia: "MY",
+    "united kingdom": "UK",
+    uk: "UK",
+    "united states": "US",
+    usa: "US",
+    canada: "CA",
+    singapore: "SG",
+    germany: "DE",
+    france: "FR",
+    japan: "JP",
+    china: "CN",
+    "south korea": "KR",
+    india: "IN",
+    indonesia: "ID",
+    thailand: "TH",
+    vietnam: "VN",
+    philippines: "PH",
+    netherlands: "NL",
+    switzerland: "CH",
+    "new zealand": "NZ",
+    ireland: "IE",
+};
+
 /**
  * Get initials from an organization name (up to 2 characters).
+ * For government providers, tries to return a country code (e.g. AU, MY).
  */
 export function getProviderInitials(provider: string): string {
+    const lowerProvider = provider.toLowerCase();
+    
+    // Check for government context
+    if (lowerProvider.includes("government") || lowerProvider.includes("govt")) {
+        for (const [country, code] of Object.entries(COUNTRY_TO_CODE)) {
+            if (lowerProvider.includes(country)) {
+                return code;
+            }
+        }
+    }
+
     const words = provider.trim().split(/\s+/).filter(Boolean);
     if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
     return (words[0][0] + words[1][0]).toUpperCase();
