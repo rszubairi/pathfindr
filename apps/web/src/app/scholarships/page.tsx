@@ -154,7 +154,7 @@ export default function ScholarshipsPage() {
             <div className="hidden md:block relative">
               <div className="relative h-[280px] w-full rounded-2xl overflow-hidden shadow-xl">
                 <Image
-                  src="/images/scholarships-hero.jpg"
+                  src="/images/female-student-studying-at-college-library-2023-11-27-04-50-27-utc.webp"
                   alt="Student studying for scholarship opportunities"
                   fill
                   className="object-cover"

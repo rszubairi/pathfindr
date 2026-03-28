@@ -34,7 +34,7 @@ export default function InternshipsPage() {
             <div className="hidden md:block relative">
               <div className="relative h-[240px] w-full rounded-2xl overflow-hidden shadow-xl ring-1 ring-white/20">
                 <Image
-                  src="/images/internships-hero.jpg"
+                  src="/images/islamic-girl-sitting-and-using-laptop-2023-11-27-05-21-11-utc.webp"
                   alt="Student preparing for corporate internship"
                   fill
                   className="object-cover"

@@ -171,7 +171,7 @@ export default function InternationalSchoolsPage() {
             <div className="hidden md:block relative">
               <div className="relative h-[280px] w-full rounded-2xl overflow-hidden shadow-xl">
                 <Image
-                  src="/images/schools-hero.jpg"
+                  src="/images/pretty-girl-using-laptop-on-background-of-her-clas-2023-11-27-05-22-09-utc.webp"
                   alt="Students learning in an international school environment"
                   fill
                   className="object-cover"
