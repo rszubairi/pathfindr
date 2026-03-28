@@ -6,10 +6,12 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
+  Image,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import type { RootStackParamList } from '../navigation/RootNavigator';
+import { Feather } from '@expo/vector-icons';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 
@@ -56,27 +58,34 @@ export function HomeScreen() {
           <FeatureCard
             title="Scholarships"
             description="Discover and apply for scholarships from governments, universities, and organizations"
-            icon="🎓"
-          />
-          <FeatureCard
-            title="University Programs"
-            description="Explore degree programmes from top universities worldwide"
-            icon="🏛️"
+            icon="award"
+            imageSource={require('../../assets/images/female-student-studying-at-college-library-2023-11-27-04-50-27-utc.webp')}
+            onPress={() => navigation.navigate('Scholarships' as never)}
           />
           <FeatureCard
             title="Internships"
             description="Find internship opportunities to kickstart your career"
-            icon="💼"
+            icon="briefcase"
+            imageSource={require('../../assets/images/islamic-girl-sitting-and-using-laptop-2023-11-27-05-21-11-utc.webp')}
+            onPress={() => navigation.navigate('Internships' as never)}
           />
           <FeatureCard
-            title="Graduate Jobs"
-            description="Access entry-level positions and graduate programmes"
-            icon="🏢"
+            title="Boarding Schools"
+            description="Discover top boarding schools across the nation"
+            icon="home"
+            imageSource={require('../../assets/images/pretty-girl-using-laptop-on-background-of-her-clas-2023-11-27-05-22-09-utc.webp')}
+            onPress={() => navigation.navigate('BoardingSchools' as never)}
+          />
+          <FeatureCard
+            title="International Schools"
+            description="Explore modern international education options globally"
+            icon="globe"
+            imageSource={require('../../assets/images/female-student-studying-at-college-library-2023-11-27-04-50-27-utc.webp')}
+            onPress={() => navigation.navigate('InternationalSchools' as never)}
           />
         </View>
       </View>
 
-      {/* CTA Section */}
       <View style={styles.ctaSection}>
         <Text style={styles.ctaTitle}>Ready to Start Your Journey?</Text>
         <Text style={styles.ctaDescription}>
@@ -97,17 +106,30 @@ function FeatureCard({
   title,
   description,
   icon,
+  imageSource,
+  onPress,
 }: {
   title: string;
   description: string;
-  icon: string;
+  icon: keyof typeof Feather.glyphMap;
+  imageSource: any;
+  onPress?: () => void;
 }) {
   return (
-    <View style={styles.featureCard}>
-      <Text style={styles.featureIcon}>{icon}</Text>
-      <Text style={styles.featureTitle}>{title}</Text>
-      <Text style={styles.featureDescription}>{description}</Text>
-    </View>
+    <TouchableOpacity style={styles.featureCard} onPress={onPress}>
+      <Image source={imageSource} style={styles.cardCoverImage} />
+      <View style={styles.cardContent}>
+        <View style={styles.cardHeaderWrapper}>
+          <View style={styles.iconContainer}>
+            <Feather name={icon} size={28} color="#2563eb" />
+          </View>
+          <View style={styles.textContainer}>
+            <Text style={styles.featureTitle}>{title}</Text>
+            <Text style={styles.featureDescription}>{description}</Text>
+          </View>
+        </View>
+      </View>
+    </TouchableOpacity>
   );
 }
 
@@ -120,6 +142,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 60,
     backgroundColor: '#ffffff',
+    alignItems: 'center',
   },
   title: {
     fontSize: 40,
@@ -187,23 +210,43 @@ const styles = StyleSheet.create({
   },
   featureCard: {
     backgroundColor: '#ffffff',
-    padding: 24,
     borderRadius: 16,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 3,
+    overflow: 'hidden',
   },
-  featureIcon: {
-    fontSize: 48,
-    marginBottom: 16,
+  cardCoverImage: {
+    width: '100%',
+    height: 160,
+    backgroundColor: '#cbd5e1',
+  },
+  cardContent: {
+    padding: 20,
+  },
+  cardHeaderWrapper: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+  iconContainer: {
+    backgroundColor: '#eff6ff',
+    width: 48,
+    height: 48,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  textContainer: {
+    flex: 1,
   },
   featureTitle: {
-    fontSize: 20,
-    fontWeight: '600',
+    fontSize: 18,
+    fontWeight: '700',
     color: '#1e293b',
-    marginBottom: 8,
+    marginBottom: 4,
   },
   featureDescription: {
     fontSize: 14,

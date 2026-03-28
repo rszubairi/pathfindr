@@ -1,9 +1,16 @@
 'use client';
 
-import React from 'react';
-import { Calendar, MapPin, Users, ExternalLink, BookOpen, Building2 } from 'lucide-react';
+import React, { useState, useCallback } from 'react';
+import { Calendar, MapPin, Users, ExternalLink, BookOpen, Building2, Bell, BellRing, CheckCircle2 } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
+import { useQuery, useMutation } from 'convex/react';
+import { api } from '../../../../../convex/_generated/api';
+import { useAuth } from '@/hooks/useAuth';
+import { useSubscription } from '@/hooks/useSubscription';
+import { useRouter } from 'next/navigation';
 import type { BoardingSchool } from '@/types';
+import type { Id } from '../../../../../convex/_generated/dataModel';
 
 export interface BoardingSchoolCardProps {
   school: BoardingSchool;
@@ -28,6 +35,53 @@ const genderLabel: Record<string, string> = {
 export function BoardingSchoolCard({ school }: BoardingSchoolCardProps) {
   const colors = categoryColors[school.category] || categoryColors['MRSM'];
   const isApplicationOpen = school.status === 'active' && school.deadline;
+  const router = useRouter();
+  const { user, isAuthenticated } = useAuth();
+  const { isSubscribed } = useSubscription();
+
+  const isNotified = useQuery(
+    api.boardingSchoolNotifications.hasUserSubscribed,
+    user?._id ? { userId: user._id as Id<'users'>, schoolId: school._id as Id<'boardingSchools'> } : 'skip'
+  );
+
+  const subscribeMutation = useMutation(api.boardingSchoolNotifications.subscribe);
+  const unsubscribeMutation = useMutation(api.boardingSchoolNotifications.unsubscribe);
+  const [notifyLoading, setNotifyLoading] = useState(false);
+
+  const handleNotifyToggle = useCallback(async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!isAuthenticated) {
+      router.push(`/login?redirect=/boarding-schools`);
+      return;
+    }
+
+    if (!isSubscribed) {
+      router.push('/pricing');
+      return;
+    }
+
+    setNotifyLoading(true);
+    try {
+      if (isNotified) {
+        await unsubscribeMutation({ 
+          userId: user?._id as Id<'users'>,
+          schoolId: school._id as Id<'boardingSchools'>
+        });
+      } else {
+        await subscribeMutation({
+          userId: user?._id as Id<'users'>,
+          schoolId: school._id as Id<'boardingSchools'>,
+          email: user?.email || '',
+        });
+      }
+    } catch (err) {
+      console.error('Failed to update notification preference:', err);
+    } finally {
+      setNotifyLoading(false);
+    }
+  }, [isAuthenticated, isSubscribed, isNotified, user, school._id, subscribeMutation, unsubscribeMutation, router]);
 
   const deadlineBadgeVariant = (() => {
     if (!school.deadline) return 'default' as const;
@@ -117,30 +171,47 @@ export function BoardingSchoolCard({ school }: BoardingSchoolCardProps) {
         </div>
       </div>
 
-      {/* Footer - Apply button */}
-      <div className="px-5 pb-5">
-        {isApplicationOpen ? (
-          <a
-            href={school.applicationPortal}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-primary-600 hover:bg-primary-700 active:scale-95 text-white text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md"
-          >
-            Apply Now
-            <ExternalLink className="w-3.5 h-3.5" />
-          </a>
-        ) : (
-          <a
-            href={school.applicationPortal}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold transition-all duration-200"
-          >
-            View Portal
-            <ExternalLink className="w-3.5 h-3.5" />
-          </a>
-        )}
+      {/* Footer - Apply & Notify buttons */}
+      <div className="px-5 pb-5 grid grid-cols-2 gap-3">
+        <button
+          onClick={handleNotifyToggle}
+          disabled={notifyLoading}
+          className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-sm font-semibold transition-all duration-200 border ${
+            isNotified 
+              ? 'bg-indigo-50 text-indigo-700 border-indigo-200' 
+              : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
+          }`}
+        >
+          {notifyLoading ? (
+            <div className="w-4 h-4 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+          ) : isNotified ? (
+            <>
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              Alerted
+            </>
+          ) : (
+            <>
+              <Bell className="w-3.5 h-3.5" />
+              Notify
+            </>
+          )}
+        </button>
+
+        <a
+          href={school.applicationPortal}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md ${
+            isApplicationOpen 
+              ? 'bg-primary-600 hover:bg-primary-700 text-white' 
+              : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+          }`}
+        >
+          {isApplicationOpen ? 'Apply' : 'Portal'}
+          <ExternalLink className="w-3.5 h-3.5" />
+        </a>
       </div>
     </div>
   );
 }
+

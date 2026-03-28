@@ -26,36 +26,7 @@ export default function BoardingSchoolsPage() {
   const [sortBy, setSortBy] = useState<'name' | 'state' | 'category'>('name');
   const [currentPage, setCurrentPage] = useState(1);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
-  const [notifyLoading, setNotifyLoading] = useState(false);
-
   const { user, isAuthenticated } = useAuth();
-
-  const isSubscribed = useQuery(
-    api.boardingSchoolNotifications.hasUserSubscribed,
-    user?._id ? { userId: user._id as Id<'users'> } : 'skip'
-  );
-  const subscriberCount = useQuery(api.boardingSchoolNotifications.getSubscriberCount);
-  const subscribeMutation = useMutation(api.boardingSchoolNotifications.subscribe);
-  const unsubscribeMutation = useMutation(api.boardingSchoolNotifications.unsubscribe);
-
-  const handleNotifyToggle = useCallback(async () => {
-    if (!user?._id) return;
-    setNotifyLoading(true);
-    try {
-      if (isSubscribed) {
-        await unsubscribeMutation({ userId: user._id as Id<'users'> });
-      } else {
-        await subscribeMutation({
-          userId: user._id as Id<'users'>,
-          email: user.email,
-        });
-      }
-    } catch (err) {
-      console.error('Failed to update notification preference:', err);
-    } finally {
-      setNotifyLoading(false);
-    }
-  }, [user, isSubscribed, subscribeMutation, unsubscribeMutation]);
 
   const { data: schoolsData = [], isLoading } = useBoardingSchoolSearch(searchQuery, filters);
   const { data: stats } = useBoardingSchoolStats();
@@ -177,66 +148,6 @@ export default function BoardingSchoolsPage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
               </div>
             </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* Notification Banner */}
-      <section className="py-6 bg-white border-b border-gray-100">
-        <Container size="xl">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-5 sm:p-6">
-            <div className="flex items-start gap-3">
-              <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                <BellRing className="w-5 h-5 text-indigo-600" />
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-gray-900">
-                  Get notified when applications open
-                </h3>
-                <p className="text-sm text-gray-600 mt-0.5">
-                  Be the first to know when boarding school scholarships and applications become available. We&apos;ll send you an email notification so you never miss a deadline.
-                </p>
-                {subscriberCount !== undefined && subscriberCount > 0 && (
-                  <p className="text-xs text-indigo-600 font-medium mt-1">
-                    {subscriberCount} {subscriberCount === 1 ? 'student has' : 'students have'} signed up for notifications
-                  </p>
-                )}
-              </div>
-            </div>
-            {isAuthenticated ? (
-              <Button
-                variant={isSubscribed ? 'secondary' : 'primary'}
-                size="md"
-                onClick={handleNotifyToggle}
-                disabled={notifyLoading || isSubscribed === undefined}
-                isLoading={notifyLoading}
-                className="flex-shrink-0 flex items-center gap-2"
-              >
-                {isSubscribed ? (
-                  <>
-                    <CheckCircle2 className="w-4 h-4" />
-                    Subscribed
-                  </>
-                ) : (
-                  <>
-                    <Bell className="w-4 h-4" />
-                    Notify Me
-                  </>
-                )}
-              </Button>
-            ) : (
-              <Button
-                variant="primary"
-                size="md"
-                className="flex-shrink-0 flex items-center gap-2"
-                asChild
-              >
-                <a href="/login?redirect=/boarding-schools">
-                  <Bell className="w-4 h-4" />
-                  Sign in to get notified
-                </a>
-              </Button>
-            )}
           </div>
         </Container>
       </section>

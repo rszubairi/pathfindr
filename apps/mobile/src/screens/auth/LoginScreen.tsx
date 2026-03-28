@@ -8,17 +8,57 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Alert,
+  Image,
+  Dimensions,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useAction } from 'convex/react';
+import { api } from '../../../../../convex/_generated/api';
+import { useDispatch } from 'react-redux';
+import { setToken, setUser } from '../../store/slices/authSlice';
+import * as SecureStore from 'expo-secure-store';
+
+const { width } = Dimensions.get('window');
 
 export function LoginScreen() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = () => {
-    // Login logic will be implemented here
-    console.log('Login:', { email, password });
+  const loginUser = useAction(api.authActions.loginUser);
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Please enter email and password.');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const result = await loginUser({ email: email.toLowerCase(), password });
+
+      // Save to SecureStore
+      await SecureStore.setItemAsync('token', result.token);
+      await SecureStore.setItemAsync('userId', result.user._id);
+
+      // Update Redux state
+      dispatch(setToken(result.token));
+      dispatch(
+        setUser({
+          id: result.user._id,
+          email: result.user.email,
+          fullName: result.user.fullName,
+          role: result.user.role,
+        })
+      );
+    } catch (error: any) {
+      Alert.alert('Login Failed', error.message || 'An error occurred during login.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -26,57 +66,69 @@ export function LoginScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View style={styles.content}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+      >
+        {/* Header with gradient-like background */}
+        <View style={styles.headerSection}>
+          <Image
+            source={require('../../../assets/images/logo.png')}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+        </View>
+
+        {/* Form section */}
+        <View style={styles.formSection}>
           <Text style={styles.title}>Welcome Back</Text>
-          <Text style={styles.subtitle}>Sign in to continue</Text>
+          <Text style={styles.subtitle}>Sign in to your account to continue</Text>
 
           <View style={styles.form}>
             <View style={styles.inputContainer}>
               <Text style={styles.label}>Email</Text>
-              <TextInput
-                style={styles.input}
-                value={email}
-                onChangeText={setEmail}
-                placeholder="your@email.com"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoComplete="email"
-              />
+              <View style={styles.inputWrapper}>
+                <TextInput
+                  style={styles.input}
+                  value={email}
+                  onChangeText={setEmail}
+                  placeholder="your@email.com"
+                  placeholderTextColor="#94a3b8"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoComplete="email"
+                />
+              </View>
             </View>
 
             <View style={styles.inputContainer}>
               <Text style={styles.label}>Password</Text>
-              <TextInput
-                style={styles.input}
-                value={password}
-                onChangeText={setPassword}
-                placeholder="••••••••"
-                secureTextEntry
-                autoComplete="password"
-              />
+              <View style={styles.inputWrapper}>
+                <TextInput
+                  style={styles.input}
+                  value={password}
+                  onChangeText={setPassword}
+                  placeholder="Enter your password"
+                  placeholderTextColor="#94a3b8"
+                  secureTextEntry
+                  autoComplete="password"
+                />
+              </View>
             </View>
 
             <TouchableOpacity>
               <Text style={styles.forgotPassword}>Forgot password?</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-              <Text style={styles.loginButtonText}>Sign In</Text>
-            </TouchableOpacity>
-
-            <View style={styles.divider}>
-              <View style={styles.dividerLine} />
-              <Text style={styles.dividerText}>OR</Text>
-              <View style={styles.dividerLine} />
-            </View>
-
-            <TouchableOpacity style={styles.socialButton}>
-              <Text style={styles.socialButtonText}>Continue with Google</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.socialButton}>
-              <Text style={styles.socialButtonText}>Continue with Apple</Text>
+            <TouchableOpacity
+              style={[styles.loginButton, isLoading && styles.loginButtonDisabled]}
+              onPress={handleLogin}
+              disabled={isLoading}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.loginButtonText}>
+                {isLoading ? 'Signing In...' : 'Sign In'}
+              </Text>
             </TouchableOpacity>
 
             <View style={styles.footer}>
@@ -95,29 +147,45 @@ export function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#f8fafc',
   },
   scrollContent: {
     flexGrow: 1,
   },
-  content: {
-    flex: 1,
-    padding: 24,
+  headerSection: {
+    backgroundColor: '#ffffff',
+    alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: Platform.OS === 'ios' ? 70 : 50,
+    paddingBottom: 20,
+  },
+  logo: {
+    width: width * 0.45,
+    height: width * 0.35,
+  },
+  formSection: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    paddingHorizontal: 28,
+    paddingTop: 8,
+    paddingBottom: 40,
   },
   title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#1e293b',
-    marginBottom: 8,
+    fontSize: 30,
+    fontWeight: '700',
+    color: '#0f172a',
+    marginBottom: 6,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 15,
     color: '#64748b',
     marginBottom: 32,
+    lineHeight: 22,
   },
   form: {
-    gap: 16,
+    gap: 18,
   },
   inputContainer: {
     gap: 8,
@@ -125,59 +193,48 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1e293b',
+    color: '#334155',
+  },
+  inputWrapper: {
+    backgroundColor: '#f8fafc',
+    borderWidth: 1.5,
+    borderColor: '#e2e8f0',
+    borderRadius: 12,
+    overflow: 'hidden',
   },
   input: {
-    borderWidth: 1,
-    borderColor: '#cbd5e1',
-    borderRadius: 8,
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 14,
     fontSize: 16,
+    color: '#0f172a',
   },
   forgotPassword: {
     color: '#2563eb',
     fontSize: 14,
+    fontWeight: '500',
     textAlign: 'right',
   },
   loginButton: {
     backgroundColor: '#2563eb',
     paddingVertical: 16,
-    borderRadius: 8,
+    borderRadius: 12,
     alignItems: 'center',
     marginTop: 8,
+    shadowColor: '#2563eb',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  loginButtonDisabled: {
+    backgroundColor: '#93b4f5',
+    shadowOpacity: 0.1,
   },
   loginButtonText: {
     color: '#ffffff',
     fontSize: 16,
-    fontWeight: '600',
-  },
-  divider: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 16,
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: '#cbd5e1',
-  },
-  dividerText: {
-    marginHorizontal: 16,
-    color: '#64748b',
-    fontSize: 14,
-  },
-  socialButton: {
-    borderWidth: 1,
-    borderColor: '#cbd5e1',
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  socialButtonText: {
-    color: '#1e293b',
-    fontSize: 16,
-    fontWeight: '500',
+    fontWeight: '700',
+    letterSpacing: 0.3,
   },
   footer: {
     flexDirection: 'row',
@@ -191,6 +248,6 @@ const styles = StyleSheet.create({
   footerLink: {
     color: '#2563eb',
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '700',
   },
 });

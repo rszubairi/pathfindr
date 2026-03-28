@@ -8,8 +8,11 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useAction } from 'convex/react';
+import { api } from '../../../../../convex/_generated/api';
 
 export function RegisterScreen() {
   const navigation = useNavigation();
@@ -17,10 +20,31 @@ export function RegisterScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleRegister = () => {
-    // Registration logic will be implemented here
-    console.log('Register:', { fullName, email, password });
+  const registerUser = useAction(api.authActions.registerUser);
+
+  const handleRegister = async () => {
+    if (!fullName || !email || !password || !confirmPassword) {
+      Alert.alert('Error', 'Please fill in all fields.');
+      return;
+    }
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Passwords do not match.');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      await registerUser({ fullName, email: email.toLowerCase(), password, phone: '' });
+      Alert.alert('Success', 'Account created! Please sign in.', [
+        { text: 'OK', onPress: () => navigation.navigate('Login' as never) }
+      ]);
+    } catch (error: any) {
+      Alert.alert('Registration Failed', error.message || 'An error occurred.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -82,23 +106,11 @@ export function RegisterScreen() {
               />
             </View>
 
-            <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
-              <Text style={styles.registerButtonText}>Create Account</Text>
+            <TouchableOpacity style={styles.registerButton} onPress={handleRegister} disabled={isLoading}>
+              <Text style={styles.registerButtonText}>{isLoading ? 'Creating...' : 'Create Account'}</Text>
             </TouchableOpacity>
 
-            <View style={styles.divider}>
-              <View style={styles.dividerLine} />
-              <Text style={styles.dividerText}>OR</Text>
-              <View style={styles.dividerLine} />
-            </View>
 
-            <TouchableOpacity style={styles.socialButton}>
-              <Text style={styles.socialButtonText}>Continue with Google</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.socialButton}>
-              <Text style={styles.socialButtonText}>Continue with Apple</Text>
-            </TouchableOpacity>
 
             <View style={styles.footer}>
               <Text style={styles.footerText}>Already have an account? </Text>

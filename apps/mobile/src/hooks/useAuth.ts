@@ -50,6 +50,7 @@ export function useAuth() {
           fullName: currentUser.fullName,
           role: currentUser.role,
           profileCompleted: currentUser.profileCompleted,
+          profileImageUrl: currentUser.profileImageUrl,
         })
       );
     }

@@ -66,13 +66,17 @@ export const getByCompany = query({
 });
 
 export const listActive = query({
-  args: { userId: v.optional(v.id('users')) },
+  args: { 
+    userId: v.optional(v.id('users')),
+    types: v.optional(v.array(v.string())),
+    locations: v.optional(v.array(v.string())),
+  },
   handler: async (ctx, args) => {
-    const internships = await ctx.db
+    let query = ctx.db
       .query('internships')
-      .withIndex('by_status', (q) => q.eq('status', 'active'))
-      .order('desc')
-      .collect();
+      .withIndex('by_status', (q) => q.eq('status', 'active'));
+
+    const internships = await query.order('desc').collect();
 
     // Check if user is subscribed
     let isSubscribed = false;
@@ -85,9 +89,18 @@ export const listActive = query({
       isSubscribed = !!subscription;
     }
 
+    // Apply manual filters
+    let filtered = internships;
+    if (args.types && args.types.length > 0) {
+      filtered = filtered.filter(i => args.types!.includes(i.type));
+    }
+    if (args.locations && args.locations.length > 0) {
+      filtered = filtered.filter(i => args.locations!.includes(i.location));
+    }
+
     // Anonymize company if not subscribed
     const results = await Promise.all(
-      internships.map(async (internship) => {
+      filtered.map(async (internship) => {
         const company = await ctx.db.get(internship.companyId);
         if (!isSubscribed) {
           return {

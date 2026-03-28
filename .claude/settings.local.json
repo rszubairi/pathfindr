@@ -32,7 +32,10 @@
       "Bash(find:*)",
       "Bash(npx convex deploy:*)",
       "Bash(npx convex push:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(npx expo install:*)",
+      "Bash(npx:*)",
+      "Bash(node scripts/generate-icons.js:*)"
     ]
   }
 }

@@ -4,8 +4,10 @@ interface User {
   id: string;
   email: string;
   fullName: string;
-  role: 'student' | 'institution' | 'philanthropist' | 'admin';
+  role: 'student' | 'institution' | 'philanthropist' | 'admin' | 'corporate';
   subscriptionTier?: 'free' | 'premium';
+  profileCompleted?: boolean;
+  profileImageUrl?: string | null;
 }
 
 interface AuthState {

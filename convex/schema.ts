@@ -236,10 +236,13 @@ export default defineSchema({
 
   boardingSchoolNotifications: defineTable({
     userId: v.id('users'),
+    schoolId: v.id('boardingSchools'),
     email: v.string(),
     createdAt: v.string(),
   })
-    .index('by_user_id', ['userId']),
+    .index('by_user_id', ['userId'])
+    .index('by_school_id', ['schoolId'])
+    .index('by_user_and_school', ['userId', 'schoolId']),
 
   internationalSchools: defineTable({
     name: v.string(),
