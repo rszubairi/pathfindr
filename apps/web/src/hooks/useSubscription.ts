@@ -19,6 +19,8 @@ export function useSubscription() {
     tier: subscription?.tier ?? null,
     applicationsUsed: subscription?.applicationsUsed ?? 0,
     applicationsLimit: subscription?.applicationsLimit ?? 0,
+    isDonated: subscription?.isDonated ?? false,
+    donatedBy: subscription?.donatedBy ?? null,
     isLoading: isAuthenticated && subscription === undefined,
   };
 }

@@ -7,11 +7,13 @@ import { api } from '../../../../../convex/_generated/api';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Container } from '@/components/ui/Container';
 import { PricingCard } from '@/components/subscription/PricingCard';
+import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/hooks/useAuth';
 import { useTranslation } from 'react-i18next';
 import { useSubscription } from '@/hooks/useSubscription';
 import { TIER_CONFIG, type TierKey } from '@/lib/stripe';
 import type { Id } from '../../../../../convex/_generated/dataModel';
+import { Gift } from 'lucide-react';
 
 export default function PricingPage() {
   const router = useRouter();
@@ -21,6 +23,8 @@ export default function PricingPage() {
   const createCheckout = useAction(api.stripeActions.createCheckoutSession);
   const [loadingTier, setLoadingTier] = useState<TierKey | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [couponInput, setCouponInput] = useState('');
+  const [showCoupon, setShowCoupon] = useState(false);
 
   // Also read userId directly from localStorage as fallback for the Convex query
   const storedUserId =
@@ -102,6 +106,40 @@ export default function PricingPage() {
                   isLoading={loadingTier === key}
                 />
               )
+            )}
+          </div>
+
+          {/* Coupon Code Input */}
+          <div className="max-w-md mx-auto mt-10 text-center">
+            {!showCoupon ? (
+              <button
+                onClick={() => setShowCoupon(true)}
+                className="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center gap-2 mx-auto"
+              >
+                <Gift className="w-4 h-4" />
+                Have a sponsor code?
+              </button>
+            ) : (
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={couponInput}
+                  onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
+                  placeholder="Enter coupon code"
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 font-mono"
+                />
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    if (couponInput.trim()) {
+                      router.push(`/claim/${couponInput.trim()}`);
+                    }
+                  }}
+                  disabled={!couponInput.trim()}
+                >
+                  Redeem
+                </Button>
+              </div>
             )}
           </div>
         </Container>

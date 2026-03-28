@@ -11,6 +11,8 @@
 import type * as adminInstitutions from "../adminInstitutions.js";
 import type * as auth from "../auth.js";
 import type * as authActions from "../authActions.js";
+import type * as corporateDonationActions from "../corporateDonationActions.js";
+import type * as corporateDonations from "../corporateDonations.js";
 import type * as boardingSchoolNotifications from "../boardingSchoolNotifications.js";
 import type * as boardingSchools from "../boardingSchools.js";
 import type * as http from "../http.js";
@@ -44,6 +46,8 @@ declare const fullApi: ApiFromModules<{
   adminInstitutions: typeof adminInstitutions;
   auth: typeof auth;
   authActions: typeof authActions;
+  corporateDonationActions: typeof corporateDonationActions;
+  corporateDonations: typeof corporateDonations;
   boardingSchoolNotifications: typeof boardingSchoolNotifications;
   boardingSchools: typeof boardingSchools;
   http: typeof http;

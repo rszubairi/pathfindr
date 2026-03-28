@@ -12,7 +12,8 @@ import {
   X, 
   User,
   Briefcase,
-  FilePlus
+  FilePlus,
+  Heart
 } from 'lucide-react';
 
 import { useState } from 'react';
@@ -34,6 +35,7 @@ export function DashboardSidebar() {
         ...common,
         { name: 'Internships', href: '/dashboard/internships', icon: Briefcase },
         { name: 'Post Internship', href: '/dashboard/internships/create', icon: FilePlus },
+        { name: 'Donations', href: '/dashboard/donations', icon: Heart },
         { name: 'Profile', href: '/dashboard/profile', icon: User },
       ];
     }

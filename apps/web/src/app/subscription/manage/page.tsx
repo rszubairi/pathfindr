@@ -18,12 +18,18 @@ import {
   ArrowUpCircle,
   BookOpen,
   ExternalLink,
+  Heart,
 } from 'lucide-react';
 import type { Id } from '../../../../../../convex/_generated/dataModel';
 
 export default function ManageSubscriptionPage() {
   const { user, isAuthenticated, loading: authLoading } = useAuth();
-  const { subscription, isSubscribed, tier, applicationsUsed, applicationsLimit, isLoading: subLoading } = useSubscription();
+  const { subscription, isSubscribed, tier, applicationsUsed, applicationsLimit, isDonated, donatedBy, isLoading: subLoading } = useSubscription();
+
+  const donorProfile = useConvexQuery(
+    api.corporateDonations.getCompanyProfile,
+    donatedBy ? { userId: donatedBy } : 'skip'
+  );
   const createPortal = useAction(api.stripeActions.createPortalSession);
   const [portalLoading, setPortalLoading] = useState(false);
 
@@ -147,13 +153,24 @@ export default function ManageSubscriptionPage() {
                     </Badge>
                   </div>
 
+                  {isDonated && donorProfile && (
+                    <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center gap-3">
+                      <Heart className="w-5 h-5 text-green-600 flex-shrink-0" />
+                      <p className="text-sm text-green-800">
+                        This subscription is sponsored by{' '}
+                        <span className="font-bold">{donorProfile.institutionName}</span>.
+                        Thank you for their generous support!
+                      </p>
+                    </div>
+                  )}
+
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div className="flex items-center gap-3">
                       <CreditCard className="h-5 w-5 text-gray-400" />
                       <div>
                         <p className="text-sm text-gray-500">Plan</p>
                         <p className="font-semibold text-gray-900 capitalize">
-                          {tier}
+                          {tier} {isDonated && <span className="text-green-600 text-xs font-normal">(Sponsored)</span>}
                         </p>
                       </div>
                     </div>
@@ -183,30 +200,32 @@ export default function ManageSubscriptionPage() {
                     </div>
                   )}
 
-                  <div className="mt-6 flex flex-wrap gap-3">
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      onClick={handleManageBilling}
-                      isLoading={portalLoading}
-                      className="flex items-center gap-2"
-                    >
-                      <CreditCard className="h-4 w-4" />
-                      Manage Billing
-                    </Button>
-                    {tier === 'pro' && (
-                      <Link href="/pricing">
-                        <Button
-                          variant="primary"
-                          size="sm"
-                          className="flex items-center gap-2"
-                        >
-                          <ArrowUpCircle className="h-4 w-4" />
-                          Upgrade to Expert
-                        </Button>
-                      </Link>
-                    )}
-                  </div>
+                  {!isDonated && (
+                    <div className="mt-6 flex flex-wrap gap-3">
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={handleManageBilling}
+                        isLoading={portalLoading}
+                        className="flex items-center gap-2"
+                      >
+                        <CreditCard className="h-4 w-4" />
+                        Manage Billing
+                      </Button>
+                      {tier === 'pro' && (
+                        <Link href="/pricing">
+                          <Button
+                            variant="primary"
+                            size="sm"
+                            className="flex items-center gap-2"
+                          >
+                            <ArrowUpCircle className="h-4 w-4" />
+                            Upgrade to Expert
+                          </Button>
+                        </Link>
+                      )}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 

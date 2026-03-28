@@ -177,6 +177,9 @@ export default defineSchema({
     cancelAtPeriodEnd: v.boolean(),
     applicationsUsed: v.number(),
     applicationsLimit: v.number(),
+    isDonated: v.optional(v.boolean()),
+    donatedBy: v.optional(v.id('users')),
+    donationId: v.optional(v.id('corporateDonations')),
     createdAt: v.string(),
     updatedAt: v.string(),
   })
@@ -332,5 +335,46 @@ export default defineSchema({
   })
     .index('by_company', ['companyId'])
     .index('by_stripe_id', ['stripePaymentIntentId']),
+
+  corporateDonations: defineTable({
+    corporateUserId: v.id('users'),
+    companyId: v.id('institutionProfiles'),
+    tier: v.union(v.literal('pro'), v.literal('expert')),
+    quantityPurchased: v.number(),
+    quantityAssigned: v.number(),
+    quantityRemaining: v.number(),
+    totalAmountPaid: v.number(),
+    currency: v.string(),
+    stripePaymentIntentId: v.optional(v.string()),
+    stripeCheckoutSessionId: v.optional(v.string()),
+    couponCode: v.string(),
+    status: v.union(
+      v.literal('pending'),
+      v.literal('completed'),
+      v.literal('exhausted')
+    ),
+    createdAt: v.string(),
+    updatedAt: v.string(),
+  })
+    .index('by_corporate_user', ['corporateUserId'])
+    .index('by_company', ['companyId'])
+    .index('by_coupon_code', ['couponCode'])
+    .index('by_status', ['status']),
+
+  donatedSubscriptions: defineTable({
+    donationId: v.id('corporateDonations'),
+    corporateUserId: v.id('users'),
+    studentUserId: v.id('users'),
+    subscriptionId: v.id('subscriptions'),
+    claimMethod: v.union(
+      v.literal('auto_assigned'),
+      v.literal('coupon_claimed')
+    ),
+    couponCode: v.optional(v.string()),
+    createdAt: v.string(),
+  })
+    .index('by_donation', ['donationId'])
+    .index('by_corporate_user', ['corporateUserId'])
+    .index('by_student_user', ['studentUserId']),
 
 });

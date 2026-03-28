@@ -10,7 +10,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useSubscription } from '@/hooks/useSubscription';
 import { TIER_CONFIG, type TierKey } from '@/lib/stripe';
 import type { Id } from '@convex/_generated/dataModel';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Gift } from 'lucide-react';
 
 interface SubscriptionModalProps {
   isOpen: boolean;
@@ -31,6 +31,8 @@ export function SubscriptionModal({
   const createCheckout = useAction(api.stripeActions.createCheckoutSession);
   const [loadingTier, setLoadingTier] = useState<TierKey | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showCoupon, setShowCoupon] = useState(false);
+  const [couponInput, setCouponInput] = useState('');
 
   const handleSelect = async (tier: TierKey) => {
     if (!isAuthenticated) {
@@ -88,6 +90,41 @@ export function SubscriptionModal({
                 isLoading={loadingTier === key}
               />
             )
+          )}
+        </div>
+
+        {/* Coupon Code Section */}
+        <div className="text-center pt-2 border-t border-gray-100">
+          {!showCoupon ? (
+            <button
+              onClick={() => setShowCoupon(true)}
+              className="text-sm text-primary-600 hover:text-primary-700 font-medium inline-flex items-center gap-1.5"
+            >
+              <Gift className="w-4 h-4" />
+              Have a sponsor code?
+            </button>
+          ) : (
+            <div className="flex gap-2 max-w-xs mx-auto">
+              <input
+                type="text"
+                value={couponInput}
+                onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
+                placeholder="Enter coupon code"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 font-mono"
+              />
+              <button
+                onClick={() => {
+                  if (couponInput.trim()) {
+                    onClose();
+                    router.push(`/claim/${couponInput.trim()}`);
+                  }
+                }}
+                disabled={!couponInput.trim()}
+                className="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Redeem
+              </button>
+            </div>
           )}
         </div>
       </div>

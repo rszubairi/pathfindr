@@ -6,6 +6,20 @@ import { api } from './_generated/api';
 import Stripe from 'stripe';
 import { Id } from './_generated/dataModel';
 
+function generateDonationCouponCode(companyName: string): string {
+  const prefix = companyName
+    .replace(/[^a-zA-Z]/g, '')
+    .substring(0, 3)
+    .toUpperCase() || 'PFD';
+  const year = new Date().getFullYear();
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let random = '';
+  for (let i = 0; i < 6; i++) {
+    random += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return `${prefix}-${year}-${random}`;
+}
+
 // Lazy-init to avoid module-level errors during Convex analysis
 let _stripe: Stripe | null = null;
 function getStripe(): Stripe {
@@ -287,6 +301,59 @@ export const handleWebhook = action({
             paymentId,
             stripePaymentIntentId: session.payment_intent as string,
           });
+        } else if (paymentType === 'corporate_donation') {
+          const userId = session.metadata?.userId;
+          const companyId = session.metadata?.companyId;
+          const tier = session.metadata?.tier as 'pro' | 'expert';
+          const quantity = parseInt(session.metadata?.quantity || '0', 10);
+
+          if (!userId || !companyId || !tier || !quantity) break;
+
+          const totalAmount = (session.amount_total || 0) / 100;
+
+          // Get company name for coupon code prefix
+          const companyProfile = await ctx.runQuery(
+            api.corporateDonations.getCompanyProfile,
+            { userId: userId as Id<'users'> }
+          );
+          const couponCode = generateDonationCouponCode(
+            companyProfile?.institutionName ?? 'PFD'
+          );
+
+          // 1. Create donation record
+          const donationId = await ctx.runMutation(
+            api.corporateDonations.createDonation,
+            {
+              corporateUserId: userId as Id<'users'>,
+              companyId: companyId as Id<'institutionProfiles'>,
+              tier,
+              quantityPurchased: quantity,
+              totalAmountPaid: totalAmount,
+              currency: 'usd',
+              stripePaymentIntentId: session.payment_intent as string,
+              stripeCheckoutSessionId: session.id,
+              couponCode,
+            }
+          );
+
+          // 2. Auto-assign to existing unsubscribed students
+          const result = await ctx.runAction(
+            api.corporateDonationActions.autoAssignDonations,
+            { donationId }
+          );
+
+          // 3. Send receipt email to corporate
+          await ctx.runAction(
+            api.corporateDonationActions.sendDonationReceiptEmail,
+            {
+              corporateUserId: userId as Id<'users'>,
+              quantity,
+              totalAmount,
+              couponCode,
+              assignedCount: result.assignedCount,
+              remainingBalance: result.remainingBalance,
+            }
+          );
         } else {
           // Subscription logic
           const userId = session.metadata?.userId;

@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useAction } from 'convex/react';
+import { useAction, useQuery } from 'convex/react';
 import { api } from '../../../../../convex/_generated/api';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
@@ -37,10 +37,16 @@ function RegisterContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('redirect');
+  const couponCode = searchParams.get('coupon');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const registerUser = useAction(api.authActions.registerUser);
+
+  const couponValidation = useQuery(
+    api.corporateDonations.validateCouponCode,
+    couponCode ? { couponCode } : 'skip'
+  );
 
   const {
     register,
@@ -62,8 +68,10 @@ function RegisterContent() {
         phone: data.phone,
       });
       // Bypassing check-email screen for development
-      const loginUrl = redirectTo
-        ? `/login?registered=true&redirect=${encodeURIComponent(redirectTo)}`
+      const claimRedirect = couponCode ? `/claim/${couponCode}` : null;
+      const finalRedirect = claimRedirect || redirectTo;
+      const loginUrl = finalRedirect
+        ? `/login?registered=true&redirect=${encodeURIComponent(finalRedirect)}`
         : '/login?registered=true';
       router.push(loginUrl);
     } catch (err) {
@@ -88,6 +96,16 @@ function RegisterContent() {
           </div>
 
           <Card className="p-6">
+            {couponCode && couponValidation?.valid && (
+              <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+                <p className="text-sm text-green-800">
+                  <span className="font-bold">{couponValidation.companyName}</span> is sponsoring
+                  your subscription! Register to claim your free{' '}
+                  <span className="font-semibold capitalize">{couponValidation.tier}</span> plan.
+                </p>
+              </div>
+            )}
+
             <div className="mb-6 bg-primary-50 border border-primary-200 rounded-lg p-4 text-center">
               <p className="text-sm text-primary-800">
                 Are you a scholarship provider or institution?{' '}
