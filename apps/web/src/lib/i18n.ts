@@ -386,6 +386,25 @@ const resources = {
         notFound: 'Profile Not Found',
         notFoundDesc: "You haven't completed your profile yet. Complete it to view your profile here.",
         completeProfileBtn: 'Complete Profile',
+        resumeOptimizer: {
+          title: 'Resume Optimizer',
+          score: 'Profile Score',
+          ranking: 'Ranking',
+          generateBtn: 'Generate Optimized Resume',
+          suggestions: 'Suggestions for Improvement',
+          levels: {
+            needsImprovement: 'Needs Improvement',
+            goodProgress: 'Good Progress',
+            professional: 'Professional',
+            elite: 'Elite',
+          },
+          descriptions: {
+            needsImprovement: 'Your profile needs more details to stand out.',
+            goodProgress: 'You are building a solid foundation.',
+            professional: 'You are ready for most career opportunities.',
+            elite: 'Your profile is highly competitive for top-tier hiring.',
+          }
+        },
         sections: {
           personal: 'Personal Details',
           education: 'Education',

@@ -48,6 +48,28 @@ export const getByUserId = query({
   },
 });
 
+export const getPublicResume = query({
+  args: { userId: v.id('users') },
+  handler: async (ctx, args) => {
+    const user = await ctx.db.get(args.userId);
+    if (!user) return null;
+
+    const profile = await ctx.db
+      .query('academicProfiles')
+      .withIndex('by_user_id', (q) => q.eq('userId', args.userId))
+      .first();
+
+    return {
+      user: {
+        fullName: user.fullName,
+        email: user.email,
+        profileImageUrl: user.profileImageId ? await ctx.storage.getUrl(user.profileImageId) : null,
+      },
+      profile,
+    };
+  },
+});
+
 // ─── Mutations ──────────────────────────────────────────────
 
 export const upsert = mutation({

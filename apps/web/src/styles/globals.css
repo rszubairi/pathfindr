@@ -168,3 +168,35 @@
 .animate-feature-fly-in { animation: feature-fly-in 0.8s ease-out both; }
 .animate-feature-fly-in-right { animation: feature-fly-in-right 0.8s ease-out both; }
 .animate-feature-reveal-up { animation: feature-reveal-up 0.8s ease-out both; }
+
+/* Print Styles */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #resume-content, #resume-content * {
+    visibility: visible;
+  }
+  #resume-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    background: white;
+  }
+  .no-print {
+    display: none !important;
+  }
+  
+  /* Reset background colors for printing */
+  .print-bg-gray-50 { background-color: #f9fafb !important; -webkit-print-color-adjust: exact; }
+  .print-bg-gray-900 { background-color: #111827 !important; -webkit-print-color-adjust: exact; }
+}
+
+.no-print {
+  display: block;
+}

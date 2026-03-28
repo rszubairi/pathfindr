@@ -27,6 +27,7 @@ import {
   Flag,
   Phone,
 } from 'lucide-react';
+import { ResumeOptimizer } from '@/components/profile/ResumeOptimizer';
 
 export default function StudentProfileViewPage() {
   const router = useRouter();
@@ -144,6 +145,9 @@ export default function StudentProfileViewPage() {
               </Button>
             </div>
           </Card>
+
+          {/* Resume Optimizer */}
+          <ResumeOptimizer profile={profile} user={user} />
 
           {/* Personal Details */}
           <Card className="p-5 sm:p-6">

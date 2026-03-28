@@ -135,7 +135,7 @@ export function Header() {
                 className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium text-gray-700"
               >
                 <Globe className="w-4 h-4 text-gray-400" />
-                <span>{i18n.language.toUpperCase()}</span>
+                <span>{mounted ? (i18n?.language || 'en').toUpperCase().split('-')[0] : 'EN'}</span>
                 <ChevronDown className={cn('w-3 h-3 text-gray-400 transition-transform', langMenuOpen && 'rotate-180')} />
               </button>
 
@@ -154,7 +154,7 @@ export function Header() {
                       }}
                       className={cn(
                         'w-full text-left px-4 py-2 text-sm transition-colors',
-                        i18n.language === lng.code
+                        (i18n?.language || 'en') === lng.code
                           ? 'bg-primary-50 text-primary-600 font-semibold'
                           : 'text-gray-700 hover:bg-gray-50'
                       )}
@@ -308,7 +308,7 @@ export function Header() {
                   </p>
                   <div className="relative">
                     <select
-                      value={i18n.language}
+                      value={mounted ? i18n?.language || 'en' : 'en'}
                       onChange={(e) => changeLanguage(e.target.value)}
                       className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-primary-500 appearance-none"
                     >
