@@ -42,7 +42,7 @@ export function useAuth() {
 
   // Sync Convex user to Redux
   useEffect(() => {
-    if (currentUser && !user) {
+    if (currentUser) {
       dispatch(
         setUser({
           id: currentUser._id,
@@ -54,7 +54,7 @@ export function useAuth() {
         })
       );
     }
-  }, [currentUser, user, dispatch]);
+  }, [currentUser, dispatch]);
 
   const logout = async () => {
     try {

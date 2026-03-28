@@ -41,7 +41,8 @@
       "WebFetch(domain:job-logs.eascdn.net)",
       "Bash(npm view:*)",
       "Bash(npm cache clean:*)",
-      "Bash(sudo chown:*)"
+      "Bash(sudo chown:*)",
+      "Bash(./gradlew app:assembleRelease:*)"
     ]
   }
 }
