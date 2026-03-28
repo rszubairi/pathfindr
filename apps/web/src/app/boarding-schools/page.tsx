@@ -264,7 +264,7 @@ export default function BoardingSchoolsPage() {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {paginatedSchools.map((school) => (
-                    <BoardingSchoolCard key={school.id} school={school} />
+                    <BoardingSchoolCard key={school._id} school={school} />
                   ))}
                 </div>
               )}

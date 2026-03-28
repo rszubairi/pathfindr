@@ -65,7 +65,7 @@ export interface ScholarshipFilters {
 
 // Boarding School Types
 export interface BoardingSchool {
-  id: string;
+  _id: string;
   name: string;
   shortName?: string;
   category: 'SBP Premier' | 'SMS' | 'SBPI' | 'SMAP' | 'TMUA' | 'MRSM' | 'MRSM Premier';
