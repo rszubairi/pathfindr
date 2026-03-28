@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { useMutation } from 'convex/react';
@@ -9,7 +9,8 @@ import type { Id } from '../../../../../convex/_generated/dataModel';
 export function PersonalDetailsForm({ data, onUpdate, user }: any) {
   const [formData, setFormData] = useState(data.personalDetails || {});
   const [uploading, setUploading] = useState(false);
-  
+  const [localImageUri, setLocalImageUri] = useState<string | null>(null);
+
   const generateUploadUrl = useMutation(api.storage.generateUploadUrl);
   const saveProfileImage = useMutation(api.storage.saveProfileImage);
 
@@ -28,25 +29,39 @@ export function PersonalDetailsForm({ data, onUpdate, user }: any) {
     });
 
     if (!result.canceled && result.assets[0].uri) {
+      const uri = result.assets[0].uri;
+      setLocalImageUri(uri);
       setUploading(true);
       try {
-        const response = await fetch(result.assets[0].uri);
+        const response = await fetch(uri);
         const blob = await response.blob();
-        
+
+        // Ensure valid content type - blob.type can be empty in React Native
+        const contentType = blob.type || result.assets[0].mimeType || 'image/jpeg';
+
         const uploadUrl = await generateUploadUrl();
         const uploadResult = await fetch(uploadUrl, {
           method: 'POST',
-          headers: { 'Content-Type': blob.type },
+          headers: { 'Content-Type': contentType },
           body: blob,
         });
-        
+
+        if (!uploadResult.ok) {
+          throw new Error(`Upload failed with status ${uploadResult.status}`);
+        }
+
         const { storageId } = await uploadResult.json();
+        if (!storageId) {
+          throw new Error('No storageId returned from upload');
+        }
+
         await saveProfileImage({
-          userId: user.id as Id<'users'>,
+          userId: (user._id || user.id) as Id<'users'>,
           storageId,
         });
       } catch (error) {
         console.error('Image upload failed:', error);
+        setLocalImageUri(null);
       } finally {
         setUploading(false);
       }
@@ -57,8 +72,8 @@ export function PersonalDetailsForm({ data, onUpdate, user }: any) {
     <ScrollView style={styles.container}>
       <View style={styles.imageSection}>
         <TouchableOpacity onPress={pickImage} disabled={uploading} style={styles.avatarContainer}>
-          {user.profileImageUrl ? (
-            <Image source={{ uri: user.profileImageUrl }} style={styles.avatar} />
+          {localImageUri || user?.profileImageUrl ? (
+            <Image source={{ uri: localImageUri || user.profileImageUrl }} style={styles.avatar} />
           ) : (
             <View style={styles.placeholderAvatar}>
               <Feather name="camera" size={32} color="#94a3b8" />
@@ -161,4 +176,3 @@ const styles = StyleSheet.create({
   activeTagText: { color: '#2563eb', fontWeight: '700' },
   phoneRow: { flexDirection: 'row' },
 });
-import { ActivityIndicator } from 'react-native';

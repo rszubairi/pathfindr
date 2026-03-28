@@ -141,7 +141,7 @@ export function ProfileScreen({ navigation }: any) {
             <DetailItem label="Gender" value={profile.gender?.charAt(0).toUpperCase() + profile.gender?.slice(1)} />
             <DetailItem label="Nationality" value={profile.nationality} />
             <DetailItem label="Country" value={profile.country} />
-            <DetailItem label="Phone" value={`${profile.countryCode} ${profile.phone}`} />
+            <DetailItem label="Phone" value={profile.phone ? `${profile.countryCode || ''} ${profile.phone}`.trim() : undefined} />
           </View>
         </ViewSection>
 

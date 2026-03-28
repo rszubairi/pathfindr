@@ -42,7 +42,8 @@
       "Bash(npm view:*)",
       "Bash(npm cache clean:*)",
       "Bash(sudo chown:*)",
-      "Bash(./gradlew app:assembleRelease:*)"
+      "Bash(./gradlew app:assembleRelease:*)",
+      "Bash(ls:*)"
     ]
   }
 }
