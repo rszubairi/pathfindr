@@ -5,32 +5,36 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Dimensions,
   Image,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import type { RootStackParamList } from '../navigation/RootNavigator';
 import { Feather } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
+import { LanguageSwitcher } from '../components/LanguageSwitcher';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 
-const { width } = Dimensions.get('window');
-
 export function HomeScreen() {
   const navigation = useNavigation<HomeScreenNavigationProp>();
+  const { t } = useTranslation();
 
   return (
     <ScrollView style={styles.container}>
       {/* Hero Section */}
       <View style={styles.hero}>
+        {/* Language Switcher */}
+        <View style={styles.languageRow}>
+          <LanguageSwitcher />
+        </View>
+
         <Text style={styles.title}>Pathfindr</Text>
         <Text style={styles.subtitle}>
-          Your Path to Global Educational Opportunities
+          {t('mobile.home.subtitle')}
         </Text>
         <Text style={styles.description}>
-          Connect with scholarships, university programmes, internships, and jobs across
-          Southeast Asia and beyond
+          {t('mobile.home.description')}
         </Text>
 
         <View style={styles.buttonContainer}>
@@ -38,47 +42,47 @@ export function HomeScreen() {
             style={styles.primaryButton}
             onPress={() => navigation.navigate('Register')}
           >
-            <Text style={styles.primaryButtonText}>Get Started</Text>
+            <Text style={styles.primaryButtonText}>{t('nav.getStarted')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.secondaryButton}
             onPress={() => navigation.navigate('Login')}
           >
-            <Text style={styles.secondaryButtonText}>Sign In</Text>
+            <Text style={styles.secondaryButtonText}>{t('nav.signIn')}</Text>
           </TouchableOpacity>
         </View>
       </View>
 
       {/* Features Section */}
       <View style={styles.featuresSection}>
-        <Text style={styles.sectionTitle}>What We Offer</Text>
+        <Text style={styles.sectionTitle}>{t('mobile.home.whatWeOffer')}</Text>
 
         <View style={styles.featuresGrid}>
           <FeatureCard
-            title="Scholarships"
-            description="Discover and apply for scholarships from governments, universities, and organizations"
+            title={t('nav.scholarships')}
+            description={t('mobile.home.scholarshipsDesc')}
             icon="award"
             imageSource={require('../../assets/images/female-student-studying-at-college-library-2023-11-27-04-50-27-utc.webp')}
             onPress={() => navigation.navigate('Scholarships' as never)}
           />
           <FeatureCard
-            title="Internships"
-            description="Find internship opportunities to kickstart your career"
+            title={t('nav.internships')}
+            description={t('mobile.home.internshipsDesc')}
             icon="briefcase"
             imageSource={require('../../assets/images/islamic-girl-sitting-and-using-laptop-2023-11-27-05-21-11-utc.webp')}
             onPress={() => navigation.navigate('Internships' as never)}
           />
           <FeatureCard
-            title="Boarding Schools"
-            description="Discover top boarding schools across the nation"
+            title={t('nav.boardingschools')}
+            description={t('mobile.home.boardingSchoolsDesc')}
             icon="home"
             imageSource={require('../../assets/images/pretty-girl-using-laptop-on-background-of-her-clas-2023-11-27-05-22-09-utc.webp')}
             onPress={() => navigation.navigate('BoardingSchools' as never)}
           />
           <FeatureCard
-            title="International Schools"
-            description="Explore modern international education options globally"
+            title={t('nav.internationalschools')}
+            description={t('mobile.home.internationalSchoolsDesc')}
             icon="globe"
             imageSource={require('../../assets/images/female-student-studying-at-college-library-2023-11-27-04-50-27-utc.webp')}
             onPress={() => navigation.navigate('InternationalSchools' as never)}
@@ -87,15 +91,15 @@ export function HomeScreen() {
       </View>
 
       <View style={styles.ctaSection}>
-        <Text style={styles.ctaTitle}>Ready to Start Your Journey?</Text>
+        <Text style={styles.ctaTitle}>{t('home.cta.title')}</Text>
         <Text style={styles.ctaDescription}>
-          Create your profile today and unlock access to thousands of opportunities
+          {t('home.cta.subtitle')}
         </Text>
         <TouchableOpacity
           style={styles.ctaButton}
           onPress={() => navigation.navigate('Register')}
         >
-          <Text style={styles.ctaButtonText}>Create Free Account</Text>
+          <Text style={styles.ctaButtonText}>{t('home.cta.createAccount')}</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -143,6 +147,11 @@ const styles = StyleSheet.create({
     paddingVertical: 60,
     backgroundColor: '#ffffff',
     alignItems: 'center',
+  },
+  languageRow: {
+    alignSelf: 'flex-end',
+    marginBottom: 20,
+    marginTop: -20,
   },
   title: {
     fontSize: 40,

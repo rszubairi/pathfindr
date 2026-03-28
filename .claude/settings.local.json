@@ -35,7 +35,13 @@
       "Bash(npm run build:*)",
       "Bash(npx expo install:*)",
       "Bash(npx:*)",
-      "Bash(node scripts/generate-icons.js:*)"
+      "Bash(node scripts/generate-icons.js:*)",
+      "Bash(gh api:*)",
+      "WebFetch(domain:expo.dev)",
+      "WebFetch(domain:job-logs.eascdn.net)",
+      "Bash(npm view:*)",
+      "Bash(npm cache clean:*)",
+      "Bash(sudo chown:*)"
     ]
   }
 }

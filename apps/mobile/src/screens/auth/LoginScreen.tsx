@@ -18,12 +18,14 @@ import { api } from '../../../../../convex/_generated/api';
 import { useDispatch } from 'react-redux';
 import { setToken, setUser } from '../../store/slices/authSlice';
 import * as SecureStore from 'expo-secure-store';
+import { useTranslation } from 'react-i18next';
 
 const { width } = Dimensions.get('window');
 
 export function LoginScreen() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -40,11 +42,9 @@ export function LoginScreen() {
       setIsLoading(true);
       const result = await loginUser({ email: email.toLowerCase(), password });
 
-      // Save to SecureStore
       await SecureStore.setItemAsync('token', result.token);
       await SecureStore.setItemAsync('userId', result.user._id);
 
-      // Update Redux state
       dispatch(setToken(result.token));
       dispatch(
         setUser({
@@ -70,7 +70,6 @@ export function LoginScreen() {
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
       >
-        {/* Header with gradient-like background */}
         <View style={styles.headerSection}>
           <Image
             source={require('../../../assets/images/logo.png')}
@@ -79,20 +78,19 @@ export function LoginScreen() {
           />
         </View>
 
-        {/* Form section */}
         <View style={styles.formSection}>
-          <Text style={styles.title}>Welcome Back</Text>
-          <Text style={styles.subtitle}>Sign in to your account to continue</Text>
+          <Text style={styles.title}>{t('mobile.auth.welcomeBack')}</Text>
+          <Text style={styles.subtitle}>{t('mobile.auth.signInSubtitle')}</Text>
 
           <View style={styles.form}>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Email</Text>
+              <Text style={styles.label}>{t('mobile.auth.email')}</Text>
               <View style={styles.inputWrapper}>
                 <TextInput
                   style={styles.input}
                   value={email}
                   onChangeText={setEmail}
-                  placeholder="your@email.com"
+                  placeholder={t('mobile.auth.emailPlaceholder')}
                   placeholderTextColor="#94a3b8"
                   keyboardType="email-address"
                   autoCapitalize="none"
@@ -102,13 +100,13 @@ export function LoginScreen() {
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Password</Text>
+              <Text style={styles.label}>{t('mobile.auth.password')}</Text>
               <View style={styles.inputWrapper}>
                 <TextInput
                   style={styles.input}
                   value={password}
                   onChangeText={setPassword}
-                  placeholder="Enter your password"
+                  placeholder={t('mobile.auth.passwordPlaceholder')}
                   placeholderTextColor="#94a3b8"
                   secureTextEntry
                   autoComplete="password"
@@ -117,7 +115,7 @@ export function LoginScreen() {
             </View>
 
             <TouchableOpacity>
-              <Text style={styles.forgotPassword}>Forgot password?</Text>
+              <Text style={styles.forgotPassword}>{t('mobile.auth.forgotPassword')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -127,14 +125,14 @@ export function LoginScreen() {
               activeOpacity={0.8}
             >
               <Text style={styles.loginButtonText}>
-                {isLoading ? 'Signing In...' : 'Sign In'}
+                {isLoading ? t('mobile.auth.signingIn') : t('mobile.auth.signIn')}
               </Text>
             </TouchableOpacity>
 
             <View style={styles.footer}>
-              <Text style={styles.footerText}>Don't have an account? </Text>
+              <Text style={styles.footerText}>{t('mobile.auth.noAccount')}</Text>
               <TouchableOpacity onPress={() => navigation.navigate('Register' as never)}>
-                <Text style={styles.footerLink}>Sign Up</Text>
+                <Text style={styles.footerLink}>{t('mobile.auth.signUp')}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -166,8 +164,6 @@ const styles = StyleSheet.create({
   formSection: {
     flex: 1,
     backgroundColor: '#ffffff',
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
     paddingHorizontal: 28,
     paddingTop: 8,
     paddingBottom: 40,

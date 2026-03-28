@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  ScrollView, 
-  TouchableOpacity, 
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
   ActivityIndicator,
   Image,
-  Alert
 } from 'react-native';
 import { useQuery } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
@@ -17,11 +16,14 @@ import { Feather } from '@expo/vector-icons';
 import type { Id } from '../../../../convex/_generated/dataModel';
 import { ViewSection, DetailItem, TagCloud } from '../components/profile/ProfileViewComponents';
 import { ProfileEditModal } from './ProfileEditModal';
+import { useTranslation } from 'react-i18next';
+import { LanguageSwitcher } from '../components/LanguageSwitcher';
 
 export function ProfileScreen({ navigation }: any) {
   const { user } = useSelector((state: RootState) => state.auth);
+  const { t } = useTranslation();
   const [isEditVisible, setIsEditVisible] = useState(false);
-  
+
   const profile = useQuery(
     api.profiles.getByUserId,
     user?.id ? { userId: user.id as Id<'users'> } : 'skip'
@@ -50,20 +52,20 @@ export function ProfileScreen({ navigation }: any) {
     return (
       <View style={styles.emptyContainer}>
         <Feather name="user-plus" size={64} color="#cbd5e1" />
-        <Text style={styles.emptyTitle}>Complete Your Profile</Text>
+        <Text style={styles.emptyTitle}>{t('mobile.profile.completeProfile')}</Text>
         <Text style={styles.emptySubtitle}>
-          You haven't completed your profile yet. Complete it to unlock personalized recommendations.
+          {t('mobile.profile.completeProfileDesc')}
         </Text>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.completeBtn}
           onPress={() => setIsEditVisible(true)}
         >
-          <Text style={styles.completeBtnText}>Complete Profile</Text>
+          <Text style={styles.completeBtnText}>{t('mobile.profile.completeProfileBtn')}</Text>
         </TouchableOpacity>
-        <ProfileEditModal 
-          visible={isEditVisible} 
-          onClose={() => setIsEditVisible(false)} 
-          initialData={{}} 
+        <ProfileEditModal
+          visible={isEditVisible}
+          onClose={() => setIsEditVisible(false)}
+          initialData={{}}
         />
       </View>
     );
@@ -72,6 +74,12 @@ export function ProfileScreen({ navigation }: any) {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        {/* Language Switcher */}
+        <View style={styles.languageRow}>
+          <Text style={styles.languageLabel}>{t('mobile.common.language')}</Text>
+          <LanguageSwitcher />
+        </View>
+
         {/* Profile Header */}
         <View style={styles.header}>
           <View style={styles.avatarSection}>
@@ -93,19 +101,19 @@ export function ProfileScreen({ navigation }: any) {
               </View>
             </View>
           </View>
-          
-          <TouchableOpacity 
+
+          <TouchableOpacity
             style={styles.editBtn}
             onPress={() => setIsEditVisible(true)}
           >
             <Feather name="edit-3" size={18} color="#2563eb" />
-            <Text style={styles.editBtnText}>Edit</Text>
+            <Text style={styles.editBtnText}>{t('mobile.profile.edit')}</Text>
           </TouchableOpacity>
         </View>
 
-        <ProfileEditModal 
-          visible={isEditVisible} 
-          onClose={() => setIsEditVisible(false)} 
+        <ProfileEditModal
+          visible={isEditVisible}
+          onClose={() => setIsEditVisible(false)}
           initialData={{
             personalDetails: {
               dateOfBirth: profile?.dateOfBirth,
@@ -123,11 +131,11 @@ export function ProfileScreen({ navigation }: any) {
             interests: profile?.interests,
             preferredCountries: profile?.preferredCountries,
             availability: profile?.availability,
-          }} 
+          }}
         />
 
         {/* Personal Details */}
-        <ViewSection icon="user" title="Personal Details">
+        <ViewSection icon="user" title={t('mobile.profile.personalDetails')}>
           <View style={styles.grid}>
             <DetailItem label="Date of Birth" value={profile.dateOfBirth} />
             <DetailItem label="Gender" value={profile.gender?.charAt(0).toUpperCase() + profile.gender?.slice(1)} />
@@ -139,7 +147,7 @@ export function ProfileScreen({ navigation }: any) {
 
         {/* Education */}
         {profile.education && profile.education.length > 0 && (
-          <ViewSection icon="book-open" title="Education History">
+          <ViewSection icon="book-open" title={t('mobile.profile.educationHistory')}>
             {profile.education.map((edu: any, index: number) => (
               <View key={edu.id || index} style={[styles.itemBlock, index > 0 && styles.itemBorder]}>
                 <Text style={styles.itemTitle}>{edu.institutionName}</Text>
@@ -157,7 +165,7 @@ export function ProfileScreen({ navigation }: any) {
 
         {/* Test Scores */}
         {Object.values(profile.testScores || {}).some(v => !!v) && (
-          <ViewSection icon="file-text" title="Standardized Tests">
+          <ViewSection icon="file-text" title={t('mobile.profile.standardizedTests')}>
             <View style={styles.scoreRow}>
               {Object.entries(profile.testScores || {}).map(([key, val]) => val ? (
                 <View key={key} style={styles.scoreBox}>
@@ -171,7 +179,7 @@ export function ProfileScreen({ navigation }: any) {
 
         {/* Certificates */}
         {profile.certificates && profile.certificates.length > 0 && (
-          <ViewSection icon="award" title="Certifications">
+          <ViewSection icon="award" title={t('mobile.profile.certifications')}>
             {profile.certificates.map((cert: any, index: number) => (
               <View key={cert.id || index} style={[styles.itemBlock, index > 0 && styles.itemBorder]}>
                 <Text style={styles.itemTitle}>{cert.title}</Text>
@@ -184,16 +192,16 @@ export function ProfileScreen({ navigation }: any) {
 
         {/* Skills & Interests */}
         {(profile.skills?.length > 0 || profile.interests?.length > 0) && (
-          <ViewSection icon="zap" title="Skills & Interests">
+          <ViewSection icon="zap" title={t('mobile.profile.skillsAndInterests')}>
             {profile.skills?.length > 0 && (
               <View style={{ marginBottom: 12 }}>
-                <Text style={styles.subLabel}>Top Skills</Text>
+                <Text style={styles.subLabel}>{t('mobile.profile.topSkills')}</Text>
                 <TagCloud tags={profile.skills} color="#2563eb" />
               </View>
             )}
             {profile.interests?.length > 0 && (
               <View>
-                <Text style={styles.subLabel}>Interests</Text>
+                <Text style={styles.subLabel}>{t('mobile.profile.interests')}</Text>
                 <TagCloud tags={profile.interests} color="#7c3aed" />
               </View>
             )}
@@ -201,17 +209,17 @@ export function ProfileScreen({ navigation }: any) {
         )}
 
         {/* Preferences */}
-        <ViewSection icon="globe" title="Career Preferences">
+        <ViewSection icon="globe" title={t('mobile.profile.careerPreferences')}>
           <View>
-            <Text style={styles.subLabel}>Preferred Countries</Text>
+            <Text style={styles.subLabel}>{t('mobile.profile.preferredCountries')}</Text>
             <TagCloud tags={profile.preferredCountries} color="#059669" />
           </View>
           <View style={{ marginTop: 12 }}>
-            <Text style={styles.subLabel}>Availability</Text>
-            <Text style={styles.itemSubtitle}>{profile.availability || 'Not specified'}</Text>
+            <Text style={styles.subLabel}>{t('mobile.profile.availability')}</Text>
+            <Text style={styles.itemSubtitle}>{profile.availability || t('mobile.profile.notSpecified')}</Text>
           </View>
         </ViewSection>
-        
+
         <View style={{ height: 40 }} />
       </ScrollView>
     </View>
@@ -222,6 +230,18 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f8fafc' },
   scrollContent: { padding: 16 },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' },
+  languageRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    marginBottom: 12,
+    gap: 10,
+  },
+  languageLabel: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#64748b',
+  },
   header: {
     backgroundColor: '#fff',
     borderRadius: 20,

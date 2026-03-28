@@ -13,9 +13,11 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { useAction } from 'convex/react';
 import { api } from '../../../../../convex/_generated/api';
+import { useTranslation } from 'react-i18next';
 
 export function RegisterScreen() {
   const navigation = useNavigation();
+  const { t } = useTranslation();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -54,28 +56,28 @@ export function RegisterScreen() {
     >
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.content}>
-          <Text style={styles.title}>Create Account</Text>
-          <Text style={styles.subtitle}>Join Pathfindr today</Text>
+          <Text style={styles.title}>{t('mobile.auth.createAccount')}</Text>
+          <Text style={styles.subtitle}>{t('mobile.auth.createAccountSubtitle')}</Text>
 
           <View style={styles.form}>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Full Name</Text>
+              <Text style={styles.label}>{t('mobile.auth.fullName')}</Text>
               <TextInput
                 style={styles.input}
                 value={fullName}
                 onChangeText={setFullName}
-                placeholder="John Doe"
+                placeholder={t('mobile.auth.fullNamePlaceholder')}
                 autoComplete="name"
               />
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Email</Text>
+              <Text style={styles.label}>{t('mobile.auth.email')}</Text>
               <TextInput
                 style={styles.input}
                 value={email}
                 onChangeText={setEmail}
-                placeholder="your@email.com"
+                placeholder={t('mobile.auth.emailPlaceholder')}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 autoComplete="email"
@@ -83,7 +85,7 @@ export function RegisterScreen() {
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Password</Text>
+              <Text style={styles.label}>{t('mobile.auth.password')}</Text>
               <TextInput
                 style={styles.input}
                 value={password}
@@ -95,7 +97,7 @@ export function RegisterScreen() {
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Confirm Password</Text>
+              <Text style={styles.label}>{t('mobile.auth.confirmPassword')}</Text>
               <TextInput
                 style={styles.input}
                 value={confirmPassword}
@@ -107,15 +109,15 @@ export function RegisterScreen() {
             </View>
 
             <TouchableOpacity style={styles.registerButton} onPress={handleRegister} disabled={isLoading}>
-              <Text style={styles.registerButtonText}>{isLoading ? 'Creating...' : 'Create Account'}</Text>
+              <Text style={styles.registerButtonText}>
+                {isLoading ? t('mobile.auth.creating') : t('mobile.auth.createAccount')}
+              </Text>
             </TouchableOpacity>
 
-
-
             <View style={styles.footer}>
-              <Text style={styles.footerText}>Already have an account? </Text>
+              <Text style={styles.footerText}>{t('mobile.auth.haveAccount')}</Text>
               <TouchableOpacity onPress={() => navigation.navigate('Login' as never)}>
-                <Text style={styles.footerLink}>Sign In</Text>
+                <Text style={styles.footerLink}>{t('mobile.auth.signIn')}</Text>
               </TouchableOpacity>
             </View>
 
@@ -183,33 +185,6 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 16,
     fontWeight: '600',
-  },
-  divider: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 16,
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: '#cbd5e1',
-  },
-  dividerText: {
-    marginHorizontal: 16,
-    color: '#64748b',
-    fontSize: 14,
-  },
-  socialButton: {
-    borderWidth: 1,
-    borderColor: '#cbd5e1',
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  socialButtonText: {
-    color: '#1e293b',
-    fontSize: 16,
-    fontWeight: '500',
   },
   footer: {
     flexDirection: 'row',
