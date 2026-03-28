@@ -1,17 +1,18 @@
 import React from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  Modal, 
-  TouchableOpacity, 
-  FlatList, 
-  SafeAreaView 
+import {
+  View,
+  Text,
+  StyleSheet,
+  Modal,
+  TouchableOpacity,
+  FlatList,
+  SafeAreaView
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import type { Id } from '../../../../convex/_generated/dataModel';
+import { useTheme, ThemeColors } from '../theme';
 
 interface NotificationModalProps {
   visible: boolean;
@@ -21,11 +22,13 @@ interface NotificationModalProps {
 }
 
 export function NotificationModal({ visible, onClose, userId, navigation }: NotificationModalProps) {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const notifications = useQuery(
     api.notifications.getUserNotifications,
     { userId: userId as Id<'users'> }
   );
-  
+
   const markAsRead = useMutation(api.notifications.markNotified);
 
   const handleNotificationPress = async (item: any) => {
@@ -37,12 +40,12 @@ export function NotificationModal({ visible, onClose, userId, navigation }: Noti
   };
 
   const renderItem = ({ item }: { item: any }) => (
-    <TouchableOpacity 
+    <TouchableOpacity
       style={[styles.notificationItem, !item.notified && styles.unreadItem]}
       onPress={() => handleNotificationPress(item)}
     >
       <View style={styles.iconContainer}>
-        <Feather name="award" size={20} color={item.notified ? "#64748b" : "#2563eb"} />
+        <Feather name="award" size={20} color={item.notified ? colors.textMuted : colors.primary} />
       </View>
       <View style={styles.textContainer}>
         <Text style={[styles.notifTitle, !item.notified && styles.unreadText]}>
@@ -66,9 +69,9 @@ export function NotificationModal({ visible, onClose, userId, navigation }: Noti
       transparent={true}
       onRequestClose={onClose}
     >
-      <TouchableOpacity 
-        style={styles.overlay} 
-        activeOpacity={1} 
+      <TouchableOpacity
+        style={styles.overlay}
+        activeOpacity={1}
         onPress={onClose}
       >
         <SafeAreaView style={styles.modalContent}>
@@ -76,10 +79,10 @@ export function NotificationModal({ visible, onClose, userId, navigation }: Noti
             <View style={styles.header}>
               <Text style={styles.headerTitle}>Notifications ({notifications?.length || 0})</Text>
               <TouchableOpacity onPress={onClose}>
-                <Feather name="x" size={24} color="#1e293b" />
+                <Feather name="x" size={24} color={colors.text} />
               </TouchableOpacity>
             </View>
-            
+
             {notifications && notifications.length > 0 ? (
               <FlatList
                 data={notifications}
@@ -89,7 +92,7 @@ export function NotificationModal({ visible, onClose, userId, navigation }: Noti
               />
             ) : (
               <View style={styles.emptyContainer}>
-                <Feather name="bell-off" size={48} color="#cbd5e1" />
+                <Feather name="bell-off" size={48} color={colors.border} />
                 <Text style={styles.emptyText}>No notifications yet</Text>
                 <Text style={styles.emptySubtext}>We'll notify you when matching scholarships open up.</Text>
               </View>
@@ -101,10 +104,10 @@ export function NotificationModal({ visible, onClose, userId, navigation }: Noti
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    backgroundColor: colors.overlay,
     justifyContent: 'flex-start',
     alignItems: 'flex-end',
     paddingTop: 80,
@@ -115,10 +118,10 @@ const styles = StyleSheet.create({
     maxHeight: '70%',
   },
   innerContent: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     borderRadius: 16,
     overflow: 'hidden',
-    shadowColor: '#000',
+    shadowColor: colors.shadow,
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.1,
     shadowRadius: 20,
@@ -130,12 +133,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#f1f5f9',
+    borderBottomColor: colors.borderLight,
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#1e293b',
+    color: colors.text,
   },
   listContent: {
     paddingBottom: 20,
@@ -144,21 +147,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#f8fafc',
+    borderBottomColor: colors.borderLight,
     alignItems: 'center',
   },
   unreadItem: {
-    backgroundColor: '#eff6ff',
+    backgroundColor: colors.primaryLight,
   },
   iconContainer: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: colors.border,
   },
   textContainer: {
     flex: 1,
@@ -166,27 +169,27 @@ const styles = StyleSheet.create({
   },
   notifTitle: {
     fontSize: 14,
-    color: '#334155',
+    color: colors.textSecondary,
   },
   unreadText: {
     fontWeight: 'bold',
-    color: '#1e293b',
+    color: colors.text,
   },
   notifSubtitle: {
     fontSize: 12,
-    color: '#64748b',
+    color: colors.textMuted,
     marginTop: 2,
   },
   notifTime: {
     fontSize: 10,
-    color: '#94a3b8',
+    color: colors.placeholderText,
     marginTop: 4,
   },
   unreadDot: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#2563eb',
+    backgroundColor: colors.primary,
     marginLeft: 8,
   },
   emptyContainer: {
@@ -197,12 +200,12 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#64748b',
+    color: colors.textMuted,
     marginTop: 12,
   },
   emptySubtext: {
     fontSize: 14,
-    color: '#94a3b8',
+    color: colors.placeholderText,
     textAlign: 'center',
     marginTop: 8,
   },

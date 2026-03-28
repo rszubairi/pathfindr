@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { useTheme } from '../../theme';
 
 interface ViewSectionProps {
   icon: keyof typeof Feather.glyphMap;
@@ -8,22 +9,26 @@ interface ViewSectionProps {
   children: React.ReactNode;
 }
 
-export const ViewSection = ({ icon, title, children }: ViewSectionProps) => (
-  <View style={styles.section}>
-    <View style={styles.sectionHeader}>
-      <Feather name={icon} size={20} color="#2563eb" />
-      <Text style={styles.sectionTitle}>{title}</Text>
+export const ViewSection = ({ icon, title, children }: ViewSectionProps) => {
+  const { colors } = useTheme();
+  return (
+    <View style={[styles.section, { backgroundColor: colors.card, borderColor: colors.borderLight }]}>
+      <View style={[styles.sectionHeader, { borderBottomColor: colors.borderLight }]}>
+        <Feather name={icon} size={20} color={colors.primary} />
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>{title}</Text>
+      </View>
+      <View style={styles.sectionContent}>{children}</View>
     </View>
-    <View style={styles.sectionContent}>{children}</View>
-  </View>
-);
+  );
+};
 
 export const DetailItem = ({ label, value }: { label: string; value?: string | number | null }) => {
+  const { colors } = useTheme();
   if (!value) return null;
   return (
     <View style={styles.detailItem}>
-      <Text style={styles.detailLabel}>{label}</Text>
-      <Text style={styles.detailValue}>{value}</Text>
+      <Text style={[styles.detailLabel, { color: colors.textMuted }]}>{label}</Text>
+      <Text style={[styles.detailValue, { color: colors.text }]}>{value}</Text>
     </View>
   );
 };
@@ -43,12 +48,10 @@ export const TagCloud = ({ tags, color = '#2563eb' }: { tags?: string[]; color?:
 
 const styles = StyleSheet.create({
   section: {
-    backgroundColor: '#fff',
     borderRadius: 16,
     padding: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#f1f5f9',
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -56,13 +59,11 @@ const styles = StyleSheet.create({
     gap: 8,
     marginBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#f8fafc',
     paddingBottom: 8,
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1e293b',
   },
   sectionContent: {
     gap: 12,
@@ -72,12 +73,10 @@ const styles = StyleSheet.create({
   },
   detailLabel: {
     fontSize: 12,
-    color: '#64748b',
     marginBottom: 2,
   },
   detailValue: {
     fontSize: 15,
-    color: '#1e293b',
     fontWeight: '500',
   },
   tagCloud: {

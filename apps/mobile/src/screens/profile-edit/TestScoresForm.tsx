@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
+import { useTheme, ThemeColors } from '../../theme';
 
 export function TestScoresForm({ data, onUpdate }: any) {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const [scores, setScores] = useState(data.testScores || {});
 
   const updateScore = (key: string, value: string) => {
@@ -32,6 +35,7 @@ export function TestScoresForm({ data, onUpdate }: any) {
               value={scores[field.key]?.toString()}
               onChangeText={(v) => updateScore(field.key, v)}
               placeholder={field.placeholder}
+              placeholderTextColor={colors.placeholderText}
               keyboardType="numeric"
             />
           </View>
@@ -41,12 +45,12 @@ export function TestScoresForm({ data, onUpdate }: any) {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
   container: { padding: 16 },
-  title: { fontSize: 20, fontWeight: 'bold', color: '#1e293b', marginBottom: 4 },
-  subtitle: { fontSize: 14, color: '#64748b', marginBottom: 24 },
+  title: { fontSize: 20, fontWeight: 'bold', color: colors.text, marginBottom: 4 },
+  subtitle: { fontSize: 14, color: colors.textMuted, marginBottom: 24 },
   row: { flexDirection: 'row', flexWrap: 'wrap', gap: 16 },
   inputGroup: { width: '47%', marginBottom: 16 },
-  label: { fontSize: 14, fontWeight: '600', color: '#1e293b', marginBottom: 8 },
-  input: { backgroundColor: '#fff', borderWidth: 1, borderColor: '#e2e8f0', borderRadius: 12, padding: 12, fontSize: 15 },
+  label: { fontSize: 14, fontWeight: '600', color: colors.text, marginBottom: 8 },
+  input: { backgroundColor: colors.inputBg, borderWidth: 1, borderColor: colors.inputBorder, borderRadius: 12, padding: 12, fontSize: 15, color: colors.inputText },
 });

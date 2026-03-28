@@ -14,10 +14,13 @@ import { useNavigation } from '@react-navigation/native';
 import { useAction } from 'convex/react';
 import { api } from '../../../../../convex/_generated/api';
 import { useTranslation } from 'react-i18next';
+import { useTheme, ThemeColors } from '../../theme';
 
 export function RegisterScreen() {
   const navigation = useNavigation();
   const { t } = useTranslation();
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -67,6 +70,7 @@ export function RegisterScreen() {
                 value={fullName}
                 onChangeText={setFullName}
                 placeholder={t('mobile.auth.fullNamePlaceholder')}
+                placeholderTextColor={colors.placeholderText}
                 autoComplete="name"
               />
             </View>
@@ -78,6 +82,7 @@ export function RegisterScreen() {
                 value={email}
                 onChangeText={setEmail}
                 placeholder={t('mobile.auth.emailPlaceholder')}
+                placeholderTextColor={colors.placeholderText}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 autoComplete="email"
@@ -91,6 +96,7 @@ export function RegisterScreen() {
                 value={password}
                 onChangeText={setPassword}
                 placeholder="••••••••"
+                placeholderTextColor={colors.placeholderText}
                 secureTextEntry
                 autoComplete="password-new"
               />
@@ -103,6 +109,7 @@ export function RegisterScreen() {
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
                 placeholder="••••••••"
+                placeholderTextColor={colors.placeholderText}
                 secureTextEntry
                 autoComplete="password-new"
               />
@@ -131,10 +138,10 @@ export function RegisterScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: colors.surface,
   },
   scrollContent: {
     flexGrow: 1,
@@ -147,12 +154,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#1e293b',
+    color: colors.text,
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: '#64748b',
+    color: colors.textMuted,
     marginBottom: 32,
   },
   form: {
@@ -164,18 +171,20 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1e293b',
+    color: colors.text,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#cbd5e1',
+    borderColor: colors.inputBorder,
+    backgroundColor: colors.inputBg,
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 16,
+    color: colors.inputText,
   },
   registerButton: {
-    backgroundColor: '#2563eb',
+    backgroundColor: colors.primary,
     paddingVertical: 16,
     borderRadius: 8,
     alignItems: 'center',
@@ -192,16 +201,16 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   footerText: {
-    color: '#64748b',
+    color: colors.textMuted,
     fontSize: 14,
   },
   footerLink: {
-    color: '#2563eb',
+    color: colors.primary,
     fontSize: 14,
     fontWeight: '600',
   },
   terms: {
-    color: '#94a3b8',
+    color: colors.textMuted,
     fontSize: 12,
     textAlign: 'center',
     marginTop: 16,

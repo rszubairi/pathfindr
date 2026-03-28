@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { LANGUAGES, changeLanguage } from '../lib/i18n';
+import { useTheme } from '../theme';
 
 interface LanguageSwitcherProps {
   variant?: 'light' | 'dark';
@@ -9,6 +10,7 @@ interface LanguageSwitcherProps {
 
 export function LanguageSwitcher({ variant = 'dark' }: LanguageSwitcherProps) {
   const { i18n } = useTranslation();
+  const { colors } = useTheme();
   const currentLang = i18n.language;
 
   const isLight = variant === 'light';
@@ -22,8 +24,8 @@ export function LanguageSwitcher({ variant = 'dark' }: LanguageSwitcherProps) {
             key={lang.code}
             style={[
               styles.button,
-              isActive && (isLight ? styles.buttonActiveLight : styles.buttonActiveDark),
-              !isActive && (isLight ? styles.buttonInactiveLight : styles.buttonInactiveDark),
+              isActive && (isLight ? styles.buttonActiveLight : { backgroundColor: colors.primary, borderColor: colors.primary }),
+              !isActive && (isLight ? styles.buttonInactiveLight : { backgroundColor: 'transparent', borderColor: colors.border }),
             ]}
             onPress={() => changeLanguage(lang.code)}
             activeOpacity={0.7}
@@ -31,8 +33,8 @@ export function LanguageSwitcher({ variant = 'dark' }: LanguageSwitcherProps) {
             <Text
               style={[
                 styles.label,
-                isActive && (isLight ? styles.labelActiveLight : styles.labelActiveDark),
-                !isActive && (isLight ? styles.labelInactiveLight : styles.labelInactiveDark),
+                isActive && (isLight ? styles.labelActiveLight : { color: '#ffffff' }),
+                !isActive && (isLight ? styles.labelInactiveLight : { color: colors.textMuted }),
               ]}
             >
               {lang.label}
@@ -56,22 +58,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 1.5,
   },
-  // Dark variant (for white backgrounds)
-  buttonActiveDark: {
-    backgroundColor: '#2563eb',
-    borderColor: '#2563eb',
-  },
-  buttonInactiveDark: {
-    backgroundColor: 'transparent',
-    borderColor: '#cbd5e1',
-  },
-  labelActiveDark: {
-    color: '#ffffff',
-  },
-  labelInactiveDark: {
-    color: '#64748b',
-  },
-  // Light variant (for colored backgrounds)
   buttonActiveLight: {
     backgroundColor: '#ffffff',
     borderColor: '#ffffff',

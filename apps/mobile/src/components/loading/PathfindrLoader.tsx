@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import Svg, { Path, G, Rect } from 'react-native-svg';
-import Animated, { 
-  useSharedValue, 
-  useAnimatedStyle, 
-  withRepeat, 
-  withTiming, 
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withRepeat,
+  withTiming,
   withDelay,
   Easing,
   interpolate
 } from 'react-native-reanimated';
+import { useTheme, ThemeColors } from '../../theme';
 
 const { width } = Dimensions.get('window');
 
@@ -17,6 +18,8 @@ const AnimatedPath = Animated.createAnimatedComponent(Path);
 const AnimatedG = Animated.createAnimatedComponent(G);
 
 export const PathfindrLoader = () => {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const rotation = useSharedValue(0);
   const scale = useSharedValue(1);
   const float = useSharedValue(0);
@@ -72,14 +75,14 @@ export const PathfindrLoader = () => {
     <View style={styles.container}>
       {/* Background Glow */}
       <Animated.View style={[styles.glow, animatedGlowStyle]} />
-      
+
       <Animated.View style={animatedLogoStyle}>
         <Svg width="120" height="120" viewBox="0 0 100 100">
           {/* Graduation Cap Main Part */}
           <Path
             d="M50 25L15 42L50 59L85 42L50 25Z"
-            fill="#2563eb"
-            stroke="#2563eb"
+            fill={colors.primary}
+            stroke={colors.primary}
             strokeWidth="2"
             strokeLinejoin="round"
           />
@@ -87,7 +90,7 @@ export const PathfindrLoader = () => {
           <Path
             d="M30 52V62C30 62 40 70 50 70C60 70 70 62 70 62V52"
             fill="none"
-            stroke="#2563eb"
+            stroke={colors.primary}
             strokeWidth="5"
             strokeLinecap="round"
           />
@@ -95,19 +98,19 @@ export const PathfindrLoader = () => {
           <Path
             d="M85 42V55C85 55 83 60 81 60"
             fill="none"
-            stroke="#2563eb"
+            stroke={colors.primary}
             strokeWidth="3"
             strokeLinecap="round"
           />
-          <Rect x="79" y="60" width="4" height="6" rx="1" fill="#2563eb" />
+          <Rect x="79" y="60" width="4" height="6" rx="1" fill={colors.primary} />
         </Svg>
       </Animated.View>
-      
+
       <View style={styles.textContainer}>
         <Animated.Text style={styles.brandText}>Pathfindr</Animated.Text>
         <View style={styles.dotContainer}>
           {[0, 1, 2].map((i) => (
-            <Dot key={i} index={i} />
+            <Dot key={i} index={i} colors={colors} />
           ))}
         </View>
       </View>
@@ -115,7 +118,8 @@ export const PathfindrLoader = () => {
   );
 };
 
-const Dot = ({ index }: { index: number }) => {
+const Dot = ({ index, colors }: { index: number; colors: ThemeColors }) => {
+  const styles = createStyles(colors);
   const dotScale = useSharedValue(1);
   const dotOpacity = useSharedValue(0.4);
 
@@ -146,7 +150,7 @@ const Dot = ({ index }: { index: number }) => {
   return <Animated.View style={[styles.dot, animatedStyle]} />;
 };
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
   container: {
     padding: 20,
     alignItems: 'center',
@@ -157,8 +161,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: '#dbeafe',
-    blurRadius: 20,
+    backgroundColor: colors.primaryLight,
   },
   textContainer: {
     marginTop: 20,
@@ -167,7 +170,7 @@ const styles = StyleSheet.create({
   brandText: {
     fontSize: 24,
     fontWeight: '800',
-    color: '#1e293b',
+    color: colors.text,
     letterSpacing: -0.5,
   },
   dotContainer: {
@@ -179,6 +182,6 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#2563eb',
+    backgroundColor: colors.primary,
   },
 });

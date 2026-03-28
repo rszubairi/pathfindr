@@ -10,6 +10,7 @@ import './src/lib/i18n';
 import { store } from './src/store';
 import { RootNavigator } from './src/navigation/RootNavigator';
 import { AnimatedSplashScreen } from './src/components/AnimatedSplashScreen';
+import { ThemeProvider, useTheme } from './src/theme';
 
 const convex = new ConvexReactClient(
   process.env.EXPO_PUBLIC_CONVEX_URL as string
@@ -35,20 +36,29 @@ export default function App() {
     <Provider store={store}>
       <ConvexProvider client={convex}>
         <QueryClientProvider client={queryClient}>
-          <SafeAreaProvider>
-            <View style={styles.container}>
-              <NavigationContainer>
-                <RootNavigator />
-                <StatusBar style="auto" />
-              </NavigationContainer>
-              {showSplash && (
-                <AnimatedSplashScreen onAnimationComplete={handleSplashComplete} />
-              )}
-            </View>
-          </SafeAreaProvider>
+          <ThemeProvider>
+            <SafeAreaProvider>
+              <AppContent showSplash={showSplash} onSplashComplete={handleSplashComplete} />
+            </SafeAreaProvider>
+          </ThemeProvider>
         </QueryClientProvider>
       </ConvexProvider>
     </Provider>
+  );
+}
+
+function AppContent({ showSplash, onSplashComplete }: { showSplash: boolean; onSplashComplete: () => void }) {
+  const { isDark } = useTheme();
+  return (
+    <View style={styles.container}>
+      <NavigationContainer>
+        <RootNavigator />
+        <StatusBar style={isDark ? 'light' : 'dark'} />
+      </NavigationContainer>
+      {showSplash && (
+        <AnimatedSplashScreen onAnimationComplete={onSplashComplete} />
+      )}
+    </View>
   );
 }
 

@@ -5,8 +5,11 @@ import * as ImagePicker from 'expo-image-picker';
 import { useMutation } from 'convex/react';
 import { api } from '../../../../../convex/_generated/api';
 import type { Id } from '../../../../../convex/_generated/dataModel';
+import { useTheme, ThemeColors } from '../../theme';
 
 export function PersonalDetailsForm({ data, onUpdate, user }: any) {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const [formData, setFormData] = useState(data.personalDetails || {});
   const [uploading, setUploading] = useState(false);
   const [localImageUri, setLocalImageUri] = useState<string | null>(null);
@@ -76,7 +79,7 @@ export function PersonalDetailsForm({ data, onUpdate, user }: any) {
             <Image source={{ uri: localImageUri || user.profileImageUrl }} style={styles.avatar} />
           ) : (
             <View style={styles.placeholderAvatar}>
-              <Feather name="camera" size={32} color="#94a3b8" />
+              <Feather name="camera" size={32} color={colors.textMuted} />
             </View>
           )}
           {uploading && (
@@ -95,6 +98,7 @@ export function PersonalDetailsForm({ data, onUpdate, user }: any) {
           value={formData.dateOfBirth}
           onChangeText={(v) => handleChange('dateOfBirth', v)}
           placeholder="YYYY-MM-DD"
+          placeholderTextColor={colors.placeholderText}
         />
       </View>
 
@@ -102,8 +106,8 @@ export function PersonalDetailsForm({ data, onUpdate, user }: any) {
         <Text style={styles.label}>Gender</Text>
         <View style={styles.tagSelector}>
           {['male', 'female', 'other'].map((g) => (
-            <TouchableOpacity 
-              key={g} 
+            <TouchableOpacity
+              key={g}
               style={[styles.tag, formData.gender === g && styles.activeTag]}
               onPress={() => handleChange('gender', g)}
             >
@@ -122,6 +126,7 @@ export function PersonalDetailsForm({ data, onUpdate, user }: any) {
           value={formData.nationality}
           onChangeText={(v) => handleChange('nationality', v)}
           placeholder="e.g. Malaysian"
+          placeholderTextColor={colors.placeholderText}
         />
       </View>
 
@@ -132,6 +137,7 @@ export function PersonalDetailsForm({ data, onUpdate, user }: any) {
           value={formData.country}
           onChangeText={(v) => handleChange('country', v)}
           placeholder="e.g. Malaysia"
+          placeholderTextColor={colors.placeholderText}
         />
       </View>
 
@@ -143,6 +149,7 @@ export function PersonalDetailsForm({ data, onUpdate, user }: any) {
             value={formData.countryCode}
             onChangeText={(v) => handleChange('countryCode', v)}
             placeholder="+60"
+            placeholderTextColor={colors.placeholderText}
             keyboardType="phone-pad"
           />
           <TextInput
@@ -150,6 +157,7 @@ export function PersonalDetailsForm({ data, onUpdate, user }: any) {
             value={formData.phone}
             onChangeText={(v) => handleChange('phone', v)}
             placeholder="123456789"
+            placeholderTextColor={colors.placeholderText}
             keyboardType="phone-pad"
           />
         </View>
@@ -158,21 +166,21 @@ export function PersonalDetailsForm({ data, onUpdate, user }: any) {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
   container: { padding: 16 },
   imageSection: { alignItems: 'center', marginBottom: 24 },
-  avatarContainer: { width: 100, height: 100, borderRadius: 50, overflow: 'hidden', backgroundColor: '#f1f5f9' },
+  avatarContainer: { width: 100, height: 100, borderRadius: 50, overflow: 'hidden', backgroundColor: colors.borderLight },
   avatar: { width: 100, height: 100 },
   placeholderAvatar: { width: 100, height: 100, justifyContent: 'center', alignItems: 'center' },
   loadingOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.3)', justifyContent: 'center', alignItems: 'center' },
-  imageHint: { marginTop: 8, fontSize: 12, color: '#64748b' },
+  imageHint: { marginTop: 8, fontSize: 12, color: colors.textMuted },
   inputGroup: { marginBottom: 20 },
-  label: { fontSize: 14, fontWeight: '600', color: '#1e293b', marginBottom: 8 },
-  input: { backgroundColor: '#fff', borderWidth: 1, borderColor: '#e2e8f0', borderRadius: 12, padding: 12, fontSize: 16, color: '#1e293b' },
+  label: { fontSize: 14, fontWeight: '600', color: colors.text, marginBottom: 8 },
+  input: { backgroundColor: colors.inputBg, borderWidth: 1, borderColor: colors.inputBorder, borderRadius: 12, padding: 12, fontSize: 16, color: colors.inputText },
   tagSelector: { flexDirection: 'row', gap: 10 },
-  tag: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, backgroundColor: '#f1f5f9', borderWidth: 1, borderColor: '#e2e8f0' },
-  activeTag: { backgroundColor: '#eff6ff', borderColor: '#2563eb' },
-  tagText: { color: '#64748b', fontWeight: '500' },
-  activeTagText: { color: '#2563eb', fontWeight: '700' },
+  tag: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, backgroundColor: colors.borderLight, borderWidth: 1, borderColor: colors.border },
+  activeTag: { backgroundColor: colors.primaryLight, borderColor: colors.primary },
+  tagText: { color: colors.textMuted, fontWeight: '500' },
+  activeTagText: { color: colors.primary, fontWeight: '700' },
   phoneRow: { flexDirection: 'row' },
 });

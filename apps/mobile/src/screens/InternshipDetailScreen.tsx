@@ -16,23 +16,26 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { useSubscription } from '../hooks/useSubscription';
 import type { Id } from '../../../../convex/_generated/dataModel';
+import { useTheme, ThemeColors } from '../theme';
 
 export function InternshipDetailScreen({ route, navigation }: any) {
   const { id } = route.params;
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const { user } = useSelector((state: RootState) => state.auth);
-  
-  const internship = useQuery(api.internships.getById, { 
-    id, 
-    userId: user?.id as Id<'users'> | undefined 
+
+  const internship = useQuery(api.internships.getById, {
+    id,
+    userId: user?.id as Id<'users'> | undefined
   });
-  
+
   const { isSubscribed, isLoading: subLoading } = useSubscription();
   const [applying, setApplying] = useState(false);
 
   if (!internship || subLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#2563eb" />
+        <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
   }
@@ -73,7 +76,7 @@ export function InternshipDetailScreen({ route, navigation }: any) {
           </View>
           <Text style={styles.title}>{internship.title}</Text>
           <View style={styles.companyRow}>
-            {isPrivate && <Feather name="lock" size={16} color="#94a3b8" style={{ marginRight: 6 }} />}
+            {isPrivate && <Feather name="lock" size={16} color={colors.placeholderText} style={{ marginRight: 6 }} />}
             <Text style={[styles.companyName, isPrivate && styles.privateText]}>
               {internship.companyName}
             </Text>
@@ -83,15 +86,15 @@ export function InternshipDetailScreen({ route, navigation }: any) {
         {/* Info Grid */}
         <View style={styles.infoGrid}>
           <View style={styles.infoItem}>
-            <Feather name="map-pin" size={16} color="#64748b" />
+            <Feather name="map-pin" size={16} color={colors.textMuted} />
             <Text style={styles.infoText}>{internship.location}</Text>
           </View>
           <View style={styles.infoItem}>
-            <Feather name="clock" size={16} color="#64748b" />
+            <Feather name="clock" size={16} color={colors.textMuted} />
             <Text style={styles.infoText}>{internship.duration || 'Flexible'}</Text>
           </View>
           <View style={styles.infoItem}>
-            <Feather name="dollar-sign" size={16} color="#64748b" />
+            <Feather name="dollar-sign" size={16} color={colors.textMuted} />
             <Text style={styles.infoText}>{internship.salaryRange || 'Paid'}</Text>
           </View>
         </View>
@@ -154,9 +157,9 @@ export function InternshipDetailScreen({ route, navigation }: any) {
   );
 }
 
-const styles = StyleSheet.create({
-  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' },
-  container: { flex: 1, backgroundColor: '#fff' },
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
+  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.card },
+  container: { flex: 1, backgroundColor: colors.card },
   content: { flex: 1, padding: 24 },
   header: { marginBottom: 24 },
   jobTypeBadge: {
@@ -168,70 +171,70 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   jobTypeBadgeText: { fontSize: 11, fontWeight: '800' },
-  title: { fontSize: 26, fontWeight: 'bold', color: '#1e293b', marginBottom: 12, lineHeight: 34 },
+  title: { fontSize: 26, fontWeight: 'bold', color: colors.text, marginBottom: 12, lineHeight: 34 },
   companyRow: { flexDirection: 'row', alignItems: 'center' },
-  companyName: { fontSize: 16, color: '#64748b', fontWeight: '500' },
-  privateText: { color: '#94a3b8', fontStyle: 'italic' },
-  infoGrid: { 
-    flexDirection: 'row', 
-    backgroundColor: '#f8fafc', 
-    borderRadius: 16, 
-    padding: 16, 
+  companyName: { fontSize: 16, color: colors.textMuted, fontWeight: '500' },
+  privateText: { color: colors.placeholderText, fontStyle: 'italic' },
+  infoGrid: {
+    flexDirection: 'row',
+    backgroundColor: colors.background,
+    borderRadius: 16,
+    padding: 16,
     marginBottom: 32,
     flexWrap: 'wrap',
     gap: 12,
   },
-  infoItem: { 
+  infoItem: {
     flexDirection: 'row',
-    alignItems: 'center', 
+    alignItems: 'center',
     gap: 8,
     minWidth: '45%',
   },
-  infoText: { fontSize: 13, color: '#475569', fontWeight: '600', flexShrink: 1 },
+  infoText: { fontSize: 13, color: colors.textSecondary, fontWeight: '600', flexShrink: 1 },
   section: { marginBottom: 32 },
-  sectionTitle: { fontSize: 18, fontWeight: 'bold', color: '#1e293b', marginBottom: 16 },
-  description: { fontSize: 15, lineHeight: 24, color: '#475569' },
+  sectionTitle: { fontSize: 18, fontWeight: 'bold', color: colors.text, marginBottom: 16 },
+  description: { fontSize: 15, lineHeight: 24, color: colors.textSecondary },
   listItem: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 10 },
-  bullet: { 
-    width: 6, 
-    height: 6, 
-    borderRadius: 3, 
-    backgroundColor: '#2563eb', 
-    marginTop: 8, 
-    marginRight: 12 
+  bullet: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: colors.primary,
+    marginTop: 8,
+    marginRight: 12
   },
-  listText: { fontSize: 15, color: '#475569', flex: 1, lineHeight: 22 },
+  listText: { fontSize: 15, color: colors.textSecondary, flex: 1, lineHeight: 22 },
   bottomActions: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     padding: 20,
     paddingBottom: Platform.OS === 'ios' ? 40 : 20,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
     borderTopWidth: 1,
-    borderTopColor: '#f1f5f9',
-    shadowColor: '#000',
+    borderTopColor: colors.borderLight,
+    shadowColor: colors.shadow,
     shadowOffset: { width: 0, height: -4 },
     shadowOpacity: 0.05,
     shadowRadius: 10,
     elevation: 20,
   },
   actionInfo: { flex: 1 },
-  footerLabel: { fontSize: 11, color: '#94a3b8', fontWeight: '600', marginBottom: 2 },
-  footerValue: { fontSize: 14, color: '#1e293b', fontWeight: '700' },
+  footerLabel: { fontSize: 11, color: colors.placeholderText, fontWeight: '600', marginBottom: 2 },
+  footerValue: { fontSize: 14, color: colors.text, fontWeight: '700' },
   applyButton: {
     flex: 2,
-    backgroundColor: '#2563eb',
+    backgroundColor: colors.primary,
     height: 52,
     borderRadius: 14,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    shadowColor: '#2563eb',
+    shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,

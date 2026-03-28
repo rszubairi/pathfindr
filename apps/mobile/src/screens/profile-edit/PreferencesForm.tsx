@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
 import { TagCloud } from '../../components/profile/ProfileViewComponents';
+import { useTheme, ThemeColors } from '../../theme';
 
 export function PreferencesForm({ data, onUpdate }: any) {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const [pref, setPref] = useState({
     skills: data.skills || [],
     interests: data.interests || [],
@@ -39,9 +42,10 @@ export function PreferencesForm({ data, onUpdate }: any) {
         value={skillText}
         onChangeText={(v) => setSkillText(handleTagInput('skills', v))}
         placeholder="e.g. Python, SQL"
+        placeholderTextColor={colors.placeholderText}
       />
       <View style={{ marginTop: 8 }}>
-        <TagCloud tags={pref.skills} color="#2563eb" />
+        <TagCloud tags={pref.skills} color={colors.primary} />
       </View>
 
       <Text style={[styles.label, { marginTop: 24 }]}>Interests</Text>
@@ -50,6 +54,7 @@ export function PreferencesForm({ data, onUpdate }: any) {
         value={interestText}
         onChangeText={(v) => setInterestText(handleTagInput('interests', v))}
         placeholder="e.g. AI, Music"
+        placeholderTextColor={colors.placeholderText}
       />
       <View style={{ marginTop: 8 }}>
         <TagCloud tags={pref.interests} color="#7c3aed" />
@@ -61,6 +66,7 @@ export function PreferencesForm({ data, onUpdate }: any) {
         value={countryText}
         onChangeText={(v) => setCountryText(handleTagInput('preferredCountries', v))}
         placeholder="e.g. UK, USA"
+        placeholderTextColor={colors.placeholderText}
       />
       <View style={{ marginTop: 8 }}>
         <TagCloud tags={pref.preferredCountries} color="#059669" />
@@ -72,13 +78,14 @@ export function PreferencesForm({ data, onUpdate }: any) {
         value={pref.availability}
         onChangeText={(v) => handleUpdate('availability', v)}
         placeholder="e.g. Immediate, Next year"
+        placeholderTextColor={colors.placeholderText}
       />
     </ScrollView>
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
   container: { padding: 16 },
-  label: { fontSize: 14, fontWeight: '600', color: '#1e293b', marginBottom: 8 },
-  input: { backgroundColor: '#fff', borderWidth: 1, borderColor: '#e2e8f0', borderRadius: 12, padding: 12, fontSize: 15 },
+  label: { fontSize: 14, fontWeight: '600', color: colors.text, marginBottom: 8 },
+  input: { backgroundColor: colors.inputBg, borderWidth: 1, borderColor: colors.inputBorder, borderRadius: 12, padding: 12, fontSize: 15, color: colors.inputText },
 });

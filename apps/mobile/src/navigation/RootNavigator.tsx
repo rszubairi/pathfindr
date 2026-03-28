@@ -13,6 +13,7 @@ import { SubscriptionScreen } from '../screens/SubscriptionScreen';
 import { MainTabNavigator } from './MainTabNavigator';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
+import { useTheme } from '../theme';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -36,14 +37,16 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 export function RootNavigator() {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { colors } = useTheme();
 
   return (
     <Stack.Navigator
       initialRouteName="Home"
       screenOptions={{
-        headerStyle: { backgroundColor: '#2563eb' },
-        headerTintColor: '#fff',
+        headerStyle: { backgroundColor: colors.headerBg },
+        headerTintColor: colors.headerText,
         headerTitleStyle: { fontWeight: 'bold' },
+        cardStyle: { backgroundColor: colors.background },
       }}
     >
       {!isAuthenticated ? (

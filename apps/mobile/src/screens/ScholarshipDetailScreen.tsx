@@ -14,9 +14,12 @@ import { useQuery } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import { Feather } from '@expo/vector-icons';
 import { useApplyGate } from '../hooks/useApplyGate';
+import { useTheme, ThemeColors } from '../theme';
 
 export function ScholarshipDetailScreen({ route, navigation }: any) {
   const { id } = route.params;
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const scholarship = useQuery(api.scholarships.getById, { id });
   const {
     checkGate,
@@ -33,7 +36,7 @@ export function ScholarshipDetailScreen({ route, navigation }: any) {
   if (!scholarship || gateLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#2563eb" />
+        <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
   }
@@ -106,16 +109,16 @@ export function ScholarshipDetailScreen({ route, navigation }: any) {
           </View>
           <Text style={styles.title}>{scholarship.name}</Text>
           <View style={styles.providerRow}>
-            <Feather name="briefcase" size={16} color="#64748b" />
+            <Feather name="briefcase" size={16} color={colors.textMuted} />
             <Text style={styles.providerName}>{scholarship.provider}</Text>
           </View>
         </View>
 
         {/* Stats Grid */}
         <View style={styles.statsGrid}>
-          <View style={[styles.statCard, { backgroundColor: '#eff6ff', borderColor: '#bfdbfe' }]}>
+          <View style={[styles.statCard, { backgroundColor: colors.primaryLight, borderColor: '#bfdbfe' }]}>
             <View style={styles.statIconHeader}>
-              <Feather name="dollar-sign" size={14} color="#2563eb" />
+              <Feather name="dollar-sign" size={14} color={colors.primary} />
               <Text style={styles.statLabel}>Value</Text>
             </View>
             <Text style={styles.statValue}>
@@ -163,12 +166,12 @@ export function ScholarshipDetailScreen({ route, navigation }: any) {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Global Applicability</Text>
           <View style={styles.infoRow}>
-            <Feather name="globe" size={16} color="#64748b" />
+            <Feather name="globe" size={16} color={colors.textMuted} />
             <Text style={styles.infoLabel}>Eligible Countries:</Text>
             <Text style={styles.infoValue}>{scholarship.eligibleCountries.join(', ')}</Text>
           </View>
           <View style={styles.infoRow}>
-            <Feather name="book-open" size={16} color="#64748b" />
+            <Feather name="book-open" size={16} color={colors.textMuted} />
             <Text style={styles.infoLabel}>Fields of Study:</Text>
             <Text style={styles.infoValue}>{scholarship.eligibleFields.join(', ')}</Text>
           </View>
@@ -214,14 +217,14 @@ export function ScholarshipDetailScreen({ route, navigation }: any) {
   );
 }
 
-const styles = StyleSheet.create({
-  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' },
-  container: { flex: 1, backgroundColor: '#fff' },
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
+  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.card },
+  container: { flex: 1, backgroundColor: colors.card },
   content: { flex: 1, padding: 24 },
   header: { marginBottom: 24 },
   providerBadge: {
     alignSelf: 'flex-start',
-    backgroundColor: '#eff6ff',
+    backgroundColor: colors.primaryLight,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
@@ -229,10 +232,10 @@ const styles = StyleSheet.create({
     borderColor: '#bfdbfe',
     marginBottom: 12,
   },
-  providerBadgeText: { fontSize: 10, fontWeight: '700', color: '#2563eb' },
-  title: { fontSize: 28, fontWeight: 'bold', color: '#1e293b', marginBottom: 8, lineHeight: 36 },
+  providerBadgeText: { fontSize: 10, fontWeight: '700', color: colors.primary },
+  title: { fontSize: 28, fontWeight: 'bold', color: colors.text, marginBottom: 8, lineHeight: 36 },
   providerRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  providerName: { fontSize: 16, color: '#64748b', fontWeight: '500' },
+  providerName: { fontSize: 16, color: colors.textMuted, fontWeight: '500' },
   statsGrid: { flexDirection: 'row', gap: 12, marginBottom: 32 },
   statCard: {
     flex: 1,
@@ -241,54 +244,54 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   statIconHeader: { flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: 8 },
-  statLabel: { fontSize: 12, fontWeight: '600', color: '#64748b' },
-  statValue: { fontSize: 18, fontWeight: 'bold', color: '#1e293b' },
+  statLabel: { fontSize: 12, fontWeight: '600', color: colors.textMuted },
+  statValue: { fontSize: 18, fontWeight: 'bold', color: colors.text },
   section: { marginBottom: 32 },
-  sectionTitle: { fontSize: 18, fontWeight: 'bold', color: '#1e293b', marginBottom: 16 },
-  description: { fontSize: 15, lineHeight: 24, color: '#475569' },
-  criteriaRow: { 
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
-    paddingVertical: 12, 
-    borderBottomWidth: 1, 
-    borderBottomColor: '#f1f5f9' 
+  sectionTitle: { fontSize: 18, fontWeight: 'bold', color: colors.text, marginBottom: 16 },
+  description: { fontSize: 15, lineHeight: 24, color: colors.textSecondary },
+  criteriaRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderLight
   },
-  criteriaKey: { fontSize: 14, color: '#64748b', fontWeight: '500' },
-  criteriaValue: { fontSize: 14, color: '#1e293b', fontWeight: '600' },
+  criteriaKey: { fontSize: 14, color: colors.textMuted, fontWeight: '500' },
+  criteriaValue: { fontSize: 14, color: colors.text, fontWeight: '600' },
   infoRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 10, marginBottom: 16 },
-  infoLabel: { fontSize: 14, fontWeight: '600', color: '#1e293b', width: 130 },
-  infoValue: { fontSize: 14, color: '#475569', flex: 1 },
+  infoLabel: { fontSize: 14, fontWeight: '600', color: colors.text, width: 130 },
+  infoValue: { fontSize: 14, color: colors.textSecondary, flex: 1 },
   bottomActions: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     padding: 20,
     paddingBottom: Platform.OS === 'ios' ? 40 : 20,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
     borderTopWidth: 1,
-    borderTopColor: '#f1f5f9',
-    shadowColor: '#000',
+    borderTopColor: colors.borderLight,
+    shadowColor: colors.shadow,
     shadowOffset: { width: 0, height: -4 },
     shadowOpacity: 0.05,
     shadowRadius: 10,
     elevation: 20,
   },
   actionInfo: { flex: 1 },
-  usageText: { fontSize: 12, color: '#64748b', fontWeight: '500' },
-  freeText: { fontSize: 12, color: '#2563eb', fontWeight: '600' },
+  usageText: { fontSize: 12, color: colors.textMuted, fontWeight: '500' },
+  freeText: { fontSize: 12, color: colors.primary, fontWeight: '600' },
   applyButton: {
     flex: 2,
-    backgroundColor: '#2563eb',
+    backgroundColor: colors.primary,
     height: 52,
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
   },
-  disabledButton: { backgroundColor: '#cbd5e1' },
+  disabledButton: { backgroundColor: colors.border },
   applyButtonText: { color: '#fff', fontSize: 16, fontWeight: '700' },
 });

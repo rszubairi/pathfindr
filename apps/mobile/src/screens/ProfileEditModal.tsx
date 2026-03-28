@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  ScrollView, 
-  TouchableOpacity, 
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
   ActivityIndicator,
   Alert,
   Modal,
@@ -21,6 +21,7 @@ import { EducationForm } from './profile-edit/EducationForm';
 import { TestScoresForm } from './profile-edit/TestScoresForm';
 import { AchievementsForm } from './profile-edit/AchievementsForm';
 import { PreferencesForm } from './profile-edit/PreferencesForm';
+import { useTheme, ThemeColors } from '../theme';
 
 const STEPS = [
   { id: 1, name: 'Personal', icon: 'user' },
@@ -31,6 +32,8 @@ const STEPS = [
 ];
 
 export function ProfileEditModal({ visible, onClose, initialData }: any) {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const { user } = useSelector((state: RootState) => state.auth);
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState(initialData || {});
@@ -95,7 +98,7 @@ export function ProfileEditModal({ visible, onClose, initialData }: any) {
       <SafeAreaView style={styles.modalContainer}>
         <View style={styles.modalHeader}>
           <TouchableOpacity onPress={onClose} style={styles.iconBtn}>
-            <Feather name="x" size={24} color="#1e293b" />
+            <Feather name="x" size={24} color={colors.text} />
           </TouchableOpacity>
           <Text style={styles.modalTitle}>Edit Profile</Text>
           <TouchableOpacity onPress={saveProfile} style={[styles.saveBtn, isSaving && styles.saveBtnDisabled]} disabled={isSaving}>
@@ -105,12 +108,12 @@ export function ProfileEditModal({ visible, onClose, initialData }: any) {
 
         <View style={styles.stepIndicator}>
           {STEPS.map((step) => (
-            <TouchableOpacity 
-              key={step.id} 
+            <TouchableOpacity
+              key={step.id}
               onPress={() => setCurrentStep(step.id)}
               style={[styles.stepItem, currentStep === step.id && styles.activeStepItem]}
             >
-              <Feather name={step.icon as any} size={18} color={currentStep === step.id ? '#2563eb' : '#64748b'} />
+              <Feather name={step.icon as any} size={18} color={currentStep === step.id ? colors.primary : colors.textMuted} />
               <Text style={[styles.stepText, currentStep === step.id && styles.activeStepText]}>{step.name}</Text>
             </TouchableOpacity>
           ))}
@@ -121,16 +124,16 @@ export function ProfileEditModal({ visible, onClose, initialData }: any) {
         </View>
 
         <View style={styles.footer}>
-          <TouchableOpacity 
-            style={[styles.navBtn, currentStep === 1 && styles.navBtnHidden]} 
+          <TouchableOpacity
+            style={[styles.navBtn, currentStep === 1 && styles.navBtnHidden]}
             onPress={() => setCurrentStep(s => s - 1)}
           >
-            <Feather name="chevron-left" size={20} color="#64748b" />
+            <Feather name="chevron-left" size={20} color={colors.textMuted} />
             <Text style={styles.navBtnText}>Back</Text>
           </TouchableOpacity>
-          
-          <TouchableOpacity 
-            style={[styles.navBtn, styles.nextBtn, currentStep === 5 && styles.navBtnHidden]} 
+
+          <TouchableOpacity
+            style={[styles.navBtn, styles.nextBtn, currentStep === 5 && styles.navBtnHidden]}
             onPress={() => setCurrentStep(s => s + 1)}
           >
             <Text style={[styles.navBtnText, styles.nextBtnText]}>Next</Text>
@@ -142,24 +145,24 @@ export function ProfileEditModal({ visible, onClose, initialData }: any) {
   );
 }
 
-const styles = StyleSheet.create({
-  modalContainer: { flex: 1, backgroundColor: '#fff' },
-  modalHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, borderBottomWidth: 1, borderBottomColor: '#f1f5f9' },
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
+  modalContainer: { flex: 1, backgroundColor: colors.card },
+  modalHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, borderBottomWidth: 1, borderBottomColor: colors.borderLight },
   iconBtn: { padding: 8 },
-  modalTitle: { fontSize: 18, fontWeight: 'bold', color: '#1e293b' },
-  saveBtn: { backgroundColor: '#2563eb', paddingHorizontal: 20, paddingVertical: 10, borderRadius: 10, minWidth: 80, alignItems: 'center' },
+  modalTitle: { fontSize: 18, fontWeight: 'bold', color: colors.text },
+  saveBtn: { backgroundColor: colors.primary, paddingHorizontal: 20, paddingVertical: 10, borderRadius: 10, minWidth: 80, alignItems: 'center' },
   saveBtnDisabled: { opacity: 0.6 },
   saveBtnText: { color: '#fff', fontWeight: 'bold' },
-  stepIndicator: { flexDirection: 'row', padding: 12, backgroundColor: '#f8fafc', borderBottomWidth: 1, borderBottomColor: '#f1f5f9' },
+  stepIndicator: { flexDirection: 'row', padding: 12, backgroundColor: colors.background, borderBottomWidth: 1, borderBottomColor: colors.borderLight },
   stepItem: { flex: 1, alignItems: 'center', paddingVertical: 8, gap: 4, borderRadius: 8 },
-  activeStepItem: { backgroundColor: '#eff6ff' },
-  stepText: { fontSize: 10, fontWeight: '600', color: '#64748b' },
-  activeStepText: { color: '#2563eb' },
+  activeStepItem: { backgroundColor: colors.primaryLight },
+  stepText: { fontSize: 10, fontWeight: '600', color: colors.textMuted },
+  activeStepText: { color: colors.primary },
   stepContent: { flex: 1 },
-  footer: { flexDirection: 'row', justifyContent: 'space-between', padding: 20, borderTopWidth: 1, borderTopColor: '#f1f5f9' },
+  footer: { flexDirection: 'row', justifyContent: 'space-between', padding: 20, borderTopWidth: 1, borderTopColor: colors.borderLight },
   navBtn: { flexDirection: 'row', alignItems: 'center', padding: 12, borderRadius: 12, gap: 4 },
   navBtnHidden: { opacity: 0 },
-  navBtnText: { fontSize: 16, fontWeight: '600', color: '#64748b' },
-  nextBtn: { backgroundColor: '#2563eb', paddingHorizontal: 24 },
+  navBtnText: { fontSize: 16, fontWeight: '600', color: colors.textMuted },
+  nextBtn: { backgroundColor: colors.primary, paddingHorizontal: 24 },
   nextBtnText: { color: '#fff' },
 });

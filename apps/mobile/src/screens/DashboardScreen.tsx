@@ -8,11 +8,14 @@ import { useQuery } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import type { Id } from '../../../../convex/_generated/dataModel';
 import { NotificationModal } from '../components/NotificationModal';
+import { useTheme, ThemeColors } from '../theme';
 
 export function DashboardScreen() {
   const navigation = useNavigation<any>();
   const { user } = useSelector((state: RootState) => state.auth);
   const [isNotifVisible, setIsNotifVisible] = React.useState(false);
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
 
   const notifications = useQuery(
     api.notifications.getUserNotifications,
@@ -45,11 +48,11 @@ export function DashboardScreen() {
           <Text style={styles.subtitle}>{user?.fullName || 'Student'}!</Text>
         </View>
         <View style={styles.headerRight}>
-          <TouchableOpacity 
-            style={styles.bellBtn} 
+          <TouchableOpacity
+            style={styles.bellBtn}
             onPress={() => setIsNotifVisible(true)}
           >
-            <Feather name="bell" size={24} color="#1e293b" />
+            <Feather name="bell" size={24} color={colors.text} />
             {unreadCount > 0 && (
               <View style={styles.badge}>
                 <Text style={styles.badgeText}>{unreadCount > 9 ? '9+' : unreadCount}</Text>
@@ -57,9 +60,9 @@ export function DashboardScreen() {
             )}
           </TouchableOpacity>
           {user?.profileImageUrl ? (
-            <Image 
-              source={{ uri: user.profileImageUrl }} 
-              style={styles.avatar} 
+            <Image
+              source={{ uri: user.profileImageUrl }}
+              style={styles.avatar}
             />
           ) : (
             <View style={styles.initialsAvatar}>
@@ -69,16 +72,16 @@ export function DashboardScreen() {
         </View>
       </View>
 
-      <NotificationModal 
-        visible={isNotifVisible} 
-        onClose={() => setIsNotifVisible(false)} 
-        userId={user?.id || ''} 
+      <NotificationModal
+        visible={isNotifVisible}
+        onClose={() => setIsNotifVisible(false)}
+        userId={user?.id || ''}
         navigation={navigation}
       />
 
       <View style={styles.subscriptionSection}>
         {subscription === undefined ? (
-          <ActivityIndicator size="small" color="#2563eb" />
+          <ActivityIndicator size="small" color={colors.primary} />
         ) : subscription ? (
           <View style={styles.activeSubscriptionBox}>
             <View style={styles.subHeader}>
@@ -99,7 +102,7 @@ export function DashboardScreen() {
                 <Text style={styles.statLabel}>Available</Text>
               </View>
             </View>
-            
+
             <View style={styles.deadlinesContainer}>
               <Text style={styles.deadlinesTitle}>Upcoming Scholarship Deadlines</Text>
               {upcomingScholarships?.slice(0, 3).map((item) => (
@@ -116,7 +119,7 @@ export function DashboardScreen() {
             <Text style={styles.inactiveDesc}>
               Subscribe to access premium features, apply limits, and priority application processing.
             </Text>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.upgradeBtn}
               onPress={() => navigation.navigate('Subscription')}
             >
@@ -128,31 +131,35 @@ export function DashboardScreen() {
 
       <View style={styles.featuresSection}>
         <Text style={styles.sectionTitle}>Explore Opportunities</Text>
-        
+
         <View style={styles.featuresGrid}>
           <FeatureCard
             title="Scholarships"
             description="Discover and apply for scholarships"
             icon="award"
             onPress={() => navigation.navigate('Scholarships')}
+            colors={colors}
           />
           <FeatureCard
             title="Internships"
             description="Find internship opportunities"
             icon="briefcase"
             onPress={() => navigation.navigate('Internships')}
+            colors={colors}
           />
           <FeatureCard
             title="Boarding Schools"
             description="Discover top boarding schools"
             icon="book-open"
             onPress={() => navigation.navigate('BoardingSchools')}
+            colors={colors}
           />
           <FeatureCard
             title="International Schools"
             description="Explore modern international education"
             icon="globe"
             onPress={() => navigation.navigate('InternationalSchools')}
+            colors={colors}
           />
         </View>
       </View>
@@ -165,36 +172,74 @@ function FeatureCard({
   description,
   icon,
   onPress,
+  colors,
 }: {
   title: string;
   description: string;
   icon: keyof typeof Feather.glyphMap;
   onPress?: () => void;
+  colors: ThemeColors;
 }) {
   return (
-    <TouchableOpacity style={styles.featureCard} onPress={onPress}>
-      <View style={styles.iconContainer}>
-        <Feather name={icon} size={28} color="#2563eb" />
+    <TouchableOpacity style={[fcStyles.featureCard, { backgroundColor: colors.card, shadowColor: colors.shadow }]} onPress={onPress}>
+      <View style={[fcStyles.iconContainer, { backgroundColor: colors.primaryLight }]}>
+        <Feather name={icon} size={28} color={colors.primary} />
       </View>
-      <View style={styles.featureTextContainer}>
-        <Text style={styles.featureTitle}>{title}</Text>
-        <Text style={styles.featureDescription}>{description}</Text>
+      <View style={fcStyles.featureTextContainer}>
+        <Text style={[fcStyles.featureTitle, { color: colors.text }]}>{title}</Text>
+        <Text style={[fcStyles.featureDescription, { color: colors.textMuted }]}>{description}</Text>
       </View>
-      <Feather name="chevron-right" size={24} color="#64748b" style={styles.chevron} />
+      <Feather name="chevron-right" size={24} color={colors.textMuted} style={fcStyles.chevron} />
     </TouchableOpacity>
   );
 }
 
-const styles = StyleSheet.create({
+const fcStyles = StyleSheet.create({
+  featureCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 20,
+    borderRadius: 16,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  iconContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  featureTextContainer: {
+    flex: 1,
+  },
+  featureTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  featureDescription: {
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  chevron: {
+    marginLeft: 16,
+  },
+});
+
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8fafc',
+    backgroundColor: colors.background,
   },
   header: {
     padding: 24,
-    backgroundColor: '#ffffff',
+    backgroundColor: colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: '#e2e8f0',
+    borderBottomColor: colors.border,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -216,7 +261,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 4,
     right: 4,
-    backgroundColor: '#ef4444',
+    backgroundColor: colors.error,
     borderRadius: 8,
     minWidth: 16,
     height: 16,
@@ -224,7 +269,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 4,
     borderWidth: 1.5,
-    borderColor: '#fff',
+    borderColor: colors.surface,
   },
   badgeText: {
     color: '#fff',
@@ -233,45 +278,45 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    color: '#64748b',
+    color: colors.textMuted,
   },
   subtitle: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#1e293b',
+    color: colors.text,
     marginTop: 4,
   },
   avatar: {
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#e2e8f0',
+    backgroundColor: colors.border,
   },
   initialsAvatar: {
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#dbeafe',
+    backgroundColor: colors.primaryLight,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#bfdbfe',
+    borderColor: colors.border,
   },
   initialsText: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#1e40af',
+    color: colors.primary,
   },
   subscriptionSection: {
     paddingHorizontal: 24,
     paddingTop: 24,
   },
   activeSubscriptionBox: {
-    backgroundColor: '#ffffff',
+    backgroundColor: colors.card,
     padding: 20,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: colors.border,
   },
   subHeader: {
     flexDirection: 'row',
@@ -282,7 +327,7 @@ const styles = StyleSheet.create({
   subTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#1e293b',
+    color: colors.text,
   },
   statsRow: {
     flexDirection: 'row',
@@ -291,7 +336,7 @@ const styles = StyleSheet.create({
   },
   statBox: {
     flex: 1,
-    backgroundColor: '#f1f5f9',
+    backgroundColor: colors.background,
     padding: 16,
     borderRadius: 12,
     alignItems: 'center',
@@ -299,23 +344,23 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#2563eb',
+    color: colors.primary,
   },
   statLabel: {
     fontSize: 14,
-    color: '#64748b',
+    color: colors.textMuted,
     marginTop: 4,
   },
   deadlinesContainer: {
     marginTop: 8,
     borderTopWidth: 1,
-    borderTopColor: '#e2e8f0',
+    borderTopColor: colors.border,
     paddingTop: 16,
   },
   deadlinesTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1e293b',
+    color: colors.text,
     marginBottom: 12,
   },
   deadlineRow: {
@@ -323,40 +368,40 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#f1f5f9',
+    borderBottomColor: colors.borderLight,
   },
   deadlineName: {
     fontSize: 14,
-    color: '#334155',
+    color: colors.textSecondary,
     flex: 1,
   },
   deadlineDate: {
     fontSize: 14,
-    color: '#ef4444',
+    color: colors.error,
     fontWeight: '500',
     marginLeft: 16,
   },
   inactiveSubscriptionBox: {
-    backgroundColor: '#eff6ff',
+    backgroundColor: colors.primaryLight,
     padding: 20,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#bfdbfe',
+    borderColor: colors.border,
   },
   inactiveTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#1e40af',
+    color: colors.primary,
     marginBottom: 8,
   },
   inactiveDesc: {
     fontSize: 14,
-    color: '#1e3a8a',
+    color: colors.textSecondary,
     marginBottom: 16,
     lineHeight: 20,
   },
   upgradeBtn: {
-    backgroundColor: '#2563eb',
+    backgroundColor: colors.primary,
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
@@ -372,48 +417,10 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#1e293b',
+    color: colors.text,
     marginBottom: 16,
   },
   featuresGrid: {
     gap: 16,
-  },
-  featureCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#ffffff',
-    padding: 20,
-    borderRadius: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
-  },
-  iconContainer: {
-    backgroundColor: '#eff6ff',
-    width: 56,
-    height: 56,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 16,
-  },
-  featureTextContainer: {
-    flex: 1,
-  },
-  featureTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#1e293b',
-    marginBottom: 4,
-  },
-  featureDescription: {
-    fontSize: 14,
-    color: '#64748b',
-    lineHeight: 20,
-  },
-  chevron: {
-    marginLeft: 16,
   },
 });

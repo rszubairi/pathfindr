@@ -7,6 +7,7 @@ import {
   StatusBar,
   Animated,
 } from 'react-native';
+import { useTheme } from '../theme';
 
 const { width, height } = Dimensions.get('window');
 
@@ -15,7 +16,8 @@ interface AnimatedSplashScreenProps {
 }
 
 export function AnimatedSplashScreen({ onAnimationComplete }: AnimatedSplashScreenProps) {
-  // Animation values using RN Animated
+  const { colors, isDark } = useTheme();
+
   const logoScale = useRef(new Animated.Value(0)).current;
   const logoOpacity = useRef(new Animated.Value(0)).current;
   const logoTranslateY = useRef(new Animated.Value(30)).current;
@@ -40,17 +42,14 @@ export function AnimatedSplashScreen({ onAnimationComplete }: AnimatedSplashScre
   }, [onAnimationComplete]);
 
   useEffect(() => {
-    // Safety timeout
     const safetyTimeout = setTimeout(finishAnimation, 4500);
 
-    // Stage 1: Background circles (100-400ms)
     Animated.stagger(150, [
       Animated.spring(circle1Scale, { toValue: 1, damping: 15, useNativeDriver: true }),
       Animated.spring(circle2Scale, { toValue: 1, damping: 15, useNativeDriver: true }),
       Animated.spring(circle3Scale, { toValue: 1, damping: 15, useNativeDriver: true }),
     ]).start();
 
-    // Stage 2: Logo (300ms delay)
     Animated.sequence([
       Animated.delay(300),
       Animated.parallel([
@@ -60,7 +59,6 @@ export function AnimatedSplashScreen({ onAnimationComplete }: AnimatedSplashScre
       ]),
     ]).start();
 
-    // Stage 3: Brand name (700ms delay)
     Animated.sequence([
       Animated.delay(700),
       Animated.parallel([
@@ -69,7 +67,6 @@ export function AnimatedSplashScreen({ onAnimationComplete }: AnimatedSplashScre
       ]),
     ]).start();
 
-    // Stage 4: Tagline (1000ms delay)
     Animated.sequence([
       Animated.delay(1000),
       Animated.parallel([
@@ -78,7 +75,6 @@ export function AnimatedSplashScreen({ onAnimationComplete }: AnimatedSplashScre
       ]),
     ]).start();
 
-    // Stage 5: Shimmer (1200ms delay)
     Animated.sequence([
       Animated.delay(1200),
       Animated.parallel([
@@ -90,7 +86,6 @@ export function AnimatedSplashScreen({ onAnimationComplete }: AnimatedSplashScre
       ]),
     ]).start();
 
-    // Stage 6: Fade out (2400ms delay)
     Animated.sequence([
       Animated.delay(2400),
       Animated.timing(overallOpacity, { toValue: 0, duration: 500, useNativeDriver: true }),
@@ -103,32 +98,29 @@ export function AnimatedSplashScreen({ onAnimationComplete }: AnimatedSplashScre
   }, []);
 
   return (
-    <Animated.View style={[styles.container, { opacity: overallOpacity }]} pointerEvents="none">
-      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+    <Animated.View style={[styles.container, { backgroundColor: colors.surface, opacity: overallOpacity }]} pointerEvents="none">
+      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.surface} />
 
-      {/* Decorative background circles */}
       <Animated.View
         style={[
-          styles.circle, styles.circle1,
+          styles.circle, styles.circle1, { backgroundColor: colors.primary },
           { transform: [{ scale: circle1Scale }], opacity: circle1Scale.interpolate({ inputRange: [0, 1], outputRange: [0, 0.06] }) },
         ]}
       />
       <Animated.View
         style={[
-          styles.circle, styles.circle2,
+          styles.circle, styles.circle2, { backgroundColor: colors.primary },
           { transform: [{ scale: circle2Scale }], opacity: circle2Scale.interpolate({ inputRange: [0, 1], outputRange: [0, 0.04] }) },
         ]}
       />
       <Animated.View
         style={[
-          styles.circle, styles.circle3,
+          styles.circle, styles.circle3, { backgroundColor: colors.primary },
           { transform: [{ scale: circle3Scale }], opacity: circle3Scale.interpolate({ inputRange: [0, 1], outputRange: [0, 0.03] }) },
         ]}
       />
 
-      {/* Main content */}
       <View style={styles.content}>
-        {/* Logo */}
         <Animated.View
           style={[
             styles.logoContainer,
@@ -140,32 +132,29 @@ export function AnimatedSplashScreen({ onAnimationComplete }: AnimatedSplashScre
         >
           <Image
             source={require('../../assets/images/logo.png')}
-            style={styles.logo}
+            style={[styles.logo, colors.logoTint ? { tintColor: colors.logoTint } : {}]}
             resizeMode="contain"
           />
-          {/* Shimmer overlay */}
           <Animated.View
             style={[
-              styles.shimmer,
+              styles.shimmer, { backgroundColor: colors.surface },
               { transform: [{ translateX: shimmerTranslateX }], opacity: shimmerOpacity },
             ]}
           />
         </Animated.View>
 
-        {/* Brand name */}
         <Animated.Text
           style={[
-            styles.brandName,
+            styles.brandName, { color: colors.text },
             { opacity: textOpacity, transform: [{ translateY: textTranslateY }] },
           ]}
         >
           Pathfindr
         </Animated.Text>
 
-        {/* Tagline */}
         <Animated.Text
           style={[
-            styles.tagline,
+            styles.tagline, { color: colors.textMuted },
             { opacity: taglineOpacity, transform: [{ translateY: taglineTranslateY }] },
           ]}
         >
@@ -173,13 +162,12 @@ export function AnimatedSplashScreen({ onAnimationComplete }: AnimatedSplashScre
         </Animated.Text>
       </View>
 
-      {/* Bottom decoration */}
       <View style={styles.bottomSection}>
         <Animated.View
           style={[styles.dots, { opacity: taglineOpacity, transform: [{ translateY: taglineTranslateY }] }]}
         >
           {[0, 1, 2].map((i) => (
-            <View key={i} style={[styles.dot, i === 1 && styles.dotActive]} />
+            <View key={i} style={[styles.dot, { backgroundColor: colors.border }, i === 1 && { backgroundColor: colors.primary, width: 24 }]} />
           ))}
         </Animated.View>
       </View>
@@ -190,7 +178,6 @@ export function AnimatedSplashScreen({ onAnimationComplete }: AnimatedSplashScre
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: '#ffffff',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 999,
@@ -199,7 +186,6 @@ const styles = StyleSheet.create({
   circle: {
     position: 'absolute',
     borderRadius: 9999,
-    backgroundColor: '#2563eb',
   },
   circle1: {
     width: width * 1.5,
@@ -237,19 +223,16 @@ const styles = StyleSheet.create({
   },
   shimmer: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: '#ffffff',
     width: width * 0.3,
   },
   brandName: {
     fontSize: 42,
     fontWeight: '800',
-    color: '#0f172a',
     letterSpacing: -0.5,
     marginBottom: 8,
   },
   tagline: {
     fontSize: 16,
-    color: '#64748b',
     fontWeight: '400',
     letterSpacing: 0.3,
   },
@@ -266,10 +249,5 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#cbd5e1',
-  },
-  dotActive: {
-    backgroundColor: '#2563eb',
-    width: 24,
   },
 });

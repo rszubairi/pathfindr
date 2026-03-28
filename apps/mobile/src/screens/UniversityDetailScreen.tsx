@@ -16,35 +16,38 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { useSubscription } from '../hooks/useSubscription';
 import type { Id } from '../../../../convex/_generated/dataModel';
+import { useTheme, ThemeColors } from '../theme';
 
 export function UniversityDetailScreen({ route, navigation }: any) {
   const { id, type } = route.params;
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const { user } = useSelector((state: RootState) => state.auth);
   const { isSubscribed, isLoading: subLoading } = useSubscription();
 
   const school = useQuery(
-    type === 'Boarding' ? api.boardingSchools.getById : api.internationalSchools.getById, 
+    type === 'Boarding' ? api.boardingSchools.getById : api.internationalSchools.getById,
     { id }
   );
-  
+
   // Helper to safely access properties from union types
   const s = (data: any) => data || {};
 
 
   const isSubscribedToNotifications = useQuery(
-    api.boardingSchoolNotifications.hasUserSubscribed, 
+    api.boardingSchoolNotifications.hasUserSubscribed,
     user?.id && type === 'Boarding' ? { userId: user.id as Id<'users'>, schoolId: id } : 'skip'
   );
 
   const subscribe = useMutation(api.boardingSchoolNotifications.subscribe);
   const unsubscribe = useMutation(api.boardingSchoolNotifications.unsubscribe);
-  
+
   const [actionLoading, setActionLoading] = useState(false);
 
   if (!school || subLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#2563eb" />
+        <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
   }
@@ -101,10 +104,10 @@ export function UniversityDetailScreen({ route, navigation }: any) {
         {/* Header */}
         <View style={styles.header}>
           <View style={[
-            styles.categoryBadge, 
-            { 
-              backgroundColor: getCategoryColor(s(school).category || 'International') + '15', 
-              borderColor: getCategoryColor(s(school).category || 'International') + '30' 
+            styles.categoryBadge,
+            {
+              backgroundColor: getCategoryColor(s(school).category || 'International') + '15',
+              borderColor: getCategoryColor(s(school).category || 'International') + '30'
             }
           ]}>
             <Text style={[styles.categoryBadgeText, { color: getCategoryColor(s(school).category || 'International') }]}>
@@ -113,7 +116,7 @@ export function UniversityDetailScreen({ route, navigation }: any) {
           </View>
           <Text style={styles.title}>{s(school).name}</Text>
           <View style={styles.metaRow}>
-            <Feather name="map-pin" size={16} color="#64748b" />
+            <Feather name="map-pin" size={16} color={colors.textMuted} />
             <Text style={styles.metaText}>
               {s(school).city || s(school).district}, {s(school).country || s(school).state}
             </Text>
@@ -125,14 +128,14 @@ export function UniversityDetailScreen({ route, navigation }: any) {
           {type === 'Boarding' ? (
             <>
               <View style={styles.infoItem}>
-                <Feather name="shield" size={18} color="#2563eb" />
+                <Feather name="shield" size={18} color={colors.primary} />
                 <View>
                   <Text style={styles.infoLabel}>Managed By</Text>
                   <Text style={styles.infoValue}>{s(school).managedBy}</Text>
                 </View>
               </View>
               <View style={styles.infoItem}>
-                <Feather name="users" size={18} color="#2563eb" />
+                <Feather name="users" size={18} color={colors.primary} />
                 <View>
                   <Text style={styles.infoLabel}>Gender</Text>
                   <Text style={styles.infoValue}>{s(school).gender?.toUpperCase()}</Text>
@@ -142,14 +145,14 @@ export function UniversityDetailScreen({ route, navigation }: any) {
           ) : (
             <>
               <View style={styles.infoItem}>
-                <Feather name="layers" size={18} color="#2563eb" />
+                <Feather name="layers" size={18} color={colors.primary} />
                 <View>
                   <Text style={styles.infoLabel}>Grades</Text>
                   <Text style={styles.infoValue}>{s(school).grades}</Text>
                 </View>
               </View>
               <View style={styles.infoItem}>
-                <Feather name="dollar-sign" size={18} color="#2563eb" />
+                <Feather name="dollar-sign" size={18} color={colors.primary} />
                 <View>
                   <Text style={styles.infoLabel}>Annual Fees</Text>
                   <Text style={styles.infoValue}>{s(school).annualFees || 'Varies'}</Text>
@@ -216,24 +219,24 @@ export function UniversityDetailScreen({ route, navigation }: any) {
             {type === 'Boarding' ? s(school).applicationPeriod : s(school).city}
           </Text>
         </View>
-        
+
         {type === 'Boarding' ? (
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[
-              styles.reminderBtn, 
+              styles.reminderBtn,
               isSubscribedToNotifications && styles.reminderBtnActive
             ]}
             onPress={handleToggleReminder}
             disabled={actionLoading}
           >
             {actionLoading ? (
-              <ActivityIndicator color={isSubscribedToNotifications ? '#2563eb' : '#fff'} />
+              <ActivityIndicator color={isSubscribedToNotifications ? colors.primary : '#fff'} />
             ) : (
               <>
-                <Feather 
-                  name={isSubscribedToNotifications ? 'bell-off' : 'bell'} 
-                  size={18} 
-                  color={isSubscribedToNotifications ? '#2563eb' : '#fff'} 
+                <Feather
+                  name={isSubscribedToNotifications ? 'bell-off' : 'bell'}
+                  size={18}
+                  color={isSubscribedToNotifications ? colors.primary : '#fff'}
                 />
                 <Text style={[
                   styles.reminderBtnText,
@@ -245,7 +248,7 @@ export function UniversityDetailScreen({ route, navigation }: any) {
             )}
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.reminderBtn}
             onPress={() => Alert.alert('External Link', 'Opening official school website...')}
           >
@@ -258,8 +261,8 @@ export function UniversityDetailScreen({ route, navigation }: any) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
+  container: { flex: 1, backgroundColor: colors.card },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   content: { flex: 1, padding: 24 },
   header: { marginBottom: 32 },
@@ -272,53 +275,53 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   categoryBadgeText: { fontSize: 12, fontWeight: '800' },
-  title: { fontSize: 28, fontWeight: 'bold', color: '#1e293b', marginBottom: 12, lineHeight: 36 },
+  title: { fontSize: 28, fontWeight: 'bold', color: colors.text, marginBottom: 12, lineHeight: 36 },
   metaRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  metaText: { fontSize: 16, color: '#64748b', fontWeight: '500' },
-  infoGrid: { 
+  metaText: { fontSize: 16, color: colors.textMuted, fontWeight: '500' },
+  infoGrid: {
     flexDirection: 'row',
-    backgroundColor: '#f8fafc',
+    backgroundColor: colors.background,
     borderRadius: 20,
     padding: 20,
     marginBottom: 32,
     gap: 24
   },
   infoItem: { flexDirection: 'row', gap: 12, flex: 1 },
-  infoLabel: { fontSize: 12, color: '#94a3b8', fontWeight: '600', marginBottom: 2 },
-  infoValue: { fontSize: 15, color: '#1e293b', fontWeight: '700' },
+  infoLabel: { fontSize: 12, color: colors.placeholderText, fontWeight: '600', marginBottom: 2 },
+  infoValue: { fontSize: 15, color: colors.text, fontWeight: '700' },
   section: { marginBottom: 32 },
-  sectionTitle: { fontSize: 18, fontWeight: 'bold', color: '#1e293b', marginBottom: 16 },
-  description: { fontSize: 15, lineHeight: 24, color: '#475569' },
+  sectionTitle: { fontSize: 18, fontWeight: 'bold', color: colors.text, marginBottom: 16 },
+  description: { fontSize: 15, lineHeight: 24, color: colors.textSecondary },
   tagContainer: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  levelTag: { backgroundColor: '#f1f5f9', paddingHorizontal: 12, paddingVertical: 8, borderRadius: 10 },
-  levelTagText: { fontSize: 14, color: '#475569', fontWeight: '600' },
+  levelTag: { backgroundColor: colors.borderLight, paddingHorizontal: 12, paddingVertical: 8, borderRadius: 10 },
+  levelTagText: { fontSize: 14, color: colors.textSecondary, fontWeight: '600' },
   progItem: { flexDirection: 'row', gap: 12, marginBottom: 12, alignItems: 'flex-start' },
-  progText: { fontSize: 15, color: '#475569', flex: 1, lineHeight: 22 },
+  progText: { fontSize: 15, color: colors.textSecondary, flex: 1, lineHeight: 22 },
   bottomBar: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     padding: 20,
     paddingBottom: Platform.OS === 'ios' ? 40 : 20,
     flexDirection: 'row',
     alignItems: 'center',
     borderTopWidth: 1,
-    borderTopColor: '#f1f5f9',
+    borderTopColor: colors.borderLight,
     gap: 16,
-    shadowColor: '#000',
+    shadowColor: colors.shadow,
     shadowOffset: { width: 0, height: -4 },
     shadowOpacity: 0.05,
     shadowRadius: 10,
     elevation: 20,
   },
   deadlineInfo: { flex: 1 },
-  deadlineLabel: { fontSize: 11, color: '#94a3b8', fontWeight: '600', marginBottom: 2 },
-  deadlineValue: { fontSize: 14, color: '#1e293b', fontWeight: '700' },
+  deadlineLabel: { fontSize: 11, color: colors.placeholderText, fontWeight: '600', marginBottom: 2 },
+  deadlineValue: { fontSize: 14, color: colors.text, fontWeight: '700' },
   reminderBtn: {
     flex: 1.5,
-    backgroundColor: '#2563eb',
+    backgroundColor: colors.primary,
     height: 54,
     borderRadius: 16,
     flexDirection: 'row',
@@ -327,10 +330,10 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   reminderBtnActive: {
-    backgroundColor: '#eff6ff',
+    backgroundColor: colors.primaryLight,
     borderWidth: 1,
-    borderColor: '#2563eb',
+    borderColor: colors.primary,
   },
   reminderBtnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
-  reminderBtnTextActive: { color: '#2563eb' },
+  reminderBtnTextActive: { color: colors.primary },
 });

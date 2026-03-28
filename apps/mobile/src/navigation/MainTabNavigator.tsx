@@ -7,7 +7,7 @@ import { InternshipsScreen } from '../screens/InternshipsScreen';
 import { BoardingSchoolsScreen } from '../screens/BoardingSchoolsScreen';
 import { InternationalSchoolsScreen } from '../screens/InternationalSchoolsScreen';
 import { Feather } from '@expo/vector-icons';
-import { StyleProp, TextStyle } from 'react-native';
+import { useTheme } from '../theme';
 
 export type MainTabParamList = {
   Dashboard: undefined;
@@ -21,12 +21,16 @@ export type MainTabParamList = {
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
 export function MainTabNavigator() {
+  const { colors } = useTheme();
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        headerStyle: { backgroundColor: '#2563eb' },
-        headerTintColor: '#fff',
-        tabBarActiveTintColor: '#2563eb',
+        headerStyle: { backgroundColor: colors.headerBg },
+        headerTintColor: colors.headerText,
+        tabBarActiveTintColor: colors.tabBarActive,
+        tabBarInactiveTintColor: colors.tabBarInactive,
+        tabBarStyle: { backgroundColor: colors.tabBarBg, borderTopColor: colors.border },
         tabBarIcon: ({ color, size }) => {
           let iconName: keyof typeof Feather.glyphMap;
 

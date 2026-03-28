@@ -19,6 +19,7 @@ import { useDispatch } from 'react-redux';
 import { setToken, setUser } from '../../store/slices/authSlice';
 import * as SecureStore from 'expo-secure-store';
 import { useTranslation } from 'react-i18next';
+import { useTheme, ThemeColors } from '../../theme';
 
 const { width } = Dimensions.get('window');
 
@@ -26,6 +27,8 @@ export function LoginScreen() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -73,7 +76,7 @@ export function LoginScreen() {
         <View style={styles.headerSection}>
           <Image
             source={require('../../../assets/images/logo.png')}
-            style={styles.logo}
+            style={[styles.logo, colors.logoTint ? { tintColor: colors.logoTint } : {}]}
             resizeMode="contain"
           />
         </View>
@@ -91,7 +94,7 @@ export function LoginScreen() {
                   value={email}
                   onChangeText={setEmail}
                   placeholder={t('mobile.auth.emailPlaceholder')}
-                  placeholderTextColor="#94a3b8"
+                  placeholderTextColor={colors.placeholderText}
                   keyboardType="email-address"
                   autoCapitalize="none"
                   autoComplete="email"
@@ -107,7 +110,7 @@ export function LoginScreen() {
                   value={password}
                   onChangeText={setPassword}
                   placeholder={t('mobile.auth.passwordPlaceholder')}
-                  placeholderTextColor="#94a3b8"
+                  placeholderTextColor={colors.placeholderText}
                   secureTextEntry
                   autoComplete="password"
                 />
@@ -142,16 +145,16 @@ export function LoginScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8fafc',
+    backgroundColor: colors.background,
   },
   scrollContent: {
     flexGrow: 1,
   },
   headerSection: {
-    backgroundColor: '#ffffff',
+    backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
     paddingTop: Platform.OS === 'ios' ? 70 : 50,
@@ -163,7 +166,7 @@ const styles = StyleSheet.create({
   },
   formSection: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: colors.surface,
     paddingHorizontal: 28,
     paddingTop: 8,
     paddingBottom: 40,
@@ -171,12 +174,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     fontWeight: '700',
-    color: '#0f172a',
+    color: colors.text,
     marginBottom: 6,
   },
   subtitle: {
     fontSize: 15,
-    color: '#64748b',
+    color: colors.textMuted,
     marginBottom: 32,
     lineHeight: 22,
   },
@@ -189,12 +192,12 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#334155',
+    color: colors.textSecondary,
   },
   inputWrapper: {
-    backgroundColor: '#f8fafc',
+    backgroundColor: colors.inputBg,
     borderWidth: 1.5,
-    borderColor: '#e2e8f0',
+    borderColor: colors.inputBorder,
     borderRadius: 12,
     overflow: 'hidden',
   },
@@ -202,28 +205,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 16,
-    color: '#0f172a',
+    color: colors.inputText,
   },
   forgotPassword: {
-    color: '#2563eb',
+    color: colors.primary,
     fontSize: 14,
     fontWeight: '500',
     textAlign: 'right',
   },
   loginButton: {
-    backgroundColor: '#2563eb',
+    backgroundColor: colors.primary,
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
     marginTop: 8,
-    shadowColor: '#2563eb',
+    shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 8,
     elevation: 4,
   },
   loginButtonDisabled: {
-    backgroundColor: '#93b4f5',
+    opacity: 0.6,
     shadowOpacity: 0.1,
   },
   loginButtonText: {
@@ -238,11 +241,11 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   footerText: {
-    color: '#64748b',
+    color: colors.textMuted,
     fontSize: 14,
   },
   footerLink: {
-    color: '#2563eb',
+    color: colors.primary,
     fontSize: 14,
     fontWeight: '700',
   },

@@ -9,6 +9,7 @@ import {
   TextInput,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { useTheme, ThemeColors } from '../theme';
 
 const filterOptions = {
   countries: [
@@ -43,6 +44,8 @@ interface FilterModalProps {
 }
 
 export function FilterModal({ visible, onClose, filters, onApply }: FilterModalProps) {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const [localFilters, setLocalFilters] = useState<ScholarshipFilters>(filters);
 
   const toggleFilter = (key: keyof ScholarshipFilters, value: string) => {
@@ -69,7 +72,7 @@ export function FilterModal({ visible, onClose, filters, onApply }: FilterModalP
           <View style={styles.modalHeader}>
             <Text style={styles.modalTitle}>Filters</Text>
             <TouchableOpacity onPress={onClose}>
-              <Feather name="x" size={24} color="#1e293b" />
+              <Feather name="x" size={24} color={colors.text} />
             </TouchableOpacity>
           </View>
 
@@ -130,6 +133,7 @@ export function FilterModal({ visible, onClose, filters, onApply }: FilterModalP
                 <TextInput
                   style={styles.input}
                   placeholder="Min"
+                  placeholderTextColor={colors.placeholderText}
                   keyboardType="numeric"
                   value={localFilters.minValue?.toString() || ''}
                   onChangeText={(v) => setLocalFilters({ ...localFilters, minValue: v ? parseInt(v) : undefined })}
@@ -138,6 +142,7 @@ export function FilterModal({ visible, onClose, filters, onApply }: FilterModalP
                 <TextInput
                   style={styles.input}
                   placeholder="Max"
+                  placeholderTextColor={colors.placeholderText}
                   keyboardType="numeric"
                   value={localFilters.maxValue?.toString() || ''}
                   onChangeText={(v) => setLocalFilters({ ...localFilters, maxValue: v ? parseInt(v) : undefined })}
@@ -184,14 +189,14 @@ export function FilterModal({ visible, onClose, filters, onApply }: FilterModalP
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
   modalContainer: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: colors.overlay,
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     height: '80%',
@@ -202,12 +207,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 24,
     borderBottomWidth: 1,
-    borderBottomColor: '#f1f5f9',
+    borderBottomColor: colors.borderLight,
   },
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#1e293b',
+    color: colors.text,
   },
   filterScroll: {
     padding: 24,
@@ -218,7 +223,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1e293b',
+    color: colors.text,
     marginBottom: 12,
   },
   tagContainer: {
@@ -230,20 +235,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 8,
-    backgroundColor: '#f1f5f9',
+    backgroundColor: colors.borderLight,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: colors.border,
   },
   activeTag: {
-    backgroundColor: '#eff6ff',
-    borderColor: '#2563eb',
+    backgroundColor: colors.primaryLight,
+    borderColor: colors.primary,
   },
   tagText: {
     fontSize: 14,
-    color: '#64748b',
+    color: colors.textMuted,
   },
   activeTagText: {
-    color: '#2563eb',
+    color: colors.primary,
     fontWeight: '600',
   },
   inputRow: {
@@ -253,21 +258,22 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    backgroundColor: '#f1f5f9',
+    backgroundColor: colors.inputBg,
     padding: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: colors.inputBorder,
     fontSize: 14,
+    color: colors.inputText,
   },
   inputSeparator: {
-    color: '#64748b',
+    color: colors.textMuted,
   },
   modalFooter: {
     flexDirection: 'row',
     padding: 24,
     borderTopWidth: 1,
-    borderTopColor: '#f1f5f9',
+    borderTopColor: colors.borderLight,
     gap: 12,
   },
   clearBtn: {
@@ -275,17 +281,17 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#cbd5e1',
+    borderColor: colors.border,
     alignItems: 'center',
   },
   clearBtnText: {
-    color: '#64748b',
+    color: colors.textMuted,
     fontWeight: '600',
     fontSize: 16,
   },
   applyBtn: {
     flex: 2,
-    backgroundColor: '#2563eb',
+    backgroundColor: colors.primary,
     paddingVertical: 14,
     borderRadius: 12,
     alignItems: 'center',

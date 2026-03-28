@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Image,
+  Switch,
 } from 'react-native';
 import { useQuery } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
@@ -18,11 +19,14 @@ import { ViewSection, DetailItem, TagCloud } from '../components/profile/Profile
 import { ProfileEditModal } from './ProfileEditModal';
 import { useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
+import { useTheme, ThemeColors } from '../theme';
 
 export function ProfileScreen({ navigation }: any) {
   const { user } = useSelector((state: RootState) => state.auth);
   const { t } = useTranslation();
+  const { colors, isDark, toggleTheme } = useTheme();
   const [isEditVisible, setIsEditVisible] = useState(false);
+  const styles = createStyles(colors);
 
   const profile = useQuery(
     api.profiles.getByUserId,
@@ -43,7 +47,7 @@ export function ProfileScreen({ navigation }: any) {
   if (profile === undefined) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#2563eb" />
+        <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
   }
@@ -51,7 +55,7 @@ export function ProfileScreen({ navigation }: any) {
   if (profile === null) {
     return (
       <View style={styles.emptyContainer}>
-        <Feather name="user-plus" size={64} color="#cbd5e1" />
+        <Feather name="user-plus" size={64} color={colors.border} />
         <Text style={styles.emptyTitle}>{t('mobile.profile.completeProfile')}</Text>
         <Text style={styles.emptySubtitle}>
           {t('mobile.profile.completeProfileDesc')}
@@ -74,10 +78,22 @@ export function ProfileScreen({ navigation }: any) {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        {/* Language Switcher */}
-        <View style={styles.languageRow}>
-          <Text style={styles.languageLabel}>{t('mobile.common.language')}</Text>
-          <LanguageSwitcher />
+        {/* Settings Row */}
+        <View style={styles.settingsRow}>
+          <View style={styles.themeToggle}>
+            <Feather name={isDark ? 'moon' : 'sun'} size={16} color={colors.textMuted} />
+            <Text style={styles.settingsLabel}>{isDark ? 'Dark' : 'Light'}</Text>
+            <Switch
+              value={isDark}
+              onValueChange={toggleTheme}
+              trackColor={{ false: '#cbd5e1', true: colors.primary }}
+              thumbColor="#ffffff"
+            />
+          </View>
+          <View style={styles.languageToggle}>
+            <Text style={styles.settingsLabel}>{t('mobile.common.language')}</Text>
+            <LanguageSwitcher />
+          </View>
         </View>
 
         {/* Profile Header */}
@@ -94,7 +110,7 @@ export function ProfileScreen({ navigation }: any) {
               <Text style={styles.fullName}>{user?.fullName}</Text>
               <Text style={styles.email}>{user?.email}</Text>
               <View style={styles.statusBadge}>
-                <View style={[styles.statusDot, { backgroundColor: profile.profileStatus === 'verified' ? '#22c55e' : '#f59e0b' }]} />
+                <View style={[styles.statusDot, { backgroundColor: profile.profileStatus === 'verified' ? colors.success : colors.warning }]} />
                 <Text style={styles.statusText}>
                   {profile.profileStatus?.replace('_', ' ').toUpperCase()}
                 </Text>
@@ -106,7 +122,7 @@ export function ProfileScreen({ navigation }: any) {
             style={styles.editBtn}
             onPress={() => setIsEditVisible(true)}
           >
-            <Feather name="edit-3" size={18} color="#2563eb" />
+            <Feather name="edit-3" size={18} color={colors.primary} />
             <Text style={styles.editBtnText}>{t('mobile.profile.edit')}</Text>
           </TouchableOpacity>
         </View>
@@ -138,7 +154,7 @@ export function ProfileScreen({ navigation }: any) {
         <ViewSection icon="user" title={t('mobile.profile.personalDetails')}>
           <View style={styles.grid}>
             <DetailItem label="Date of Birth" value={profile.dateOfBirth} />
-            <DetailItem label="Gender" value={profile.gender?.charAt(0).toUpperCase() + profile.gender?.slice(1)} />
+            <DetailItem label="Gender" value={profile.gender ? profile.gender.charAt(0).toUpperCase() + profile.gender.slice(1) : undefined} />
             <DetailItem label="Nationality" value={profile.nationality} />
             <DetailItem label="Country" value={profile.country} />
             <DetailItem label="Phone" value={profile.phone ? `${profile.countryCode || ''} ${profile.phone}`.trim() : undefined} />
@@ -196,7 +212,7 @@ export function ProfileScreen({ navigation }: any) {
             {profile.skills?.length > 0 && (
               <View style={{ marginBottom: 12 }}>
                 <Text style={styles.subLabel}>{t('mobile.profile.topSkills')}</Text>
-                <TagCloud tags={profile.skills} color="#2563eb" />
+                <TagCloud tags={profile.skills} color={colors.primary} />
               </View>
             )}
             {profile.interests?.length > 0 && (
@@ -226,31 +242,40 @@ export function ProfileScreen({ navigation }: any) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f8fafc' },
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
+  container: { flex: 1, backgroundColor: colors.background },
   scrollContent: { padding: 16 },
-  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' },
-  languageRow: {
+  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.surface },
+  settingsRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     marginBottom: 12,
+  },
+  themeToggle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  languageToggle: {
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 10,
   },
-  languageLabel: {
+  settingsLabel: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#64748b',
+    color: colors.textMuted,
   },
   header: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     borderRadius: 20,
     padding: 20,
     marginBottom: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    shadowColor: '#000',
+    shadowColor: colors.shadow,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.05,
     shadowRadius: 10,
@@ -262,62 +287,62 @@ const styles = StyleSheet.create({
     width: 70,
     height: 70,
     borderRadius: 35,
-    backgroundColor: '#eff6ff',
+    backgroundColor: colors.primaryLight,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#dbeafe',
+    borderColor: colors.border,
   },
-  initialsText: { fontSize: 24, fontWeight: 'bold', color: '#2563eb' },
+  initialsText: { fontSize: 24, fontWeight: 'bold', color: colors.primary },
   headerInfo: { marginLeft: 16, flex: 1 },
-  fullName: { fontSize: 20, fontWeight: 'bold', color: '#1e293b' },
-  email: { fontSize: 14, color: '#64748b', marginBottom: 8 },
+  fullName: { fontSize: 20, fontWeight: 'bold', color: colors.text },
+  email: { fontSize: 14, color: colors.textMuted, marginBottom: 8 },
   statusBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#f8fafc',
+    backgroundColor: colors.background,
     alignSelf: 'flex-start',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: colors.border,
   },
   statusDot: { width: 6, height: 6, borderRadius: 3, marginRight: 6 },
-  statusText: { fontSize: 10, fontWeight: '800', color: '#475569', letterSpacing: 0.5 },
+  statusText: { fontSize: 10, fontWeight: '800', color: colors.textSecondary, letterSpacing: 0.5 },
   editBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#eff6ff',
+    backgroundColor: colors.primaryLight,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 10,
     gap: 4,
   },
-  editBtnText: { fontSize: 14, fontWeight: '700', color: '#2563eb' },
+  editBtnText: { fontSize: 14, fontWeight: '700', color: colors.primary },
   grid: { flexDirection: 'row', flexWrap: 'wrap' },
   itemBlock: { paddingVertical: 10 },
-  itemBorder: { borderTopWidth: 1, borderTopColor: '#f1f5f9', marginTop: 8 },
-  itemTitle: { fontSize: 16, fontWeight: '700', color: '#1e293b' },
-  itemSubtitle: { fontSize: 14, color: '#475569', marginTop: 2 },
-  itemMeta: { fontSize: 12, color: '#94a3b8', marginTop: 4 },
-  itemGpa: { fontSize: 13, color: '#2563eb', fontWeight: '600', marginTop: 4 },
+  itemBorder: { borderTopWidth: 1, borderTopColor: colors.borderLight, marginTop: 8 },
+  itemTitle: { fontSize: 16, fontWeight: '700', color: colors.text },
+  itemSubtitle: { fontSize: 14, color: colors.textSecondary, marginTop: 2 },
+  itemMeta: { fontSize: 12, color: colors.textMuted, marginTop: 4 },
+  itemGpa: { fontSize: 13, color: colors.primary, fontWeight: '600', marginTop: 4 },
   scoreRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   scoreBox: {
-    backgroundColor: '#f8fafc',
+    backgroundColor: colors.background,
     padding: 12,
     borderRadius: 12,
     minWidth: 80,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#f1f5f9',
+    borderColor: colors.borderLight,
   },
-  scoreLabel: { fontSize: 10, fontWeight: '800', color: '#64748b', marginBottom: 4 },
-  scoreValue: { fontSize: 18, fontWeight: 'bold', color: '#1e293b' },
-  subLabel: { fontSize: 14, fontWeight: '600', color: '#64748b', marginBottom: 8 },
-  emptyContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 32, backgroundColor: '#fff' },
-  emptyTitle: { fontSize: 24, fontWeight: 'bold', color: '#1e293b', marginTop: 24 },
-  emptySubtitle: { fontSize: 16, color: '#64748b', textAlign: 'center', marginTop: 12, marginBottom: 32, lineHeight: 24 },
-  completeBtn: { backgroundColor: '#2563eb', paddingHorizontal: 32, paddingVertical: 16, borderRadius: 12, shadowColor: '#2563eb', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 10, elevation: 5 },
+  scoreLabel: { fontSize: 10, fontWeight: '800', color: colors.textMuted, marginBottom: 4 },
+  scoreValue: { fontSize: 18, fontWeight: 'bold', color: colors.text },
+  subLabel: { fontSize: 14, fontWeight: '600', color: colors.textMuted, marginBottom: 8 },
+  emptyContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 32, backgroundColor: colors.surface },
+  emptyTitle: { fontSize: 24, fontWeight: 'bold', color: colors.text, marginTop: 24 },
+  emptySubtitle: { fontSize: 16, color: colors.textMuted, textAlign: 'center', marginTop: 12, marginBottom: 32, lineHeight: 24 },
+  completeBtn: { backgroundColor: colors.primary, paddingHorizontal: 32, paddingVertical: 16, borderRadius: 12, shadowColor: colors.primary, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 10, elevation: 5 },
   completeBtnText: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
 });
