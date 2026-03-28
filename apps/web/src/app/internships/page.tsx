@@ -2,6 +2,7 @@
 
 import { useQuery } from 'convex/react';
 import { api } from '@convex/_generated/api';
+import Image from 'next/image';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -21,12 +22,28 @@ export default function InternshipsPage() {
   return (
     <MainLayout>
       {/* Hero Banner */}
-      <div className="bg-blue-600 py-10 sm:py-14 text-white">
+      <div className="relative bg-blue-600 py-10 sm:py-14 text-white overflow-hidden">
         <Container>
-          <h1 className="text-3xl sm:text-4xl font-bold mb-3">Find Corporate Internships</h1>
-          <p className="text-blue-100 text-base sm:text-lg max-w-2xl">
-            Launch your career with internships from top global companies.
-          </p>
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div className="relative z-10">
+              <h1 className="text-3xl sm:text-4xl font-bold mb-3">Find Corporate Internships</h1>
+              <p className="text-blue-100 text-base sm:text-lg max-w-2xl">
+                Launch your career with internships from top global companies.
+              </p>
+            </div>
+            <div className="hidden md:block relative">
+              <div className="relative h-[240px] w-full rounded-2xl overflow-hidden shadow-xl ring-1 ring-white/20">
+                <Image
+                  src="/images/internships-hero.jpg"
+                  alt="Student preparing for corporate internship"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-l from-blue-600/30 to-transparent" />
+              </div>
+            </div>
+          </div>
         </Container>
       </div>
 

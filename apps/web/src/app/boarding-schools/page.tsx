@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useCallback } from 'react';
+import Image from 'next/image';
 import { Filter, X, SearchX, Building2, Bell, BellRing, CheckCircle2 } from 'lucide-react';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '../../../../../convex/_generated/api';
@@ -135,31 +136,45 @@ export default function BoardingSchoolsPage() {
   return (
     <MainLayout>
       {/* Page Header */}
-      <section className="bg-gradient-to-br from-indigo-50 to-purple-50 py-12">
+      <section className="relative bg-gradient-to-br from-indigo-50 to-purple-50 py-12 overflow-hidden">
         <Container size="xl">
-          <div className="max-w-3xl">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
-                <Building2 className="w-6 h-6 text-indigo-600" />
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div className="max-w-xl relative z-10">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
+                  <Building2 className="w-6 h-6 text-indigo-600" />
+                </div>
+                <div>
+                  <h1 className="text-4xl sm:text-5xl font-bold text-gray-900">
+                    Boarding Schools
+                  </h1>
+                </div>
               </div>
-              <div>
-                <h1 className="text-4xl sm:text-5xl font-bold text-gray-900">
-                  Boarding Schools
-                </h1>
+              <p className="text-lg text-gray-600">
+                Discover {stats?.total || '95+'} government boarding schools across Malaysia.
+                Browse SBP, MRSM, SMS, and more. Never miss an application deadline again.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-lg px-3 py-2 text-sm">
+                  <span className="font-semibold text-indigo-600">SBP</span>
+                  <span className="text-gray-500">Apply: Aug - Sep</span>
+                </div>
+                <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-lg px-3 py-2 text-sm">
+                  <span className="font-semibold text-purple-600">MRSM</span>
+                  <span className="text-gray-500">Apply: Mar - May</span>
+                </div>
               </div>
             </div>
-            <p className="text-lg text-gray-600">
-              Discover {stats?.total || '95+'} government boarding schools across Malaysia.
-              Browse SBP, MRSM, SMS, and more. Never miss an application deadline again.
-            </p>
-            <div className="mt-4 flex flex-wrap gap-3">
-              <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-lg px-3 py-2 text-sm">
-                <span className="font-semibold text-indigo-600">SBP</span>
-                <span className="text-gray-500">Apply: Aug - Sep</span>
-              </div>
-              <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-lg px-3 py-2 text-sm">
-                <span className="font-semibold text-purple-600">MRSM</span>
-                <span className="text-gray-500">Apply: Mar - May</span>
+            <div className="hidden md:block relative">
+              <div className="relative h-[280px] w-full rounded-2xl overflow-hidden shadow-xl">
+                <Image
+                  src="/images/schools-hero.jpg"
+                  alt="Students in a boarding school classroom"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
               </div>
             </div>
           </div>

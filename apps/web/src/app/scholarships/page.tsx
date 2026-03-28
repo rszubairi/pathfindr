@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import Image from 'next/image';
 import { Filter, X } from 'lucide-react';
 import { useQuery as useConvexQuery } from 'convex/react';
 import { api } from '../../../../../convex/_generated/api';
@@ -138,16 +139,30 @@ export default function ScholarshipsPage() {
   return (
     <MainLayout>
       {/* Page Header */}
-      <section className="bg-gradient-to-br from-primary-50 to-secondary-50 py-12">
+      <section className="relative bg-gradient-to-br from-primary-50 to-secondary-50 py-12 overflow-hidden">
         <Container size="xl">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-              Find Your Scholarship
-            </h1>
-            <p className="text-lg text-gray-600">
-              Browse through {scholarships.length} scholarships from around the world. Use our
-              advanced filters to find opportunities that match your profile.
-            </p>
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div className="max-w-xl relative z-10">
+              <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+                Find Your Scholarship
+              </h1>
+              <p className="text-lg text-gray-600">
+                Browse through {scholarships.length} scholarships from around the world. Use our
+                advanced filters to find opportunities that match your profile.
+              </p>
+            </div>
+            <div className="hidden md:block relative">
+              <div className="relative h-[280px] w-full rounded-2xl overflow-hidden shadow-xl">
+                <Image
+                  src="/images/scholarships-hero.jpg"
+                  alt="Student studying for scholarship opportunities"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+              </div>
+            </div>
           </div>
         </Container>
       </section>

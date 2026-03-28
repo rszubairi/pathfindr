@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useCallback } from 'react';
+import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 import { Filter, X, SearchX, Globe2, MapPin, Navigation, XCircle } from 'lucide-react';
 import { calculateDistance, MAJOR_CITIES } from '@/lib/distance';
@@ -141,29 +142,43 @@ export default function InternationalSchoolsPage() {
   return (
     <MainLayout>
       {/* Page Header */}
-      <section className="bg-gradient-to-br from-blue-50 to-cyan-50 py-12">
+      <section className="relative bg-gradient-to-br from-blue-50 to-cyan-50 py-12 overflow-hidden">
         <Container size="xl">
-          <div className="max-w-3xl">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                <Globe2 className="w-6 h-6 text-blue-600" />
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div className="max-w-xl relative z-10">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                  <Globe2 className="w-6 h-6 text-blue-600" />
+                </div>
+                <div>
+                  <h1 className="text-4xl sm:text-5xl font-bold text-gray-900">
+                    {t('internationalSchools.title')}
+                  </h1>
+                </div>
               </div>
-              <div>
-                <h1 className="text-4xl sm:text-5xl font-bold text-gray-900">
-                  {t('internationalSchools.title')}
-                </h1>
+              <p className="text-lg text-gray-600">
+                {t('internationalSchools.subtitle', { total: stats?.total || '60+' })}
+              </p>
+              <div className="mt-4 flex flex-wrap gap-3">
+                {stats?.byCountry && Object.entries(stats.byCountry).map(([country, count]) => (
+                  <div key={country} className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-lg px-3 py-2 text-sm">
+                    <span className="font-semibold text-blue-600">{country}</span>
+                    <span className="text-gray-500">{t('internationalSchools.schoolsCount', { count: count as number })}</span>
+                  </div>
+                ))}
               </div>
             </div>
-            <p className="text-lg text-gray-600">
-              {t('internationalSchools.subtitle', { total: stats?.total || '60+' })}
-            </p>
-            <div className="mt-4 flex flex-wrap gap-3">
-              {stats?.byCountry && Object.entries(stats.byCountry).map(([country, count]) => (
-                <div key={country} className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-lg px-3 py-2 text-sm">
-                  <span className="font-semibold text-blue-600">{country}</span>
-                  <span className="text-gray-500">{t('internationalSchools.schoolsCount', { count: count as number })}</span>
-                </div>
-              ))}
+            <div className="hidden md:block relative">
+              <div className="relative h-[280px] w-full rounded-2xl overflow-hidden shadow-xl">
+                <Image
+                  src="/images/schools-hero.jpg"
+                  alt="Students learning in an international school environment"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+              </div>
             </div>
           </div>
         </Container>
