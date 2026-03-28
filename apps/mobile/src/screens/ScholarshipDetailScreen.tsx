@@ -11,6 +11,7 @@ import {
   Platform,
 } from 'react-native';
 import { useQuery } from 'convex/react';
+import { useTranslation } from 'react-i18next';
 import { api } from '../../../../convex/_generated/api';
 import { Feather } from '@expo/vector-icons';
 import { useApplyGate } from '../hooks/useApplyGate';
@@ -19,6 +20,7 @@ import { useTheme, ThemeColors } from '../theme';
 export function ScholarshipDetailScreen({ route, navigation }: any) {
   const { id } = route.params;
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const styles = createStyles(colors);
   const scholarship = useQuery(api.scholarships.getById, { id });
   const {
@@ -46,36 +48,36 @@ export function ScholarshipDetailScreen({ route, navigation }: any) {
 
     if (!result.allowed) {
       if (result.reason === 'auth') {
-        Alert.alert('Login Required', 'Please sign in to apply for scholarships.', [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'Sign In', onPress: () => navigation.navigate('Login') },
+        Alert.alert(t('mobile.details.loginRequired'), t('mobile.details.pleaseSignIn'), [
+          { text: t('mobile.details.cancel'), style: 'cancel' },
+          { text: t('mobile.details.signIn'), onPress: () => navigation.navigate('Login') },
         ]);
         return;
       }
       if (result.reason === 'subscribe') {
         Alert.alert(
-          'Subscription Required',
-          'This feature is only available for Pro and Expert members. Upgrade your plan to start applying!',
+          t('mobile.details.subscriptionRequired'),
+          t('mobile.details.upgradeToApply'),
           [
-            { text: 'Not Now', style: 'cancel' },
-            { text: 'Upgrade Plan', onPress: () => navigation.navigate('Subscription') },
+            { text: t('mobile.details.notNow'), style: 'cancel' },
+            { text: t('mobile.details.upgradePlan'), onPress: () => navigation.navigate('Subscription') },
           ]
         );
         return;
       }
       if (result.reason === 'limit_reached') {
         Alert.alert(
-          'Limit Reached',
-          'You have reached your application limit for this month. Upgrade to Expert for unlimited applications!',
+          t('mobile.details.limitReached'),
+          t('mobile.details.limitReachedDesc'),
           [
-            { text: 'OK', style: 'cancel' },
-            { text: 'View Plans', onPress: () => navigation.navigate('Subscription') },
+            { text: t('mobile.details.ok'), style: 'cancel' },
+            { text: t('mobile.details.viewPlans'), onPress: () => navigation.navigate('Subscription') },
           ]
         );
         return;
       }
       if (result.reason === 'already_applied') {
-        Alert.alert('Already Applied', 'You have already submitted an application for this scholarship.');
+        Alert.alert(t('mobile.details.alreadyAppliedTitle'), t('mobile.details.alreadyAppliedDesc'));
         return;
       }
       return;
@@ -87,10 +89,10 @@ export function ScholarshipDetailScreen({ route, navigation }: any) {
       if (scholarship.applicationUrl) {
         Linking.openURL(scholarship.applicationUrl);
       } else {
-        Alert.alert('Success', 'Application tracked! Please complete any remaining steps on the provider website.');
+        Alert.alert(t('mobile.details.success'), t('mobile.details.appTracked'));
       }
     } catch (error) {
-      Alert.alert('Error', 'Failed to process application. Please try again.');
+      Alert.alert(t('mobile.details.error'), t('mobile.details.failedProcess'));
     } finally {
       setApplying(false);
     }
@@ -119,7 +121,7 @@ export function ScholarshipDetailScreen({ route, navigation }: any) {
           <View style={[styles.statCard, { backgroundColor: colors.primaryLight, borderColor: '#bfdbfe' }]}>
             <View style={styles.statIconHeader}>
               <Feather name="dollar-sign" size={14} color={colors.primary} />
-              <Text style={styles.statLabel}>Value</Text>
+              <Text style={styles.statLabel}>{t('mobile.details.value')}</Text>
             </View>
             <Text style={styles.statValue}>
               {new Intl.NumberFormat('en-US', {
@@ -133,7 +135,7 @@ export function ScholarshipDetailScreen({ route, navigation }: any) {
           <View style={[styles.statCard, { backgroundColor: '#fdf4ff', borderColor: '#f5d0fe' }]}>
             <View style={styles.statIconHeader}>
               <Feather name="calendar" size={14} color="#a21caf" />
-              <Text style={styles.statLabel}>Deadline</Text>
+              <Text style={styles.statLabel}>{t('mobile.details.deadline')}</Text>
             </View>
             <Text style={styles.statValue}>
               {new Date(scholarship.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
@@ -143,16 +145,16 @@ export function ScholarshipDetailScreen({ route, navigation }: any) {
 
         {/* About Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>About This Scholarship</Text>
+          <Text style={styles.sectionTitle}>{t('mobile.details.aboutScholarship')}</Text>
           <Text style={styles.description}>
-            {scholarship.description || 'No description available for this scholarship.'}
+            {scholarship.description || t('mobile.details.noDescription')}
           </Text>
         </View>
 
         {/* Eligibility Section */}
         {scholarship.eligibilityCriteria && (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Eligibility Criteria</Text>
+            <Text style={styles.sectionTitle}>{t('mobile.details.eligibilityCriteria')}</Text>
             {Object.entries(scholarship.eligibilityCriteria).map(([key, value]: [string, any]) => (
               <View key={key} style={styles.criteriaRow}>
                 <Text style={styles.criteriaKey}>{key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</Text>
@@ -164,15 +166,15 @@ export function ScholarshipDetailScreen({ route, navigation }: any) {
 
         {/* Requirements Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Global Applicability</Text>
+          <Text style={styles.sectionTitle}>{t('mobile.details.globalApplicability')}</Text>
           <View style={styles.infoRow}>
             <Feather name="globe" size={16} color={colors.textMuted} />
-            <Text style={styles.infoLabel}>Eligible Countries:</Text>
+            <Text style={styles.infoLabel}>{t('mobile.details.eligibleCountries')}</Text>
             <Text style={styles.infoValue}>{scholarship.eligibleCountries.join(', ')}</Text>
           </View>
           <View style={styles.infoRow}>
             <Feather name="book-open" size={16} color={colors.textMuted} />
-            <Text style={styles.infoLabel}>Fields of Study:</Text>
+            <Text style={styles.infoLabel}>{t('mobile.details.eligibleFields')}</Text>
             <Text style={styles.infoValue}>{scholarship.eligibleFields.join(', ')}</Text>
           </View>
         </View>
@@ -185,10 +187,10 @@ export function ScholarshipDetailScreen({ route, navigation }: any) {
         <View style={styles.actionInfo}>
           {isSubscribed ? (
             <Text style={styles.usageText}>
-              Used {applicationsUsed}/{applicationsLimit} apps
+              {t('mobile.details.usedApps', { count: applicationsUsed, limit: applicationsLimit })}
             </Text>
           ) : (
-            <Text style={styles.freeText}>Free Preview</Text>
+            <Text style={styles.freeText}>{t('mobile.details.freePreview')}</Text>
           )}
         </View>
         <TouchableOpacity
@@ -204,7 +206,7 @@ export function ScholarshipDetailScreen({ route, navigation }: any) {
           ) : (
             <>
               <Text style={styles.applyButtonText}>
-                {isPending ? 'Opening Soon' : isClosed ? 'Deadline Passed' : alreadyApplied ? 'Already Applied' : 'Apply Now'}
+                {isPending ? t('mobile.details.openingSoon') : isClosed ? t('mobile.details.deadlinePassed') : alreadyApplied ? t('mobile.details.alreadyApplied') : t('mobile.details.applyNow')}
               </Text>
               {!isPending && !isClosed && !alreadyApplied && (
                 <Feather name="external-link" size={18} color="#fff" style={{ marginLeft: 8 }} />

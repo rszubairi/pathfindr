@@ -8,6 +8,7 @@ import { BoardingSchoolsScreen } from '../screens/BoardingSchoolsScreen';
 import { InternationalSchoolsScreen } from '../screens/InternationalSchoolsScreen';
 import { Feather } from '@expo/vector-icons';
 import { useTheme } from '../theme';
+import { useTranslation } from 'react-i18next';
 
 export type MainTabParamList = {
   Dashboard: undefined;
@@ -22,6 +23,7 @@ const Tab = createBottomTabNavigator<MainTabParamList>();
 
 export function MainTabNavigator() {
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <Tab.Navigator
@@ -62,12 +64,36 @@ export function MainTabNavigator() {
         },
       })}
     >
-      <Tab.Screen name="Dashboard" component={DashboardScreen} />
-      <Tab.Screen name="Scholarships" component={ScholarshipsScreen} />
-      <Tab.Screen name="Internships" component={InternshipsScreen} />
-      <Tab.Screen name="BoardingSchools" component={BoardingSchoolsScreen} options={{ title: 'Boarding' }} />
-      <Tab.Screen name="InternationalSchools" component={InternationalSchoolsScreen} options={{ title: 'International' }} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen 
+        name="Dashboard" 
+        component={DashboardScreen} 
+        options={{ title: t('nav.home') }}
+      />
+      <Tab.Screen 
+        name="Scholarships" 
+        component={ScholarshipsScreen} 
+        options={{ title: t('nav.scholarships') }}
+      />
+      <Tab.Screen 
+        name="Internships" 
+        component={InternshipsScreen} 
+        options={{ title: t('nav.internships') }}
+      />
+      <Tab.Screen 
+        name="BoardingSchools" 
+        component={BoardingSchoolsScreen} 
+        options={{ title: t('nav.boardingschools') }} 
+      />
+      <Tab.Screen 
+        name="InternationalSchools" 
+        component={InternationalSchoolsScreen} 
+        options={{ title: t('nav.internationalschools') }} 
+      />
+      <Tab.Screen 
+        name="Profile" 
+        component={ProfileScreen} 
+        options={{ title: t('nav.profile') }}
+      />
     </Tab.Navigator>
   );
 }

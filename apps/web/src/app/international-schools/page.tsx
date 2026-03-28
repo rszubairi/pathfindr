@@ -190,7 +190,7 @@ export default function InternationalSchoolsPage() {
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
             <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
               <MapPin className="w-4 h-4 text-gray-500" />
-              <span>Your Location</span>
+              <span>{t('internationalSchools.location.title')}</span>
             </div>
 
             {userLocation ? (
@@ -215,15 +215,15 @@ export default function InternationalSchoolsPage() {
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary-50 text-primary-700 text-sm font-medium border border-primary-200 hover:bg-primary-100 transition disabled:opacity-50"
                 >
                   <Navigation className="w-3.5 h-3.5" />
-                  {isLocating ? 'Locating...' : 'Use My Location'}
+                  {isLocating ? t('internationalSchools.location.locating') : t('internationalSchools.location.useCurrent')}
                 </button>
-                <span className="text-xs text-gray-400">or</span>
+                <span className="text-xs text-gray-400">{t('internationalSchools.location.or')}</span>
                 <select
                   onChange={(e) => { if (e.target.value) handleSelectCity(e.target.value); }}
                   defaultValue=""
                   className="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white"
                 >
-                  <option value="" disabled>Select a city</option>
+                  <option value="" disabled>{t('internationalSchools.location.selectCity')}</option>
                   {MAJOR_CITIES.map((city) => (
                     <option key={city.name} value={city.name}>{city.name}</option>
                   ))}
@@ -262,7 +262,7 @@ export default function InternationalSchoolsPage() {
                     <option value="name">{t('internationalSchools.sort.name')}</option>
                     <option value="country">{t('internationalSchools.sort.country')}</option>
                     <option value="city">{t('internationalSchools.sort.city')}</option>
-                    {userLocation && <option value="distance">Distance</option>}
+                    {userLocation && <option value="distance">{t('internationalSchools.location.distance')}</option>}
                   </select>
                 </div>
               </div>

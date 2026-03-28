@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput, ActivityIndicator, Image } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
 import { useQuery } from 'convex/react';
+import { useTranslation } from 'react-i18next';
 import { api } from '../../../../convex/_generated/api';
 import { Feather } from '@expo/vector-icons';
 import { FilterModal } from '../components/ScholarshipFilterModal';
@@ -11,6 +12,7 @@ export function ScholarshipsScreen({ navigation }: any) {
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const [filters, setFilters] = useState<any>({});
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const styles = createStyles(colors);
 
   const scholarships = useQuery(api.scholarships.filter, {
@@ -57,7 +59,7 @@ export function ScholarshipsScreen({ navigation }: any) {
           <Feather name="search" size={20} color={colors.placeholderText} style={styles.searchIcon} />
           <TextInput
             style={styles.searchInput}
-            placeholder="Search opportunities..."
+            placeholder={t('mobile.scholarships.searchPlaceholder')}
             value={searchQuery}
             onChangeText={setSearchQuery}
             placeholderTextColor={colors.placeholderText}
@@ -108,7 +110,7 @@ export function ScholarshipsScreen({ navigation }: any) {
 
                 <View style={styles.valueRow}>
                   <Text style={styles.valueText}>{formatValue(item.value, item.currency)}</Text>
-                  <Text style={styles.valueLabel}>/year (est.)</Text>
+                  <Text style={styles.valueLabel}>{t('mobile.scholarships.yearEst')}</Text>
                 </View>
 
                 <View style={styles.footer}>
@@ -119,7 +121,7 @@ export function ScholarshipsScreen({ navigation }: any) {
                       </View>
                     ))}
                     {item.eligibleCountries.length > 2 && (
-                      <Text style={styles.moreTags}>+{item.eligibleCountries.length - 2} more</Text>
+                      <Text style={styles.moreTags}>{t('mobile.scholarships.more', { count: item.eligibleCountries.length - 2 })}</Text>
                     )}
                   </View>
                   <Feather name="chevron-right" size={20} color={colors.border} />
@@ -130,8 +132,8 @@ export function ScholarshipsScreen({ navigation }: any) {
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
               <Feather name="search" size={48} color={colors.border} />
-              <Text style={styles.emptyTitle}>No Scholarships Found</Text>
-              <Text style={styles.emptySubtitle}>Try adjusting your search or filters to find more opportunities.</Text>
+              <Text style={styles.emptyTitle}>{t('mobile.scholarships.noScholarships')}</Text>
+              <Text style={styles.emptySubtitle}>{t('mobile.scholarships.tryAdjusting')}</Text>
             </View>
           }
         />

@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
-  Platform
 } from 'react-native';
 import { useQuery } from 'convex/react';
+import { useTranslation } from 'react-i18next';
 import { api } from '../../../../convex/_generated/api';
 import { Feather } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
@@ -24,6 +24,7 @@ export function InternshipsScreen({ navigation }: any) {
   const [filters, setFilters] = useState<any>({});
   const { user } = useSelector((state: RootState) => state.auth);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const styles = createStyles(colors);
 
   const internships = useQuery(api.internships.listActive, {
@@ -52,7 +53,7 @@ export function InternshipsScreen({ navigation }: any) {
           <Feather name="search" size={20} color={colors.placeholderText} style={styles.searchIcon} />
           <TextInput
             style={styles.searchInput}
-            placeholder="Search roles or companies..."
+            placeholder={t('mobile.internships.searchPlaceholder')}
             value={searchQuery}
             onChangeText={setSearchQuery}
             placeholderTextColor={colors.placeholderText}
@@ -122,8 +123,8 @@ export function InternshipsScreen({ navigation }: any) {
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
               <Feather name="briefcase" size={48} color={colors.border} />
-              <Text style={styles.emptyTitle}>No Internships Found</Text>
-              <Text style={styles.emptySubtitle}>We couldn't find any active internships matching your search.</Text>
+              <Text style={styles.emptyTitle}>{t('mobile.internships.noInternships')}</Text>
+              <Text style={styles.emptySubtitle}>{t('mobile.internships.tryAdjusting')}</Text>
             </View>
           }
         />

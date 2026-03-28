@@ -55,7 +55,36 @@ const resources = {
             verified: { title: 'Verified Listings', desc: 'All scholarships are verified for accuracy.' },
             tracking: { title: 'Application Tracking', desc: 'Keep track of your applications in one dashboard.' },
             secure: { title: 'Secure & Private', desc: 'Your personal information is protected.' },
-          }
+          },
+          detailed: [
+            {
+              title: 'Advanced Search & Filters',
+              description: "Find exactly what you're looking for with powerful search capabilities and smart filters. Filter by country, field of study, value, and provider type.",
+              benefits: [
+                'Multi-criteria filtering',
+                'Instant search results',
+                'Saved search preferences',
+              ],
+            },
+            {
+              title: 'AI-Powered Matching',
+              description: 'Our intelligent matching algorithm analyzes your profile to recommend opportunities with the highest success probability.',
+              benefits: [
+                'Personalized recommendations',
+                'Match score for each scholarship',
+                'Smart priority ranking',
+              ],
+            },
+            {
+              title: 'Real-Time Notifications',
+              description: 'Never miss a deadline. Get instant notifications for new scholarships matching your profile and upcoming deadlines.',
+              benefits: [
+                'Customizable preferences',
+                'Deadline reminders',
+                'Status change alerts',
+              ],
+            },
+          ]
         },
         featured: {
           title: 'Featured Scholarships',
@@ -65,6 +94,23 @@ const resources = {
         testimonials: {
           title: 'Success Stories from Our Students',
           subtitle: 'Join thousands of students who have found their perfect scholarship through Pathfindr.',
+          list: [
+            {
+              quote: "Pathfindr made finding the right scholarship so much easier. The personalized matching feature connected me with opportunities I didn't even know existed. Now I'm studying Computer Science at NUS!",
+              university: 'National University of Singapore',
+              country: 'Singapore',
+            },
+            {
+              quote: "I was overwhelmed by the number of scholarships available until I found Pathfindr. The platform's smart filters and deadline tracking helped me stay organized and ultimately win a full scholarship to study Engineering.",
+              university: 'University of Melbourne',
+              country: 'Australia',
+            },
+            {
+              quote: "As a first-generation college student, navigating scholarship applications was daunting. Pathfindr's verified listings and application tracking gave me the confidence to pursue my dreams. I'm now studying Medicine in Bangkok!",
+              university: 'Chulalongkorn University',
+              country: 'Thailand',
+            },
+          ]
         },
         cta: {
           title: 'Ready to Start Your Journey?',
@@ -313,6 +359,14 @@ const resources = {
           country: 'Country',
           curriculum: 'Curriculum',
         },
+        location: {
+          title: 'Your Location',
+          locating: 'Locating...',
+          useCurrent: 'Use My Location',
+          or: 'or',
+          selectCity: 'Select a city',
+          distance: 'Distance',
+        },
         card: {
           fees: 'Fees:',
           visitWebsite: 'Visit Website',
@@ -325,6 +379,74 @@ const resources = {
           filters: 'Filters',
           showResults: 'Show {{count}} Results',
         },
+      },
+      profileView: {
+        title: 'My Profile',
+        editProfile: 'Edit Profile',
+        notFound: 'Profile Not Found',
+        notFoundDesc: "You haven't completed your profile yet. Complete it to view your profile here.",
+        completeProfileBtn: 'Complete Profile',
+        sections: {
+          personal: 'Personal Details',
+          education: 'Education',
+          testScores: 'Test Scores',
+          certificates: 'Certificates',
+          projects: 'Projects',
+          skills: 'Skills',
+          interests: 'Interests',
+          preferences: 'Preferences',
+        },
+        fields: {
+          dob: 'Date of Birth',
+          gender: 'Gender',
+          nationality: 'Nationality',
+          country: 'Country',
+          phone: 'Phone',
+          gpa: 'GPA',
+          grade: 'Grade',
+          present: 'Present',
+          preferredCountries: 'Preferred Countries',
+          availability: 'Availability',
+        }
+      },
+      scholarships: {
+        title: 'Find Your Scholarship',
+        subtitle: 'Browse through thousands of scholarships from around the world. Use our advanced filters to find opportunities that match your profile.',
+        searchPlaceholder: 'Search scholarships by name, provider...',
+        sortBy: 'Sort by:',
+        sort: {
+          relevant: 'Relevant',
+          deadline: 'Deadline',
+          value: 'Value',
+          recent: 'Recent',
+        },
+        filters: 'Filters',
+        showResults: 'Show {{count}} Results',
+        previous: 'Previous',
+        next: 'Next',
+        noResults: 'No scholarships found',
+        noResultsDesc: "We couldn't find any scholarships matching your criteria. Try adjusting your filters or search query.",
+        clearFilters: 'Clear All Filters',
+      },
+      boardingSchools: {
+        title: 'Boarding Schools',
+        subtitle: 'Discover top boarding schools across Southeast Asia. Compare categories, locations, and find the perfect environment for your education.',
+        searchPlaceholder: 'Search schools by name...',
+        filters: 'Filters',
+        noResults: 'No schools found',
+        noResultsDesc: "We couldn't find any boarding schools matching your criteria. Try adjusting your filters or search query.",
+        category: 'Category',
+        state: 'State',
+        managedBy: 'Managed by {{provider}}',
+      },
+      internships: {
+        title: 'Internships',
+        subtitle: 'Find your next career step with internships from top companies. Gain valuable experience and kickstart your professional journey.',
+        searchPlaceholder: 'Search roles or companies...',
+        filters: 'Filters',
+        noResults: 'No internships found',
+        noResultsDesc: "We couldn't find any active internships matching your search.",
+        applyBy: 'Apply by {{date}}',
       },
     },
   },
@@ -380,7 +502,36 @@ const resources = {
             verified: { title: 'Senarai Disahkan', desc: 'Semua biasiswa disahkan untuk ketepatan.' },
             tracking: { title: 'Jejak Permohonan', desc: 'Jejaki permohonan anda dalam satu papan pemuka.' },
             secure: { title: 'Selamat & Peribadi', desc: 'Maklumat peribadi anda dilindungi.' },
-          }
+          },
+          detailed: [
+            {
+              title: 'Carian & Penapis Terperinci',
+              description: 'Cari apa yang anda cari dengan keupayaan carian yang hebat dan penapis pintar.',
+              benefits: [
+                'Penapisan pelbagai kriteria',
+                'Keputusan carian segera',
+                'Pilihan carian disimpan',
+              ],
+            },
+            {
+              title: 'Padanan Dikuasakan AI',
+              description: 'Algoritma padanan pintar kami menganalisis profil anda untuk mencadangkan peluang dengan kebarangkalian kejayaan tertinggi.',
+              benefits: [
+                'Syor diperibadikan',
+                'Skor padanan untuk setiap biasiswa',
+                'Kedudukan keutamaan pintar',
+              ],
+            },
+            {
+              title: 'Pemberitahuan Masa Realiti',
+              description: 'Jangan terlepas tarikh akhir. Dapatkan pemberitahuan segera untuk biasiswa baru yang sepadan dengan profil anda.',
+              benefits: [
+                'Keutamaan yang boleh disesuaikan',
+                'Peringatan tarikh akhir',
+                'Amaran perubahan status',
+              ],
+            },
+          ]
         },
         featured: {
           title: 'Biasiswa Pilihan',
@@ -390,6 +541,23 @@ const resources = {
         testimonials: {
           title: 'Kisah Kejayaan Pelajar Kami',
           subtitle: 'Sertai beribu-ribu pelajar yang telah menemui biasiswa sempurna melalui Pathfindr.',
+          list: [
+            {
+              quote: "Pathfindr memudahkan pencarian biasiswa. Ciri padanan peribadi menghubungkan saya dengan peluang yang saya tidak tahu wujud. Sekarang saya belajar Sains Komputer di NUS!",
+              university: 'National University of Singapore',
+              country: 'Singapura',
+            },
+            {
+              quote: "Saya merasa terbeban dengan jumlah biasiswa yang ada sehinggalah saya menemui Pathfindr. Penapis pintar dan penjejakan tarikh akhir membantu saya kekal teratur.",
+              university: 'University of Melbourne',
+              country: 'Australia',
+            },
+            {
+              quote: "Sebagai pelajar kolej generasi pertama, permohonan biasiswa amat menakutkan. Penjejakan permohonan Pathfindr memberi saya keyakinan. Saya kini belajar Perubatan!",
+              university: 'Chulalongkorn University',
+              country: 'Thailand',
+            },
+          ]
         },
         cta: {
           title: 'Sedia untuk Memulai Perjalanan Anda?',
@@ -638,6 +806,14 @@ const resources = {
           country: 'Negara',
           curriculum: 'Kurikulum',
         },
+        location: {
+          title: 'Lokasi Anda',
+          locating: 'Menentukan Lokasi...',
+          useCurrent: 'Gunakan Lokasi Saya',
+          or: 'atau',
+          selectCity: 'Pilih bandar',
+          distance: 'Jarak',
+        },
         card: {
           fees: 'Yuran:',
           visitWebsite: 'Lawati Laman Web',
@@ -650,6 +826,74 @@ const resources = {
           filters: 'Penapis',
           showResults: 'Tunjukkan {{count}} Keputusan',
         },
+      },
+      profileView: {
+        title: 'Profil Saya',
+        editProfile: 'Sunting Profil',
+        notFound: 'Profil Tidak Ditemui',
+        notFoundDesc: "Anda belum melengkapkan profil anda. Lengkapkan profil anda untuk melihatnya di sini.",
+        completeProfileBtn: 'Lengkapkan Profil',
+        sections: {
+          personal: 'Butiran Peribadi',
+          education: 'Pendidikan',
+          testScores: 'Skor Ujian',
+          certificates: 'Sijil',
+          projects: 'Projek',
+          skills: 'Kemahiran',
+          interests: 'Minat',
+          preferences: 'Keutamaan',
+        },
+        fields: {
+          dob: 'Tarikh Lahir',
+          gender: 'Jantina',
+          nationality: 'Kewarganegaraan',
+          country: 'Negara',
+          phone: 'Telefon',
+          gpa: 'GPA',
+          grade: 'Gred',
+          present: 'Sekarang',
+          preferredCountries: 'Negara Pilihan',
+          availability: 'Ketersediaan',
+        }
+      },
+      scholarships: {
+        title: 'Cari Biasiswa Anda',
+        subtitle: 'Lihat beribu-ribu biasiswa dari seluruh dunia. Gunakan penapis canggih kami untuk mencari peluang yang sepadan dengan profil anda.',
+        searchPlaceholder: 'Cari biasiswa mengikut nama, penyedia...',
+        sortBy: 'Susun mengikut:',
+        sort: {
+          relevant: 'Relevan',
+          deadline: 'Tarikh Akhir',
+          value: 'Nilai',
+          recent: 'Terkini',
+        },
+        filters: 'Penapis',
+        showResults: 'Tunjukkan {{count}} Keputusan',
+        previous: 'Sebelumnya',
+        next: 'Seterusnya',
+        noResults: 'Tiada biasiswa ditemui',
+        noResultsDesc: "Kami tidak dapat mencari biasiswa yang sepadan dengan kriteria anda. Cuba laraskan penapis atau carian anda.",
+        clearFilters: 'Kosongkan Semua Penapis',
+      },
+      boardingSchools: {
+        title: 'Sekolah Berasrama',
+        subtitle: 'Temui sekolah berasrama terbaik di seluruh Asia Tenggara. Bandingkan kategori, lokasi, dan cari persekitaran yang sempurna untuk pendidikan anda.',
+        searchPlaceholder: 'Cari sekolah mengikut nama...',
+        filters: 'Penapis',
+        noResults: 'Tiada sekolah ditemui',
+        noResultsDesc: "Kami tidak dapat mencari sekolah berasrama yang sepadan dengan kriteria anda. Cuba laraskan penapis atau carian anda.",
+        category: 'Kategori',
+        state: 'Negeri',
+        managedBy: 'Diuruskan oleh {{provider}}',
+      },
+      internships: {
+        title: 'Latihan Amali',
+        subtitle: 'Cari langkah kerjaya anda seterusnya dengan latihan amali daripada syarikat terkemuka. Dapatkan pengalaman berharga dan mulakan perjalanan profesional anda.',
+        searchPlaceholder: 'Cari peranan atau syarikat...',
+        filters: 'Penapis',
+        noResults: 'Tiada latihan amali ditemui',
+        noResultsDesc: "Kami tidak dapat mencari latihan amali yang aktif yang sepadan dengan carian anda.",
+        applyBy: 'Mohon sebelum {{date}}',
       },
     },
   },
@@ -705,7 +949,36 @@ const resources = {
             verified: { title: '认证列表', desc: '所有奖学金经过验证以确保准确。' },
             tracking: { title: '申请跟踪', desc: '在一个仪表板中跟踪您的申请。' },
             secure: { title: '安全与私密', desc: '您的个人信息受到保护。' },
-          }
+          },
+          detailed: [
+            {
+              title: '高级搜索与筛选',
+              description: '通过强大的搜索功能和智能过滤器，准确找到您想要的内容。',
+              benefits: [
+                '多标准过滤',
+                '即时搜索结果',
+                '保存搜索偏好',
+              ],
+            },
+            {
+              title: 'AI 驱动匹配',
+              description: '我们的智能匹配算法会分析您的个人资料，推荐成功率最高的机会。',
+              benefits: [
+                '个性化推荐',
+                '每项奖学金的匹配得分',
+                '智能优先级排序',
+              ],
+            },
+            {
+              title: '实时通知',
+              description: '永远不会错过截止日期。即时获取符合您资料的新奖学金通知。',
+              benefits: [
+                '可定制的偏好',
+                '截止日期提醒',
+                '状态变更警报',
+              ],
+            },
+          ]
         },
         featured: {
           title: '精选奖学金',
@@ -715,6 +988,23 @@ const resources = {
         testimonials: {
           title: '我们学生的成功故事',
           subtitle: '加入成千上万通过 Pathfindr 找到完美奖学金的学生行列。',
+          list: [
+            {
+              quote: "Pathfindr 让寻找合适的奖学金变得更加简单。个性化匹配功能让我发现了很多我以前都不知道的机会。现在我在新加坡国立大学学习计算机科学！",
+              university: '新加坡国立大学',
+              country: '新加坡',
+            },
+            {
+              quote: "在发现 Pathfindr 之前，我被大量的奖学金信息搞得不知所措。平台的智能过滤器和截止日期跟踪帮助我保持井井有条，并最终赢得了全额奖学金去学习工程学。",
+              university: '墨尔本大学',
+              country: '澳大利亚',
+            },
+            {
+              quote: "作为第一代大学生，申请奖学金曾让我望而生畏。Pathfindr 的认证列表和申请跟踪给了我追求梦想的信心。我现在在曼谷学习医学！",
+              university: '朱拉隆功大学',
+              country: '泰国',
+            },
+          ]
         },
         cta: {
           title: '准备好开启您的旅程了吗？',
@@ -953,7 +1243,7 @@ const resources = {
         },
         empty: {
           title: '未找到学校',
-          description: '未找到符合您条件的国际学校。请尝试调整筛选条件或搜索关键词。',
+          description: '未找到符合您条件的国际学校。请尝试调整筛选条件或搜索关键词识别。',
           clearAll: '清除所有筛选',
         },
         filters: {
@@ -962,6 +1252,14 @@ const resources = {
           clearAllBtn: '清除所有筛选',
           country: '国家',
           curriculum: '课程体系',
+        },
+        location: {
+          title: '您的位置',
+          locating: '定位中...',
+          useCurrent: '使用我的位置',
+          or: '或',
+          selectCity: '选择城市',
+          distance: '距离',
         },
         card: {
           fees: '学费：',
@@ -975,6 +1273,74 @@ const resources = {
           filters: '筛选',
           showResults: '显示 {{count}} 个结果',
         },
+      },
+      profileView: {
+        title: '我的个人资料',
+        editProfile: '编辑资料',
+        notFound: '未找到个人资料',
+        notFoundDesc: '您尚未完善个人资料。完善后即可在此查看。',
+        completeProfileBtn: '完善资料',
+        sections: {
+          personal: '个人详情',
+          education: '教育经历',
+          testScores: '考试成绩',
+          certificates: '证书',
+          projects: '项目经历',
+          skills: '技能',
+          interests: '兴趣爱好',
+          preferences: '偏好设置',
+        },
+        fields: {
+          dob: '出生日期',
+          gender: '性别',
+          nationality: '国籍',
+          country: '居住国家',
+          phone: '电话',
+          gpa: 'GPA',
+          grade: '成绩/等级',
+          present: '至今',
+          preferredCountries: '首选国家',
+          availability: '入学时间',
+        }
+      },
+      scholarships: {
+        title: '寻找您的奖学金',
+        subtitle: '浏览来自全球的数千项奖学金。使用我们的高级筛选器，寻找匹配您资料的机会。',
+        searchPlaceholder: '按名称、提供商搜索奖学金...',
+        sortBy: '排序方式：',
+        sort: {
+          relevant: '相关性',
+          deadline: '截止日期',
+          value: '价值',
+          recent: '最近添加',
+        },
+        filters: '筛选',
+        showResults: '显示 {{count}} 个结果',
+        previous: '上一页',
+        next: '下一页',
+        noResults: '未找到奖学金项目',
+        noResultsDesc: "未找到符合您条件的奖学金。请尝试调整筛选条件或搜索关键词。",
+        clearFilters: '清除所有筛选',
+      },
+      boardingSchools: {
+        title: '寄宿学校',
+        subtitle: '探索东南亚顶尖的寄宿学校。比较类别、地点，为您的教育找到理想的环境。',
+        searchPlaceholder: '按名称搜索学校...',
+        filters: '筛选',
+        noResults: '未找到学校',
+        noResultsDesc: "未找到符合您条件的寄宿学校。请尝试调整筛选条件或搜索关键词。",
+        category: '类别',
+        state: '州/省',
+        managedBy: '由 {{provider}} 管理',
+      },
+      internships: {
+        title: '实习机会',
+        subtitle: '通过顶尖公司的实习机会发现您的职业新台阶。获得宝贵经验，开启您的专业旅程。',
+        searchPlaceholder: '搜索职位或公司...',
+        filters: '筛选',
+        noResults: '未找到实习机会',
+        noResultsDesc: "未找到匹配您搜索的活跃实习机会。",
+        applyBy: '请在 {{date}} 前申请',
       },
     },
   },

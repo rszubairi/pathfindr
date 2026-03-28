@@ -15,45 +15,21 @@ import {
   NotificationsAnimation,
 } from './FeatureAnimations';
 
-const detailedFeatures = [
+const detailedFeaturesData = [
   {
     icon: Search,
-    title: 'Advanced Search & Filters',
-    description:
-      "Find exactly what you're looking for with powerful search capabilities and smart filters. Filter by country, field of study, value, and provider type.",
-    benefits: [
-      'Multi-criteria filtering',
-      'Instant search results',
-      'Saved search preferences',
-    ],
     color: 'from-blue-500 to-blue-600',
     bgColor: 'bg-blue-50',
     Animation: SearchFiltersAnimation,
   },
   {
     icon: Target,
-    title: 'AI-Powered Matching',
-    description:
-      'Our intelligent matching algorithm analyzes your profile to recommend opportunities with the highest success probability.',
-    benefits: [
-      'Personalized recommendations',
-      'Match score for each scholarship',
-      'Smart priority ranking',
-    ],
     color: 'from-green-500 to-green-600',
     bgColor: 'bg-green-50',
     Animation: AIMatchingAnimation,
   },
   {
     icon: Bell,
-    title: 'Real-Time Notifications',
-    description:
-      'Never miss a deadline. Get instant notifications for new scholarships matching your profile and upcoming deadlines.',
-    benefits: [
-      'Customizable preferences',
-      'Deadline reminders',
-      'Status change alerts',
-    ],
     color: 'from-purple-500 to-purple-600',
     bgColor: 'bg-purple-50',
     Animation: NotificationsAnimation,
@@ -87,35 +63,47 @@ function useInView(threshold = 0.2) {
 
 export function DetailedFeaturesSection() {
   const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
+  // Get localized features from i18n
+  const localizedFeatures = t('home.features.detailed', { returnObjects: true }) as any[];
 
   return (
     <section id="features" className="py-24 bg-white overflow-hidden">
       <Container size="xl">
         <div className="text-center max-w-3xl mx-auto mb-20">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Everything You Need to Succeed
+            {t('home.features.title')}
           </h2>
           <p className="text-xl text-gray-600 leading-relaxed">
-            Powerful tools and features designed to help you discover, track, and secure
-            educational opportunities worldwide.
+            {t('home.features.subtitle')}
           </p>
         </div>
 
         <div className="space-y-32">
-          {detailedFeatures.map((feature, index) => {
-            const Icon = feature.icon;
-            const Animation = feature.Animation;
+          {detailedFeaturesData.map((featureData, index) => {
+            const Icon = featureData.icon;
+            const Animation = featureData.Animation;
             const isEven = index % 2 === 0;
+            const localized = Array.isArray(localizedFeatures) ? localizedFeatures[index] : null;
+
+            if (!localized) return null;
 
             return (
               <FeatureRow
                 key={index}
                 icon={Icon}
                 Animation={Animation}
-                title={feature.title}
-                description={feature.description}
-                benefits={feature.benefits}
-                color={feature.color}
+                title={localized.title}
+                description={localized.description}
+                benefits={localized.benefits}
+                color={featureData.color}
                 isEven={isEven}
               />
             );

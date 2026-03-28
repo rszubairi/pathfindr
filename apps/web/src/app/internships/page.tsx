@@ -3,6 +3,7 @@
 import { useQuery } from 'convex/react';
 import { api } from '@convex/_generated/api';
 import Image from 'next/image';
+import { useTranslation } from 'react-i18next';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -14,6 +15,7 @@ import { useAuth } from '@/hooks/useAuth';
 import type { Id } from '@convex/_generated/dataModel';
 
 export default function InternshipsPage() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const internships = useQuery(api.internships.listActive, {
     userId: user?._id as Id<'users'> | undefined,
@@ -26,9 +28,9 @@ export default function InternshipsPage() {
         <Container>
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="relative z-10">
-              <h1 className="text-3xl sm:text-4xl font-bold mb-3">Find Corporate Internships</h1>
+              <h1 className="text-3xl sm:text-4xl font-bold mb-3">{t('internships.title')}</h1>
               <p className="text-blue-100 text-base sm:text-lg max-w-2xl">
-                Launch your career with internships from top global companies.
+                {t('internships.subtitle')}
               </p>
             </div>
             <div className="hidden md:block relative">
@@ -50,7 +52,7 @@ export default function InternshipsPage() {
       <Container className="py-8 sm:py-12">
         {/* Filters */}
         <div className="mb-6">
-          <h3 className="font-semibold text-gray-900 mb-3 text-sm uppercase tracking-wider">Filter by type</h3>
+          <h3 className="font-semibold text-gray-900 mb-3 text-sm uppercase tracking-wider">{t('internships.filters')}</h3>
           <div className="flex flex-wrap gap-2">
             {['Full-time', 'Part-time', 'Remote'].map((type) => (
               <label
@@ -76,7 +78,7 @@ export default function InternshipsPage() {
             </div>
           ) : internships.length === 0 ? (
             <div className="text-center py-16">
-              <p className="text-gray-500">No active internships found.</p>
+              <p className="text-gray-500">{t('internships.noResults')}</p>
             </div>
           ) : (
             internships.map((internship) => (
@@ -103,7 +105,7 @@ export default function InternshipsPage() {
                       </div>
                       <div className="flex items-center gap-1">
                         <Calendar className="w-4 h-4 shrink-0" />
-                        Deadline: {new Date(internship.deadline).toLocaleDateString()}
+                        {t('scholarships.sort.deadline')}: {new Date(internship.deadline).toLocaleDateString()}
                       </div>
                       {internship.salaryRange && (
                         <div className="flex items-center gap-1">

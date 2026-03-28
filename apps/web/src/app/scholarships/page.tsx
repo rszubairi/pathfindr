@@ -4,6 +4,7 @@ import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import { Filter, X } from 'lucide-react';
 import { useQuery as useConvexQuery } from 'convex/react';
+import { useTranslation } from 'react-i18next';
 import { api } from '../../../../../convex/_generated/api';
 import type { Id } from '../../../../../convex/_generated/dataModel';
 import { MainLayout } from '@/components/layout/MainLayout';
@@ -18,6 +19,7 @@ import type { ScholarshipFilters as Filters } from '@/types';
 const ITEMS_PER_PAGE = 20;
 
 export default function ScholarshipsPage() {
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState<Filters>({});
   const [sortBy, setSortBy] = useState<'relevant' | 'deadline' | 'value' | 'recent'>('relevant');
@@ -144,11 +146,10 @@ export default function ScholarshipsPage() {
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="max-w-xl relative z-10">
               <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-                Find Your Scholarship
+                {t('scholarships.title')}
               </h1>
               <p className="text-lg text-gray-600">
-                Browse through {scholarships.length} scholarships from around the world. Use our
-                advanced filters to find opportunities that match your profile.
+                {t('scholarships.subtitle')}
               </p>
             </div>
             <div className="hidden md:block relative">
@@ -192,7 +193,7 @@ export default function ScholarshipsPage() {
               className="w-full flex items-center justify-center gap-2"
             >
               <Filter className="h-5 w-5" />
-              Filters
+              {t('scholarships.filters')}
               {Object.keys(filters).length > 0 && (
                 <span className="bg-primary-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                   {Object.keys(filters).length}
@@ -232,7 +233,7 @@ export default function ScholarshipsPage() {
                     onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
                     disabled={currentPage === 1}
                   >
-                    Previous
+                    {t('scholarships.previous')}
                   </Button>
 
                   <div className="flex items-center gap-2">
@@ -269,7 +270,7 @@ export default function ScholarshipsPage() {
                     onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
                     disabled={currentPage === totalPages}
                   >
-                    Next
+                    {t('scholarships.next')}
                   </Button>
                 </div>
               )}
@@ -291,7 +292,7 @@ export default function ScholarshipsPage() {
           <div className="absolute inset-y-0 right-0 w-full max-w-sm bg-white shadow-2xl overflow-y-auto">
             {/* Header */}
             <div className="sticky top-0 bg-white border-b border-gray-200 px-4 py-4 flex items-center justify-between z-10">
-              <h2 className="text-lg font-bold text-gray-900">Filters</h2>
+              <h2 className="text-lg font-bold text-gray-900">{t('scholarships.filters')}</h2>
               <button
                 onClick={toggleMobileFilter}
                 className="p-2 hover:bg-gray-100 rounded-lg transition"
@@ -317,7 +318,7 @@ export default function ScholarshipsPage() {
                 onClick={toggleMobileFilter}
                 className="w-full"
               >
-                Show {sortedScholarships.length} Results
+                {t('scholarships.showResults', { count: sortedScholarships.length })}
               </Button>
             </div>
           </div>

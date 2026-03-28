@@ -1,5 +1,6 @@
 import React from 'react';
 import { SearchX } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { ScholarshipCard } from './ScholarshipCard';
 import { ScholarshipSkeleton } from './ScholarshipSkeleton';
 import { Button } from '@/components/ui/Button';
@@ -20,6 +21,8 @@ export function ScholarshipList({
   onClearFilters,
   userCountry,
 }: ScholarshipListProps) {
+  const { t } = useTranslation();
+
   // Loading state - show skeletons
   if (isLoading) {
     return (
@@ -38,14 +41,13 @@ export function ScholarshipList({
         <div className="bg-gray-100 rounded-full p-6 mb-4">
           <SearchX className="h-12 w-12 text-gray-400" />
         </div>
-        <h3 className="text-xl font-bold text-gray-900 mb-2">No scholarships found</h3>
+        <h3 className="text-xl font-bold text-gray-900 mb-2">{t('scholarships.noResults')}</h3>
         <p className="text-gray-600 text-center mb-6 max-w-md">
-          We couldn&apos;t find any scholarships matching your criteria. Try adjusting your filters or
-          search query.
+          {t('scholarships.noResultsDesc')}
         </p>
         {onClearFilters && (
           <Button variant="primary" size="md" onClick={onClearFilters}>
-            Clear All Filters
+            {t('scholarships.clearFilters')}
           </Button>
         )}
       </div>

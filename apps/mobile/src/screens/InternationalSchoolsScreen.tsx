@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
-  Platform
 } from 'react-native';
 import { useQuery } from 'convex/react';
+import { useTranslation } from 'react-i18next';
 import { api } from '../../../../convex/_generated/api';
 import { Feather } from '@expo/vector-icons';
 import { InternationalSchoolFilterModal } from '../components/InternationalSchoolFilterModal';
@@ -20,6 +20,7 @@ export function InternationalSchoolsScreen({ navigation }: any) {
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const [filters, setFilters] = useState<any>({});
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const styles = createStyles(colors);
 
   const schools = useQuery(api.internationalSchools.filter, {
@@ -38,7 +39,7 @@ export function InternationalSchoolsScreen({ navigation }: any) {
           <Feather name="search" size={20} color={colors.placeholderText} style={styles.searchIcon} />
           <TextInput
             style={styles.searchInput}
-            placeholder="Search school or city..."
+            placeholder={t('mobile.internationalSchools.searchPlaceholder')}
             value={searchQuery}
             onChangeText={setSearchQuery}
             placeholderTextColor={colors.placeholderText}
@@ -94,7 +95,7 @@ export function InternationalSchoolsScreen({ navigation }: any) {
                     </View>
                   ))}
                   {item.curriculum.length > 2 && (
-                    <Text style={styles.moreText}>+{item.curriculum.length - 2} more</Text>
+                    <Text style={styles.moreText}>{t('mobile.scholarships.more', { count: item.curriculum.length - 2 })}</Text>
                   )}
                 </View>
                 <Feather name="chevron-right" size={20} color={colors.border} />
@@ -104,8 +105,8 @@ export function InternationalSchoolsScreen({ navigation }: any) {
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
               <Feather name="globe" size={48} color={colors.border} />
-              <Text style={styles.emptyTitle}>No Schools Found</Text>
-              <Text style={styles.emptySubtitle}>Try adjusting your search or filters to find international schools.</Text>
+              <Text style={styles.emptyTitle}>{t('mobile.internationalSchools.noSchools')}</Text>
+              <Text style={styles.emptySubtitle}>{t('mobile.internationalSchools.tryAdjusting')}</Text>
             </View>
           }
         />

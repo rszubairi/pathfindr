@@ -22,7 +22,9 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
+  const langMenuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const { user, isAuthenticated, logout } = useAuth();
   const { t, i18n } = useTranslation();
@@ -56,6 +58,12 @@ export function Header() {
         !userMenuRef.current.contains(event.target as Node)
       ) {
         setUserMenuOpen(false);
+      }
+      if (
+        langMenuRef.current &&
+        !langMenuRef.current.contains(event.target as Node)
+      ) {
+        setLangMenuOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -121,18 +129,41 @@ export function Header() {
 
           {/* Auth Buttons - Desktop */}
           <div className="hidden md:flex md:items-center md:gap-4">
-            {/* Language Switcher */}
-            <div className="flex items-center gap-2 mr-2 border-r pr-4 border-gray-200">
-              <Globe className="w-4 h-4 text-gray-400" />
-              <select
-                onChange={(e) => changeLanguage(e.target.value)}
-                value={i18n.language}
-                className="text-sm font-medium bg-transparent border-none focus:ring-0 cursor-pointer text-gray-700 hover:text-primary-600 transition-colors"
+            <div className="relative mr-2 border-r pr-4 border-gray-200" ref={langMenuRef}>
+              <button
+                onClick={() => setLangMenuOpen(!langMenuOpen)}
+                className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium text-gray-700"
               >
-                <option value="en">EN</option>
-                <option value="ms">BM</option>
-                <option value="zh">ZH</option>
-              </select>
+                <Globe className="w-4 h-4 text-gray-400" />
+                <span>{i18n.language.toUpperCase()}</span>
+                <ChevronDown className={cn('w-3 h-3 text-gray-400 transition-transform', langMenuOpen && 'rotate-180')} />
+              </button>
+
+              {langMenuOpen && (
+                <div className="absolute right-0 mt-2 w-32 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50 animate-in fade-in zoom-in duration-200 origin-top-right">
+                  {[
+                    { code: 'en', label: 'English' },
+                    { code: 'ms', label: 'Bahasa' },
+                    { code: 'zh', label: '中文' }
+                  ].map((lng) => (
+                    <button
+                      key={lng.code}
+                      onClick={() => {
+                        changeLanguage(lng.code);
+                        setLangMenuOpen(false);
+                      }}
+                      className={cn(
+                        'w-full text-left px-4 py-2 text-sm transition-colors',
+                        i18n.language === lng.code
+                          ? 'bg-primary-50 text-primary-600 font-semibold'
+                          : 'text-gray-700 hover:bg-gray-50'
+                      )}
+                    >
+                      {lng.label}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {isAuthenticated && user ? (
@@ -271,26 +302,22 @@ export function Header() {
                   })}
                 </div>
 
-                {/* Mobile Language Switcher */}
                 <div className="mt-8 px-4">
                   <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
                     Select Language
                   </p>
-                  <div className="flex gap-2">
-                    {['en', 'ms', 'zh'].map((lng) => (
-                      <button
-                        key={lng}
-                        onClick={() => changeLanguage(lng)}
-                        className={cn(
-                          'px-4 py-2 rounded-lg text-sm font-medium border transition-all',
-                          i18n.language === lng
-                            ? 'bg-primary-600 text-white border-primary-600'
-                            : 'bg-white text-gray-700 border-gray-200 hover:border-primary-600'
-                        )}
-                      >
-                        {lng === 'en' ? 'English' : lng === 'ms' ? 'Bahasa' : '中文'}
-                      </button>
-                    ))}
+                  <div className="relative">
+                    <select
+                      value={i18n.language}
+                      onChange={(e) => changeLanguage(e.target.value)}
+                      className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-primary-500 appearance-none"
+                    >
+                      <option value="en">English (EN)</option>
+                      <option value="ms">Bahasa Melayu (BM)</option>
+                      <option value="zh">中文 (ZH)</option>
+                    </select>
+                    <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                   </div>
                 </div>
               </div>

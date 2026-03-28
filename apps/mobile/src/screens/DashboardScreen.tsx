@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { RootState } from '../store';
 import { useQuery } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
@@ -15,6 +16,7 @@ export function DashboardScreen() {
   const { user } = useSelector((state: RootState) => state.auth);
   const [isNotifVisible, setIsNotifVisible] = React.useState(false);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const styles = createStyles(colors);
 
   const notifications = useQuery(
@@ -44,7 +46,7 @@ export function DashboardScreen() {
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerTextContainer}>
-          <Text style={styles.title}>Welcome back,</Text>
+          <Text style={styles.title}>{t('mobile.dashboard.welcome')}</Text>
           <Text style={styles.subtitle}>{user?.fullName || 'Student'}!</Text>
         </View>
         <View style={styles.headerRight}>
@@ -87,24 +89,24 @@ export function DashboardScreen() {
             <View style={styles.subHeader}>
               <Feather name="zap" size={24} color="#eab308" />
               <Text style={styles.subTitle}>
-                {subscription.tier.toUpperCase()} PLAN
+                {t('mobile.dashboard.plan', { tier: subscription.tier.toUpperCase() })}
               </Text>
             </View>
             <View style={styles.statsRow}>
               <View style={styles.statBox}>
                 <Text style={styles.statValue}>{subscription.applicationsUsed}</Text>
-                <Text style={styles.statLabel}>Applied</Text>
+                <Text style={styles.statLabel}>{t('mobile.dashboard.applied')}</Text>
               </View>
               <View style={styles.statBox}>
                 <Text style={styles.statValue}>
                   {subscription.applicationsLimit - subscription.applicationsUsed}
                 </Text>
-                <Text style={styles.statLabel}>Available</Text>
+                <Text style={styles.statLabel}>{t('mobile.dashboard.available')}</Text>
               </View>
             </View>
 
             <View style={styles.deadlinesContainer}>
-              <Text style={styles.deadlinesTitle}>Upcoming Scholarship Deadlines</Text>
+              <Text style={styles.deadlinesTitle}>{t('mobile.dashboard.upcomingDeadlines')}</Text>
               {upcomingScholarships?.slice(0, 3).map((item) => (
                 <View key={item._id} style={styles.deadlineRow}>
                   <Text style={styles.deadlineName} numberOfLines={1}>{item.name}</Text>
@@ -115,48 +117,48 @@ export function DashboardScreen() {
           </View>
         ) : (
           <View style={styles.inactiveSubscriptionBox}>
-            <Text style={styles.inactiveTitle}>Unlock Your Potential</Text>
+            <Text style={styles.inactiveTitle}>{t('mobile.dashboard.unlockPotential')}</Text>
             <Text style={styles.inactiveDesc}>
-              Subscribe to access premium features, apply limits, and priority application processing.
+              {t('mobile.dashboard.subscribeDesc')}
             </Text>
             <TouchableOpacity
               style={styles.upgradeBtn}
               onPress={() => navigation.navigate('Subscription')}
             >
-              <Text style={styles.upgradeBtnText}>View Plans</Text>
+              <Text style={styles.upgradeBtnText}>{t('mobile.dashboard.viewPlans')}</Text>
             </TouchableOpacity>
           </View>
         )}
       </View>
 
       <View style={styles.featuresSection}>
-        <Text style={styles.sectionTitle}>Explore Opportunities</Text>
+        <Text style={styles.sectionTitle}>{t('mobile.dashboard.exploreOpportunities')}</Text>
 
         <View style={styles.featuresGrid}>
           <FeatureCard
-            title="Scholarships"
-            description="Discover and apply for scholarships"
+            title={t('mobile.dashboard.scholarships')}
+            description={t('mobile.dashboard.scholarshipsDesc')}
             icon="award"
             onPress={() => navigation.navigate('Scholarships')}
             colors={colors}
           />
           <FeatureCard
-            title="Internships"
-            description="Find internship opportunities"
+            title={t('mobile.dashboard.internships')}
+            description={t('mobile.dashboard.internshipsDesc')}
             icon="briefcase"
             onPress={() => navigation.navigate('Internships')}
             colors={colors}
           />
           <FeatureCard
-            title="Boarding Schools"
-            description="Discover top boarding schools"
+            title={t('mobile.dashboard.boardingSchools')}
+            description={t('mobile.dashboard.boardingSchoolsDesc')}
             icon="book-open"
             onPress={() => navigation.navigate('BoardingSchools')}
             colors={colors}
           />
           <FeatureCard
-            title="International Schools"
-            description="Explore modern international education"
+            title={t('mobile.dashboard.internationalSchools')}
+            description={t('mobile.dashboard.internationalSchoolsDesc')}
             icon="globe"
             onPress={() => navigation.navigate('InternationalSchools')}
             colors={colors}

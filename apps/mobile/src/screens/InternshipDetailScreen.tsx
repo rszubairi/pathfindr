@@ -10,6 +10,7 @@ import {
   Platform,
 } from 'react-native';
 import { useQuery } from 'convex/react';
+import { useTranslation } from 'react-i18next';
 import { api } from '../../../../convex/_generated/api';
 import { Feather } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
@@ -21,6 +22,7 @@ import { useTheme, ThemeColors } from '../theme';
 export function InternshipDetailScreen({ route, navigation }: any) {
   const { id } = route.params;
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const styles = createStyles(colors);
   const { user } = useSelector((state: RootState) => state.auth);
 
@@ -43,17 +45,17 @@ export function InternshipDetailScreen({ route, navigation }: any) {
   const handleApply = async () => {
     if (!isSubscribed) {
       Alert.alert(
-        'Subscription Required',
-        'Internship applications and company host details are exclusive to Pro and Expert members.',
+        t('mobile.details.subscriptionRequired'),
+        t('mobile.details.exclusiveFeature'),
         [
-          { text: 'Not Now', style: 'cancel' },
-          { text: 'Upgrade Plan', onPress: () => navigation.navigate('Subscription') },
+          { text: t('mobile.details.notNow'), style: 'cancel' },
+          { text: t('mobile.details.upgradePlan'), onPress: () => navigation.navigate('Subscription') },
         ]
       );
       return;
     }
 
-    Alert.alert('Success', 'Your profile has been shared with the host organization. They will contact you if shortlisted.');
+    Alert.alert(t('mobile.details.success'), t('mobile.details.successShared'));
   };
 
   const isPrivate = internship.companyName === 'Private Company';
@@ -101,13 +103,13 @@ export function InternshipDetailScreen({ route, navigation }: any) {
 
         {/* Description Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Role Overview</Text>
+          <Text style={styles.sectionTitle}>{t('mobile.details.roleOverview')}</Text>
           <Text style={styles.description}>{internship.description}</Text>
         </View>
 
         {/* Responsibilities Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Responsibilities</Text>
+          <Text style={styles.sectionTitle}>{t('mobile.details.responsibilities')}</Text>
           {internship.responsibilities.map((item: string, index: number) => (
             <View key={index} style={styles.listItem}>
               <View style={styles.bullet} />
@@ -118,7 +120,7 @@ export function InternshipDetailScreen({ route, navigation }: any) {
 
         {/* Requirements Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Requirements</Text>
+          <Text style={styles.sectionTitle}>{t('mobile.details.requirements')}</Text>
           {internship.requirements.map((item: string, index: number) => (
             <View key={index} style={styles.listItem}>
               <Feather name="check" size={14} color="#10b981" style={{ marginRight: 8, marginTop: 4 }} />
@@ -133,7 +135,7 @@ export function InternshipDetailScreen({ route, navigation }: any) {
       {/* Floating Bottom Action Bar */}
       <View style={styles.bottomActions}>
         <View style={styles.actionInfo}>
-          <Text style={styles.footerLabel}>Application Deadline</Text>
+          <Text style={styles.footerLabel}>{t('mobile.details.applicationDeadline')}</Text>
           <Text style={styles.footerValue}>
             {new Date(internship.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
           </Text>
@@ -147,7 +149,7 @@ export function InternshipDetailScreen({ route, navigation }: any) {
             <ActivityIndicator color="#fff" />
           ) : (
             <>
-              <Text style={styles.applyButtonText}>Apply for Interest</Text>
+              <Text style={styles.applyButtonText}>{t('mobile.details.applyInterest')}</Text>
               <Feather name="arrow-right" size={18} color="#fff" style={{ marginLeft: 8 }} />
             </>
           )}

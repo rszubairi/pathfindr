@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { SearchInput } from '@/components/ui/SearchInput';
 import { Badge } from '@/components/ui/Badge';
 import type { ScholarshipFilters } from '@/types';
@@ -25,6 +26,8 @@ export function ScholarshipSearch({
   sortBy,
   onSortChange,
 }: ScholarshipSearchProps) {
+  const { t } = useTranslation();
+  
   // Build active filter chips
   const activeFilters: Array<{
     type: keyof ScholarshipFilters;
@@ -80,7 +83,7 @@ export function ScholarshipSearch({
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="flex-1">
           <SearchInput
-            placeholder="Search scholarships by name, provider, or keyword..."
+            placeholder={t('scholarships.searchPlaceholder')}
             onSearch={onSearchChange}
             debounceMs={400}
             showClearButton
@@ -90,7 +93,7 @@ export function ScholarshipSearch({
         {/* Sort Dropdown */}
         <div className="flex items-center gap-2">
           <label htmlFor="sort" className="text-sm font-medium text-gray-700 whitespace-nowrap">
-            Sort by:
+            {t('scholarships.sortBy')}
           </label>
           <select
             id="sort"
@@ -100,10 +103,10 @@ export function ScholarshipSearch({
             }
             className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white"
           >
-            <option value="relevant">Relevant</option>
-            <option value="deadline">Deadline</option>
-            <option value="value">Value</option>
-            <option value="recent">Recent</option>
+            <option value="relevant">{t('scholarships.sort.relevant')}</option>
+            <option value="deadline">{t('scholarships.sort.deadline')}</option>
+            <option value="value">{t('scholarships.sort.value')}</option>
+            <option value="recent">{t('scholarships.sort.recent')}</option>
           </select>
         </div>
       </div>
@@ -113,7 +116,7 @@ export function ScholarshipSearch({
         <div className="flex flex-wrap items-center gap-2">
           {/* Result Count */}
           <span className="text-sm text-gray-600 font-medium">
-            {resultCount} {resultCount === 1 ? 'scholarship' : 'scholarships'} found
+            {t('internationalSchools.results.schools', { count: resultCount })}
           </span>
 
           {/* Separator */}

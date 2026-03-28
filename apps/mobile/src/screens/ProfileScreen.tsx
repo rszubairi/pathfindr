@@ -82,7 +82,7 @@ export function ProfileScreen({ navigation }: any) {
         <View style={styles.settingsRow}>
           <View style={styles.themeToggle}>
             <Feather name={isDark ? 'moon' : 'sun'} size={16} color={colors.textMuted} />
-            <Text style={styles.settingsLabel}>{isDark ? 'Dark' : 'Light'}</Text>
+            <Text style={styles.settingsLabel}>{isDark ? t('mobile.profile.dark') : t('mobile.profile.light')}</Text>
             <Switch
               value={isDark}
               onValueChange={toggleTheme}
@@ -153,11 +153,11 @@ export function ProfileScreen({ navigation }: any) {
         {/* Personal Details */}
         <ViewSection icon="user" title={t('mobile.profile.personalDetails')}>
           <View style={styles.grid}>
-            <DetailItem label="Date of Birth" value={profile.dateOfBirth} />
-            <DetailItem label="Gender" value={profile.gender ? profile.gender.charAt(0).toUpperCase() + profile.gender.slice(1) : undefined} />
-            <DetailItem label="Nationality" value={profile.nationality} />
-            <DetailItem label="Country" value={profile.country} />
-            <DetailItem label="Phone" value={profile.phone ? `${profile.countryCode || ''} ${profile.phone}`.trim() : undefined} />
+            <DetailItem label={t('mobile.profile.dateOfBirth')} value={profile.dateOfBirth} />
+            <DetailItem label={t('mobile.profile.gender')} value={profile.gender ? t(`profile.forms.personalDetails.gender.${profile.gender}`) : undefined} />
+            <DetailItem label={t('mobile.profile.nationality')} value={profile.nationality} />
+            <DetailItem label={t('mobile.profile.country')} value={profile.country} />
+            <DetailItem label={t('mobile.profile.phone')} value={profile.phone ? `${profile.countryCode || ''} ${profile.phone}`.trim() : undefined} />
           </View>
         </ViewSection>
 
@@ -171,9 +171,9 @@ export function ProfileScreen({ navigation }: any) {
                   {edu.qualificationTitle} • {edu.fieldOfStudy}
                 </Text>
                 <Text style={styles.itemMeta}>
-                  {edu.startDate} — {edu.endDate || 'Present'}
+                  {edu.startDate} — {edu.endDate || t('mobile.profile.present')}
                 </Text>
-                {edu.gpa && <Text style={styles.itemGpa}>GPA: {edu.gpa}</Text>}
+                {edu.gpa && <Text style={styles.itemGpa}>{t('mobile.profile.gpa')}: {edu.gpa}</Text>}
               </View>
             ))}
           </ViewSection>

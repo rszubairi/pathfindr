@@ -67,13 +67,13 @@ export default function StudentProfileViewPage() {
         <Container className="py-12">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-2xl font-bold text-gray-900 mb-4">
-              Profile Not Found
+              {t('profileView.notFound')}
             </h1>
             <p className="text-gray-600 mb-6">
-              You haven&apos;t completed your profile yet. Complete it to view your profile here.
+              {t('profileView.notFoundDesc')}
             </p>
             <Button variant="primary" asChild>
-              <Link href="/profile/complete">Complete Profile</Link>
+              <Link href="/profile/complete">{t('profileView.completeProfileBtn')}</Link>
             </Button>
           </div>
         </Container>
@@ -98,7 +98,7 @@ export default function StudentProfileViewPage() {
     <MainLayout>
       <Container className="py-6 sm:py-12">
         <div className="max-w-3xl mx-auto space-y-4 sm:space-y-6">
-          {/* ─── Header ────────────────────────────────────────── */}
+          {/* Header */}
           <Card className="p-5 sm:p-8">
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
               <div className="flex items-center gap-4">
@@ -139,29 +139,29 @@ export default function StudentProfileViewPage() {
               <Button variant="secondary" size="sm" asChild className="self-start mt-1 shrink-0">
                 <Link href="/profile/complete" className="flex items-center gap-1.5">
                   <Pencil className="w-4 h-4" />
-                  Edit Profile
+                  {t('profileView.editProfile')}
                 </Link>
               </Button>
             </div>
           </Card>
 
-          {/* ─── Personal Details ───────────────────────────────── */}
+          {/* Personal Details */}
           <Card className="p-5 sm:p-6">
-            <SectionHeader icon={User} title="Personal Details" />
+            <SectionHeader icon={User} title={t('profileView.sections.personal')} />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-              <DetailItem label="Date of Birth" value={profile.dateOfBirth} />
+              <DetailItem label={t('profileView.fields.dob')} value={profile.dateOfBirth} />
               <DetailItem
-                label="Gender"
+                label={t('profileView.fields.gender')}
                 value={
                   profile.gender
-                    ? profile.gender.charAt(0).toUpperCase() + profile.gender.slice(1).replace(/-/g, ' ')
+                    ? t(`profile.forms.personalDetails.gender.${profile.gender}`)
                     : undefined
                 }
               />
-              <DetailItem label="Nationality" value={profile.nationality} />
-              <DetailItem label="Country" value={profile.country} />
+              <DetailItem label={t('profileView.fields.nationality')} value={profile.nationality} />
+              <DetailItem label={t('profileView.fields.country')} value={profile.country} />
               <DetailItem
-                label="Phone"
+                label={t('profileView.fields.phone')}
                 value={
                   profile.phone
                     ? `${profile.countryCode || ''} ${profile.phone}`
@@ -171,10 +171,10 @@ export default function StudentProfileViewPage() {
             </div>
           </Card>
 
-          {/* ─── Education ──────────────────────────────────────── */}
+          {/* Education */}
           {profile.education && profile.education.length > 0 && (
             <Card className="p-6">
-              <SectionHeader icon={GraduationCap} title="Education" />
+              <SectionHeader icon={GraduationCap} title={t('profileView.sections.education')} />
               <div className="mt-4 space-y-5">
                 {profile.education.map((edu, index) => (
                   <div
@@ -190,18 +190,18 @@ export default function StudentProfileViewPage() {
                     </h4>
                     <p className="text-sm text-gray-700 mt-0.5">
                       {edu.qualificationTitle}
-                      {edu.fieldOfStudy && ` in ${edu.fieldOfStudy}`}
+                      {edu.fieldOfStudy && ` ${t('common.in', { defaultValue: 'in' })} ${edu.fieldOfStudy}`}
                     </p>
                     <div className="flex items-center gap-4 mt-1 text-sm text-gray-500">
                       <span className="inline-flex items-center gap-1">
                         <Calendar className="w-3.5 h-3.5" />
                         {edu.startDate}
-                        {edu.endDate ? ` — ${edu.endDate}` : ' — Present'}
+                        {edu.endDate ? ` — ${edu.endDate}` : ` — ${t('profileView.fields.present')}`}
                       </span>
                       {edu.gpa !== undefined && edu.gpa !== null && (
-                        <span>GPA: {edu.gpa}</span>
+                        <span>{t('profileView.fields.gpa')}: {edu.gpa}</span>
                       )}
-                      {edu.grade && <span>Grade: {edu.grade}</span>}
+                      {edu.grade && <span>{t('profileView.fields.grade')}: {edu.grade}</span>}
                     </div>
                   </div>
                 ))}
@@ -209,10 +209,10 @@ export default function StudentProfileViewPage() {
             </Card>
           )}
 
-          {/* ─── Test Scores ────────────────────────────────────── */}
+          {/* Test Scores */}
           {hasTestScores && (
             <Card className="p-6">
-              <SectionHeader icon={FileText} title="Test Scores" />
+              <SectionHeader icon={FileText} title={t('profileView.sections.testScores')} />
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-4">
                 {profile.testScores?.sat && (
                   <ScoreItem label="SAT" value={profile.testScores.sat} />
@@ -233,10 +233,10 @@ export default function StudentProfileViewPage() {
             </Card>
           )}
 
-          {/* ─── Certificates ───────────────────────────────────── */}
+          {/* Certificates */}
           {hasCertificates && (
             <Card className="p-6">
-              <SectionHeader icon={Award} title="Certificates" />
+              <SectionHeader icon={Award} title={t('profileView.sections.certificates')} />
               <div className="mt-4 space-y-4">
                 {profile.certificates!.map((cert, index) => (
                   <div
@@ -265,10 +265,10 @@ export default function StudentProfileViewPage() {
             </Card>
           )}
 
-          {/* ─── Projects ───────────────────────────────────────── */}
+          {/* Projects */}
           {hasProjects && (
             <Card className="p-6">
-              <SectionHeader icon={FolderOpen} title="Projects" />
+              <SectionHeader icon={FolderOpen} title={t('profileView.sections.projects')} />
               <div className="mt-4 space-y-5">
                 {profile.projects!.map((proj, index) => (
                   <div
@@ -291,7 +291,7 @@ export default function StudentProfileViewPage() {
                       <span className="inline-flex items-center gap-1">
                         <Calendar className="w-3.5 h-3.5" />
                         {proj.startDate}
-                        {proj.endDate ? ` — ${proj.endDate}` : ' — Present'}
+                        {proj.endDate ? ` — ${proj.endDate}` : ` — ${t('profileView.fields.present')}`}
                       </span>
                     </div>
                     {proj.technologies && proj.technologies.length > 0 && (
@@ -312,12 +312,12 @@ export default function StudentProfileViewPage() {
             </Card>
           )}
 
-          {/* ─── Skills & Interests ─────────────────────────────── */}
+          {/* Skills & Interests */}
           {(hasSkills || hasInterests) && (
             <Card className="p-6">
               {hasSkills && (
                 <div>
-                  <SectionHeader icon={Sparkles} title="Skills" />
+                  <SectionHeader icon={Sparkles} title={t('profileView.sections.skills')} />
                   <div className="flex flex-wrap gap-2 mt-3">
                     {profile.skills!.map((skill) => (
                       <span
@@ -332,7 +332,7 @@ export default function StudentProfileViewPage() {
               )}
               {hasInterests && (
                 <div className={hasSkills ? 'mt-6' : ''}>
-                  <SectionHeader icon={Heart} title="Interests" />
+                  <SectionHeader icon={Heart} title={t('profileView.sections.interests')} />
                   <div className="flex flex-wrap gap-2 mt-3">
                     {profile.interests!.map((interest) => (
                       <span
@@ -348,14 +348,14 @@ export default function StudentProfileViewPage() {
             </Card>
           )}
 
-          {/* ─── Preferences ────────────────────────────────────── */}
+          {/* Preferences */}
           {(profile.preferredCountries?.length > 0 || profile.availability) && (
             <Card className="p-6">
-              <SectionHeader icon={Globe} title="Preferences" />
+              <SectionHeader icon={Globe} title={t('profileView.sections.preferences')} />
               {profile.preferredCountries && profile.preferredCountries.length > 0 && (
                 <div className="mt-4">
                   <p className="text-sm font-medium text-gray-600 mb-2">
-                    Preferred Countries
+                    {t('profileView.fields.preferredCountries')}
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {profile.preferredCountries.map((country) => (
@@ -372,7 +372,7 @@ export default function StudentProfileViewPage() {
               {profile.availability && (
                 <div className="mt-4">
                   <p className="text-sm font-medium text-gray-600 mb-1">
-                    Availability
+                    {t('profileView.fields.availability')}
                   </p>
                   <p className="text-gray-900">{profile.availability}</p>
                 </div>

@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
-  Platform
 } from 'react-native';
 import { useQuery } from 'convex/react';
+import { useTranslation } from 'react-i18next';
 import { api } from '../../../../convex/_generated/api';
 import { Feather } from '@expo/vector-icons';
 import { BoardingSchoolFilterModal } from '../components/BoardingSchoolFilterModal';
@@ -20,6 +20,7 @@ export function BoardingSchoolsScreen({ navigation }: any) {
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const [filters, setFilters] = useState<any>({});
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const styles = createStyles(colors);
 
   const boardingSchoolsSelection = useQuery(api.boardingSchools.filter, {
@@ -45,7 +46,7 @@ export function BoardingSchoolsScreen({ navigation }: any) {
           <Feather name="search" size={20} color={colors.placeholderText} style={styles.searchIcon} />
           <TextInput
             style={styles.searchInput}
-            placeholder="Search school name or S/N..."
+            placeholder={t('mobile.boardingSchools.searchPlaceholder')}
             value={searchQuery}
             onChangeText={setSearchQuery}
             placeholderTextColor={colors.placeholderText}
@@ -93,7 +94,7 @@ export function BoardingSchoolsScreen({ navigation }: any) {
 
                 <View style={styles.managedRow}>
                   <Feather name="shield" size={14} color={colors.placeholderText} />
-                  <Text style={styles.managedText}>Managed by {item.managedBy}</Text>
+                  <Text style={styles.managedText}>{t('mobile.boardingSchools.managedBy', { provider: item.managedBy })}</Text>
                 </View>
 
                 <View style={styles.footer}>
@@ -120,8 +121,8 @@ export function BoardingSchoolsScreen({ navigation }: any) {
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
               <Feather name="book-open" size={48} color={colors.border} />
-              <Text style={styles.emptyTitle}>No Schools Found</Text>
-              <Text style={styles.emptySubtitle}>Try adjusting your search or filters to find boarding schools.</Text>
+              <Text style={styles.emptyTitle}>{t('mobile.boardingSchools.noSchools')}</Text>
+              <Text style={styles.emptySubtitle}>{t('mobile.boardingSchools.tryAdjusting')}</Text>
             </View>
           }
         />

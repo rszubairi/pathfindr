@@ -2,9 +2,8 @@
 
 import React, { useState, useMemo, useCallback } from 'react';
 import Image from 'next/image';
-import { Filter, X, SearchX, Building2, Bell, BellRing, CheckCircle2 } from 'lucide-react';
-import { useQuery, useMutation } from 'convex/react';
-import { api } from '../../../../../convex/_generated/api';
+import { Filter, X, SearchX, Building2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
@@ -16,17 +15,17 @@ import { ScholarshipSkeleton } from '@/components/scholarships/ScholarshipSkelet
 import { useBoardingSchoolSearch, useBoardingSchoolStats } from '@/lib/convexQueries';
 import { useAuth } from '@/hooks/useAuth';
 import type { BoardingSchoolFilters as Filters } from '@/types';
-import type { Id } from '../../../../../convex/_generated/dataModel';
 
 const ITEMS_PER_PAGE = 20;
 
 export default function BoardingSchoolsPage() {
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState<Filters>({});
   const [sortBy, setSortBy] = useState<'name' | 'state' | 'category'>('name');
   const [currentPage, setCurrentPage] = useState(1);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
-  const { user, isAuthenticated } = useAuth();
+  const { user } = useAuth();
 
   const { data: schoolsData = [], isLoading } = useBoardingSchoolSearch(searchQuery, filters);
   const { data: stats } = useBoardingSchoolStats();
@@ -117,13 +116,12 @@ export default function BoardingSchoolsPage() {
                 </div>
                 <div>
                   <h1 className="text-4xl sm:text-5xl font-bold text-gray-900">
-                    Boarding Schools
+                    {t('boardingSchools.title')}
                   </h1>
                 </div>
               </div>
               <p className="text-lg text-gray-600">
-                Discover {stats?.total || '95+'} government boarding schools across Malaysia.
-                Browse SBP, MRSM, SMS, and more. Never miss an application deadline again.
+                {t('boardingSchools.subtitle')}
               </p>
               <div className="mt-4 flex flex-wrap gap-3">
                 <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-lg px-3 py-2 text-sm">
@@ -161,7 +159,7 @@ export default function BoardingSchoolsPage() {
               <div className="flex flex-col sm:flex-row gap-3">
                 <div className="flex-1">
                   <SearchInput
-                    placeholder="Search schools by name, e.g. MCKK, MRSM Langkawi..."
+                    placeholder={t('boardingSchools.searchPlaceholder')}
                     onSearch={setSearchQuery}
                     debounceMs={400}
                     showClearButton
@@ -169,7 +167,7 @@ export default function BoardingSchoolsPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <label htmlFor="sort" className="text-sm font-medium text-gray-700 whitespace-nowrap">
-                    Sort by:
+                    {t('scholarships.sortBy')}
                   </label>
                   <select
                     id="sort"
@@ -188,7 +186,7 @@ export default function BoardingSchoolsPage() {
               {(activeFilters.length > 0 || searchQuery) && (
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-sm text-gray-600 font-medium">
-                    {sortedSchools.length} {sortedSchools.length === 1 ? 'school' : 'schools'} found
+                    {t('internationalSchools.results.schools', { count: sortedSchools.length })}
                   </span>
                   {activeFilters.length > 0 && <span className="text-gray-300">|</span>}
                   {activeFilters.map((filter, index) => (
@@ -217,7 +215,7 @@ export default function BoardingSchoolsPage() {
               className="w-full flex items-center justify-center gap-2"
             >
               <Filter className="h-5 w-5" />
-              Filters
+              {t('boardingSchools.filters')}
               {activeFilters.length > 0 && (
                 <span className="bg-primary-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                   {activeFilters.length}
@@ -253,12 +251,12 @@ export default function BoardingSchoolsPage() {
                   <div className="bg-gray-100 rounded-full p-6 mb-4">
                     <SearchX className="h-12 w-12 text-gray-400" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">No schools found</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">{t('boardingSchools.noResults')}</h3>
                   <p className="text-gray-600 text-center mb-6 max-w-md">
-                    We couldn&apos;t find any boarding schools matching your criteria. Try adjusting your filters or search query.
+                    {t('boardingSchools.noResultsDesc')}
                   </p>
                   <Button variant="primary" size="md" onClick={handleClearFilters}>
-                    Clear All Filters
+                    {t('scholarships.clearFilters')}
                   </Button>
                 </div>
               ) : (
@@ -278,7 +276,7 @@ export default function BoardingSchoolsPage() {
                     onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
                     disabled={currentPage === 1}
                   >
-                    Previous
+                    {t('scholarships.previous')}
                   </Button>
 
                   <div className="flex items-center gap-2">
@@ -316,7 +314,7 @@ export default function BoardingSchoolsPage() {
                     onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
                     disabled={currentPage === totalPages}
                   >
-                    Next
+                    {t('scholarships.next')}
                   </Button>
                 </div>
               )}
@@ -331,7 +329,7 @@ export default function BoardingSchoolsPage() {
           <div className="absolute inset-0 bg-black/50" onClick={toggleMobileFilter}></div>
           <div className="absolute inset-y-0 right-0 w-full max-w-sm bg-white shadow-2xl overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-gray-200 px-4 py-4 flex items-center justify-between z-10">
-              <h2 className="text-lg font-bold text-gray-900">Filters</h2>
+              <h2 className="text-lg font-bold text-gray-900">{t('boardingSchools.filters')}</h2>
               <button onClick={toggleMobileFilter} className="p-2 hover:bg-gray-100 rounded-lg transition">
                 <X className="h-6 w-6 text-gray-600" />
               </button>
@@ -346,7 +344,7 @@ export default function BoardingSchoolsPage() {
             </div>
             <div className="sticky bottom-0 bg-white border-t border-gray-200 px-4 py-4">
               <Button variant="primary" size="lg" onClick={toggleMobileFilter} className="w-full">
-                Show {sortedSchools.length} Results
+                {t('boardingSchools.showResults', { count: sortedSchools.length })}
               </Button>
             </div>
           </div>
