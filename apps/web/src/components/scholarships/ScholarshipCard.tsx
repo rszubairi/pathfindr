@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Calendar, ExternalLink, MapPin, BookOpen, TrendingUp, Clock, Bell, Home } from 'lucide-react';
+import { Calendar, ExternalLink, MapPin, BookOpen, TrendingUp, Clock, Bell, Home, Trophy, Globe } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { cn, formatCurrency, formatDate, getDeadlineUrgency } from '@/lib/utils';
@@ -141,13 +141,31 @@ export function ScholarshipCard({ scholarship, showMatchScore = false, userCount
           </div>
         </div>
 
-        {/* Provider name */}
-        <p className={cn(
-          "font-semibold text-gray-500 mb-1 truncate",
-          scholarship.providerType === 'government' ? "text-sm" : "text-xs"
-        )}>
-          {scholarship.provider}
-        </p>
+        {/* Provider name & Rankings */}
+        <div className="flex items-center gap-2 mb-1 overflow-hidden">
+          <p className={cn(
+            "font-semibold text-gray-400 truncate flex-shrink min-w-0 font-medium",
+            scholarship.providerType === 'government' ? "text-sm" : "text-[10px] uppercase tracking-wider"
+          )}>
+            {scholarship.provider}
+          </p>
+          {scholarship.providerType === 'university' && (scholarship.localRanking || scholarship.internationalRanking) && (
+            <div className="flex gap-1 flex-shrink-0 ml-auto items-center">
+                {scholarship.localRanking && (
+                    <span title="Local Rank" className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-amber-50 text-amber-700 border border-amber-100">
+                        <Trophy className="w-2.5 h-2.5" />
+                        #{scholarship.localRanking}
+                    </span>
+                )}
+                {scholarship.internationalRanking && (
+                    <span title="World Rank" className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-blue-50 text-blue-700 border border-blue-100">
+                        <Globe className="w-2.5 h-2.5" />
+                        #{scholarship.internationalRanking}
+                    </span>
+                )}
+            </div>
+          )}
+        </div>
 
         {/* Scholarship name */}
         <h3 className="text-base font-bold text-gray-900 mb-3 line-clamp-2 leading-snug group-hover:text-primary-600 transition-colors duration-200">

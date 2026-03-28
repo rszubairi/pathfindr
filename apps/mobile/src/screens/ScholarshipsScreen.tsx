@@ -105,7 +105,25 @@ export function ScholarshipsScreen({ navigation }: any) {
                   </View>
                 </View>
 
-                <Text style={styles.providerName}>{item.provider}</Text>
+                <View style={styles.providerRow}>
+                  <Text style={styles.providerName}>{item.provider}</Text>
+                  {item.providerType === 'university' && (item.localRanking || item.internationalRanking) && (
+                    <View style={styles.rankingBadges}>
+                      {item.localRanking && (
+                        <View style={[styles.miniBadge, { backgroundColor: '#fffbeb', borderColor: '#fef3c7' }]}>
+                          <Feather name="award" size={10} color="#b45309" />
+                          <Text style={[styles.miniBadgeText, { color: '#b45309' }]}>#{item.localRanking}</Text>
+                        </View>
+                      )}
+                      {item.internationalRanking && (
+                        <View style={[styles.miniBadge, { backgroundColor: '#eff6ff', borderColor: '#dbeafe' }]}>
+                          <Feather name="globe" size={10} color="#1d4ed8" />
+                          <Text style={[styles.miniBadgeText, { color: '#1d4ed8' }]}>#{item.internationalRanking}</Text>
+                        </View>
+                      )}
+                    </View>
+                  )}
+                </View>
                 <Text style={styles.scholarshipName} numberOfLines={2}>{item.name}</Text>
 
                 <View style={styles.valueRow}>
@@ -214,7 +232,11 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
   badgeText: { fontSize: 10, fontWeight: '700' },
   deadlineBadge: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   deadlineText: { fontSize: 12, fontWeight: '600' },
-  providerName: { fontSize: 13, color: colors.textMuted, fontWeight: '500', marginBottom: 4 },
+  providerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4, gap: 8 },
+  providerName: { fontSize: 13, color: colors.textMuted, fontWeight: '500', flex: 1 },
+  rankingBadges: { flexDirection: 'row', gap: 6 },
+  miniBadge: { flexDirection: 'row', alignItems: 'center', gap: 3, paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4, borderWidth: 1 },
+  miniBadgeText: { fontSize: 10, fontWeight: '800' },
   scholarshipName: { fontSize: 18, fontWeight: 'bold', color: colors.text, marginBottom: 12, lineHeight: 24 },
   valueRow: { flexDirection: 'row', alignItems: 'baseline', gap: 4, marginBottom: 16 },
   valueText: { fontSize: 24, fontWeight: '800', color: colors.primary },
