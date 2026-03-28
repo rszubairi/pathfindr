@@ -28,6 +28,8 @@ export default defineSchema({
     status: v.union(v.literal('active'), v.literal('closed'), v.literal('pending')),
     createdAt: v.string(),
     updatedAt: v.string(),
+    localRanking: v.optional(v.number()),
+    internationalRanking: v.optional(v.number()),
   })
     .index('by_status', ['status'])
     .index('by_deadline', ['deadline'])

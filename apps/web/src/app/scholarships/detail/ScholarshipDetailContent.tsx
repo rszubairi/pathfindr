@@ -17,6 +17,7 @@ import {
     Bell,
     BellOff,
     Clock,
+    Trophy
 } from 'lucide-react';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Container } from '@/components/ui/Container';
@@ -175,9 +176,27 @@ export function ScholarshipDetailContent() {
                     <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">
                         {scholarship.name}
                     </h1>
-                    <div className="flex items-center gap-2 text-lg text-gray-600">
-                        <Building2 className="h-5 w-5" />
-                        <span className="font-medium">{scholarship.provider}</span>
+                    <div className="flex items-center flex-wrap gap-4 text-lg text-gray-600">
+                        <div className="flex items-center gap-2">
+                            <Building2 className="h-5 w-5" />
+                            <span className="font-medium">{scholarship.provider}</span>
+                        </div>
+                        {scholarship.providerType === 'university' && (
+                            <div className="flex gap-2">
+                                {scholarship.localRanking && (
+                                    <Badge variant="secondary" size="sm" className="bg-amber-50 text-amber-700 border-amber-100 flex items-center gap-1">
+                                        <Trophy className="h-3 w-3" />
+                                        #{scholarship.localRanking} Local
+                                    </Badge>
+                                )}
+                                {scholarship.internationalRanking && (
+                                    <Badge variant="secondary" size="sm" className="bg-blue-50 text-blue-700 border-blue-100 flex items-center gap-1">
+                                        <Globe className="h-3 w-3" />
+                                        #{scholarship.internationalRanking} World
+                                    </Badge>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </Container>
             </section>
@@ -438,6 +457,27 @@ export function ScholarshipDetailContent() {
                                             <p className="text-sm text-gray-500">Currency</p>
                                             <p className="font-medium text-gray-900">{scholarship.currency}</p>
                                         </div>
+                                        {scholarship.providerType === 'university' && (scholarship.localRanking || scholarship.internationalRanking) && (
+                                            <div className="pt-2 border-t border-gray-100 mt-2 space-y-3">
+                                                <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">University Rankings</p>
+                                                {scholarship.localRanking && (
+                                                    <div className="flex items-center justify-between">
+                                                        <span className="text-sm text-gray-500">Local Rank</span>
+                                                        <Badge variant="secondary" size="sm" className="bg-amber-50 text-amber-700 border-amber-100">
+                                                            #{scholarship.localRanking}
+                                                        </Badge>
+                                                    </div>
+                                                )}
+                                                {scholarship.internationalRanking && (
+                                                    <div className="flex items-center justify-between">
+                                                        <span className="text-sm text-gray-500">World Rank</span>
+                                                        <Badge variant="secondary" size="sm" className="bg-blue-50 text-blue-700 border-blue-100">
+                                                            #{scholarship.internationalRanking}
+                                                        </Badge>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
                                 </CardContent>
                             </Card>

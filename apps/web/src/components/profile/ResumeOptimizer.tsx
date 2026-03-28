@@ -299,18 +299,21 @@ function ResumePreview({ isOpen, onClose, profile, user }: { isOpen: boolean, on
 }
 
 export function ResumeContent({ profile, user, showProgress = false }: { profile: any, user: any, showProgress?: boolean }) {
+  const safeProfile = profile || { education: [], projects: [], skills: [], certificates: [], testScores: {} };
+  
   const getSectionProgress = (section: string) => {
+    if (!profile) return 0;
     switch (section) {
       case 'education':
-        return profile.education?.length > 0 ? (profile.education.some((e: any) => e.gpa) ? 100 : 70) : 0;
+        return safeProfile.education?.length > 0 ? (safeProfile.education.some((e: any) => e.gpa) ? 100 : 70) : 0;
       case 'projects':
-        return profile.projects?.length > 0 ? (profile.projects.every((p: any) => p.description?.length > 50) ? 100 : 50) : 0;
+        return safeProfile.projects?.length > 0 ? (safeProfile.projects.every((p: any) => p.description?.length > 50) ? 100 : 50) : 0;
       case 'skills':
-        return profile.skills?.length > 0 ? Math.min(100, (profile.skills.length / 8) * 100) : 0;
+        return safeProfile.skills?.length > 0 ? Math.min(100, (safeProfile.skills.length / 8) * 100) : 0;
       case 'certificates':
-        return profile.certificates?.length > 0 ? 100 : 0;
+        return safeProfile.certificates?.length > 0 ? 100 : 0;
       case 'testScores':
-        return Object.values(profile.testScores || {}).some(v => v !== undefined) ? 100 : 0;
+        return Object.values(safeProfile.testScores || {}).some(v => v !== undefined) ? 100 : 0;
       default:
         return 0;
     }
@@ -331,8 +334,8 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
           </h1>
           <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-600">
             <span className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5" /> {user.email}</span>
-            {profile.phone && <span className="flex items-center gap-1.5"><Phone className="w-3.5 h-3.5" /> {profile.phone}</span>}
-            {profile.country && <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5" /> {profile.country}</span>}
+            {safeProfile.phone && <span className="flex items-center gap-1.5"><Phone className="w-3.5 h-3.5" /> {safeProfile.phone}</span>}
+            {safeProfile.country && <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5" /> {safeProfile.country}</span>}
           </div>
         </div>
         <div className="hidden sm:block">
@@ -353,9 +356,9 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
               progress={getSectionProgress('education')}
               showProgress={showProgress}
             />
-            {profile.education?.length > 0 ? (
+            {safeProfile.education?.length > 0 ? (
               <div className="space-y-6">
-                {profile.education.map((edu: any, i: number) => (
+                {safeProfile.education.map((edu: any, i: number) => (
                   <div key={i} className="relative pl-4 border-l-2 border-gray-100">
                     <h4 className="font-bold text-lg leading-tight">{edu.institutionName}</h4>
                     <p className="text-gray-700 italic">{edu.qualificationTitle} • {edu.fieldOfStudy}</p>
@@ -379,9 +382,9 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
               progress={getSectionProgress('projects')}
               showProgress={showProgress}
             />
-            {profile.projects?.length > 0 ? (
+            {safeProfile.projects?.length > 0 ? (
               <div className="space-y-6">
-                {profile.projects.map((proj: any, i: number) => (
+                {safeProfile.projects.map((proj: any, i: number) => (
                   <div key={i} className="relative pl-4 border-l-2 border-gray-100">
                     <h4 className="font-bold text-lg leading-tight">{proj.title}</h4>
                     <p className="text-sm text-gray-600 mt-1 leading-relaxed">{proj.description}</p>
@@ -413,9 +416,9 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
               progress={getSectionProgress('skills')}
               showProgress={showProgress}
             />
-            {profile.skills?.length > 0 ? (
+            {safeProfile.skills?.length > 0 ? (
               <div className="flex flex-wrap gap-2">
-                {profile.skills.map((skill: string) => (
+                {safeProfile.skills.map((skill: string) => (
                   <span key={skill} className="px-2.5 py-1 bg-gray-900 text-white text-[11px] font-bold uppercase tracking-wide">
                     {skill}
                   </span>
@@ -434,9 +437,9 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
               progress={getSectionProgress('certificates')}
               showProgress={showProgress}
             />
-            {profile.certificates?.length > 0 ? (
+            {safeProfile.certificates?.length > 0 ? (
               <div className="space-y-4">
-                {profile.certificates.map((cert: any, i: number) => (
+                {safeProfile.certificates.map((cert: any, i: number) => (
                   <div key={i}>
                     <h5 className="font-bold text-sm">{cert.title}</h5>
                     <p className="text-xs text-gray-600">{cert.issuer} • {cert.dateIssued}</p>
@@ -456,9 +459,9 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
               progress={getSectionProgress('testScores')}
               showProgress={showProgress}
             />
-            {Object.values(profile.testScores || {}).some(v => v !== undefined) ? (
+            {(safeProfile.testScores && Object.values(safeProfile.testScores || {}).some(v => v !== undefined)) ? (
               <div className="grid grid-cols-2 gap-3">
-                {Object.entries(profile.testScores || {}).map(([key, value]) => {
+                {Object.entries(safeProfile.testScores || {}).map(([key, value]) => {
                   if (value === undefined) return null;
                   return (
                     <div key={key} className="bg-gray-50 p-2 border border-gray-100 rounded">
