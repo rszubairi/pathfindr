@@ -37,8 +37,8 @@ import type * as seedDataScraped from "../seedDataScraped.js";
 import type * as storage from "../storage.js";
 import type * as stripeActions from "../stripeActions.js";
 import type * as subscriptions from "../subscriptions.js";
-import type * as temp_fix_users from "../temp_fix_users.js";
 import type * as updateRankings from "../updateRankings.js";
+import type * as utils from "../utils.js";
 
 import type {
   ApiFromModules,
@@ -76,8 +76,8 @@ declare const fullApi: ApiFromModules<{
   storage: typeof storage;
   stripeActions: typeof stripeActions;
   subscriptions: typeof subscriptions;
-  temp_fix_users: typeof temp_fix_users;
   updateRankings: typeof updateRankings;
+  utils: typeof utils;
 }>;
 
 /**
