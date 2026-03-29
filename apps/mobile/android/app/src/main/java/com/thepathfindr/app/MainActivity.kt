@@ -1,4 +1,4 @@
-package com.pathfindr.app
+package com.thepathfindr.app
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

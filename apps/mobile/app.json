@@ -16,7 +16,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.pathfindr.app",
+      "bundleIdentifier": "com.thepathfindr.app",
       "infoPlist": {
         "NSFaceIDUsageDescription": "Allow Pathfindr to use Face ID for secure authentication",
         "NSCameraUsageDescription": "Allow Pathfindr to access your camera to upload documents",
@@ -28,7 +28,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.pathfindr.app",
+      "package": "com.thepathfindr.app",
       "permissions": [
         "CAMERA",
         "READ_EXTERNAL_STORAGE",
@@ -43,6 +43,7 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+      "@sentry/react-native/expo",
       "expo-secure-store",
       "expo-local-authentication",
       [
