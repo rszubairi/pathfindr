@@ -67,11 +67,11 @@ export function ResumeOptimizer({ profile, user }: ResumeOptimizerProps) {
                 onClick={() => {
                   const url = `${window.location.protocol}//${window.location.host}/resume/${user._id || localStorage.getItem('userId')}`;
                   navigator.clipboard.writeText(url);
-                  alert('Shareable link copied to clipboard!');
+                  alert(t('profileView.resumeOptimizer.copySuccess'));
                 }}
               >
                 <Copy className="w-3.5 h-3.5 mr-1.5" />
-                Copy Shareable Link
+                {t('profileView.resumeOptimizer.copyLink')}
               </Button>
               <Button 
                 variant="ghost" 
@@ -81,7 +81,7 @@ export function ResumeOptimizer({ profile, user }: ResumeOptimizerProps) {
               >
                 <a href={`/resume/${user._id || localStorage.getItem('userId')}`} target="_blank" rel="noopener noreferrer">
                   <ExternalLink className="w-3.5 h-3.5 mr-1.5" />
-                  View Public Resume
+                  {t('profileView.resumeOptimizer.viewPublic')}
                 </a>
               </Button>
             </div>
@@ -107,7 +107,7 @@ export function ResumeOptimizer({ profile, user }: ResumeOptimizerProps) {
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <span className="text-2xl font-bold text-gray-900">{score}</span>
-                <span className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">Score</span>
+                <span className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">{t('profileView.resumeOptimizer.scoreLabel')}</span>
               </div>
             </div>
             <div>
@@ -134,7 +134,9 @@ export function ResumeOptimizer({ profile, user }: ResumeOptimizerProps) {
                     <div className="mt-1 p-0.5 bg-amber-50 rounded-full group-hover:bg-amber-100 transition-colors">
                       <AlertCircle className="w-4 h-4 text-amber-600" />
                     </div>
-                    <span className="text-sm text-gray-700 leading-relaxed">{suggestion}</span>
+                    <span className="text-sm text-gray-700 leading-relaxed">
+                      {t(`profileView.resumeOptimizer.suggestionsList.${suggestion}`)}
+                    </span>
                   </li>
                 ))
               ) : (
@@ -142,7 +144,7 @@ export function ResumeOptimizer({ profile, user }: ResumeOptimizerProps) {
                   <div className="mt-1 p-0.5 bg-green-50 rounded-full">
                     <CheckCircle className="w-4 h-4 text-green-600" />
                   </div>
-                  <span className="text-sm text-gray-700">Your profile is perfect! You are ready to generate your optimized resume.</span>
+                  <span className="text-sm text-gray-700">{t('profileView.resumeOptimizer.perfectProfile')}</span>
                 </li>
               )}
             </ul>
@@ -158,7 +160,7 @@ export function ResumeOptimizer({ profile, user }: ResumeOptimizerProps) {
               {t('profileView.resumeOptimizer.generateBtn')}
             </Button>
             <p className="text-xs text-center text-gray-500 italic">
-              Our AI-driven system formats your profile into a professional, recruiter-ready resume.
+              {t('profileView.resumeOptimizer.aiDescription')}
             </p>
           </div>
         </div>
@@ -183,7 +185,7 @@ function calculateScore(profile: any, user: any) {
   // 1. Basic Info (10 points)
   if (user.fullName) score += 3;
   if (user.email) score += 3;
-  if (profile.phone) score += 2; else suggestions.push('Add your phone number for recruiters.');
+  if (profile.phone) score += 2; else suggestions.push('phone');
   if (profile.country || profile.nationality) score += 2;
 
   // 2. Education (25 points)
@@ -191,9 +193,9 @@ function calculateScore(profile: any, user: any) {
     score += 15;
     const hasGpa = profile.education.some((edu: any) => edu.gpa !== undefined || edu.grade !== undefined);
     if (hasGpa) score += 10;
-    else suggestions.push('Include your GPA or grades to showcase academic excellence.');
+    else suggestions.push('gpa');
   } else {
-    suggestions.push('List your educational background.');
+    suggestions.push('education');
   }
 
   // 3. Skills (20 points)
@@ -201,9 +203,9 @@ function calculateScore(profile: any, user: any) {
     if (profile.skills.length >= 8) score += 20;
     else if (profile.skills.length >= 5) score += 15;
     else score += 10;
-    if (profile.skills.length < 8) suggestions.push('Add more industry-relevant skills (aim for at least 8).');
+    if (profile.skills.length < 8) suggestions.push('skills');
   } else {
-    suggestions.push('Showcase your technical and professional skills.');
+    suggestions.push('skillsBasic');
   }
 
   // 4. Projects (20 points)
@@ -211,14 +213,14 @@ function calculateScore(profile: any, user: any) {
     score += 10;
     const hasDetailedProjects = profile.projects.every((p: any) => p.description && p.description.length > 50);
     if (hasDetailedProjects) score += 10;
-    else suggestions.push('Write more detailed descriptions for your projects.');
+    else suggestions.push('projectDetail');
   } else {
-    suggestions.push('Detail academic or personal projects to demonstrate practical experience.');
+    suggestions.push('projectDetailBasic');
   }
 
   // 5. Credentials (15 points)
   if (profile.certificates && profile.certificates.length > 0) score += 10;
-  else suggestions.push('Add certifications to validate your expertise.');
+  else suggestions.push('certificates');
   
   if (profile.testScores && Object.values(profile.testScores).some(v => v !== undefined)) score += 5;
 
@@ -283,13 +285,13 @@ function ResumePreview({ isOpen, onClose, profile, user }: { isOpen: boolean, on
     <Modal 
       isOpen={isOpen} 
       onClose={onClose} 
-      title="Resume Preview" 
+      title={t('profileView.resumeOptimizer.previewTitle')} 
       className="max-w-4xl"
     >
       <div className="flex justify-end gap-2 mb-4 no-print">
         <Button variant="secondary" size="sm" onClick={handlePrint}>
           <Printer className="w-4 h-4 mr-1.5" />
-          Print / Save as PDF
+          {t('profileView.resumeOptimizer.printBtn')}
         </Button>
       </div>
 
@@ -299,6 +301,7 @@ function ResumePreview({ isOpen, onClose, profile, user }: { isOpen: boolean, on
 }
 
 export function ResumeContent({ profile, user, showProgress = false }: { profile: any, user: any, showProgress?: boolean }) {
+  const { t } = useTranslation();
   const safeProfile = profile || { education: [], projects: [], skills: [], certificates: [], testScores: {} };
   
   const getSectionProgress = (section: string) => {
@@ -352,7 +355,7 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
           <section>
             <ResumeSectionTitle 
               icon={GraduationCap} 
-              title="Education" 
+              title={t('profileView.resumeOptimizer.sections.education')} 
               progress={getSectionProgress('education')}
               showProgress={showProgress}
             />
@@ -363,14 +366,14 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
                     <h4 className="font-bold text-lg leading-tight">{edu.institutionName}</h4>
                     <p className="text-gray-700 italic">{edu.qualificationTitle} • {edu.fieldOfStudy}</p>
                     <div className="flex justify-between mt-1 text-sm text-gray-500 font-medium">
-                      <span>{edu.startDate} — {edu.endDate || 'Present'}</span>
-                      {edu.gpa && <span>GPA: {edu.gpa}</span>}
+                      <span>{edu.startDate} — {edu.endDate || t('profileView.fields.present')}</span>
+                      {edu.gpa && <span>{t('profileView.fields.gpa')}: {edu.gpa}</span>}
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-gray-400 italic no-print">No education entries added. Recruiters prioritize academic background.</p>
+              <p className="text-sm text-gray-400 italic no-print">{t('profileView.resumeOptimizer.placeholders.noEducation')}</p>
             )}
           </section>
 
@@ -378,7 +381,7 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
           <section>
             <ResumeSectionTitle 
               icon={Briefcase} 
-              title="Key Projects" 
+              title={t('profileView.resumeOptimizer.sections.projects')} 
               progress={getSectionProgress('projects')}
               showProgress={showProgress}
             />
@@ -401,7 +404,7 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-gray-400 italic no-print">Add relevant projects to demonstrate practical application of your skills.</p>
+              <p className="text-sm text-gray-400 italic no-print">{t('profileView.resumeOptimizer.placeholders.noProjects')}</p>
             )}
           </section>
         </div>
@@ -412,7 +415,7 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
           <section>
             <ResumeSectionTitle 
               icon={Sparkles} 
-              title="Expertise" 
+              title={t('profileView.resumeOptimizer.sections.expertise')} 
               progress={getSectionProgress('skills')}
               showProgress={showProgress}
             />
@@ -425,7 +428,7 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-gray-400 italic no-print">List your core technical and soft skills.</p>
+              <p className="text-sm text-gray-400 italic no-print">{t('profileView.resumeOptimizer.placeholders.noSkills')}</p>
             )}
           </section>
 
@@ -433,7 +436,7 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
           <section>
             <ResumeSectionTitle 
               icon={Award} 
-              title="Certificates" 
+              title={t('profileView.resumeOptimizer.sections.certificates')} 
               progress={getSectionProgress('certificates')}
               showProgress={showProgress}
             />
@@ -447,7 +450,7 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-gray-400 italic no-print">Showcase your formal certifications and continuous learning.</p>
+              <p className="text-sm text-gray-400 italic no-print">{t('profileView.resumeOptimizer.placeholders.noCertificates')}</p>
             )}
           </section>
 
@@ -455,7 +458,7 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
           <section>
             <ResumeSectionTitle 
               icon={FileText} 
-              title="Test Scores" 
+              title={t('profileView.resumeOptimizer.sections.testScores')} 
               progress={getSectionProgress('testScores')}
               showProgress={showProgress}
             />
@@ -465,27 +468,28 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
                   if (value === undefined) return null;
                   return (
                     <div key={key} className="bg-gray-50 p-2 border border-gray-100 rounded">
-                      <p className="text-[10px] text-gray-500 uppercase font-bold">{key}</p>
+                      <p className="text-[10px] text-gray-500 uppercase font-bold">{t(`profile.forms.testScores.${key}.label`, { defaultValue: key })}</p>
                       <p className="text-lg font-black text-gray-800 leading-none mt-1">{value as any}</p>
                     </div>
                   );
                 })}
               </div>
             ) : (
-              <p className="text-sm text-gray-400 italic no-print">Standardized scores (SAT, IELTS, etc.) add weight to your academic standing.</p>
+              <p className="text-sm text-gray-400 italic no-print">{t('profileView.resumeOptimizer.placeholders.noTestScores')}</p>
             )}
           </section>
         </div>
       </div>
 
       <div className="mt-16 pt-8 border-t border-gray-100 text-center text-[10px] text-gray-400 font-medium uppercase tracking-[0.2em] relative z-10">
-        Generated by PathFindr Optimized Resume Engine
+        {t('profileView.resumeOptimizer.footer')}
       </div>
     </div>
   );
 }
 
 function ResumeSectionTitle({ icon: Icon, title, progress, showProgress }: { icon: any, title: string, progress: number, showProgress: boolean }) {
+  const { t } = useTranslation();
   return (
     <div className="mb-5 border-b border-gray-900 pb-1.5 flex flex-col gap-1">
       <div className="flex items-center justify-between">
@@ -499,7 +503,7 @@ function ResumeSectionTitle({ icon: Icon, title, progress, showProgress }: { ico
               "text-[10px] font-bold uppercase",
               progress === 100 ? "text-green-600" : progress > 0 ? "text-amber-500" : "text-gray-400"
             )}>
-              {progress}% Complete
+              {t('profileView.resumeOptimizer.percentageComplete', { progress })}
             </span>
           </div>
         )}

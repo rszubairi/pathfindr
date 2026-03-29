@@ -63,10 +63,11 @@ export const registerInstitution = action({
     const resendApiKey = process.env.RESEND_API_KEY;
     const isCorporate = args.role === 'corporate';
     const entityName = isCorporate ? 'Corporate' : 'Institution';
+    const verificationUrl = `${APP_URL}/verify-email/confirm?token=${verificationToken}`;
 
     if (!resendApiKey) {
       console.log(
-        `[DEV] ${entityName} registered: ${args.institutionName} (${args.email}) - awaiting admin approval`
+        `[DEV] ${entityName} registered: ${args.institutionName} (${args.email}) - awaiting admin approval. Verification link: ${verificationUrl}`
       );
     } else {
       try {
@@ -74,7 +75,7 @@ export const registerInstitution = action({
         await resend.emails.send({
           from: 'Pathfindr <noreply@thepathfindr.com>',
           to: args.email,
-          subject: `${entityName} Registration Received - Pathfindr`,
+          subject: `Verify Your ${entityName} Email - Pathfindr`,
           html: `
             <!DOCTYPE html>
             <html>
@@ -82,21 +83,21 @@ export const registerInstitution = action({
               <div style="text-align: center; margin-bottom: 32px;">
                 <h1 style="color: #2563eb; font-size: 24px; margin: 0;">Pathfindr</h1>
               </div>
-              <h2 style="color: #111827; font-size: 20px;">Registration Received</h2>
+              <h2 style="color: #111827; font-size: 20px;">Welcome, ${args.picName}!</h2>
               <p style="color: #4b5563; font-size: 16px; line-height: 1.5;">
-                Thank you for registering <strong>${args.institutionName}</strong> on Pathfindr as a ${entityName.toLowerCase()}.
+                Thank you for registering <strong>${args.institutionName}</strong> on Pathfindr.
+                Please verify your email address by clicking the button below:
               </p>
-              <p style="color: #4b5563; font-size: 16px; line-height: 1.5;">
-                Your registration is currently under review. Our team will verify your ${entityName.toLowerCase()} details
-                and you will receive an email once your account has been approved.
-              </p>
-              <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 12px; padding: 20px; margin: 24px 0;">
-                <p style="color: #0369a1; font-size: 14px; margin: 0;">
-                  <strong>What happens next?</strong><br/>
-                  Our team will review your corporate identity and contact your person in charge for verification.
-                  This typically takes 1-2 business days.
-                </p>
+              <div style="text-align: center; margin: 32px 0;">
+                <a href="${verificationUrl}"
+                   style="background-color: #2563eb; color: white; padding: 12px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 16px; display: inline-block;">
+                  Verify Email Address
+                </a>
               </div>
+              <p style="color: #4b5563; font-size: 16px; line-height: 1.5;">
+                After verification, your account will undergo a 1-2 day review process by our team.
+                You will be notified once your institution has been approved to list scholarships.
+              </p>
               <p style="color: #9ca3af; font-size: 12px; text-align: center; margin-top: 32px;">
                 If you have questions, reply to this email or contact us at support@thepathfindr.com
               </p>

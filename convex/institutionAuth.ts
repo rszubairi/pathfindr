@@ -62,8 +62,7 @@ export const createInstitutionUser = mutation({
       fullName: args.institutionName,
       phone: args.phone,
       role: args.role || 'institution',
-      emailVerified: true,
-
+      emailVerified: false,
       verificationToken: args.verificationToken,
       tokenExpiry,
       profileCompleted: true,
