@@ -415,5 +415,18 @@ export default defineSchema({
     .index('by_referrer', ['referrerUserId'])
     .index('by_coupon_code', ['couponCode'])
     .index('by_coupon_status', ['couponStatus']),
+  emailLogs: defineTable({
+    recipientEmail: v.string(),
+    subject: v.string(),
+    body: v.string(),
+    sentAt: v.string(),
+    userId: v.optional(v.id('users')),
+    type: v.string(), // e.g., 'verification', 'subscription_success', etc.
+    status: v.union(v.literal('sent'), v.literal('failed')),
+    error: v.optional(v.string()),
+  })
+    .index('by_recipient', ['recipientEmail'])
+    .index('by_sent_at', ['sentAt'])
+    .index('by_user_id', ['userId']),
 
 });

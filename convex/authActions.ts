@@ -8,27 +8,35 @@ import jwt from 'jsonwebtoken';
 import { Resend } from 'resend';
 
 import { getAppUrl } from './utils';
+import { Id } from './_generated/dataModel';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'pathfindr-dev-secret-change-in-production';
 const APP_URL = getAppUrl();
 
-// Helper: send verification email (not an action, just a function)
-async function sendEmail(email: string, fullName: string, token: string) {
+// Helper: send verification email
+async function sendEmail(ctx: any, email: string, fullName: string, token: string, userId?: Id<'users'>) {
   const resendApiKey = process.env.RESEND_API_KEY;
 
   if (!resendApiKey) {
-    console.log(`[DEV] Verification link: ${APP_URL}/verify-email/confirm?token=${token}`);
+    const verificationUrl = `${APP_URL}/verify-email/confirm?token=${token}`;
+    console.log(`[DEV] Verification link: ${verificationUrl}`);
+    
+    // Log in dev even if not sent
+    await ctx.runMutation(api.emailLogs.createLog, {
+      recipientEmail: email,
+      subject: 'Verify your Pathfindr account',
+      body: `Development link: ${verificationUrl}`,
+      userId,
+      type: 'verification',
+      status: 'sent',
+    });
     return;
   }
 
   const resend = new Resend(resendApiKey);
   const verificationUrl = `${APP_URL}/verify-email/confirm?token=${token}`;
-
-  await resend.emails.send({
-    from: 'Pathfindr <noreply@thepathfindr.com>',
-    to: email,
-    subject: 'Verify your Pathfindr account',
-    html: `
+  const subject = 'Verify your Pathfindr account';
+  const body = `
       <!DOCTYPE html>
       <html>
       <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -54,8 +62,38 @@ async function sendEmail(email: string, fullName: string, token: string) {
         </p>
       </body>
       </html>
-    `,
-  });
+    `;
+
+  try {
+    await resend.emails.send({
+      from: 'Pathfindr <noreply@thepathfindr.com>',
+      to: email,
+      subject,
+      html: body,
+    });
+
+    // Log success
+    await ctx.runMutation(api.emailLogs.createLog, {
+      recipientEmail: email,
+      subject,
+      body,
+      userId,
+      type: 'verification',
+      status: 'sent',
+    });
+  } catch (err) {
+    console.error(`Failed to send verification email to ${email}:`, err);
+    // Log failure
+    await ctx.runMutation(api.emailLogs.createLog, {
+      recipientEmail: email,
+      subject,
+      body: 'ERROR: Failed to send',
+      userId,
+      type: 'verification',
+      status: 'failed',
+      error: String(err),
+    });
+  }
 }
 
 // ─── Register ───────────────────────────────────────────────
@@ -83,7 +121,7 @@ export const registerUser = action({
       referredByCode: args.referredByCode,
     });
 
-    await sendEmail(args.email.toLowerCase(), args.fullName, verificationToken);
+    await sendEmail(ctx, args.email.toLowerCase(), args.fullName, verificationToken, userId as Id<'users'>);
 
     return { userId, success: true };
   },
@@ -177,7 +215,7 @@ export const resendVerification = action({
       token: verificationToken,
     });
 
-    await sendEmail(user.email, user.fullName, verificationToken);
+    await sendEmail(ctx, user.email, user.fullName, verificationToken, user._id);
 
     return { success: true };
   },

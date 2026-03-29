@@ -198,11 +198,8 @@ export const sendDonationNotificationEmail = action({
     const resend = new Resend(resendApiKey);
 
     try {
-      await resend.emails.send({
-        from: 'Pathfindr <noreply@thepathfindr.com>',
-        to: student.email,
-        subject: `Your Pathfindr ${tierName} subscription has been sponsored! 🎓`,
-        html: `
+      const subject = `Your Pathfindr ${tierName} subscription has been sponsored! 🎓`;
+      const body = `
           <!DOCTYPE html>
           <html>
           <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -236,10 +233,35 @@ export const sendDonationNotificationEmail = action({
             </p>
           </body>
           </html>
-        `,
+        `;
+      await resend.emails.send({
+        from: 'Pathfindr <noreply@thepathfindr.com>',
+        to: student.email,
+        subject,
+        html: body,
+      });
+
+      // Log success
+      await ctx.runMutation(api.emailLogs.createLog, {
+        recipientEmail: student.email,
+        subject,
+        body,
+        userId: args.studentUserId,
+        type: 'donation_notification',
+        status: 'sent',
       });
     } catch (err) {
       console.error(`Failed to send donation notification to ${student.email}:`, err);
+      // Log failure
+      await ctx.runMutation(api.emailLogs.createLog, {
+        recipientEmail: student.email,
+        subject: `Your Pathfindr ${tierName} subscription has been sponsored! 🎓`,
+        body: 'ERROR: Failed to send',
+        userId: args.studentUserId,
+        type: 'donation_notification',
+        status: 'failed',
+        error: String(err),
+      });
     }
   },
 });
@@ -266,20 +288,27 @@ export const sendDonationReceiptEmail = action({
     const claimLink = `${appUrl}/claim/${args.couponCode}`;
 
     if (!resendApiKey) {
+      const subject = `Thank you for sponsoring ${args.quantity} student subscription${args.quantity > 1 ? 's' : ''}! 🎓`;
       console.log(
         `[DEV] Donation receipt to ${user.email}: ${args.quantity} subscriptions, coupon: ${args.couponCode}`
       );
+      // Log in dev
+      await ctx.runMutation(api.emailLogs.createLog, {
+        recipientEmail: user.email,
+        subject,
+        body: `[DEV] Coupon code: ${args.couponCode}`,
+        userId: args.corporateUserId,
+        type: 'donation_receipt',
+        status: 'sent',
+      });
       return;
     }
 
     const resend = new Resend(resendApiKey);
 
     try {
-      await resend.emails.send({
-        from: 'Pathfindr <noreply@thepathfindr.com>',
-        to: user.email,
-        subject: `Thank you for sponsoring ${args.quantity} student subscription${args.quantity > 1 ? 's' : ''}! 🎓`,
-        html: `
+      const subject = `Thank you for sponsoring ${args.quantity} student subscription${args.quantity > 1 ? 's' : ''}! 🎓`;
+      const body = `
           <!DOCTYPE html>
           <html>
           <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -326,10 +355,35 @@ export const sendDonationReceiptEmail = action({
             </p>
           </body>
           </html>
-        `,
+        `;
+      await resend.emails.send({
+        from: 'Pathfindr <noreply@thepathfindr.com>',
+        to: user.email,
+        subject,
+        html: body,
+      });
+
+      // Log success
+      await ctx.runMutation(api.emailLogs.createLog, {
+        recipientEmail: user.email,
+        subject,
+        body,
+        userId: args.corporateUserId,
+        type: 'donation_receipt',
+        status: 'sent',
       });
     } catch (err) {
       console.error(`Failed to send donation receipt to ${user.email}:`, err);
+      // Log failure
+      await ctx.runMutation(api.emailLogs.createLog, {
+        recipientEmail: user.email,
+        subject: `Thank you for sponsoring ${args.quantity} student subscription${args.quantity > 1 ? 's' : ''}! 🎓`,
+        body: 'ERROR: Failed to send',
+        userId: args.corporateUserId,
+        type: 'donation_receipt',
+        status: 'failed',
+        error: String(err),
+      });
     }
   },
 });

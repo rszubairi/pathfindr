@@ -18,6 +18,7 @@ import type * as boardingSchoolNotifications from "../boardingSchoolNotification
 import type * as boardingSchools from "../boardingSchools.js";
 import type * as corporateDonationActions from "../corporateDonationActions.js";
 import type * as corporateDonations from "../corporateDonations.js";
+import type * as emailLogs from "../emailLogs.js";
 import type * as http from "../http.js";
 import type * as institutionAuth from "../institutionAuth.js";
 import type * as institutionAuthActions from "../institutionAuthActions.js";
@@ -59,6 +60,7 @@ declare const fullApi: ApiFromModules<{
   boardingSchools: typeof boardingSchools;
   corporateDonationActions: typeof corporateDonationActions;
   corporateDonations: typeof corporateDonations;
+  emailLogs: typeof emailLogs;
   http: typeof http;
   institutionAuth: typeof institutionAuth;
   institutionAuthActions: typeof institutionAuthActions;

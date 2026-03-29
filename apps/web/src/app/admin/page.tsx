@@ -75,8 +75,8 @@ export default function AdminDashboardPage() {
           className={dashboardStats.pendingInstitutions > 0 ? "border-amber-200 bg-amber-50/30" : ""}
         />
         <StatsCard
-          label="Total Revenue"
-          value="Calculated..."
+          label="Estimated Revenue (Annual)"
+          value={`$${dashboardStats.totalRevenue.toLocaleString()}`}
           icon={TrendingUp}
           trend={{ value: 12, isPositive: true }}
         />

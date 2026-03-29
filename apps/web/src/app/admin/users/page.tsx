@@ -167,24 +167,6 @@ export default function AdminUsersPage() {
           )}
         </div>
       </Card>
-      
-      <div className="bg-primary-50 p-6 rounded-2xl border border-primary-100 flex items-center justify-between">
-        <div>
-          <h4 className="font-bold text-primary-900">User Growth Insight</h4>
-          <p className="text-sm text-primary-700 mt-1">
-            {users ? (
-              roleFilter === 'student' ? (
-                `Currently managing ${filteredUsers?.length} students in the system.`
-              ) : (
-                `Currently showing ${filteredUsers?.length} ${roleFilter || 'total'} users in the system.`
-              )
-            ) : (
-              'Loading current user statistics...'
-            )}
-          </p>
-        </div>
-        <Button variant="primary" className="bg-primary-600 hover:bg-primary-700">View Detailed Analytics</Button>
-      </div>
     </div>
   );
 }

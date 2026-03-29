@@ -48,11 +48,8 @@ export const sendScholarshipOpenNotifications = action({
       } else {
         try {
           const resend = new Resend(resendApiKey);
-          await resend.emails.send({
-            from: 'Pathfindr <noreply@thepathfindr.com>',
-            to: sub.email,
-            subject: `🎓 "${scholarship.name}" is now open for applications!`,
-            html: `
+          const subject = `🎓 "${scholarship.name}" is now open for applications!`;
+          const body = `
               <!DOCTYPE html>
               <html>
               <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -85,10 +82,35 @@ export const sendScholarshipOpenNotifications = action({
                 </p>
               </body>
               </html>
-            `,
+            `;
+          await resend.emails.send({
+            from: 'Pathfindr <noreply@thepathfindr.com>',
+            to: sub.email,
+            subject,
+            html: body,
+          });
+
+          // Log success
+          await ctx.runMutation(api.emailLogs.createLog, {
+            recipientEmail: sub.email,
+            subject,
+            body,
+            userId: sub.userId,
+            type: 'scholarship_notification',
+            status: 'sent',
           });
         } catch (err) {
           console.error(`Failed to send notification to ${sub.email}:`, err);
+          // Log failure
+          await ctx.runMutation(api.emailLogs.createLog, {
+            recipientEmail: sub.email,
+            subject: `🎓 "${scholarship.name}" is now open for applications!`,
+            body: 'ERROR: Failed to send',
+            userId: sub.userId,
+            type: 'scholarship_notification',
+            status: 'failed',
+            error: String(err),
+          });
         }
       }
 
@@ -120,11 +142,8 @@ export const sendPaymentSuccessEmail = action({
     const whatsappLink = 'https://chat.whatsapp.com/L8h933w4nVP8yB6jXm1T7H?mode=gi_t';
 
     try {
-      await resend.emails.send({
-        from: 'Pathfindr <noreply@thepathfindr.com>',
-        to: user.email,
-        subject: `Welcome to Pathfindr! ${args.tier === 'pro' ? 'Pro' : 'Expert'} Subscription Confirmed 🎓`,
-        html: `
+      const subject = `Welcome to Pathfindr! ${args.tier === 'pro' ? 'Pro' : 'Expert'} Subscription Confirmed 🎓`;
+      const body = `
           <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #edf2f7; border-radius: 12px;">
             <h2 style="color: #2b6cb0;">Payment Successful!</h2>
             <p>Hi ${user.fullName},</p>
@@ -146,10 +165,35 @@ export const sendPaymentSuccessEmail = action({
             <p>If you have any questions, simply reply to this email.</p>
             <p>Best regards,<br/>The Pathfindr Team</p>
           </div>
-        `,
+        `;
+      await resend.emails.send({
+        from: 'Pathfindr <noreply@thepathfindr.com>',
+        to: user.email,
+        subject,
+        html: body,
+      });
+
+      // Log success
+      await ctx.runMutation(api.emailLogs.createLog, {
+        recipientEmail: user.email,
+        subject,
+        body,
+        userId: args.userId,
+        type: 'payment_success',
+        status: 'sent',
       });
     } catch (err) {
       console.error('Failed to send payment success email:', err);
+      // Log failure
+      await ctx.runMutation(api.emailLogs.createLog, {
+        recipientEmail: user.email,
+        subject: `Welcome to Pathfindr! ${args.tier === 'pro' ? 'Pro' : 'Expert'} Subscription Confirmed 🎓`,
+        body: 'ERROR: Failed to send',
+        userId: args.userId,
+        type: 'payment_success',
+        status: 'failed',
+        error: String(err),
+      });
     }
   },
 });

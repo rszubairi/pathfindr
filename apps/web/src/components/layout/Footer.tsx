@@ -32,7 +32,7 @@ export function Footer() {
     { name: 'Facebook', href: 'https://facebook.com', icon: Facebook },
     { name: 'Twitter', href: 'https://twitter.com', icon: Twitter },
     { name: 'Instagram', href: 'https://instagram.com', icon: Instagram },
-    { name: 'LinkedIn', href: 'https://linkedin.com', icon: Linkedin },
+    { name: 'LinkedIn', href: 'https://www.linkedin.com/company/thepathfindr-com/', icon: Linkedin },
   ];
 
   return (
