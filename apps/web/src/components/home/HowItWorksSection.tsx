@@ -8,31 +8,36 @@ import { useTranslation } from 'react-i18next';
 
 export function HowItWorksSection() {
   const { t } = useTranslation();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const steps = [
     {
       icon: UserPlus,
       number: '01',
-      title: t('home.howItWorks.steps.step1.title'),
-      description: t('home.howItWorks.steps.step1.desc'),
+      title: mounted ? t('home.howItWorks.steps.step1.title') : 'Create Your Profile',
+      description: mounted ? t('home.howItWorks.steps.step1.desc') : 'Sign up and tell us about your academic background, interests, and goals.',
     },
     {
       icon: Search,
       number: '02',
-      title: t('home.howItWorks.steps.step2.title'),
-      description: t('home.howItWorks.steps.step2.desc'),
+      title: mounted ? t('home.howItWorks.steps.step2.title') : 'Discover Opportunities',
+      description: mounted ? t('home.howItWorks.steps.step2.desc') : 'Browse through thousands of scholarships using our smart filters.',
     },
     {
       icon: FileCheck,
       number: '03',
-      title: t('home.howItWorks.steps.step3.title'),
-      description: t('home.howItWorks.steps.step3.desc'),
+      title: mounted ? t('home.howItWorks.steps.step3.title') : 'Apply with Confidence',
+      description: mounted ? t('home.howItWorks.steps.step3.desc') : 'Track your applications, manage deadlines, and access helpful resources.',
     },
     {
       icon: Award,
       number: '04',
-      title: t('home.howItWorks.steps.step4.title'),
-      description: t('home.howItWorks.steps.step4.desc'),
+      title: mounted ? t('home.howItWorks.steps.step4.title') : 'Achieve Your Dreams',
+      description: mounted ? t('home.howItWorks.steps.step4.desc') : 'Secure your scholarship and embark on your educational journey.',
     },
   ];
 
@@ -42,10 +47,10 @@ export function HowItWorksSection() {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            {t('home.howItWorks.title')}
+            {mounted ? t('home.howItWorks.title') : 'How Pathfindr Works'}
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            {t('home.howItWorks.subtitle')}
+            {mounted ? t('home.howItWorks.subtitle') : 'Your journey to a global education starts here. Follow these simple steps to find and secure your perfect scholarship.'}
           </p>
         </div>
 

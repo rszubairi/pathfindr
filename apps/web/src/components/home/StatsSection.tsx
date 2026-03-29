@@ -8,31 +8,36 @@ import { useTranslation } from 'react-i18next';
 
 export function StatsSection() {
   const { t } = useTranslation();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const stats = [
     {
       icon: BookOpen,
       value: '10,000+',
-      label: t('home.stats.scholarships.label'),
-      description: t('home.stats.scholarships.desc'),
+      label: mounted ? t('home.stats.scholarships.label') : 'Scholarships Available',
+      description: mounted ? t('home.stats.scholarships.desc') : 'Diverse opportunities across all fields',
     },
     {
       icon: Globe,
       value: '50+',
-      label: t('home.stats.countries.label'),
-      description: t('home.stats.countries.desc'),
+      label: mounted ? t('home.stats.countries.label') : 'Countries',
+      description: mounted ? t('home.stats.countries.desc') : 'Global reach across Southeast Asia and beyond',
     },
     {
       icon: Users,
       value: '5,000+',
-      label: t('home.stats.students.label'),
-      description: t('home.stats.students.desc'),
+      label: mounted ? t('home.stats.students.label') : 'Students Helped',
+      description: mounted ? t('home.stats.students.desc') : 'Success stories from our community',
     },
     {
       icon: TrendingUp,
       value: '$50M+',
-      label: t('home.stats.awarded.label'),
-      description: t('home.stats.awarded.desc'),
+      label: mounted ? t('home.stats.awarded.label') : 'Scholarships Awarded',
+      description: mounted ? t('home.stats.awarded.desc') : 'Total value facilitated through our platform',
     },
   ];
 

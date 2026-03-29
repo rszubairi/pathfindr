@@ -1,25 +1,31 @@
 'use client';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { GraduationCap, Facebook, Twitter, Instagram, Linkedin, Mail } from 'lucide-react';
 
 export function Footer() {
   const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
   const currentYear = new Date().getFullYear();
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const platformLinks = [
-    { name: t('nav.scholarships'), href: '/scholarships' },
-    { name: t('footer.links.universities'), href: '/universities' },
-    { name: t('footer.links.internships'), href: '/internships' },
-    { name: t('footer.links.jobs'), href: '/jobs' },
+    { name: mounted ? t('nav.scholarships') : 'Scholarships', href: '/scholarships' },
+    { name: mounted ? t('nav.boardingschools') : 'Boarding Schools', href: '/boarding-schools' },
+    { name: mounted ? t('footer.links.internships') : 'Internships', href: '/internships' },
+    { name: mounted ? t('nav.internationalschools') : 'International Schools', href: '/international-schools' },
   ];
 
   const resourceLinks = [
-    { name: t('nav.features'), href: '/#features' },
-    { name: t('nav.pricing'), href: '/#pricing' },
-    { name: t('footer.links.helpCenter'), href: '/help' },
-    { name: t('footer.links.privacyPolicy'), href: '/privacy' },
-    { name: t('footer.links.termsOfService'), href: '/terms' },
+    { name: mounted ? t('nav.features') : 'Features', href: '/#features' },
+    { name: mounted ? t('nav.pricing') : 'Pricing', href: '/#pricing' },
+    { name: mounted ? t('footer.links.knowledgeBase') : 'Knowledge Base', href: '/knowledge-base' },
+    { name: mounted ? t('footer.links.privacyPolicy') : 'Privacy Policy', href: '/privacy' },
+    { name: mounted ? t('footer.links.termsOfService') : 'Terms of Service', href: '/terms' },
   ];
 
   const socialLinks = [
@@ -40,13 +46,13 @@ export function Footer() {
               <span className="text-xl font-bold text-gray-900">Pathfindr</span>
             </Link>
             <p className="text-sm text-gray-600 leading-relaxed">
-              {t('footer.description')}
+              {mounted ? t('footer.description') : 'Your path to global educational opportunities. Connect with scholarships, boarding schools, international schools, and internships across Southeast Asia and beyond.'}
             </p>
           </div>
 
           {/* Platform Links */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-4">{t('footer.platform')}</h3>
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">{mounted ? t('footer.platform') : 'Platform'}</h3>
             <ul className="space-y-3">
               {platformLinks.map((link) => (
                 <li key={link.href}>
@@ -63,7 +69,7 @@ export function Footer() {
 
           {/* Resources */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-4">{t('footer.resources')}</h3>
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">{mounted ? t('footer.resources') : 'Resources'}</h3>
             <ul className="space-y-3">
               {resourceLinks.map((link) => (
                 <li key={link.href}>
@@ -80,7 +86,7 @@ export function Footer() {
 
           {/* Connect */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-4">{t('footer.connect')}</h3>
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">{mounted ? t('footer.connect') : 'Connect'}</h3>
 
             {/* Social Media */}
             <div className="flex gap-3 mb-4">
@@ -118,10 +124,10 @@ export function Footer() {
         <div className="mt-12 pt-8 border-t border-gray-200">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <p className="text-sm text-gray-500">
-              &copy; {currentYear} Pathfindr. {t('footer.allRightsReserved')}
+              &copy; {currentYear} Pathfindr. {mounted ? t('footer.allRightsReserved') : 'All rights reserved.'}
             </p>
             <p className="text-sm text-gray-500">
-              {t('footer.madeWith')} <span className="text-red-500">❤️</span> {t('footer.inSEA')}
+              {mounted ? t('footer.madeWith') : 'Made with'} <span className="text-red-500">❤️</span> {mounted ? t('footer.inSEA') : 'in Southeast Asia'}
             </p>
           </div>
         </div>
@@ -129,3 +135,4 @@ export function Footer() {
     </footer>
   );
 }
+
