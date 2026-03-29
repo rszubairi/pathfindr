@@ -174,12 +174,12 @@ export default function StudentProfileViewPage() {
           {/* Referral Programme */}
           {referralStats && (
             <Card className="p-5 sm:p-6">
-              <SectionHeader icon={Users} title="Referral Programme" />
+              <SectionHeader icon={Users} title={t('referral.title')} />
               <div className="mt-4 space-y-4">
                 {/* Referral Code */}
                 {referralStats.referralCode && (
-                  <div>
-                    <p className="text-sm text-gray-500 mb-2">Your referral code</p>
+                   <div>
+                    <p className="text-sm text-gray-500 mb-2">{t('referral.code.label')}</p>
                     <div className="flex items-center gap-2">
                       <code className="px-4 py-2 bg-gray-100 rounded-lg text-lg font-mono font-bold text-gray-900 tracking-wider">
                         {referralStats.referralCode}
@@ -191,7 +191,7 @@ export default function StudentProfileViewPage() {
                           setTimeout(() => setCopied(false), 2000);
                         }}
                         className="p-2 text-gray-500 hover:text-primary-600 hover:bg-gray-100 rounded-lg transition-colors"
-                        title="Copy code"
+                        title={t('referral.code.copy')}
                       >
                         {copied ? <Check className="w-5 h-5 text-green-600" /> : <Copy className="w-5 h-5" />}
                       </button>
@@ -203,25 +203,25 @@ export default function StudentProfileViewPage() {
                           setTimeout(() => setCopied(false), 2000);
                         }}
                         className="p-2 text-gray-500 hover:text-primary-600 hover:bg-gray-100 rounded-lg transition-colors"
-                        title="Copy share link"
+                        title={t('referral.code.copyLink')}
                       >
                         <Share2 className="w-5 h-5" />
                       </button>
                     </div>
                     <p className="text-xs text-gray-400 mt-1">
-                      Share this code or link with friends to earn rewards
+                      {t('referral.code.description')}
                     </p>
                   </div>
                 )}
 
                 {/* Progress */}
                 <div>
-                  <div className="flex items-center justify-between mb-2">
+                   <div className="flex items-center justify-between mb-2">
                     <p className="text-sm font-medium text-gray-700">
-                      Referral Progress
+                      {t('referral.progress.title')}
                     </p>
                     <p className="text-sm text-gray-500">
-                      {referralStats.referralsTowardNextReward}/5 friends
+                      {t('referral.progress.count', { count: referralStats.referralsTowardNextReward })}
                     </p>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2.5">
@@ -232,10 +232,10 @@ export default function StudentProfileViewPage() {
                   </div>
                   <p className="text-xs text-gray-500 mt-1.5">
                     {referralStats.referralsNeeded === 0
-                      ? 'You just earned a reward!'
+                      ? t('referral.progress.earned')
                       : referralStats.referralsTowardNextReward === 0
-                        ? 'Invite 5 friends to earn a free Pro subscription'
-                        : `${referralStats.referralsNeeded} more friend${referralStats.referralsNeeded === 1 ? '' : 's'} to earn a free Pro subscription`
+                        ? t('referral.progress.inviteToEarn')
+                        : t('referral.progress.moreNeeded', { count: referralStats.referralsNeeded })
                     }
                   </p>
                 </div>
@@ -244,18 +244,18 @@ export default function StudentProfileViewPage() {
                 <div className="flex items-center gap-6 pt-2">
                   <div className="text-center">
                     <p className="text-2xl font-bold text-gray-900">{referralStats.totalReferrals}</p>
-                    <p className="text-xs text-gray-500">Friends Referred</p>
+                    <p className="text-xs text-gray-500">{t('referral.progress.stats.friendsReferred')}</p>
                   </div>
                   <div className="text-center">
                     <p className="text-2xl font-bold text-gray-900">{referralStats.rewardsEarned}</p>
-                    <p className="text-xs text-gray-500">Rewards Earned</p>
+                    <p className="text-xs text-gray-500">{t('referral.progress.stats.rewardsEarned')}</p>
                   </div>
                 </div>
 
                 {/* Earned Rewards */}
                 {referralStats.rewards.length > 0 && (
                   <div className="pt-2">
-                    <p className="text-sm font-medium text-gray-700 mb-2">Your Rewards</p>
+                    <p className="text-sm font-medium text-gray-700 mb-2">{t('referral.rewards.title')}</p>
                     <div className="space-y-2">
                       {referralStats.rewards.map((reward) => (
                         <div
@@ -266,12 +266,12 @@ export default function StudentProfileViewPage() {
                             <Gift className="w-4 h-4 text-primary-600" />
                             {reward.rewardType === 'self_subscription' ? (
                               <span className="text-sm font-medium text-gray-900">
-                                Pro Subscription
+                                {t('referral.rewards.proSubscription')}
                               </span>
                             ) : (
                               <div className="flex items-center gap-2">
                                 <span className="text-sm font-medium text-gray-900">
-                                  Coupon: <code className="font-mono">{reward.couponCode}</code>
+                                  {t('referral.rewards.coupon')} <code className="font-mono">{reward.couponCode}</code>
                                 </span>
                                 {reward.couponStatus === 'available' && (
                                   <button
@@ -281,7 +281,7 @@ export default function StudentProfileViewPage() {
                                       setTimeout(() => setCopiedCoupon(null), 2000);
                                     }}
                                     className="p-1 text-gray-400 hover:text-primary-600"
-                                    title="Copy coupon code"
+                                    title={t('referral.rewards.copyCoupon')}
                                   >
                                     {copiedCoupon === reward.couponCode ? (
                                       <Check className="w-3.5 h-3.5 text-green-600" />
@@ -304,10 +304,10 @@ export default function StudentProfileViewPage() {
                             size="sm"
                           >
                             {reward.rewardType === 'self_subscription'
-                              ? 'Active'
+                              ? t('referral.rewards.status.active')
                               : reward.couponStatus === 'available'
-                                ? 'Available'
-                                : 'Claimed'}
+                                ? t('referral.rewards.status.available')
+                                : t('referral.rewards.status.claimed')}
                           </Badge>
                         </div>
                       ))}

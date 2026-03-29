@@ -2,6 +2,7 @@
 
 import { useAuth } from '@/hooks/useAuth';
 import { useQuery, useMutation, useAction } from 'convex/react';
+import { useTranslation } from 'react-i18next';
 import { api } from '../../../../../../convex/_generated/api';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Container } from '@/components/ui/Container';
@@ -16,6 +17,7 @@ import type { Id } from '../../../../../../convex/_generated/dataModel';
 export default function ClaimCouponPage() {
   const params = useParams();
   const router = useRouter();
+  const { t } = useTranslation();
   const code = params.code as string;
   const { user, loading: authLoading } = useAuth();
   const [claiming, setClaiming] = useState(false);
@@ -64,7 +66,7 @@ export default function ClaimCouponPage() {
 
       setClaimed(true);
     } catch (err: any) {
-      setClaimError(err.message || 'Failed to claim subscription. Please try again.');
+      setClaimError(err.message || t('sponsorship.claim.error.generic', { defaultValue: 'Failed to claim subscription. Please try again.' }));
     } finally {
       setClaiming(false);
     }
@@ -86,24 +88,26 @@ export default function ClaimCouponPage() {
                   <CheckCircle2 className="h-8 w-8 text-green-600" />
                 </div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                  Subscription Activated!
+                  {t('sponsorship.claim.success.title')}
                 </h1>
                 <p className="text-lg text-gray-600 mb-2">
-                  Your {validation?.tier === 'pro' ? 'Pro' : 'Expert'} subscription is now active, sponsored by{' '}
-                  <span className="font-semibold">{validation?.companyName}</span>.
+                  {t('sponsorship.claim.success.description', { 
+                    tier: validation?.tier === 'pro' ? 'Pro' : 'Expert',
+                    company: validation?.companyName 
+                  })}
                 </p>
                 <p className="text-gray-500 mb-8">
-                  You can now start applying for scholarships.
+                  {t('sponsorship.claim.success.nextSteps')}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Link href="/scholarships">
                     <Button variant="primary" size="lg">
-                      Browse Scholarships
+                      {t('sponsorship.claim.success.browseBtn')}
                     </Button>
                   </Link>
                   <Link href="/subscription/manage">
                     <Button variant="secondary" size="lg">
-                      View Subscription
+                      {t('sponsorship.claim.success.viewSubBtn')}
                     </Button>
                   </Link>
                 </div>
@@ -123,7 +127,7 @@ export default function ClaimCouponPage() {
             <Card className="text-center">
               <CardContent className="py-12">
                 <div className="animate-spin w-10 h-10 border-4 border-primary-600 border-t-transparent rounded-full mx-auto mb-4" />
-                <p className="text-gray-600">Validating coupon code...</p>
+                <p className="text-gray-600">{t('sponsorship.claim.validating')}</p>
               </CardContent>
             </Card>
           ) : !validation?.valid ? (
@@ -134,13 +138,13 @@ export default function ClaimCouponPage() {
                   <XCircle className="h-8 w-8 text-red-600" />
                 </div>
                 <h1 className="text-2xl font-bold text-gray-900 mb-4">
-                  Coupon No Longer Available
+                  {t('sponsorship.claim.error.notAvailable')}
                 </h1>
                 <p className="text-gray-600 mb-6">
-                  This coupon code is either invalid or all sponsored subscriptions have been claimed.
+                  {t('sponsorship.claim.error.invalidOrExhausted')}
                 </p>
                 <Link href="/pricing">
-                  <Button variant="primary">View Pricing Plans</Button>
+                  <Button variant="primary">{t('sponsorship.claim.error.viewPricing')}</Button>
                 </Link>
               </CardContent>
             </Card>
@@ -152,24 +156,26 @@ export default function ClaimCouponPage() {
                   <Gift className="h-8 w-8 text-primary-600" />
                 </div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                  Free Subscription Available!
+                  {t('sponsorship.claim.gift.title')}
                 </h1>
                 <p className="text-lg text-gray-600 mb-2">
-                  <span className="font-semibold">{validation.companyName}</span> is sponsoring{' '}
-                  {validation.tier === 'pro' ? 'Pro' : 'Expert'} subscriptions for students.
+                  {t('sponsorship.claim.gift.subtitle', { 
+                    company: validation.companyName,
+                    tier: validation.tier === 'pro' ? 'Pro' : 'Expert'
+                  })}
                 </p>
                 <p className="text-gray-500 mb-8">
-                  Register or log in to claim your free subscription.
+                  {t('sponsorship.claim.gift.instruction')}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Link href={`/register?coupon=${code}`}>
                     <Button variant="primary" size="lg">
-                      Register to Claim
+                      {t('sponsorship.claim.gift.registerBtn')}
                     </Button>
                   </Link>
                   <Link href={`/login?redirect=/claim/${code}`}>
                     <Button variant="secondary" size="lg">
-                      Log In to Claim
+                      {t('sponsorship.claim.gift.loginBtn')}
                     </Button>
                   </Link>
                 </div>
@@ -183,13 +189,13 @@ export default function ClaimCouponPage() {
                   <AlertCircle className="h-8 w-8 text-amber-600" />
                 </div>
                 <h1 className="text-2xl font-bold text-gray-900 mb-4">
-                  Student Account Required
+                  {t('sponsorship.claim.error.studentRequired')}
                 </h1>
                 <p className="text-gray-600 mb-6">
-                  Sponsored subscriptions are available only for student accounts.
+                  {t('sponsorship.claim.error.studentRequiredDesc')}
                 </p>
                 <Link href="/dashboard">
-                  <Button variant="primary">Go to Dashboard</Button>
+                  <Button variant="primary">{t('sponsorship.claim.error.goToDashboard')}</Button>
                 </Link>
               </CardContent>
             </Card>
@@ -201,17 +207,17 @@ export default function ClaimCouponPage() {
                   <AlertCircle className="h-8 w-8 text-amber-600" />
                 </div>
                 <h1 className="text-2xl font-bold text-gray-900 mb-4">
-                  You Already Have a Subscription
+                  {t('sponsorship.claim.error.alreadySubscribed')}
                 </h1>
                 <p className="text-gray-600 mb-6">
-                  Your account already has an active subscription. This coupon can be used by students without a subscription.
+                  {t('sponsorship.claim.error.alreadySubscribedDesc')}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Link href="/scholarships">
-                    <Button variant="primary">Browse Scholarships</Button>
+                    <Button variant="primary">{t('sponsorship.claim.success.browseBtn')}</Button>
                   </Link>
                   <Link href="/subscription/manage">
-                    <Button variant="secondary">Manage Subscription</Button>
+                    <Button variant="secondary">{t('sponsorship.claim.error.manageSub')}</Button>
                   </Link>
                 </div>
               </CardContent>
@@ -224,23 +230,27 @@ export default function ClaimCouponPage() {
                   <Gift className="h-8 w-8 text-primary-600" />
                 </div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                  Claim Your Free Subscription
+                  {t('sponsorship.claim.gift.claimTitle')}
                 </h1>
                 <p className="text-lg text-gray-600 mb-2">
-                  <span className="font-semibold">{validation.companyName}</span> is sponsoring your{' '}
-                  <span className="font-semibold capitalize">{validation.tier}</span> subscription!
+                  {t('sponsorship.claim.gift.sharedBy', { 
+                    company: validation.companyName,
+                    tier: validation.tier === 'pro' ? 'Pro' : 'Expert'
+                  })}
                 </p>
                 <p className="text-gray-500 mb-4">
-                  This gives you full access to apply for scholarships for one year.
+                  {t('sponsorship.claim.gift.fullAccess')}
                 </p>
 
                 <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-8 max-w-sm mx-auto">
                   <p className="text-green-800 font-medium text-sm">
-                    {validation.tier === 'pro' ? 'Pro' : 'Expert'} Plan — Free for 1 Year
+                    {t('sponsorship.claim.gift.planFree', { tier: validation.tier === 'pro' ? 'Pro' : 'Expert' })}
                   </p>
                   <p className="text-green-600 text-xs mt-1">
-                    Normally ${validation.tier === 'pro' ? '9.99' : '49.99'}/year — Waived by{' '}
-                    {validation.companyName}
+                    {t('sponsorship.claim.gift.normalPrice', { 
+                      price: validation.tier === 'pro' ? '9.99' : '49.99',
+                      company: validation.companyName 
+                    })}
                   </p>
                 </div>
 
@@ -259,11 +269,11 @@ export default function ClaimCouponPage() {
                   className="px-8"
                 >
                   <Gift className="w-5 h-5 mr-2" />
-                  Claim Free Subscription
+                  {t('sponsorship.claim.gift.claimBtn')}
                 </Button>
 
                 <p className="text-xs text-gray-400 mt-4">
-                  {validation.remainingSlots} sponsored subscription{validation.remainingSlots !== 1 ? 's' : ''} remaining
+                  {t('sponsorship.claim.gift.remainingSlots', { count: validation.remainingSlots })}
                 </p>
               </CardContent>
             </Card>

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useQuery, useMutation } from 'convex/react';
+import { useTranslation } from 'react-i18next';
 import { api } from '../../../../../../../convex/_generated/api';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Container } from '@/components/ui/Container';
@@ -16,6 +17,7 @@ import type { Id } from '../../../../../../../convex/_generated/dataModel';
 export default function ClaimReferralCouponPage() {
   const params = useParams();
   const code = params.code as string;
+  const { t } = useTranslation();
   const { user, loading: authLoading } = useAuth();
   const [claiming, setClaiming] = useState(false);
   const [claimed, setClaimed] = useState(false);
@@ -46,7 +48,7 @@ export default function ClaimReferralCouponPage() {
       });
       setClaimed(true);
     } catch (err: any) {
-      setClaimError(err.message || 'Failed to claim coupon. Please try again.');
+      setClaimError(err.message || t('referral.claim.error.generic', { defaultValue: 'Failed to claim coupon. Please try again.' }));
     } finally {
       setClaiming(false);
     }
@@ -68,24 +70,23 @@ export default function ClaimReferralCouponPage() {
                   <CheckCircle2 className="h-8 w-8 text-green-600" />
                 </div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                  Subscription Activated!
+                  {t('referral.claim.success.title')}
                 </h1>
                 <p className="text-lg text-gray-600 mb-2">
-                  Your free Pro subscription is now active, thanks to{' '}
-                  <span className="font-semibold">{validation?.referrerName}</span>.
+                  {t('referral.claim.success.description', { name: validation?.referrerName })}
                 </p>
                 <p className="text-gray-500 mb-8">
-                  You can now start applying for scholarships.
+                  {t('referral.claim.success.nextSteps')}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Link href="/scholarships">
                     <Button variant="primary" size="lg">
-                      Browse Scholarships
+                      {t('referral.claim.success.browseBtn')}
                     </Button>
                   </Link>
                   <Link href="/subscription/manage">
                     <Button variant="secondary" size="lg">
-                      View Subscription
+                      {t('referral.claim.success.viewSubBtn')}
                     </Button>
                   </Link>
                 </div>
@@ -105,7 +106,7 @@ export default function ClaimReferralCouponPage() {
             <Card className="text-center">
               <CardContent className="py-12">
                 <div className="animate-spin w-10 h-10 border-4 border-primary-600 border-t-transparent rounded-full mx-auto mb-4" />
-                <p className="text-gray-600">Validating coupon code...</p>
+                <p className="text-gray-600">{t('referral.claim.validating')}</p>
               </CardContent>
             </Card>
           ) : !validation?.valid ? (
@@ -115,13 +116,13 @@ export default function ClaimReferralCouponPage() {
                   <XCircle className="h-8 w-8 text-red-600" />
                 </div>
                 <h1 className="text-2xl font-bold text-gray-900 mb-4">
-                  Coupon Not Available
+                  {t('referral.claim.error.notAvailable')}
                 </h1>
                 <p className="text-gray-600 mb-6">
-                  This referral coupon code is either invalid or has already been claimed.
+                  {t('referral.claim.error.invalidOrClaimed')}
                 </p>
                 <Link href="/pricing">
-                  <Button variant="primary">View Pricing Plans</Button>
+                  <Button variant="primary">{t('referral.claim.error.viewPricing')}</Button>
                 </Link>
               </CardContent>
             </Card>
@@ -132,24 +133,23 @@ export default function ClaimReferralCouponPage() {
                   <Gift className="h-8 w-8 text-primary-600" />
                 </div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                  Free Pro Subscription!
+                  {t('referral.claim.gift.title')}
                 </h1>
                 <p className="text-lg text-gray-600 mb-2">
-                  <span className="font-semibold">{validation.referrerName}</span> is sharing a
-                  referral reward with you.
+                  {t('referral.claim.gift.subtitle', { name: validation.referrerName })}
                 </p>
                 <p className="text-gray-500 mb-8">
-                  Register or log in to claim your free Pro subscription.
+                  {t('referral.claim.gift.instruction')}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Link href={`/register?redirect=/referral/claim/${code}`}>
                     <Button variant="primary" size="lg">
-                      Register to Claim
+                      {t('referral.claim.gift.registerBtn')}
                     </Button>
                   </Link>
                   <Link href={`/login?redirect=/referral/claim/${code}`}>
                     <Button variant="secondary" size="lg">
-                      Log In to Claim
+                      {t('referral.claim.gift.loginBtn')}
                     </Button>
                   </Link>
                 </div>
@@ -162,13 +162,13 @@ export default function ClaimReferralCouponPage() {
                   <AlertCircle className="h-8 w-8 text-amber-600" />
                 </div>
                 <h1 className="text-2xl font-bold text-gray-900 mb-4">
-                  Student Account Required
+                  {t('referral.claim.error.studentRequired')}
                 </h1>
                 <p className="text-gray-600 mb-6">
-                  Referral coupons are available only for student accounts.
+                  {t('referral.claim.error.studentRequiredDesc')}
                 </p>
                 <Link href="/dashboard">
-                  <Button variant="primary">Go to Dashboard</Button>
+                  <Button variant="primary">{t('referral.claim.error.goToDashboard')}</Button>
                 </Link>
               </CardContent>
             </Card>
@@ -179,18 +179,17 @@ export default function ClaimReferralCouponPage() {
                   <AlertCircle className="h-8 w-8 text-amber-600" />
                 </div>
                 <h1 className="text-2xl font-bold text-gray-900 mb-4">
-                  You Already Have a Subscription
+                  {t('referral.claim.error.alreadySubscribed')}
                 </h1>
                 <p className="text-gray-600 mb-6">
-                  Your account already has an active subscription. This coupon can be used by
-                  students without a subscription.
+                  {t('referral.claim.error.alreadySubscribedDesc')}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Link href="/scholarships">
-                    <Button variant="primary">Browse Scholarships</Button>
+                    <Button variant="primary">{t('referral.claim.success.browseBtn')}</Button>
                   </Link>
                   <Link href="/subscription/manage">
-                    <Button variant="secondary">Manage Subscription</Button>
+                    <Button variant="secondary">{t('referral.claim.error.manageSub')}</Button>
                   </Link>
                 </div>
               </CardContent>
@@ -202,22 +201,21 @@ export default function ClaimReferralCouponPage() {
                   <Gift className="h-8 w-8 text-primary-600" />
                 </div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                  Claim Your Free Pro Subscription
+                  {t('referral.claim.gift.claimTitle')}
                 </h1>
                 <p className="text-lg text-gray-600 mb-2">
-                  <span className="font-semibold">{validation.referrerName}</span> earned this
-                  reward through the referral programme and is sharing it with you!
+                  {t('referral.claim.gift.sharedBy', { name: validation.referrerName })}
                 </p>
                 <p className="text-gray-500 mb-4">
-                  This gives you full access to apply for scholarships for one year.
+                  {t('referral.claim.gift.fullAccess')}
                 </p>
 
                 <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-8 max-w-sm mx-auto">
                   <p className="text-green-800 font-medium text-sm">
-                    Pro Plan — Free for 1 Year
+                    {t('referral.claim.gift.planFree')}
                   </p>
                   <p className="text-green-600 text-xs mt-1">
-                    Normally $9.99/year — Gifted by {validation.referrerName}
+                    {t('referral.claim.gift.normalPrice', { name: validation.referrerName })}
                   </p>
                 </div>
 
@@ -236,7 +234,7 @@ export default function ClaimReferralCouponPage() {
                   className="px-8"
                 >
                   <Gift className="w-5 h-5 mr-2" />
-                  Claim Free Subscription
+                  {t('referral.claim.gift.claimBtn')}
                 </Button>
               </CardContent>
             </Card>

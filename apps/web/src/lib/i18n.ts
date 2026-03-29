@@ -428,6 +428,112 @@ const resources = {
           availability: 'Availability',
         }
       },
+      referral: {
+        title: 'Referral Programme',
+        code: {
+          label: 'Your referral code',
+          copy: 'Copy code',
+          copyLink: 'Copy share link',
+          description: 'Share this code or link with friends to earn rewards',
+        },
+        progress: {
+          title: 'Referral Progress',
+          count: '{{count}}/5 friends',
+          earned: 'You just earned a reward!',
+          inviteToEarn: 'Invite 5 friends to earn a free Pro subscription',
+          moreNeeded: '{{count}} more friend to earn a free Pro subscription',
+          moreNeeded_plural: '{{count}} more friends to earn a free Pro subscription',
+          stats: {
+            friendsReferred: 'Friends Referred',
+            rewardsEarned: 'Rewards Earned',
+          }
+        },
+        rewards: {
+          title: 'Your Rewards',
+          proSubscription: 'Pro Subscription',
+          coupon: 'Coupon: ',
+          copyCoupon: 'Copy coupon code',
+          status: {
+            active: 'Active',
+            available: 'Available',
+            claimed: 'Claimed'
+          }
+        },
+        claim: {
+          success: {
+            title: 'Subscription Activated!',
+            description: 'Your free Pro subscription is now active, thanks to {{name}}.',
+            nextSteps: 'You can now start applying for scholarships.',
+            browseBtn: 'Browse Scholarships',
+            viewSubBtn: 'View Subscription',
+          },
+          validating: 'Validating coupon code...',
+          error: {
+            notAvailable: 'Coupon Not Available',
+            invalidOrClaimed: 'This referral coupon code is either invalid or has already been claimed.',
+            viewPricing: 'View Pricing Plans',
+            studentRequired: 'Student Account Required',
+            studentRequiredDesc: 'Referral coupons are available only for student accounts.',
+            goToDashboard: 'Go to Dashboard',
+            alreadySubscribed: 'You Already Have a Subscription',
+            alreadySubscribedDesc: 'Your account already has an active subscription. This coupon can be used by students without a subscription.',
+            manageSub: 'Manage Subscription',
+            generic: 'Failed to claim coupon. Please try again.',
+          },
+          gift: {
+            title: 'Free Pro Subscription!',
+            subtitle: '{{name}} is sharing a referral reward with you.',
+            instruction: 'Register or log in to claim your free Pro subscription.',
+            registerBtn: 'Register to Claim',
+            loginBtn: 'Log In to Claim',
+            claimTitle: 'Claim Your Free Pro Subscription',
+            sharedBy: '{{name}} earned this reward through the referral programme and is sharing it with you!',
+            fullAccess: 'This gives you full access to apply for scholarships for one year.',
+            planFree: 'Pro Plan — Free for 1 Year',
+            normalPrice: 'Normally $9.99/year — Gifted by {{name}}',
+            claimBtn: 'Claim Free Subscription'
+          }
+        }
+      },
+      sponsorship: {
+        claim: {
+          success: {
+            title: 'Subscription Activated!',
+            description: 'Your {{tier}} subscription is now active, sponsored by {{company}}.',
+            nextSteps: 'You can now start applying for scholarships.',
+            browseBtn: 'Browse Scholarships',
+            viewSubBtn: 'View Subscription',
+          },
+          validating: 'Validating coupon code...',
+          error: {
+            notAvailable: 'Coupon No Longer Available',
+            invalidOrExhausted: 'This coupon code is either invalid or all sponsored subscriptions have been claimed.',
+            viewPricing: 'View Pricing Plans',
+            studentRequired: 'Student Account Required',
+            studentRequiredDesc: 'Sponsored subscriptions are available only for student accounts.',
+            goToDashboard: 'Go to Dashboard',
+            alreadySubscribed: 'You Already Have a Subscription',
+            alreadySubscribedDesc: 'Your account already has an active subscription. This coupon can be used by students without a subscription.',
+            manageSub: 'Manage Subscription',
+            generic: 'Failed to claim subscription. Please try again.',
+          },
+          gift: {
+            title: 'Free Subscription Available!',
+            subtitle: '{{company}} is sponsoring {{tier}} subscriptions for students.',
+            instruction: 'Register or log in to claim your free subscription.',
+            registerBtn: 'Register to Claim',
+            loginBtn: 'Log In to Claim',
+            claimTitle: 'Claim Your Free Subscription',
+            sharedBy: '{{company}} is sponsoring your {{tier}} subscription!',
+            fullAccess: 'This gives you full access to apply for scholarships for one year.',
+            planFree: '{{tier}} Plan — Free for 1 Year',
+            normalPrice: 'Normally ${{price}}/year — Waived by {{company}}',
+            claimBtn: 'Claim Free Subscription',
+            remainingSlots: '{{count}} sponsored subscription remaining',
+            remainingSlots_plural: '{{count}} sponsored subscriptions remaining',
+          }
+        }
+      },
       scholarships: {
         title: 'Find Your Scholarship',
         subtitle: 'Browse through thousands of scholarships from around the world. Use our advanced filters to find opportunities that match your profile.',
@@ -875,6 +981,112 @@ const resources = {
           availability: 'Ketersediaan',
         }
       },
+      referral: {
+        title: 'Program Rujukan',
+        code: {
+          label: 'Kod rujukan anda',
+          copy: 'Salin kod',
+          copyLink: 'Salin pautan rujukan',
+          description: 'Kongsi kod atau pautan ini dengan rakan-rakan untuk mendapat ganjaran',
+        },
+        progress: {
+          title: 'Kemajuan Rujukan',
+          count: '{{count}}/5 rakan',
+          earned: 'Anda baru sahaja mendapat ganjaran!',
+          inviteToEarn: 'Jemput 5 rakan untuk mendapat langganan Pro percuma',
+          moreNeeded: '{{count}} lagi rakan diperlukan untuk mendapat langganan Pro percuma',
+          moreNeeded_plural: '{{count}} lagi rakan diperlukan untuk mendapat langganan Pro percuma',
+          stats: {
+            friendsReferred: 'Rakan Dirujuk',
+            rewardsEarned: 'Ganjaran Diperoleh',
+          }
+        },
+        rewards: {
+          title: 'Ganjaran Anda',
+          proSubscription: 'Langganan Pro',
+          coupon: 'Kupon: ',
+          copyCoupon: 'Salin kod kupon',
+          status: {
+            active: 'Aktif',
+            available: 'Tersedia',
+            claimed: 'Ditebus'
+          }
+        },
+        claim: {
+          success: {
+            title: 'Langganan Diaktifkan!',
+            description: 'Langganan Pro percuma anda kini aktif, terima kasih kepada {{name}}.',
+            nextSteps: 'Anda kini boleh mula memohon biasiswa.',
+            browseBtn: 'Lihat Biasiswa',
+            viewSubBtn: 'Lihat Langganan',
+          },
+          validating: 'Mengesahkan kod kupon...',
+          error: {
+            notAvailable: 'Kupon Tidak Tersedia',
+            invalidOrClaimed: 'Kod kupon rujukan ini sama ada tidak sah atau telah pun ditebus.',
+            viewPricing: 'Lihat Pelan Harga',
+            studentRequired: 'Akaun Pelajar Diperlukan',
+            studentRequiredDesc: 'Kupon rujukan hanya tersedia untuk akaun pelajar.',
+            goToDashboard: 'Pergi ke Papan Pemuka',
+            alreadySubscribed: 'Anda Sudah Mempunyai Langganan',
+            alreadySubscribedDesc: 'Akaun anda sudah mempunyai langganan aktif. Kupon ini boleh digunakan oleh pelajar tanpa langganan.',
+            manageSub: 'Urus Langganan',
+            generic: 'Gagal menebus kupon. Sila cuba lagi.',
+          },
+          gift: {
+            title: 'Langganan Pro Percuma!',
+            subtitle: '{{name}} berkongsi ganjaran rujukan dengan anda.',
+            instruction: 'Daftar atau log masuk untuk menebus langganan Pro percuma anda.',
+            registerBtn: 'Daftar untuk Menebus',
+            loginBtn: 'Log Masuk untuk Menebus',
+            claimTitle: 'Tebus Langganan Pro Percuma Anda',
+            sharedBy: '{{name}} memperoleh ganjaran ini melalui program rujukan dan berkongsinya dengan anda!',
+            fullAccess: 'Ini memberi anda akses penuh untuk memohon biasiswa selama satu tahun.',
+            planFree: 'Pelan Pro — Percuma selama 1 Tahun',
+            normalPrice: 'Biasanya $9.99/tahun — Dihadiahkan oleh {{name}}',
+            claimBtn: 'Tebus Langganan Percuma'
+          }
+        }
+      },
+      sponsorship: {
+        claim: {
+          success: {
+            title: 'Langganan Diaktifkan!',
+            description: 'Langganan {{tier}} anda kini aktif, ditaja oleh {{company}}.',
+            nextSteps: 'Anda kini boleh mula memohon biasiswa.',
+            browseBtn: 'Lihat Biasiswa',
+            viewSubBtn: 'Lihat Langganan',
+          },
+          validating: 'Mengesahkan kod kupon...',
+          error: {
+            notAvailable: 'Kupon Tidak Lagi Tersedia',
+            invalidOrExhausted: 'Kod kupon ini sama ada tidak sah atau semua langganan yang ditaja telah ditebus.',
+            viewPricing: 'Lihat Pelan Harga',
+            studentRequired: 'Akaun Pelajar Diperlukan',
+            studentRequiredDesc: 'Langganan yang ditaja hanya tersedia untuk akaun pelajar.',
+            goToDashboard: 'Pergi ke Papan Pemuka',
+            alreadySubscribed: 'Anda Sudah Mempunyai Langganan',
+            alreadySubscribedDesc: 'Akaun anda sudah mempunyai langganan aktif. Kupon ini boleh digunakan oleh pelajar tanpa langganan.',
+            manageSub: 'Urus Langganan',
+            generic: 'Gagal menebus langganan. Sila cuba lagi.',
+          },
+          gift: {
+            title: 'Langganan Percuma Tersedia!',
+            subtitle: '{{company}} menaja langganan {{tier}} untuk pelajar.',
+            instruction: 'Daftar atau log masuk untuk menebus langganan percuma anda.',
+            registerBtn: 'Daftar untuk Menebus',
+            loginBtn: 'Log Masuk untuk Menebus',
+            claimTitle: 'Tebus Langganan Percuma Anda',
+            sharedBy: '{{company}} menaja langganan {{tier}} anda!',
+            fullAccess: 'Ini memberi anda akses penuh untuk memohon biasiswa selama satu tahun.',
+            planFree: 'Pelan {{tier}} — Percuma selama 1 Tahun',
+            normalPrice: 'Biasanya ${{price}}/tahun — Dikecualikan oleh {{company}}',
+            claimBtn: 'Tebus Langganan Percuma',
+            remainingSlots: '{{count}} langganan ditaja berbaki',
+            remainingSlots_plural: '{{count}} langganan ditaja berbaki',
+          }
+        }
+      },
       scholarships: {
         title: 'Cari Biasiswa Anda',
         subtitle: 'Lihat beribu-ribu biasiswa dari seluruh dunia. Gunakan penapis canggih kami untuk mencari peluang yang sepadan dengan profil anda.',
@@ -1320,6 +1532,112 @@ const resources = {
           present: '至今',
           preferredCountries: '首选国家',
           availability: '入学时间',
+        }
+      },
+      referral: {
+        title: '推荐计划',
+        code: {
+          label: '您的推荐代码',
+          copy: '复制代码',
+          copyLink: '复制分享链接',
+          description: '与朋友分享此代码或链接以获得奖励',
+        },
+        progress: {
+          title: '推荐进度',
+          count: '{{count}}/5 位朋友',
+          earned: '您刚获得了一项奖励！',
+          inviteToEarn: '邀请 5 位朋友即可获得一年的免费 Pro 订阅',
+          moreNeeded: '还需 {{count}} 位朋友即可获得免费 Pro 订阅',
+          moreNeeded_plural: '还需 {{count}} 位朋友即可获得免费 Pro 订阅',
+          stats: {
+            friendsReferred: '已推荐朋友',
+            rewardsEarned: '已获得奖励',
+          }
+        },
+        rewards: {
+          title: '您的奖励',
+          proSubscription: 'Pro 订阅',
+          coupon: '优惠券：',
+          copyCoupon: '复制优惠券代码',
+          status: {
+            active: '已激活',
+            available: '可用',
+            claimed: '已领取'
+          }
+        },
+        claim: {
+          success: {
+            title: '订阅已激活！',
+            description: '您的免费 Pro 订阅现已激活，感谢 {{name}}。',
+            nextSteps: '您现在可以开始申请奖学金了。',
+            browseBtn: '浏览奖学金',
+            viewSubBtn: '查看订阅',
+          },
+          validating: '正在验证优惠券代码...',
+          error: {
+            notAvailable: '优惠券不可用',
+            invalidOrClaimed: '此推荐优惠券代码无效或已被领取。',
+            viewPricing: '查看价格计划',
+            studentRequired: '需要学生账户',
+            studentRequiredDesc: '推荐优惠券仅适用于学生账户。',
+            goToDashboard: '前往仪表板',
+            alreadySubscribed: '您已有订阅',
+            alreadySubscribedDesc: '您的账户已有活跃订阅。此优惠券仅供尚未订阅的学生使用。',
+            manageSub: '管理订阅',
+            generic: '领取优惠券失败。请重试。',
+          },
+          gift: {
+            title: '免费 Pro 订阅！',
+            subtitle: '{{name}} 正在与您分享推荐奖励。',
+            instruction: '注册或登录即可领取您的免费 Pro 订阅。',
+            registerBtn: '注册并领取',
+            loginBtn: '登录并领取',
+            claimTitle: '领取您的免费 Pro 订阅',
+            sharedBy: '{{name}} 通过推荐计划获得了此奖励，并正与您分享！',
+            fullAccess: '这将为您提供一年的全额奖学金申请权限。',
+            planFree: 'Pro 计划 — 1 年免费',
+            normalPrice: '原价 $9.99/年 — 由 {{name}} 赠送',
+            claimBtn: '领取免费订阅'
+          }
+        }
+      },
+      sponsorship: {
+        claim: {
+          success: {
+            title: '订阅已激活！',
+            description: '您的 {{tier}} 订阅现已激活，由 {{company}} 赞助。',
+            nextSteps: '您现在可以开始申请奖学金了。',
+            browseBtn: '浏览奖学金',
+            viewSubBtn: '查看订阅',
+          },
+          validating: '正在验证优惠券代码...',
+          error: {
+            notAvailable: '优惠券不再可用',
+            invalidOrExhausted: '此优惠券代码无效或赞助订阅已被领取。',
+            viewPricing: '查看价格计划',
+            studentRequired: '需要学生账户',
+            studentRequiredDesc: '赞助订阅仅适用于学生账户。',
+            goToDashboard: '前往仪表板',
+            alreadySubscribed: '您已有订阅',
+            alreadySubscribedDesc: '您的账户已有活跃订阅。此优惠券仅供尚未订阅的学生使用。',
+            manageSub: '管理订阅',
+            generic: '领取订阅失败。请重试。',
+          },
+          gift: {
+            title: '有免费订阅可用！',
+            subtitle: '{{company}} 正为学生赞助 {{tier}} 订阅。',
+            instruction: '注册或登录即可领取您的免费订阅。',
+            registerBtn: '注册并领取',
+            loginBtn: '登录并领取',
+            claimTitle: '领取您的免费订阅',
+            sharedBy: '{{company}} 正在赞助您的 {{tier}} 订阅！',
+            fullAccess: '这将为您提供一年的全额奖学金申请权限。',
+            planFree: '{{tier}} 计划 — 1 年免费',
+            normalPrice: '原价 ${{price}}/年 — 由 {{company}} 免除',
+            claimBtn: '领取免费订阅',
+            remainingSlots: '剩余 {{count}} 个赞助订阅名额',
+            remainingSlots_plural: '剩余 {{count}} 个赞助订阅名额',
+          }
         }
       },
       scholarships: {
