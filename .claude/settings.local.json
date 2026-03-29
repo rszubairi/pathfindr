@@ -43,7 +43,8 @@
       "Bash(npm cache clean:*)",
       "Bash(sudo chown:*)",
       "Bash(./gradlew app:assembleRelease:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(echo \"EXIT: $?\")"
     ]
   }
 }

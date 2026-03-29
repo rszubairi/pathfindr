@@ -423,6 +423,7 @@ const resources = {
             projectDetail: 'Write more detailed descriptions for your projects.',
             projectDetailBasic: 'Detail academic or personal projects to demonstrate practical experience.',
             certificates: 'Add certifications to validate your expertise.',
+            subjectScores: 'Add your IGCSE, SPM, or O-Level subject results to strengthen your academic profile.',
           },
           sections: {
             education: 'Education',
@@ -1055,6 +1056,7 @@ const resources = {
             projectDetail: 'Tulis penerangan yang lebih terperinci untuk projek anda.',
             projectDetailBasic: 'Perincikan projek akademik atau peribadi untuk menunjukkan pengalaman praktikal.',
             certificates: 'Tambah sijil untuk mengesahkan kepakaran anda.',
+            subjectScores: 'Tambah keputusan subjek IGCSE, SPM, atau O-Level anda untuk memperkukuh profil akademik anda.',
           },
           sections: {
             education: 'Pendidikan',
@@ -1665,6 +1667,7 @@ const resources = {
             projectDetail: '为您的项目编写更详细的描述。',
             projectDetailBasic: '详细描述学术或个人项目，以展示实际经验。',
             certificates: '添加证书以证明您的专业知识。',
+            subjectScores: '添加您的 IGCSE、SPM 或 O-Level 科目成绩，以加强您的学术档案。',
           },
           sections: {
             education: '教育经历',

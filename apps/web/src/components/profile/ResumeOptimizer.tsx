@@ -221,10 +221,19 @@ function calculateScore(profile: any, user: any) {
   // 5. Credentials (15 points)
   if (profile.certificates && profile.certificates.length > 0) score += 10;
   else suggestions.push('certificates');
-  
+
   if (profile.testScores && Object.values(profile.testScores).some(v => v !== undefined)) score += 5;
 
-  // 6. Extras (10 points)
+  // 6. Subject Scores (10 points)
+  if (profile.subjectScores && profile.subjectScores.length > 0) {
+    const totalSubjects = profile.subjectScores.reduce((sum: number, e: any) => sum + e.subjects.length, 0);
+    if (totalSubjects >= 5) score += 10;
+    else score += 5;
+  } else {
+    suggestions.push('subjectScores');
+  }
+
+  // 7. Extras (10 points)
   if (profile.interests && profile.interests.length > 0) score += 5;
   if (profile.preferredCountries && profile.preferredCountries.length > 0) score += 5;
 
@@ -317,6 +326,11 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
         return safeProfile.certificates?.length > 0 ? 100 : 0;
       case 'testScores':
         return Object.values(safeProfile.testScores || {}).some(v => v !== undefined) ? 100 : 0;
+      case 'subjectScores': {
+        if (!safeProfile.subjectScores?.length) return 0;
+        const total = safeProfile.subjectScores.reduce((s: number, e: any) => s + e.subjects.length, 0);
+        return total >= 5 ? 100 : Math.round((total / 5) * 100);
+      }
       default:
         return 0;
     }
@@ -377,11 +391,46 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
             )}
           </section>
 
+          {/* Academic Results (Subject Scores) */}
+          {safeProfile.subjectScores?.length > 0 && (
+            <section>
+              <ResumeSectionTitle
+                icon={GraduationCap}
+                title="Academic Results"
+                progress={getSectionProgress('subjectScores')}
+                showProgress={showProgress}
+              />
+              <div className="space-y-5">
+                {safeProfile.subjectScores.map((entry: any, ei: number) => (
+                  <div key={ei}>
+                    <div className="flex items-baseline gap-2 mb-2">
+                      <h4 className="font-bold text-base">{entry.examType}</h4>
+                      {entry.year && <span className="text-xs text-gray-500 font-medium">({entry.year})</span>}
+                    </div>
+                    {buildSubjectSummary(entry) && (
+                      <p className="text-sm text-gray-600 italic mb-2 leading-relaxed">
+                        {buildSubjectSummary(entry)}
+                      </p>
+                    )}
+                    <div className="grid grid-cols-2 gap-x-6 gap-y-1">
+                      {entry.subjects.map((s: any, si: number) => (
+                        <div key={si} className="flex items-center justify-between border-b border-gray-100 py-0.5">
+                          <span className="text-sm text-gray-700">{s.subject}</span>
+                          <span className="text-sm font-bold text-gray-900 ml-2">{s.grade}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
           {/* Projects */}
           <section>
-            <ResumeSectionTitle 
-              icon={Briefcase} 
-              title={t('profileView.resumeOptimizer.sections.projects')} 
+            <ResumeSectionTitle
+              icon={Briefcase}
+              title={t('profileView.resumeOptimizer.sections.projects')}
               progress={getSectionProgress('projects')}
               showProgress={showProgress}
             />
@@ -486,6 +535,21 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
       </div>
     </div>
   );
+}
+
+function buildSubjectSummary(entry: { examType: string; subjects: { subject: string; grade: string }[] }): string {
+  const topGrades: Record<string, string[]> = {
+    SPM: ['A+', 'A', 'A-'],
+    IGCSE: ['A*', 'A'],
+    'O-Level': ['A1', 'A2'],
+  };
+  const top = topGrades[entry.examType] ?? [];
+  const distinctions = entry.subjects.filter((s) => top.includes(s.grade));
+  if (distinctions.length === 0) return '';
+  const names = distinctions.map((s) => s.subject);
+  if (names.length === 1) return `Achieved distinction in ${names[0]}.`;
+  const last = names.pop();
+  return `Achieved distinctions in ${names.join(', ')} and ${last}.`;
 }
 
 function ResumeSectionTitle({ icon: Icon, title, progress, showProgress }: { icon: any, title: string, progress: number, showProgress: boolean }) {

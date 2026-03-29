@@ -31,6 +31,8 @@ import {
   Check,
   Gift,
   Share2,
+  BookOpen,
+  ChevronRight,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { ResumeOptimizer } from '@/components/profile/ResumeOptimizer';
@@ -111,6 +113,8 @@ export default function StudentProfileViewPage() {
       profile.testScores.toefl ||
       profile.testScores.gre ||
       profile.testScores.gmat);
+
+  const hasSubjectScores = profile.subjectScores && profile.subjectScores.length > 0;
 
   const hasCertificates = profile.certificates && profile.certificates.length > 0;
   const hasProjects = profile.projects && profile.projects.length > 0;
@@ -405,6 +409,47 @@ export default function StudentProfileViewPage() {
               </div>
             </Card>
           )}
+
+          {/* Subject Scores */}
+          <Card className="p-5 sm:p-6">
+            <div className="flex items-center justify-between">
+              <SectionHeader icon={BookOpen} title="Subject Scores (IGCSE / SPM / O-Level)" />
+              <Link
+                href="/profile/subject-scores"
+                className="inline-flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 font-medium"
+              >
+                {hasSubjectScores ? 'Edit' : 'Add Scores'}
+                <ChevronRight className="w-4 h-4" />
+              </Link>
+            </div>
+
+            {hasSubjectScores ? (
+              <div className="mt-4 space-y-5">
+                {profile.subjectScores!.map((entry, ei) => (
+                  <div key={entry.id} className={ei > 0 ? 'pt-5 border-t border-gray-100' : ''}>
+                    <div className="flex items-center gap-3 mb-3">
+                      <h4 className="font-semibold text-gray-900">{entry.examType}</h4>
+                      {entry.year && (
+                        <span className="text-sm text-gray-500">{entry.year}</span>
+                      )}
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                      {entry.subjects.map((s, si) => (
+                        <div key={si} className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-2">
+                          <span className="text-sm text-gray-700 truncate mr-2">{s.subject}</span>
+                          <span className="text-sm font-bold text-primary-700 shrink-0">{s.grade}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="mt-3 text-sm text-gray-500">
+                No subject scores added yet. Click &ldquo;Add Scores&rdquo; to add your IGCSE, SPM, or O-Level results.
+              </p>
+            )}
+          </Card>
 
           {/* Certificates */}
           {hasCertificates && (

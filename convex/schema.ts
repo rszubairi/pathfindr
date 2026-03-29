@@ -119,6 +119,15 @@ export default defineSchema({
     interests: v.array(v.string()),
     preferredCountries: v.array(v.string()),
     availability: v.optional(v.string()),
+    subjectScores: v.optional(v.array(v.object({
+      id: v.string(),
+      examType: v.union(v.literal('IGCSE'), v.literal('SPM'), v.literal('O-Level')),
+      year: v.optional(v.string()),
+      subjects: v.array(v.object({
+        subject: v.string(),
+        grade: v.string(),
+      })),
+    }))),
     profileStatus: v.union(
       v.literal('incomplete'),
       v.literal('pending_review'),

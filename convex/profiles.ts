@@ -119,6 +119,38 @@ export const upsert = mutation({
   },
 });
 
+const subjectScoreEntrySchema = v.object({
+  id: v.string(),
+  examType: v.union(v.literal('IGCSE'), v.literal('SPM'), v.literal('O-Level')),
+  year: v.optional(v.string()),
+  subjects: v.array(v.object({
+    subject: v.string(),
+    grade: v.string(),
+  })),
+});
+
+export const updateSubjectScores = mutation({
+  args: {
+    userId: v.id('users'),
+    subjectScores: v.array(subjectScoreEntrySchema),
+  },
+  handler: async (ctx, args) => {
+    const existing = await ctx.db
+      .query('academicProfiles')
+      .withIndex('by_user_id', (q) => q.eq('userId', args.userId))
+      .first();
+
+    if (!existing) throw new Error('Profile not found');
+
+    await ctx.db.patch(existing._id, {
+      subjectScores: args.subjectScores,
+      updatedAt: new Date().toISOString(),
+    });
+
+    return existing._id;
+  },
+});
+
 export const updateProfileStatus = mutation({
   args: {
     profileId: v.id('academicProfiles'),
