@@ -3,6 +3,19 @@ frontend:
   phases:
     preBuild:
       commands:
+        # Skip deployment when only mobile files changed.
+        # AWS_APP_ID, AWS_BRANCH, and AWS_JOB_ID are injected by Amplify automatically.
+        # The Amplify service role must have the amplify:StopJob permission for this to work.
+        - |
+          CHANGED=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || true)
+          if [ -n "$CHANGED" ] && [ -z "$(echo "$CHANGED" | grep -vE '^apps/mobile/')" ]; then
+            echo "Only apps/mobile/ files changed — cancelling deployment"
+            aws amplify stop-job \
+              --app-id "$AWS_APP_ID" \
+              --branch-name "$AWS_BRANCH" \
+              --job-id "$AWS_JOB_ID" || true
+            exit 0
+          fi
         # Full install to ensure root tools like 'convex' are available
         - npm install --legacy-peer-deps
         # Generate Convex types so they are available for the Next.js build

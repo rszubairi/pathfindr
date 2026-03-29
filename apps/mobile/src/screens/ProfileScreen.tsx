@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,8 +8,10 @@ import {
   ActivityIndicator,
   Image,
   Switch,
+  Share,
+  Platform,
 } from 'react-native';
-import { useQuery } from 'convex/react';
+import { useQuery, useMutation } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
@@ -26,12 +28,27 @@ export function ProfileScreen({ navigation }: any) {
   const { t } = useTranslation();
   const { colors, isDark, toggleTheme } = useTheme();
   const [isEditVisible, setIsEditVisible] = useState(false);
+  const [copiedCode, setCopiedCode] = useState(false);
+  const [copiedCoupon, setCopiedCoupon] = useState<string | null>(null);
   const styles = createStyles(colors);
 
   const profile = useQuery(
     api.profiles.getByUserId,
     user?.id ? { userId: user.id as Id<'users'> } : 'skip'
   );
+
+  const referralStats = useQuery(
+    api.referrals.getReferralStats,
+    user?.id ? { userId: user.id as Id<'users'> } : 'skip'
+  );
+
+  const generateReferralCode = useMutation(api.referrals.generateReferralCode);
+
+  useEffect(() => {
+    if (user?.id && referralStats && !referralStats.referralCode) {
+      generateReferralCode({ userId: user.id as Id<'users'> });
+    }
+  }, [user?.id, referralStats, generateReferralCode]);
 
   const initials = user?.fullName
     ? user.fullName
@@ -149,6 +166,155 @@ export function ProfileScreen({ navigation }: any) {
             availability: profile?.availability,
           }}
         />
+
+        {/* Referral Programme */}
+        {referralStats && (
+          <View style={styles.referralCard}>
+            <View style={styles.sectionHeader}>
+              <Feather name="users" size={18} color={colors.primary} />
+              <Text style={styles.sectionTitle}>Referral Programme</Text>
+            </View>
+
+            {/* Referral Code */}
+            {referralStats.referralCode && (
+              <View style={styles.referralCodeBlock}>
+                <Text style={styles.referralLabel}>Your referral code</Text>
+                <View style={styles.referralCodeRow}>
+                  <Text style={styles.referralCode}>{referralStats.referralCode}</Text>
+                  <TouchableOpacity
+                    style={styles.iconBtn}
+                    onPress={() => {
+                      Share.share({ message: referralStats.referralCode! })
+                        .then(() => {
+                          setCopiedCode(true);
+                          setTimeout(() => setCopiedCode(false), 2000);
+                        })
+                        .catch(() => {});
+                    }}
+                  >
+                    <Feather name={copiedCode ? 'check' : 'copy'} size={18} color={copiedCode ? colors.success : colors.textMuted} />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.iconBtn}
+                    onPress={() => {
+                      Share.share({
+                        message: `Join Pathfindr with my referral code: ${referralStats.referralCode}`,
+                      }).catch(() => {});
+                    }}
+                  >
+                    <Feather name="share-2" size={18} color={colors.textMuted} />
+                  </TouchableOpacity>
+                </View>
+                <Text style={styles.referralHint}>Share this code with friends to earn rewards</Text>
+              </View>
+            )}
+
+            {/* Progress */}
+            <View style={styles.progressBlock}>
+              <View style={styles.progressHeader}>
+                <Text style={styles.progressLabel}>Referral Progress</Text>
+                <Text style={styles.progressCount}>{referralStats.referralsTowardNextReward}/5 friends</Text>
+              </View>
+              <View style={styles.progressBarBg}>
+                <View
+                  style={[
+                    styles.progressBarFill,
+                    { width: `${(referralStats.referralsTowardNextReward / 5) * 100}%` as any },
+                  ]}
+                />
+              </View>
+              <Text style={styles.progressHint}>
+                {referralStats.referralsNeeded === 0
+                  ? 'You just earned a reward!'
+                  : referralStats.referralsTowardNextReward === 0
+                    ? 'Invite 5 friends to earn a free Pro subscription'
+                    : `${referralStats.referralsNeeded} more friend${referralStats.referralsNeeded === 1 ? '' : 's'} to earn a free Pro subscription`}
+              </Text>
+            </View>
+
+            {/* Stats */}
+            <View style={styles.statsRow}>
+              <View style={styles.statItem}>
+                <Text style={styles.statValue}>{referralStats.totalReferrals}</Text>
+                <Text style={styles.statLabel}>Friends Referred</Text>
+              </View>
+              <View style={styles.statDivider} />
+              <View style={styles.statItem}>
+                <Text style={styles.statValue}>{referralStats.rewardsEarned}</Text>
+                <Text style={styles.statLabel}>Rewards Earned</Text>
+              </View>
+            </View>
+
+            {/* Rewards */}
+            {referralStats.rewards.length > 0 && (
+              <View style={styles.rewardsBlock}>
+                <Text style={styles.rewardsTitle}>Your Rewards</Text>
+                {referralStats.rewards.map((reward: any) => (
+                  <View key={reward._id} style={styles.rewardRow}>
+                    <View style={styles.rewardLeft}>
+                      <Feather name="gift" size={16} color={colors.primary} />
+                      {reward.rewardType === 'self_subscription' ? (
+                        <Text style={styles.rewardText}>Pro Subscription</Text>
+                      ) : (
+                        <View style={styles.couponRow}>
+                          <Text style={styles.rewardText}>
+                            Coupon: <Text style={styles.couponCode}>{reward.couponCode}</Text>
+                          </Text>
+                          {reward.couponStatus === 'available' && (
+                            <TouchableOpacity
+                              style={styles.iconBtnSm}
+                              onPress={() => {
+                                Share.share({ message: reward.couponCode! })
+                                  .then(() => {
+                                    setCopiedCoupon(reward.couponCode!);
+                                    setTimeout(() => setCopiedCoupon(null), 2000);
+                                  })
+                                  .catch(() => {});
+                              }}
+                            >
+                              <Feather
+                                name={copiedCoupon === reward.couponCode ? 'check' : 'copy'}
+                                size={14}
+                                color={copiedCoupon === reward.couponCode ? colors.success : colors.textMuted}
+                              />
+                            </TouchableOpacity>
+                          )}
+                        </View>
+                      )}
+                    </View>
+                    <View
+                      style={[
+                        styles.rewardBadge,
+                        reward.rewardType === 'self_subscription'
+                          ? styles.badgeSuccess
+                          : reward.couponStatus === 'available'
+                            ? styles.badgePrimary
+                            : styles.badgeDefault,
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.rewardBadgeText,
+                          reward.rewardType === 'self_subscription'
+                            ? styles.badgeTextSuccess
+                            : reward.couponStatus === 'available'
+                              ? styles.badgeTextPrimary
+                              : styles.badgeTextDefault,
+                        ]}
+                      >
+                        {reward.rewardType === 'self_subscription'
+                          ? 'Active'
+                          : reward.couponStatus === 'available'
+                            ? 'Available'
+                            : 'Claimed'}
+                      </Text>
+                    </View>
+                  </View>
+                ))}
+              </View>
+            )}
+          </View>
+        )}
 
         {/* Personal Details */}
         <ViewSection icon="user" title={t('mobile.profile.personalDetails')}>
@@ -340,6 +506,99 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
   scoreLabel: { fontSize: 10, fontWeight: '800', color: colors.textMuted, marginBottom: 4 },
   scoreValue: { fontSize: 18, fontWeight: 'bold', color: colors.text },
   subLabel: { fontSize: 14, fontWeight: '600', color: colors.textMuted, marginBottom: 8 },
+
+  // Referral Programme
+  referralCard: {
+    backgroundColor: colors.card,
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 16,
+    shadowColor: colors.shadow,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 3,
+  },
+  sectionHeader: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 16 },
+  sectionTitle: { fontSize: 16, fontWeight: '700', color: colors.text },
+  referralCodeBlock: { marginBottom: 16 },
+  referralLabel: { fontSize: 12, color: colors.textMuted, marginBottom: 6 },
+  referralCodeRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  referralCode: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: colors.text,
+    letterSpacing: 2,
+    fontVariant: ['tabular-nums'],
+    backgroundColor: colors.background,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  iconBtn: {
+    padding: 8,
+    borderRadius: 8,
+    backgroundColor: colors.background,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  iconBtnSm: { padding: 4 },
+  referralHint: { fontSize: 11, color: colors.textMuted, marginTop: 6 },
+  progressBlock: { marginBottom: 16 },
+  progressHeader: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 },
+  progressLabel: { fontSize: 13, fontWeight: '600', color: colors.text },
+  progressCount: { fontSize: 13, color: colors.textMuted },
+  progressBarBg: {
+    height: 8,
+    backgroundColor: colors.borderLight,
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  progressBarFill: {
+    height: 8,
+    backgroundColor: colors.primary,
+    borderRadius: 4,
+  },
+  progressHint: { fontSize: 11, color: colors.textMuted, marginTop: 6 },
+  statsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderTopWidth: 1,
+    borderTopColor: colors.borderLight,
+    marginBottom: 4,
+  },
+  statItem: { flex: 1, alignItems: 'center' },
+  statValue: { fontSize: 24, fontWeight: 'bold', color: colors.text },
+  statLabel: { fontSize: 11, color: colors.textMuted, marginTop: 2 },
+  statDivider: { width: 1, height: 36, backgroundColor: colors.borderLight },
+  rewardsBlock: { borderTopWidth: 1, borderTopColor: colors.borderLight, paddingTop: 12 },
+  rewardsTitle: { fontSize: 13, fontWeight: '600', color: colors.text, marginBottom: 8 },
+  rewardRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    backgroundColor: colors.background,
+    borderRadius: 10,
+    marginBottom: 6,
+  },
+  rewardLeft: { flexDirection: 'row', alignItems: 'center', gap: 8, flex: 1 },
+  rewardText: { fontSize: 13, fontWeight: '600', color: colors.text },
+  couponRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  couponCode: { fontFamily: Platform.OS === 'ios' ? 'Courier New' : 'monospace', color: colors.primary },
+  rewardBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
+  badgeSuccess: { backgroundColor: '#dcfce7' },
+  badgePrimary: { backgroundColor: colors.primaryLight },
+  badgeDefault: { backgroundColor: colors.background },
+  rewardBadgeText: { fontSize: 11, fontWeight: '700' },
+  badgeTextSuccess: { color: '#16a34a' },
+  badgeTextPrimary: { color: colors.primary },
+  badgeTextDefault: { color: colors.textMuted },
+
   emptyContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 32, backgroundColor: colors.surface },
   emptyTitle: { fontSize: 24, fontWeight: 'bold', color: colors.text, marginTop: 24 },
   emptySubtitle: { fontSize: 16, color: colors.textMuted, textAlign: 'center', marginTop: 12, marginBottom: 32, lineHeight: 24 },
