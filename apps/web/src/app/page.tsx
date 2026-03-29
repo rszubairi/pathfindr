@@ -1,13 +1,7 @@
 import type { Metadata } from 'next';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { HeroSection } from '@/components/home/HeroSection';
-import { StatsSection } from '@/components/home/StatsSection';
-import { HowItWorksSection } from '@/components/home/HowItWorksSection';
-import { TestimonialsSection } from '@/components/home/TestimonialsSection';
-import { FeaturedScholarshipsSection } from '@/components/home/FeaturedScholarshipsSection';
-import { DetailedFeaturesSection } from '@/components/home/DetailedFeaturesSection';
-import { PricingSection } from '@/components/home/PricingSection';
-import { CTASection } from '@/components/home/CTASection';
+import { LazyHomeContent } from '@/components/home/LazyHomeContent';
 
 export const metadata: Metadata = {
   title: 'Pathfindr - Your Path to Global Educational Opportunities',
@@ -33,29 +27,17 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <MainLayout>
-      {/* Hero Section */}
+      {/* 
+        Above the fold - Priority Content
+        Rendered immediately to ensure super fast LCP (Largest Contentful Paint) 
+      */}
       <HeroSection />
 
-      {/* Stats Section */}
-      <StatsSection />
-
-      {/* How It Works Section */}
-      <HowItWorksSection />
-
-      {/* Features Section (Merged from Features page) */}
-      <DetailedFeaturesSection />
-
-      {/* Featured Scholarships Section */}
-      <FeaturedScholarshipsSection />
-
-      {/* Pricing Section (Merged from Pricing page) */}
-      <PricingSection />
-
-      {/* Testimonials Section */}
-      <TestimonialsSection />
-
-      {/* CTA Section */}
-      <CTASection />
+      {/* 
+        Below the fold - Lazy Loaded
+        Wait 1 second then load and hydrate the rest of the page 
+      */}
+      <LazyHomeContent />
     </MainLayout>
   );
 }
