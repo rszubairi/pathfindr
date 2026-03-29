@@ -5,7 +5,9 @@ import { v } from 'convex/values';
 import { api } from './_generated/api';
 import { Resend } from 'resend';
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+import { getAppUrl } from './utils';
+
+const APP_URL = getAppUrl();
 
 // Send notification emails to all subscribed users when a scholarship opens
 export const sendScholarshipOpenNotifications = action({

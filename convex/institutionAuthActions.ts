@@ -7,7 +7,9 @@ import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import { Resend } from 'resend';
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+import { getAppUrl } from './utils';
+
+const APP_URL = getAppUrl();
 
 const providerTypeValidator = v.union(
   v.literal('government'),

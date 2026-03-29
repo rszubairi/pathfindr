@@ -5,6 +5,7 @@ import { v } from 'convex/values';
 import { api } from './_generated/api';
 import Stripe from 'stripe';
 import { Id } from './_generated/dataModel';
+import { getAppUrl as getBaseAppUrl } from './utils';
 
 function generateDonationCouponCode(companyName: string): string {
   const prefix = companyName
@@ -30,7 +31,7 @@ function getStripe(): Stripe {
 }
 
 function getAppUrl(): string {
-  return process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  return getBaseAppUrl();
 }
 
 function getTierConfig(tier: 'pro' | 'expert') {

@@ -7,8 +7,10 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { Resend } from 'resend';
 
+import { getAppUrl } from './utils';
+
 const JWT_SECRET = process.env.JWT_SECRET || 'pathfindr-dev-secret-change-in-production';
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+const APP_URL = getAppUrl();
 
 // Helper: send verification email (not an action, just a function)
 async function sendEmail(email: string, fullName: string, token: string) {

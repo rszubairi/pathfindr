@@ -6,6 +6,8 @@ import { api } from './_generated/api';
 import Stripe from 'stripe';
 import { Resend } from 'resend';
 
+import { getAppUrl as getBaseAppUrl } from './utils';
+
 let _stripe: Stripe | null = null;
 function getStripe(): Stripe {
   if (!_stripe) {
@@ -15,7 +17,7 @@ function getStripe(): Stripe {
 }
 
 function getAppUrl(): string {
-  return process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  return getBaseAppUrl();
 }
 
 function generateCouponCode(companyName: string): string {
