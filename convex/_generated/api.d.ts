@@ -27,6 +27,7 @@ import type * as internships from "../internships.js";
 import type * as notificationActions from "../notificationActions.js";
 import type * as notifications from "../notifications.js";
 import type * as profiles from "../profiles.js";
+import type * as referrals from "../referrals.js";
 import type * as scholarships from "../scholarships.js";
 import type * as seed from "../seed.js";
 import type * as seedData from "../seedData.js";
@@ -63,6 +64,7 @@ declare const fullApi: ApiFromModules<{
   notificationActions: typeof notificationActions;
   notifications: typeof notifications;
   profiles: typeof profiles;
+  referrals: typeof referrals;
   scholarships: typeof scholarships;
   seed: typeof seed;
   seedData: typeof seedData;
