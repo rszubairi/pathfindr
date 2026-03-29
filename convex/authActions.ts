@@ -64,6 +64,7 @@ export const registerUser = action({
     password: v.string(),
     fullName: v.string(),
     phone: v.string(),
+    referredByCode: v.optional(v.string()),
   },
   handler: async (ctx, args): Promise<{ userId: string; success: boolean }> => {
     const passwordHash = await bcrypt.hash(args.password, 10);
@@ -77,6 +78,7 @@ export const registerUser = action({
       fullName: args.fullName,
       phone: args.phone,
       verificationToken,
+      referredByCode: args.referredByCode,
     });
 
     await sendEmail(args.email.toLowerCase(), args.fullName, verificationToken);

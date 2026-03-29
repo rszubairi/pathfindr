@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useQuery } from 'convex/react';
+import { useQuery, useMutation } from 'convex/react';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../../../../../convex/_generated/api';
 import { Container } from '@/components/ui/Container';
@@ -14,6 +14,7 @@ import { useAuth } from '@/hooks/useAuth';
 import type { Id } from '../../../../../../convex/_generated/dataModel';
 import {
   User,
+  Users,
   GraduationCap,
   FileText,
   Award,
@@ -26,7 +27,12 @@ import {
   MapPin,
   Flag,
   Phone,
+  Copy,
+  Check,
+  Gift,
+  Share2,
 } from 'lucide-react';
+import { Badge } from '@/components/ui/Badge';
 import { ResumeOptimizer } from '@/components/profile/ResumeOptimizer';
 
 export default function StudentProfileViewPage() {
@@ -34,6 +40,8 @@ export default function StudentProfileViewPage() {
   const { t } = useTranslation();
   const { user, isAuthenticated, loading: authLoading } = useAuth();
   const [storedUserId, setStoredUserId] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+  const [copiedCoupon, setCopiedCoupon] = useState<string | null>(null);
 
   useEffect(() => {
     const userId = localStorage.getItem('userId');
@@ -49,6 +57,20 @@ export default function StudentProfileViewPage() {
     api.profiles.getByUserId,
     storedUserId ? { userId: storedUserId as Id<'users'> } : 'skip'
   );
+
+  const referralStats = useQuery(
+    api.referrals.getReferralStats,
+    storedUserId ? { userId: storedUserId as Id<'users'> } : 'skip'
+  );
+
+  const generateReferralCode = useMutation(api.referrals.generateReferralCode);
+
+  // Auto-generate referral code if user doesn't have one
+  useEffect(() => {
+    if (storedUserId && referralStats && !referralStats.referralCode) {
+      generateReferralCode({ userId: storedUserId as Id<'users'> });
+    }
+  }, [storedUserId, referralStats, generateReferralCode]);
 
   if (authLoading || profile === undefined) {
     return (
@@ -148,6 +170,153 @@ export default function StudentProfileViewPage() {
 
           {/* Resume Optimizer */}
           <ResumeOptimizer profile={profile} user={user} />
+
+          {/* Referral Programme */}
+          {referralStats && (
+            <Card className="p-5 sm:p-6">
+              <SectionHeader icon={Users} title="Referral Programme" />
+              <div className="mt-4 space-y-4">
+                {/* Referral Code */}
+                {referralStats.referralCode && (
+                  <div>
+                    <p className="text-sm text-gray-500 mb-2">Your referral code</p>
+                    <div className="flex items-center gap-2">
+                      <code className="px-4 py-2 bg-gray-100 rounded-lg text-lg font-mono font-bold text-gray-900 tracking-wider">
+                        {referralStats.referralCode}
+                      </code>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(referralStats.referralCode!);
+                          setCopied(true);
+                          setTimeout(() => setCopied(false), 2000);
+                        }}
+                        className="p-2 text-gray-500 hover:text-primary-600 hover:bg-gray-100 rounded-lg transition-colors"
+                        title="Copy code"
+                      >
+                        {copied ? <Check className="w-5 h-5 text-green-600" /> : <Copy className="w-5 h-5" />}
+                      </button>
+                      <button
+                        onClick={() => {
+                          const shareUrl = `${window.location.origin}/register?ref=${referralStats.referralCode}`;
+                          navigator.clipboard.writeText(shareUrl);
+                          setCopied(true);
+                          setTimeout(() => setCopied(false), 2000);
+                        }}
+                        className="p-2 text-gray-500 hover:text-primary-600 hover:bg-gray-100 rounded-lg transition-colors"
+                        title="Copy share link"
+                      >
+                        <Share2 className="w-5 h-5" />
+                      </button>
+                    </div>
+                    <p className="text-xs text-gray-400 mt-1">
+                      Share this code or link with friends to earn rewards
+                    </p>
+                  </div>
+                )}
+
+                {/* Progress */}
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-sm font-medium text-gray-700">
+                      Referral Progress
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {referralStats.referralsTowardNextReward}/5 friends
+                    </p>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2.5">
+                    <div
+                      className="bg-primary-600 h-2.5 rounded-full transition-all"
+                      style={{ width: `${(referralStats.referralsTowardNextReward / 5) * 100}%` }}
+                    />
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1.5">
+                    {referralStats.referralsNeeded === 0
+                      ? 'You just earned a reward!'
+                      : referralStats.referralsTowardNextReward === 0
+                        ? 'Invite 5 friends to earn a free Pro subscription'
+                        : `${referralStats.referralsNeeded} more friend${referralStats.referralsNeeded === 1 ? '' : 's'} to earn a free Pro subscription`
+                    }
+                  </p>
+                </div>
+
+                {/* Total Stats */}
+                <div className="flex items-center gap-6 pt-2">
+                  <div className="text-center">
+                    <p className="text-2xl font-bold text-gray-900">{referralStats.totalReferrals}</p>
+                    <p className="text-xs text-gray-500">Friends Referred</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-2xl font-bold text-gray-900">{referralStats.rewardsEarned}</p>
+                    <p className="text-xs text-gray-500">Rewards Earned</p>
+                  </div>
+                </div>
+
+                {/* Earned Rewards */}
+                {referralStats.rewards.length > 0 && (
+                  <div className="pt-2">
+                    <p className="text-sm font-medium text-gray-700 mb-2">Your Rewards</p>
+                    <div className="space-y-2">
+                      {referralStats.rewards.map((reward) => (
+                        <div
+                          key={reward._id}
+                          className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                        >
+                          <div className="flex items-center gap-2">
+                            <Gift className="w-4 h-4 text-primary-600" />
+                            {reward.rewardType === 'self_subscription' ? (
+                              <span className="text-sm font-medium text-gray-900">
+                                Pro Subscription
+                              </span>
+                            ) : (
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm font-medium text-gray-900">
+                                  Coupon: <code className="font-mono">{reward.couponCode}</code>
+                                </span>
+                                {reward.couponStatus === 'available' && (
+                                  <button
+                                    onClick={() => {
+                                      navigator.clipboard.writeText(reward.couponCode!);
+                                      setCopiedCoupon(reward.couponCode!);
+                                      setTimeout(() => setCopiedCoupon(null), 2000);
+                                    }}
+                                    className="p-1 text-gray-400 hover:text-primary-600"
+                                    title="Copy coupon code"
+                                  >
+                                    {copiedCoupon === reward.couponCode ? (
+                                      <Check className="w-3.5 h-3.5 text-green-600" />
+                                    ) : (
+                                      <Copy className="w-3.5 h-3.5" />
+                                    )}
+                                  </button>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                          <Badge
+                            variant={
+                              reward.rewardType === 'self_subscription'
+                                ? 'success'
+                                : reward.couponStatus === 'available'
+                                  ? 'primary'
+                                  : 'default'
+                            }
+                            size="sm"
+                          >
+                            {reward.rewardType === 'self_subscription'
+                              ? 'Active'
+                              : reward.couponStatus === 'available'
+                                ? 'Available'
+                                : 'Claimed'}
+                          </Badge>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </Card>
+          )}
 
           {/* Personal Details */}
           <Card className="p-5 sm:p-6">

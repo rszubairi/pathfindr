@@ -62,11 +62,13 @@ export default defineSchema({
     tokenExpiry: v.optional(v.number()),
     profileCompleted: v.boolean(),
     profileImageId: v.optional(v.id('_storage')),
+    referralCode: v.optional(v.string()),
     createdAt: v.string(),
     updatedAt: v.string(),
   })
     .index('by_email', ['email'])
-    .index('by_verification_token', ['verificationToken']),
+    .index('by_verification_token', ['verificationToken'])
+    .index('by_referral_code', ['referralCode']),
 
   academicProfiles: defineTable({
     userId: v.id('users'),
@@ -182,6 +184,8 @@ export default defineSchema({
     isDonated: v.optional(v.boolean()),
     donatedBy: v.optional(v.id('users')),
     donationId: v.optional(v.id('corporateDonations')),
+    isReferralReward: v.optional(v.boolean()),
+    referralRewardId: v.optional(v.id('referralRewards')),
     createdAt: v.string(),
     updatedAt: v.string(),
   })
@@ -381,5 +385,35 @@ export default defineSchema({
     .index('by_donation', ['donationId'])
     .index('by_corporate_user', ['corporateUserId'])
     .index('by_student_user', ['studentUserId']),
+
+  referrals: defineTable({
+    referrerUserId: v.id('users'),
+    referredUserId: v.id('users'),
+    status: v.union(v.literal('registered'), v.literal('rewarded')),
+    createdAt: v.string(),
+  })
+    .index('by_referrer', ['referrerUserId'])
+    .index('by_referred', ['referredUserId'])
+    .index('by_referrer_and_status', ['referrerUserId', 'status']),
+
+  referralRewards: defineTable({
+    referrerUserId: v.id('users'),
+    rewardType: v.union(
+      v.literal('self_subscription'),
+      v.literal('coupon')
+    ),
+    subscriptionId: v.optional(v.id('subscriptions')),
+    couponCode: v.optional(v.string()),
+    couponStatus: v.optional(
+      v.union(v.literal('available'), v.literal('claimed'))
+    ),
+    couponClaimedBy: v.optional(v.id('users')),
+    couponClaimedAt: v.optional(v.string()),
+    referralIds: v.array(v.id('referrals')),
+    createdAt: v.string(),
+  })
+    .index('by_referrer', ['referrerUserId'])
+    .index('by_coupon_code', ['couponCode'])
+    .index('by_coupon_status', ['couponStatus']),
 
 });

@@ -25,6 +25,7 @@ const registerSchema = z
       .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
       .regex(/[0-9]/, 'Password must contain at least one number'),
     confirmPassword: z.string(),
+    referralCode: z.string().optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
@@ -38,6 +39,7 @@ function RegisterContent() {
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('redirect');
   const couponCode = searchParams.get('coupon');
+  const refCode = searchParams.get('ref');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -46,6 +48,11 @@ function RegisterContent() {
   const couponValidation = useQuery(
     api.corporateDonations.validateCouponCode,
     couponCode ? { couponCode } : 'skip'
+  );
+
+  const referralValidation = useQuery(
+    api.referrals.validateReferralCode,
+    refCode ? { referralCode: refCode } : 'skip'
   );
 
   const {
@@ -66,6 +73,7 @@ function RegisterContent() {
         password: data.password,
         fullName: data.fullName,
         phone: data.phone,
+        referredByCode: data.referralCode || refCode || undefined,
       });
       // Bypassing check-email screen for development
       const claimRedirect = couponCode ? `/claim/${couponCode}` : null;
@@ -102,6 +110,15 @@ function RegisterContent() {
                   <span className="font-bold">{couponValidation.companyName}</span> is sponsoring
                   your subscription! Register to claim your free{' '}
                   <span className="font-semibold capitalize">{couponValidation.tier}</span> plan.
+                </p>
+              </div>
+            )}
+
+            {refCode && referralValidation?.valid && (
+              <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+                <p className="text-sm text-green-800">
+                  Referred by <span className="font-bold">{referralValidation.referrerName}</span>!
+                  Your registration will count toward their referral rewards.
                 </p>
               </div>
             )}
@@ -169,6 +186,15 @@ function RegisterContent() {
                 error={errors.confirmPassword?.message}
                 required
               />
+
+              {!refCode && (
+                <Input
+                  label="Referral Code (optional)"
+                  placeholder="Enter a friend's referral code"
+                  {...register('referralCode')}
+                  error={errors.referralCode?.message}
+                />
+              )}
 
               <Button
                 type="submit"
