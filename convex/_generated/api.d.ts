@@ -9,6 +9,7 @@
  */
 
 import type * as adminInstitutions from "../adminInstitutions.js";
+import type * as adminUsers from "../adminUsers.js";
 import type * as auth from "../auth.js";
 import type * as authActions from "../authActions.js";
 import type * as boardingSchoolNotifications from "../boardingSchoolNotifications.js";
@@ -46,6 +47,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   adminInstitutions: typeof adminInstitutions;
+  adminUsers: typeof adminUsers;
   auth: typeof auth;
   authActions: typeof authActions;
   boardingSchoolNotifications: typeof boardingSchoolNotifications;
