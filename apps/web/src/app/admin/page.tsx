@@ -11,52 +11,74 @@ import {
   Clock,
   CheckCircle2,
   AlertCircle,
-  Mail
+  Mail,
+  UserPlus,
+  Heart
 } from 'lucide-react';
 import { StatsCard } from '@/components/dashboard/StatsCard';
 
 export default function AdminDashboardPage() {
   const institutions = useQuery(api.adminInstitutions.listInstitutions, {});
+  const dashboardStats = useQuery(api.adminDashboard.getDashboardStats);
   
-  // Basic stats from whatever data is available
-  const stats = {
-    totalInstitutions: institutions?.length || 0,
-    pendingApprovals: institutions?.filter((i: any) => i.approvalStatus === 'pending').length || 0,
-    approvedInstitutions: institutions?.filter((i: any) => i.approvalStatus === 'approved').length || 0,
-    totalStudents: 0, // Placeholder
-    activeSubscriptions: 0, // Placeholder
-  };
+  if (!dashboardStats) {
+    return (
+      <div className="py-20 text-center">
+        <div className="animate-spin w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+        <p className="text-gray-500">Loading system overview...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold text-gray-900">System Overview</h1>
-        <p className="mt-2 text-gray-600">Global status and quick actions</p>
+        <p className="mt-2 text-gray-600">Global status and real-time activity metrics</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatsCard
-          label="Total Institutions"
-          value={stats.totalInstitutions.toString()}
+          label="Total Registrations"
+          value={dashboardStats.totalRegistrations.toLocaleString()}
+          icon={Users}
+        />
+        <StatsCard
+          label="Active Subscriptions"
+          value={dashboardStats.activeSubscriptions.toLocaleString()}
+          icon={CreditCard}
+        />
+        <StatsCard
+          label="Total Referrals"
+          value={dashboardStats.totalReferrals.toLocaleString()}
+          icon={UserPlus}
+        />
+        <StatsCard
+          label="Corporates"
+          value={dashboardStats.totalCorporates.toLocaleString()}
           icon={Building2}
-          trend={{ value: 12, isPositive: true }}
+        />
+        <StatsCard
+          label="Corporate Donations"
+          value={dashboardStats.totalDonations.toLocaleString()}
+          icon={Heart}
+        />
+        <StatsCard
+          label="Total Institutions"
+          value={dashboardStats.totalInstitutions.toLocaleString()}
+          icon={Building2}
         />
         <StatsCard
           label="Pending Approvals"
-          value={stats.pendingApprovals.toString()}
+          value={dashboardStats.pendingInstitutions.toLocaleString()}
           icon={Clock}
+          className={dashboardStats.pendingInstitutions > 0 ? "border-amber-200 bg-amber-50/30" : ""}
         />
         <StatsCard
-          label="Total Users"
-          value="1,280" // Placeholder
-          icon={Users}
-          trend={{ value: 5, isPositive: true }}
-        />
-        <StatsCard
-          label="Revenue"
-          value="$12,450" // Placeholder
+          label="Total Revenue"
+          value="Calculated..."
           icon={TrendingUp}
-          trend={{ value: 18, isPositive: true }}
+          trend={{ value: 12, isPositive: true }}
         />
       </div>
 
@@ -64,7 +86,7 @@ export default function AdminDashboardPage() {
         <Card className="p-6 shadow-md border-gray-100">
           <h3 className="text-lg font-bold mb-6 flex items-center gap-2 text-gray-900">
             <CheckCircle2 className="w-5 h-5 text-green-500" />
-            Recent Approvals
+            Recent Provider Approvals
           </h3>
           <div className="space-y-4">
             {institutions?.filter((i: any) => i.approvalStatus === 'approved').slice(0, 5).map((inst: any) => (
@@ -81,7 +103,7 @@ export default function AdminDashboardPage() {
                 <span className="text-xs font-bold px-3 py-1 bg-green-100 text-green-700 rounded-full border border-green-200">Approved</span>
               </div>
             ))}
-            {stats.approvedInstitutions === 0 && (
+            {institutions?.filter((i: any) => i.approvalStatus === 'approved').length === 0 && (
               <div className="text-center py-8">
                 <p className="text-sm text-gray-500 italic">No recent approvals</p>
               </div>
@@ -100,8 +122,8 @@ export default function AdminDashboardPage() {
                 <Clock className="w-5 h-5 text-amber-600" />
               </div>
               <div>
-                <p className="text-sm font-bold text-amber-900">{stats.pendingApprovals} Institution Requests</p>
-                <p className="text-xs text-amber-800 mt-1 leading-relaxed">Verification required for new providers to list scholarships.</p>
+                <p className="text-sm font-bold text-amber-900">{dashboardStats.pendingInstitutions} Institution Requests</p>
+                <p className="text-xs text-amber-800 mt-1 leading-relaxed">Verification required for new providers to list scholarships and internships.</p>
               </div>
             </div>
             <div className="p-4 bg-blue-50 rounded-xl flex items-start gap-4 border border-blue-200">
@@ -110,7 +132,7 @@ export default function AdminDashboardPage() {
               </div>
               <div>
                 <p className="text-sm font-bold text-blue-900">System Activity</p>
-                <p className="text-xs text-blue-800 mt-1 leading-relaxed">Resend verification queue is active. Normal volume observed.</p>
+                <p className="text-xs text-blue-800 mt-1 leading-relaxed">Email verification queue is active. Normal volume observed.</p>
               </div>
             </div>
             <div className="p-4 bg-purple-50 rounded-xl flex items-start gap-4 border border-purple-200">
@@ -118,8 +140,8 @@ export default function AdminDashboardPage() {
                 <CreditCard className="w-5 h-5 text-purple-600" />
               </div>
               <div>
-                <p className="text-sm font-bold text-purple-900">Subscription Renewals</p>
-                <p className="text-xs text-purple-800 mt-1 leading-relaxed">12 subscriptions are scheduled for renewal in the next 48 hours.</p>
+                <p className="text-sm font-bold text-purple-900">Subscription Activity</p>
+                <p className="text-xs text-purple-800 mt-1 leading-relaxed">System is currently managing {dashboardStats.activeSubscriptions} active premium students.</p>
               </div>
             </div>
           </div>
@@ -128,3 +150,4 @@ export default function AdminDashboardPage() {
     </div>
   );
 }
+
