@@ -6,6 +6,7 @@ import { store } from '@/store';
 import { useState } from 'react';
 import { ConvexClientProvider } from '@/providers/ConvexClientProvider';
 import { ToastProvider } from '@/components/ui/Toast';
+import { FirebaseAnalyticsProvider } from '@/components/FirebaseAnalyticsProvider';
 import '@/lib/i18n';
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -25,7 +26,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <Provider store={store}>
       <ConvexClientProvider>
         <QueryClientProvider client={queryClient}>
-          <ToastProvider>{children}</ToastProvider>
+          <FirebaseAnalyticsProvider>
+            <ToastProvider>{children}</ToastProvider>
+          </FirebaseAnalyticsProvider>
         </QueryClientProvider>
       </ConvexClientProvider>
     </Provider>

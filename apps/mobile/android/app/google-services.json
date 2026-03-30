@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "928687977158",
+    "project_id": "pathfindr-f9573",
+    "storage_bucket": "pathfindr-f9573.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928687977158:android:6396ac2093158b63531dc7",
+        "android_client_info": {
+          "package_name": "com.thepathfindr.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAp4OXXseoOjIrMhRrBB3obDCiVAkBThE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

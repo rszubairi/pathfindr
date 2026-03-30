@@ -6,7 +6,6 @@ import {
   Image,
   StatusBar,
   Animated,
-  InteractionManager,
 } from 'react-native';
 import { useTheme } from '../theme';
 
@@ -45,11 +44,6 @@ export function AnimatedSplashScreen({ onAnimationComplete }: AnimatedSplashScre
   useEffect(() => {
     // Hard deadline: dismiss after 5s regardless — covers JS thread congestion on device
     const safetyTimeout = setTimeout(finishAnimation, 5000);
-    // Also dismiss once all pending interactions/transitions are done (iOS device guard)
-    const interactionHandle = InteractionManager.runAfterInteractions(() => {
-      clearTimeout(safetyTimeout);
-      finishAnimation();
-    });
 
     Animated.stagger(150, [
       Animated.spring(circle1Scale, { toValue: 1, damping: 15, useNativeDriver: true }),
@@ -98,13 +92,11 @@ export function AnimatedSplashScreen({ onAnimationComplete }: AnimatedSplashScre
       Animated.timing(overallOpacity, { toValue: 0, duration: 500, useNativeDriver: true }),
     ]).start(() => {
       clearTimeout(safetyTimeout);
-      interactionHandle.cancel();
       finishAnimation();
     });
 
     return () => {
       clearTimeout(safetyTimeout);
-      interactionHandle.cancel();
     };
   }, []);
 

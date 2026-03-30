@@ -44,7 +44,8 @@
       "Bash(sudo chown:*)",
       "Bash(./gradlew app:assembleRelease:*)",
       "Bash(ls:*)",
-      "Bash(echo \"EXIT: $?\")"
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(xargs cat:*)"
     ]
   }
 }

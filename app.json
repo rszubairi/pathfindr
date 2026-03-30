@@ -1,5 +1,10 @@
 {
   "ios": {
     "bundleIdentifier": "com.rzubairi.pathfindr-monorepo"
+  },
+  "extra": {
+    "eas": {
+      "projectId": "8d9017fd-059f-470c-9513-c8870d0bad31"
+    }
   }
 }
