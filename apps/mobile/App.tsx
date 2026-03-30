@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
@@ -8,8 +8,6 @@ import { Provider } from 'react-redux';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ConvexProvider, ConvexReactClient } from 'convex/react';
 import * as Sentry from '@sentry/react-native';
-import crashlytics from '@react-native-firebase/crashlytics';
-import analytics from '@react-native-firebase/analytics';
 import './src/lib/i18n';
 import { store } from './src/store';
 import { RootNavigator } from './src/navigation/RootNavigator';
@@ -42,13 +40,6 @@ const queryClient = new QueryClient({
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
-
-  useEffect(() => {
-    if (!__DEV__) {
-      crashlytics().setCrashlyticsCollectionEnabled(true);
-      analytics().setAnalyticsCollectionEnabled(true);
-    }
-  }, []);
 
   const handleSplashComplete = useCallback(() => {
     setShowSplash(false);

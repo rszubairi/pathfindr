@@ -12,12 +12,18 @@
     "preview": {
       "distribution": "internal",
       "node": "20.18.0",
+      "env": {
+        "EXPO_PUBLIC_SENTRY_DSN": "https://dfb6be406cd46a4a97c2b1e2d921f2c6@o4511131918008320.ingest.us.sentry.io/4511131918794752"
+      },
       "android": {
         "buildType": "apk"
       }
     },
     "production": {
-      "node": "20.18.0"
+      "node": "20.18.0",
+      "env": {
+        "EXPO_PUBLIC_SENTRY_DSN": "https://dfb6be406cd46a4a97c2b1e2d921f2c6@o4511131918008320.ingest.us.sentry.io/4511131918794752"
+      }
     }
   },
   "submit": {

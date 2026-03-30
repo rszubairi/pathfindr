@@ -45,7 +45,19 @@
       "Bash(./gradlew app:assembleRelease:*)",
       "Bash(ls:*)",
       "Bash(echo \"EXIT: $?\")",
-      "Bash(xargs cat:*)"
+      "Bash(xargs cat:*)",
+      "Bash(python3 -c \"import json,sys; p=json.load\\(sys.stdin\\); print\\(p[''''dependencies''''].get\\(''''@sentry/react-native'''',''''not found''''\\)\\)\")",
+      "Bash(npm show:*)",
+      "Bash(python3 -c \"import json,sys; vs=[v for v in json.load\\(sys.stdin\\) if v.startswith\\(''''6.''''\\)]; print\\(vs[-5:]\\)\")",
+      "Bash(git check-ignore:*)",
+      "Bash(echo \"ios/GoogleService-Info.plist:*)",
+      "Bash(git -C /Users/raheelzubairi/Documents/projects/pathfindr rev-parse --show-toplevel)",
+      "Bash(git -C /Users/raheelzubairi/Documents/projects/pathfindr add -f apps/mobile/ios/GoogleService-Info.plist)",
+      "Bash(git -C /Users/raheelzubairi/Documents/projects/pathfindr status apps/mobile/ios/GoogleService-Info.plist)",
+      "Bash(git -C /Users/raheelzubairi/Documents/projects/pathfindr add apps/mobile/ios/Pathfindr/GoogleService-Info.plist apps/mobile/ios/Pathfindr.xcodeproj/project.pbxproj)",
+      "Bash(git -C /Users/raheelzubairi/Documents/projects/pathfindr status --short)",
+      "Bash(git -C /Users/raheelzubairi/Documents/projects/pathfindr add apps/mobile/ios/Pathfindr.xcodeproj/project.pbxproj)",
+      "Bash(npm uninstall:*)"
     ]
   }
 }

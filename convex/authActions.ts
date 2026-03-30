@@ -11,7 +11,7 @@ import { getAppUrl } from './utils';
 import { Id } from './_generated/dataModel';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'pathfindr-dev-secret-change-in-production';
-const APP_URL = getAppUrl();
+const APP_URL = 'https://thepathfindr.com';
 
 // Helper: send verification email
 async function sendEmail(ctx: any, email: string, fullName: string, token: string, userId?: Id<'users'>) {
