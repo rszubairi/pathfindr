@@ -89,6 +89,7 @@ export const upsert = mutation({
     interests: v.array(v.string()),
     preferredCountries: v.array(v.string()),
     availability: v.optional(v.string()),
+    extracurriculars: v.optional(v.array(extracurricularSchema)),
   },
   handler: async (ctx, args) => {
     const { userId, ...profileData } = args;
@@ -117,6 +118,30 @@ export const upsert = mutation({
       updatedAt: now,
     });
   },
+});
+
+const extracurricularSchema = v.object({
+  id: v.string(),
+  name: v.string(),
+  category: v.union(
+    v.literal('sports'),
+    v.literal('arts'),
+    v.literal('leadership'),
+    v.literal('community'),
+    v.literal('academic_club'),
+    v.literal('cultural'),
+    v.literal('other')
+  ),
+  role: v.string(),
+  educationLevel: v.union(
+    v.literal('school'),
+    v.literal('college'),
+    v.literal('university')
+  ),
+  startDate: v.string(),
+  endDate: v.optional(v.string()),
+  description: v.optional(v.string()),
+  achievement: v.optional(v.string()),
 });
 
 const subjectScoreEntrySchema = v.object({

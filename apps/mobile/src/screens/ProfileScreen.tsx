@@ -164,6 +164,7 @@ export function ProfileScreen({ navigation }: any) {
             interests: profile?.interests,
             preferredCountries: profile?.preferredCountries,
             availability: profile?.availability,
+            extracurriculars: profile?.extracurriculars,
           }}
         />
 
@@ -401,6 +402,34 @@ export function ProfileScreen({ navigation }: any) {
             <Text style={styles.itemSubtitle}>{profile.availability || t('mobile.profile.notSpecified')}</Text>
           </View>
         </ViewSection>
+
+        {/* Extracurricular Activities */}
+        {profile.extracurriculars && profile.extracurriculars.length > 0 && (
+          <ViewSection icon="activity" title="Extracurricular Activities">
+            {profile.extracurriculars.map((activity: any, index: number) => (
+              <View key={activity.id || index} style={[styles.itemBlock, index > 0 && styles.itemBorder]}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  <Text style={styles.itemTitle}>{activity.name}</Text>
+                  <View style={[styles.statusBadge, { marginTop: 2 }]}>
+                    <Text style={[styles.statusText, { color: colors.primary }]}>
+                      {activity.educationLevel?.toUpperCase()}
+                    </Text>
+                  </View>
+                </View>
+                <Text style={styles.itemSubtitle}>{activity.role}</Text>
+                <Text style={styles.itemMeta}>
+                  {activity.startDate}{activity.endDate ? ` — ${activity.endDate}` : ' — Present'}
+                </Text>
+                {activity.achievement ? (
+                  <Text style={styles.itemGpa}>{activity.achievement}</Text>
+                ) : null}
+                {activity.description ? (
+                  <Text style={[styles.itemSubtitle, { marginTop: 4 }]}>{activity.description}</Text>
+                ) : null}
+              </View>
+            ))}
+          </ViewSection>
+        )}
 
         <View style={{ height: 40 }} />
       </ScrollView>

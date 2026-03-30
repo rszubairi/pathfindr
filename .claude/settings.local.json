@@ -59,7 +59,12 @@
       "Bash(git -C /Users/raheelzubairi/Documents/projects/pathfindr add apps/mobile/ios/Pathfindr.xcodeproj/project.pbxproj)",
       "Bash(npm uninstall:*)",
       "Bash(pip3 show:*)",
-      "Bash(grep -r \"EXPO_PUBLIC_\\\\|process\\\\.env\\\\.\" /Users/raheelzubairi/Documents/projects/pathfindr/apps/mobile/src /Users/raheelzubairi/Documents/projects/pathfindr/apps/mobile/App.tsx --include=\"*.{ts,tsx}\")"
+      "Bash(grep -r \"EXPO_PUBLIC_\\\\|process\\\\.env\\\\.\" /Users/raheelzubairi/Documents/projects/pathfindr/apps/mobile/src /Users/raheelzubairi/Documents/projects/pathfindr/apps/mobile/App.tsx --include=\"*.{ts,tsx}\")",
+      "Bash(sips -g pixelWidth -g pixelHeight -g hasAlpha apps/mobile/assets/icon.png)",
+      "Bash(convert apps/mobile/assets/icon.png -background \"#0538a3\" -alpha remove -alpha off apps/mobile/assets/icon.png)",
+      "Bash(magick --version)",
+      "Bash(python3 -c \"from PIL import Image; print\\(''ok''\\)\")",
+      "Bash(python3 -c \":*)"
     ]
   }
 }

@@ -33,6 +33,7 @@ import {
   Share2,
   BookOpen,
   ChevronRight,
+  Activity,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { ResumeOptimizer } from '@/components/profile/ResumeOptimizer';
@@ -116,6 +117,7 @@ export default function StudentProfileViewPage() {
 
   const hasSubjectScores = profile.subjectScores && profile.subjectScores.length > 0;
 
+  const hasExtracurriculars = profile.extracurriculars && profile.extracurriculars.length > 0;
   const hasCertificates = profile.certificates && profile.certificates.length > 0;
   const hasProjects = profile.projects && profile.projects.length > 0;
   const hasSkills = profile.skills && profile.skills.length > 0;
@@ -563,6 +565,49 @@ export default function StudentProfileViewPage() {
                   </div>
                 </div>
               )}
+            </Card>
+          )}
+
+          {/* Extracurricular Activities */}
+          {hasExtracurriculars && (
+            <Card className="p-6">
+              <SectionHeader icon={Activity} title="Extracurricular Activities" />
+              <div className="mt-4 space-y-5">
+                {profile.extracurriculars!.map((activity, index) => (
+                  <div
+                    key={activity.id || index}
+                    className={index > 0 ? 'pt-5 border-t border-gray-100' : ''}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <h4 className="font-semibold text-gray-900">{activity.name}</h4>
+                        <p className="text-sm text-gray-700 mt-0.5">{activity.role}</p>
+                      </div>
+                      <span className="shrink-0 px-2 py-0.5 rounded text-xs font-semibold bg-primary-50 text-primary-700 capitalize">
+                        {activity.educationLevel}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5 text-sm text-gray-500">
+                      <span className="inline-flex items-center gap-1">
+                        <Calendar className="w-3.5 h-3.5" />
+                        {activity.startDate}
+                        {activity.endDate ? ` — ${activity.endDate}` : ' — Present'}
+                      </span>
+                      <span className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-xs font-medium capitalize">
+                        {activity.category.replace('_', ' ')}
+                      </span>
+                    </div>
+                    {activity.achievement && (
+                      <p className="mt-1.5 text-sm font-medium text-primary-700">
+                        {activity.achievement}
+                      </p>
+                    )}
+                    {activity.description && (
+                      <p className="mt-1 text-sm text-gray-600">{activity.description}</p>
+                    )}
+                  </div>
+                ))}
+              </div>
             </Card>
           )}
 

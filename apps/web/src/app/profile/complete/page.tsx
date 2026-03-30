@@ -13,6 +13,7 @@ import EducationForm from '@/components/profile/EducationForm';
 import TestScoresForm from '@/components/profile/TestScoresForm';
 import AchievementsForm from '@/components/profile/AchievementsForm';
 import PreferencesForm from '@/components/profile/PreferencesForm';
+import ExtracurricularsForm from '@/components/profile/ExtracurricularsForm';
 import type { Id } from '../../../../../../convex/_generated/dataModel';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/components/ui/Toast';
@@ -23,6 +24,7 @@ const STEPS = [
   { id: 3, name: 'testScores', labelKey: 'profile.steps.testScores' },
   { id: 4, name: 'achievements', labelKey: 'profile.steps.achievements' },
   { id: 5, name: 'preferences', labelKey: 'profile.steps.preferences' },
+  { id: 6, name: 'activities', labelKey: 'profile.steps.activities' },
 ];
 
 export default function CompleteProfilePage() {
@@ -51,6 +53,7 @@ export default function CompleteProfilePage() {
     skills: [],
     interests: [],
     preferredCountries: [],
+    extracurriculars: [],
   });
 
   // Populate form with existing data
@@ -73,6 +76,7 @@ export default function CompleteProfilePage() {
         interests: existingProfile.interests || [],
         preferredCountries: existingProfile.preferredCountries || [],
         availability: existingProfile.availability || '',
+        extracurriculars: existingProfile.extracurriculars || [],
       });
       setIsInitialLoading(false);
     } else if (existingProfile === null) {
@@ -147,6 +151,18 @@ export default function CompleteProfilePage() {
         interests: updatedData.interests || [],
         preferredCountries: updatedData.preferredCountries || [],
         availability: updatedData.availability || undefined,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        extracurriculars: (updatedData.extracurriculars || []).map((act: any) => ({
+          id: act.id,
+          name: act.name,
+          category: act.category,
+          role: act.role,
+          educationLevel: act.educationLevel,
+          startDate: act.startDate,
+          endDate: act.endDate || undefined,
+          description: act.description || undefined,
+          achievement: act.achievement || undefined,
+        })),
       };
 
       await upsertProfile(profilePayload);
@@ -205,6 +221,8 @@ export default function CompleteProfilePage() {
         return <AchievementsForm {...commonProps} />;
       case 5:
         return <PreferencesForm {...commonProps} />;
+      case 6:
+        return <ExtracurricularsForm {...commonProps} />;
       default:
         return null;
     }

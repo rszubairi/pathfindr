@@ -128,6 +128,29 @@ export default defineSchema({
         grade: v.string(),
       })),
     }))),
+    extracurriculars: v.optional(v.array(v.object({
+      id: v.string(),
+      name: v.string(),
+      category: v.union(
+        v.literal('sports'),
+        v.literal('arts'),
+        v.literal('leadership'),
+        v.literal('community'),
+        v.literal('academic_club'),
+        v.literal('cultural'),
+        v.literal('other')
+      ),
+      role: v.string(),
+      educationLevel: v.union(
+        v.literal('school'),
+        v.literal('college'),
+        v.literal('university')
+      ),
+      startDate: v.string(),
+      endDate: v.optional(v.string()),
+      description: v.optional(v.string()),
+      achievement: v.optional(v.string()),
+    }))),
     profileStatus: v.union(
       v.literal('incomplete'),
       v.literal('pending_review'),

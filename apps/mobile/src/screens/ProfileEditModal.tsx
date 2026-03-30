@@ -21,6 +21,7 @@ import { EducationForm } from './profile-edit/EducationForm';
 import { TestScoresForm } from './profile-edit/TestScoresForm';
 import { AchievementsForm } from './profile-edit/AchievementsForm';
 import { PreferencesForm } from './profile-edit/PreferencesForm';
+import { ExtracurricularsForm } from './profile-edit/ExtracurricularsForm';
 import { useTheme, ThemeColors } from '../theme';
 
 const STEPS = [
@@ -29,6 +30,7 @@ const STEPS = [
   { id: 3, name: 'Scores', icon: 'file-text' },
   { id: 4, name: 'Achievements', icon: 'award' },
   { id: 5, name: 'Preferences', icon: 'globe' },
+  { id: 6, name: 'Activities', icon: 'activity' },
 ];
 
 export function ProfileEditModal({ visible, onClose, initialData }: any) {
@@ -68,6 +70,7 @@ export function ProfileEditModal({ visible, onClose, initialData }: any) {
         interests: formData.interests || [],
         preferredCountries: formData.preferredCountries || [],
         availability: formData.availability,
+        extracurriculars: formData.extracurriculars || [],
       };
 
       await upsertProfile(payload);
@@ -89,6 +92,7 @@ export function ProfileEditModal({ visible, onClose, initialData }: any) {
       case 3: return <TestScoresForm {...commonProps} />;
       case 4: return <AchievementsForm {...commonProps} />;
       case 5: return <PreferencesForm {...commonProps} />;
+      case 6: return <ExtracurricularsForm {...commonProps} />;
       default: return null;
     }
   };
@@ -133,7 +137,7 @@ export function ProfileEditModal({ visible, onClose, initialData }: any) {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.navBtn, styles.nextBtn, currentStep === 5 && styles.navBtnHidden]}
+            style={[styles.navBtn, styles.nextBtn, currentStep === 6 && styles.navBtnHidden]}
             onPress={() => setCurrentStep(s => s + 1)}
           >
             <Text style={[styles.navBtnText, styles.nextBtnText]}>Next</Text>
