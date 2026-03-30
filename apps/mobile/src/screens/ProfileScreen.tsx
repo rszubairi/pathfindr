@@ -405,7 +405,7 @@ export function ProfileScreen({ navigation }: any) {
 
         {/* Extracurricular Activities */}
         {profile.extracurriculars && profile.extracurriculars.length > 0 && (
-          <ViewSection icon="activity" title="Extracurricular Activities">
+          <ViewSection icon="activity" title={t('mobile.profile.extracurriculars')}>
             {profile.extracurriculars.map((activity: any, index: number) => (
               <View key={activity.id || index} style={[styles.itemBlock, index > 0 && styles.itemBorder]}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>

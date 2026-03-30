@@ -571,7 +571,7 @@ export default function StudentProfileViewPage() {
           {/* Extracurricular Activities */}
           {hasExtracurriculars && (
             <Card className="p-6">
-              <SectionHeader icon={Activity} title="Extracurricular Activities" />
+              <SectionHeader icon={Activity} title={t('profileView.sections.activities')} />
               <div className="mt-4 space-y-5">
                 {profile.extracurriculars!.map((activity, index) => (
                   <div

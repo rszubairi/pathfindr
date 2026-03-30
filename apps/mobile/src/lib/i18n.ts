@@ -278,6 +278,7 @@ const resources = {
           edit: 'Edit',
           dark: 'Dark',
           light: 'Light',
+          extracurriculars: 'Extracurricular Activities',
         },
         dashboard: {
           welcome: 'Welcome back,',
@@ -576,6 +577,7 @@ const resources = {
           edit: 'Sunting',
           dark: 'Malap',
           light: 'Cerah',
+          extracurriculars: 'Aktiviti Kokurikulum',
         },
         dashboard: {
           welcome: 'Selamat kembali,',
@@ -874,6 +876,7 @@ const resources = {
           edit: '编辑',
           dark: '深色',
           light: '浅色',
+          extracurriculars: '课外活动',
         },
         dashboard: {
           welcome: '欢迎回来，',

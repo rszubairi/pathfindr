@@ -180,6 +180,7 @@ const resources = {
           testScores: 'Test Scores',
           achievements: 'Achievements',
           preferences: 'Preferences',
+          activities: 'Activities',
         },
         forms: {
           common: {
@@ -453,6 +454,7 @@ const resources = {
           skills: 'Skills',
           interests: 'Interests',
           preferences: 'Preferences',
+          activities: 'Extracurricular Activities',
         },
         fields: {
           dob: 'Date of Birth',
@@ -791,6 +793,7 @@ const resources = {
           testScores: 'Skor Ujian',
           achievements: 'Pencapaian',
           preferences: 'Keutamaan',
+          activities: 'Aktiviti',
         },
         forms: {
           common: {
@@ -1006,6 +1009,7 @@ const resources = {
           skills: 'Kemahiran',
           interests: 'Minat',
           preferences: 'Keutamaan',
+          activities: 'Aktiviti Kokurikulum',
         },
         fields: {
           dob: 'Tarikh Lahir',
@@ -1402,6 +1406,7 @@ const resources = {
           testScores: '考试成绩',
           achievements: '个人成就',
           preferences: '偏好设置',
+          activities: '课外活动',
         },
         forms: {
           common: {
@@ -1617,6 +1622,7 @@ const resources = {
           skills: '技能',
           interests: '兴趣爱好',
           preferences: '偏好设置',
+          activities: '课外活动',
         },
         fields: {
           dob: '出生日期',
