@@ -593,6 +593,25 @@ const resources = {
         noResults: 'No scholarships found',
         noResultsDesc: "We couldn't find any scholarships matching your criteria. Try adjusting your filters or search query.",
         clearFilters: 'Clear All Filters',
+        featuredResults: 'Featured Results',
+        featuredBadge: 'Featured',
+        viewDetails: 'View Details',
+        notifyMe: 'Notify Me',
+        filtersList: {
+          title: 'Filters',
+          clearAll: 'Clear all',
+          countries: 'Countries',
+          fieldsOfStudy: 'Fields of Study',
+          providerType: 'Provider Type',
+          scholarshipValue: 'Scholarship Value',
+          minValue: 'Min Value (USD)',
+          maxValue: 'Max Value (USD)',
+          deadline: 'Application Deadline',
+          within: 'Within',
+          month: 'month',
+          months: 'months',
+          anyTime: 'Any time',
+        }
       },
       boardingSchools: {
         title: 'Boarding Schools',
@@ -604,6 +623,16 @@ const resources = {
         category: 'Category',
         state: 'State',
         managedBy: 'Managed by {{provider}}',
+        filtersList: {
+          schoolType: 'School Type',
+          gender: 'Gender',
+          boysOnly: 'Boys Only',
+          girlsOnly: 'Girls Only',
+          coed: 'Co-ed (Mixed)',
+          entryLevel: 'Entry Level',
+          managedBy: 'Managed By',
+          all: 'All',
+        }
       },
       internships: {
         title: 'Internships',
@@ -613,7 +642,24 @@ const resources = {
         noResults: 'No internships found',
         noResultsDesc: "We couldn't find any active internships matching your search.",
         applyBy: 'Apply by {{date}}',
+        filtersList: {
+          fullTime: 'Full-time',
+          partTime: 'Part-time',
+          remote: 'Remote',
+        }
       },
+      dashboard: {
+        scholarships: {
+          featureAction: 'Feature',
+          featureModalTitle: 'Feature Scholarship',
+          featureModalDesc: 'Feature your scholarship at the top of the list for 30 days. This will increase visibility and attract more qualified applicants.',
+          featureModalPrice: 'Monthly fee: USD 10.00',
+          featureBtn: 'Pay & Feature Now',
+          featureSuccessTitle: 'Scholarship Featured!',
+          featureSuccessDesc: 'Your scholarship is now featured at the top of the listings.',
+          isFeatured: 'Featured',
+        }
+      }
     },
   },
   ms: {
@@ -1206,6 +1252,25 @@ const resources = {
         noResults: 'Tiada biasiswa ditemui',
         noResultsDesc: "Kami tidak dapat mencari biasiswa yang sepadan dengan kriteria anda. Cuba laraskan penapis atau carian anda.",
         clearFilters: 'Kosongkan Semua Penapis',
+        featuredResults: 'Keputusan Pilihan',
+        featuredBadge: 'Pilihan',
+        viewDetails: 'Lihat Butiran',
+        notifyMe: 'Beritahu Saya',
+        filtersList: {
+          title: 'Penapis',
+          clearAll: 'Padam semua',
+          countries: 'Negara',
+          fieldsOfStudy: 'Bidang Pengajian',
+          providerType: 'Jenis Pemberi',
+          scholarshipValue: 'Nilai Biasiswa',
+          minValue: 'Nilai Minimum (USD)',
+          maxValue: 'Nilai Maksimum (USD)',
+          deadline: 'Tarikh Akhir Permohonan',
+          within: 'Dalam masa',
+          month: 'bulan',
+          months: 'bulan',
+          anyTime: 'Bila-bila masa',
+        }
       },
       boardingSchools: {
         title: 'Sekolah Berasrama',
@@ -1217,6 +1282,16 @@ const resources = {
         category: 'Kategori',
         state: 'Negeri',
         managedBy: 'Diuruskan oleh {{provider}}',
+        filtersList: {
+          schoolType: 'Jenis Sekolah',
+          gender: 'Jantina',
+          boysOnly: 'Lelaki Sahaja',
+          girlsOnly: 'Perempuan Sahaja',
+          coed: 'Bercampur (Lelaki & Perempuan)',
+          entryLevel: 'Tahap Kemasukan',
+          managedBy: 'Diuruskan Oleh',
+          all: 'Semua',
+        }
       },
       internships: {
         title: 'Latihan Amali',
@@ -1226,7 +1301,24 @@ const resources = {
         noResults: 'Tiada latihan amali ditemui',
         noResultsDesc: "Kami tidak dapat mencari latihan amali yang aktif yang sepadan dengan carian anda.",
         applyBy: 'Mohon sebelum {{date}}',
+        filtersList: {
+          fullTime: 'Sepenuh Masa',
+          partTime: 'Sambilan',
+          remote: 'Jarak Jauh',
+        }
       },
+      dashboard: {
+        scholarships: {
+          featureAction: 'Pilihan',
+          featureModalTitle: 'Pilihan Biasiswa',
+          featureModalDesc: 'Paparkan biasiswa anda di bahagian atas senarai selama 30 hari. Ini akan meningkatkan keterlihatan dan menarik lebih ramai pemohon yang berkelayakan.',
+          featureModalPrice: 'Yuran bulanan: USD 10.00',
+          featureBtn: 'Bayar & Jadikan Pilihan Sekarang',
+          featureSuccessTitle: 'Biasiswa Dijadikan Pilihan!',
+          featureSuccessDesc: 'Biasiswa anda kini dipaparkan di bahagian atas senarai.',
+          isFeatured: 'Pilihan',
+        }
+      }
     },
   },
   zh: {
@@ -1819,6 +1911,25 @@ const resources = {
         noResults: '未找到奖学金项目',
         noResultsDesc: "未找到符合您条件的奖学金。请尝试调整筛选条件或搜索关键词。",
         clearFilters: '清除所有筛选',
+        featuredResults: '精选结果',
+        featuredBadge: '精选',
+        viewDetails: '查看详情',
+        notifyMe: '通知我',
+        filtersList: {
+          title: '筛选',
+          clearAll: '清除全部',
+          countries: '国家',
+          fieldsOfStudy: '研究领域',
+          providerType: '提供者类型',
+          scholarshipValue: '奖学金价值',
+          minValue: '最低价值 (USD)',
+          maxValue: '最高价值 (USD)',
+          deadline: '申请截止日期',
+          within: '在',
+          month: '个月内',
+          months: '个月内',
+          anyTime: '随时',
+        }
       },
       boardingSchools: {
         title: '寄宿学校',
@@ -1830,16 +1941,43 @@ const resources = {
         category: '类别',
         state: '州/省',
         managedBy: '由 {{provider}} 管理',
+        filtersList: {
+          schoolType: '学校类型',
+          gender: '性别',
+          boysOnly: '仅限男生',
+          girlsOnly: '仅限女生',
+          coed: '混合 (男女同校)',
+          entryLevel: '入学阶段',
+          managedBy: '管理机构',
+          all: '全部',
+        }
       },
       internships: {
         title: '实习机会',
-        subtitle: '通过顶尖公司的实习机会发现您的职业新台阶。获得宝贵经验，开启您的专业旅程。',
+        subtitle: '通过顶尖公司的实习机会发现您的职业新台阶。获得宝理解并开启您的专业旅程。',
         searchPlaceholder: '搜索职位或公司...',
         filters: '筛选',
         noResults: '未找到实习机会',
         noResultsDesc: "未找到匹配您搜索的活跃实习机会。",
         applyBy: '请在 {{date}} 前申请',
+        filtersList: {
+          fullTime: '全职',
+          partTime: '兼职',
+          remote: '远程',
+        }
       },
+      dashboard: {
+        scholarships: {
+          featureAction: '精选',
+          featureModalTitle: '设为精选奖学金',
+          featureModalDesc: '将您的奖学金在列表顶部展示 30 天。这将增加曝光率并吸引更多高质量的申请者。',
+          featureModalPrice: '月费：10.00 美元',
+          featureBtn: '立即支付并设为精选',
+          featureSuccessTitle: '奖学金已设为精选！',
+          featureSuccessDesc: '您的奖学金现在显示在列表的最顶部。',
+          isFeatured: '精选',
+        }
+      }
     },
   },
 };

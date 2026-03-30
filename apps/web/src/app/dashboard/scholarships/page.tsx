@@ -12,7 +12,8 @@ import { SearchInput } from '@/components/ui/SearchInput';
 import { Modal } from '@/components/ui/Modal';
 import { format } from 'date-fns';
 import Link from 'next/link';
-import { Plus, Search, MoreVertical, Edit2, Users, Eye, EyeOff, Trash2 } from 'lucide-react';
+import { Plus, Search, MoreVertical, Edit2, Users, Eye, EyeOff, Trash2, Star } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import type { Id } from '../../../../../../convex/_generated/dataModel';
 
 export default function ScholarshipsPage() {
@@ -23,6 +24,11 @@ export default function ScholarshipsPage() {
   
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<string | null>(null);
+  
+  const [featureModalOpen, setFeatureModalOpen] = useState(false);
+  const [itemToFeature, setItemToFeature] = useState<any>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const { t } = useTranslation();
 
   const scholarships = useQuery(
     api.institutionScholarships.listByInstitution,
@@ -33,6 +39,8 @@ export default function ScholarshipsPage() {
   const bulkRemove = useMutation(api.institutionScholarships.bulkRemove);
   const updateStatus = useMutation(api.institutionScholarships.updateForInstitution);
   const removeScholarship = useMutation(api.institutionScholarships.removeForInstitution);
+  const createFeaturePayment = useMutation(api.scholarshipFeaturePayments.createPayment);
+  const completeFeaturePayment = useMutation(api.scholarshipFeaturePayments.markAsPaid);
 
   const filteredScholarships = scholarships?.filter((s: any) => 
     s.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -85,6 +93,36 @@ export default function ScholarshipsPage() {
     });
     setDeleteModalOpen(false);
     setItemToDelete(null);
+  };
+
+  const handleFeatureScholarship = async () => {
+    if (!itemToFeature || !user?._id) return;
+    
+    setIsProcessing(true);
+    try {
+      // 1. Create payment record
+      const paymentId = await createFeaturePayment({
+        corporateUserId: user._id as Id<'users'>,
+        scholarshipId: itemToFeature._id as Id<'scholarships'>,
+        amount: 10,
+        currency: 'USD'
+      });
+      
+      // 2. Simulate payment completion (in real app, this would happen via Stripe callback)
+      await completeFeaturePayment({
+        paymentId,
+        stripePaymentIntentId: 'simulated_pi_' + Math.random().toString(36).substring(7)
+      });
+      
+      setFeatureModalOpen(false);
+      setItemToFeature(null);
+      alert(t('dashboard.scholarships.featureSuccessDesc'));
+    } catch (error) {
+      console.error('Failed to feature scholarship:', error);
+      alert('Failed to process payment. Please try again.');
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const renderStatusBadge = (status: string) => {
@@ -176,6 +214,7 @@ export default function ScholarshipsPage() {
               <TableHeaderCell>Status</TableHeaderCell>
               <TableHeaderCell>Value</TableHeaderCell>
               <TableHeaderCell>Deadline</TableHeaderCell>
+              <TableHeaderCell>Featured</TableHeaderCell>
               <TableHeaderCell className="text-right">Applications</TableHeaderCell>
               <TableHeaderCell className="text-right">Actions</TableHeaderCell>
             </TableRow>
@@ -210,11 +249,33 @@ export default function ScholarshipsPage() {
                   <TableCell className="text-gray-500">
                     {scholarship.deadline ? format(new Date(scholarship.deadline), 'MMM d, yyyy') : 'N/A'}
                   </TableCell>
+                  <TableCell>
+                    {scholarship.isFeatured ? (
+                      <Badge variant="success" className="bg-amber-100 text-amber-700 border-amber-200">
+                        <Star className="w-3 h-3 mr-1 fill-amber-500" />
+                        {t('dashboard.scholarships.isFeatured')}
+                      </Badge>
+                    ) : (
+                      <span className="text-xs text-gray-400">No</span>
+                    )}
+                  </TableCell>
                   <TableCell className="text-right text-gray-500">
                     {scholarship.applicationsCount || 0}
                   </TableCell>
                   <TableCell>
                     <div className="flex justify-end gap-2 items-center">
+                      {!scholarship.isFeatured && scholarship.status === 'active' && (
+                        <button 
+                          onClick={() => {
+                            setItemToFeature(scholarship);
+                            setFeatureModalOpen(true);
+                          }}
+                          className="p-2 text-amber-500 hover:text-amber-600 rounded-md hover:bg-amber-50 transition-colors" 
+                          title={t('dashboard.scholarships.featureAction')}
+                        >
+                          <Star className="w-4 h-4" />
+                        </button>
+                      )}
                       <Link href={`/dashboard/scholarships/applicants?id=${scholarship._id}`} className="p-2 text-gray-400 hover:text-primary-600 rounded-md hover:bg-primary-50 transition-colors" title="View Applicants">
                         <Users className="w-4 h-4" />
                       </Link>
@@ -255,6 +316,45 @@ export default function ScholarshipsPage() {
             </Button>
             <Button variant="secondary" onClick={handleDeleteSingle}>
               Delete
+            </Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal
+        isOpen={featureModalOpen}
+        onClose={() => !isProcessing && setFeatureModalOpen(false)}
+        title={t('dashboard.scholarships.featureModalTitle')}
+      >
+        <div className="space-y-6">
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 flex gap-3">
+            <Star className="w-5 h-5 text-amber-500 flex-shrink-0" />
+            <p className="text-sm text-amber-800">
+              {t('dashboard.scholarships.featureModalDesc')}
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm text-gray-600">Scholarship</span>
+              <span className="text-sm font-semibold">{itemToFeature?.name}</span>
+            </div>
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm text-gray-600">Duration</span>
+              <span className="text-sm font-semibold">30 Days</span>
+            </div>
+            <div className="pt-2 border-t border-gray-200 flex justify-between items-center">
+              <span className="text-base font-bold text-gray-900">{t('dashboard.scholarships.featureModalPrice')}</span>
+              <span className="text-lg font-black text-primary-600">USD 10.00</span>
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+            <Button variant="secondary" onClick={() => setFeatureModalOpen(false)} disabled={isProcessing}>
+              Cancel
+            </Button>
+            <Button variant="primary" onClick={handleFeatureScholarship} disabled={isProcessing}>
+              {isProcessing ? 'Processing...' : t('dashboard.scholarships.featureBtn')}
             </Button>
           </div>
         </div>

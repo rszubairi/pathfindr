@@ -54,17 +54,49 @@ export function ScholarshipList({
     );
   }
 
-  // Display scholarships in a responsive grid
+  const now = new Date().toISOString();
+  const featuredScholarships = scholarships.filter(
+    (s: any) => s.isFeatured && s.featuredUntil && s.featuredUntil > now
+  );
+  const regularScholarships = scholarships.filter(
+    (s: any) => !(s.isFeatured && s.featuredUntil && s.featuredUntil > now)
+  );
+
+  // Display scholarships
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {scholarships.map((scholarship) => (
-        <ScholarshipCard
-          key={scholarship.id}
-          scholarship={scholarship}
-          showMatchScore={showMatchScore}
-          userCountry={userCountry}
-        />
-      ))}
+    <div className="space-y-8">
+      {/* Featured Scholarships Section */}
+      {featuredScholarships.length > 0 && (
+        <div className="space-y-4">
+          <div className="flex items-center gap-2 text-primary-600 font-bold uppercase tracking-wider text-[11px]">
+            <span className="h-1 w-12 bg-primary-600 rounded-full" />
+            {t('scholarships.featuredResults')}
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {featuredScholarships.map((scholarship) => (
+              <ScholarshipCard
+                key={scholarship.id}
+                scholarship={scholarship}
+                showMatchScore={showMatchScore}
+                userCountry={userCountry}
+                isPremium={true}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Regular Scholarships Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {regularScholarships.map((scholarship) => (
+          <ScholarshipCard
+            key={scholarship.id}
+            scholarship={scholarship}
+            showMatchScore={showMatchScore}
+            userCountry={userCountry}
+          />
+        ))}
+      </div>
     </div>
   );
 }

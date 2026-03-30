@@ -30,8 +30,11 @@ export default defineSchema({
     updatedAt: v.string(),
     localRanking: v.optional(v.number()),
     internationalRanking: v.optional(v.number()),
+    isFeatured: v.optional(v.boolean()),
+    featuredUntil: v.optional(v.string()),
   })
     .index('by_status', ['status'])
+    .index('by_featured', ['isFeatured'])
     .index('by_deadline', ['deadline'])
     .index('by_value', ['value'])
     .index('by_created_at', ['createdAt'])
@@ -460,5 +463,19 @@ export default defineSchema({
     .index('by_recipient', ['recipientEmail'])
     .index('by_sent_at', ['sentAt'])
     .index('by_user_id', ['userId']),
+
+  scholarshipFeaturePayments: defineTable({
+    corporateUserId: v.id('users'),
+    scholarshipId: v.id('scholarships'),
+    amount: v.number(),
+    currency: v.string(),
+    status: v.union(v.literal('pending'), v.literal('completed'), v.literal('failed')),
+    stripePaymentIntentId: v.optional(v.string()),
+    stripeCheckoutSessionId: v.optional(v.string()),
+    createdAt: v.string(),
+    updatedAt: v.string(),
+  })
+    .index('by_corporate_user', ['corporateUserId'])
+    .index('by_scholarship', ['scholarshipId']),
 
 });

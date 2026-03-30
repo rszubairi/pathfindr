@@ -1,4 +1,4 @@
-import { query, mutation } from './_generated/server';
+import { query, mutation, internalMutation } from './_generated/server';
 import { v } from 'convex/values';
 import { api } from './_generated/api';
 
@@ -21,11 +21,22 @@ export const list = query({
 
     const scholarships = await scholarshipsQuery.collect();
 
+    const now = new Date().toISOString();
+    
+    // Sort so featured and unexpired are first
+    const sortedScholarships = scholarships.sort((a, b) => {
+      const aFeatured = a.isFeatured && a.featuredUntil && a.featuredUntil > now;
+      const bFeatured = b.isFeatured && b.featuredUntil && b.featuredUntil > now;
+      if (aFeatured && !bFeatured) return -1;
+      if (!aFeatured && bFeatured) return 1;
+      return 0;
+    });
+
     if (args.limit) {
-      return scholarships.slice(0, args.limit);
+      return sortedScholarships.slice(0, args.limit);
     }
 
-    return scholarships;
+    return sortedScholarships;
   },
 });
 
@@ -81,7 +92,16 @@ export const search = query({
       new Map(combinedResults.map((item) => [item._id, item])).values()
     );
 
-    return uniqueResults;
+    const now = new Date().toISOString();
+    
+    // Sort so featured and unexpired are first
+    return uniqueResults.sort((a, b) => {
+      const aFeatured = a.isFeatured && a.featuredUntil && a.featuredUntil > now;
+      const bFeatured = b.isFeatured && b.featuredUntil && b.featuredUntil > now;
+      if (aFeatured && !bFeatured) return -1;
+      if (!aFeatured && bFeatured) return 1;
+      return 0;
+    });
   },
 });
 
@@ -147,7 +167,16 @@ export const filter = query({
       });
     }
 
-    return scholarships;
+    const now = new Date().toISOString();
+
+    // Sort so featured and unexpired are first
+    return scholarships.sort((a, b) => {
+      const aFeatured = a.isFeatured && a.featuredUntil && a.featuredUntil > now;
+      const bFeatured = b.isFeatured && b.featuredUntil && b.featuredUntil > now;
+      if (aFeatured && !bFeatured) return -1;
+      if (!aFeatured && bFeatured) return 1;
+      return 0;
+    });
   },
 });
 
@@ -345,5 +374,29 @@ export const bulkCreate = mutation({
       ids.push(id);
     }
     return ids;
+  },
+});
+
+// Internal mutation to expire featured status for scholarships
+export const expireFeatured = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    const now = new Date().toISOString();
+    const scholarships = await ctx.db
+      .query('scholarships')
+      .withIndex('by_featured', (q) => q.eq('isFeatured', true))
+      .collect();
+
+    let expired = 0;
+    for (const scholarship of scholarships) {
+      if (scholarship.featuredUntil && scholarship.featuredUntil < now) {
+        await ctx.db.patch(scholarship._id, {
+          isFeatured: false,
+          featuredUntil: undefined,
+        });
+        expired++;
+      }
+    }
+    return expired;
   },
 });

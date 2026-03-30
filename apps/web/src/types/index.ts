@@ -30,6 +30,8 @@ export interface Scholarship {
   applicationCount?: number;
   matchScore?: number;
   status: 'active' | 'closed' | 'pending';
+  isFeatured?: boolean;
+  featuredUntil?: string;
   localRanking?: number;
   internationalRanking?: number;
   createdAt: string;

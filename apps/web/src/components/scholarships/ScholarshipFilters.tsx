@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { X, ChevronDown, ChevronUp } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Badge } from '@/components/ui/Badge';
 import { cn } from '@/lib/utils';
 import { filterOptions } from '@/lib/mockData';
@@ -47,6 +48,8 @@ export function ScholarshipFilters({
   onClearFilters,
   className,
 }: ScholarshipFiltersProps) {
+  const { t } = useTranslation();
+
   const handleCountryToggle = (country: string) => {
     const currentCountries = filters.countries || [];
     const newCountries = currentCountries.includes(country)
@@ -102,7 +105,7 @@ export function ScholarshipFilters({
       {/* Header with Clear All button */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <h2 className="text-lg font-bold text-gray-900">Filters</h2>
+          <h2 className="text-lg font-bold text-gray-900">{t('scholarships.filtersList.title')}</h2>
           {activeFilterCount > 0 && (
             <Badge variant="primary" size="sm">
               {activeFilterCount}
@@ -115,13 +118,13 @@ export function ScholarshipFilters({
             className="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1"
           >
             <X className="h-3 w-3" />
-            Clear all
+            {t('scholarships.filtersList.clearAll')}
           </button>
         )}
       </div>
 
       {/* Countries Filter */}
-      <FilterSection title="Countries">
+      <FilterSection title={t('scholarships.filtersList.countries')}>
         <div className="space-y-2 max-h-48 overflow-y-auto">
           {filterOptions.countries.map((country) => (
             <label key={country} className="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded">
@@ -138,7 +141,7 @@ export function ScholarshipFilters({
       </FilterSection>
 
       {/* Fields of Study Filter */}
-      <FilterSection title="Fields of Study">
+      <FilterSection title={t('scholarships.filtersList.fieldsOfStudy')}>
         <div className="space-y-2 max-h-48 overflow-y-auto">
           {filterOptions.fields.map((field) => (
             <label key={field} className="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded">
@@ -155,7 +158,7 @@ export function ScholarshipFilters({
       </FilterSection>
 
       {/* Provider Type Filter */}
-      <FilterSection title="Provider Type">
+      <FilterSection title={t('scholarships.filtersList.providerType')}>
         <div className="space-y-2">
           {filterOptions.providerTypes.map((type) => (
             <label key={type} className="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded">
@@ -172,11 +175,11 @@ export function ScholarshipFilters({
       </FilterSection>
 
       {/* Value Range Filter */}
-      <FilterSection title="Scholarship Value">
+      <FilterSection title={t('scholarships.filtersList.scholarshipValue')}>
         <div className="space-y-3">
           <div>
             <label htmlFor="min-value" className="block text-xs text-gray-600 mb-1">
-              Min Value (USD)
+              {t('scholarships.filtersList.minValue')}
             </label>
             <input
               id="min-value"
@@ -189,7 +192,7 @@ export function ScholarshipFilters({
           </div>
           <div>
             <label htmlFor="max-value" className="block text-xs text-gray-600 mb-1">
-              Max Value (USD)
+              {t('scholarships.filtersList.maxValue')}
             </label>
             <input
               id="max-value"
@@ -204,7 +207,7 @@ export function ScholarshipFilters({
       </FilterSection>
 
       {/* Deadline Filter */}
-      <FilterSection title="Application Deadline">
+      <FilterSection title={t('scholarships.filtersList.deadline')}>
         <div className="space-y-2">
           {[1, 3, 6, 12].map((months) => (
             <label key={months} className="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded">
@@ -216,7 +219,7 @@ export function ScholarshipFilters({
                 className="h-4 w-4 text-primary-600 border-gray-300 focus:ring-primary-500"
               />
               <span className="ml-2 text-sm text-gray-700">
-                Within {months} {months === 1 ? 'month' : 'months'}
+                {t('scholarships.filtersList.within')} {months} {months === 1 ? t('scholarships.filtersList.month') : t('scholarships.filtersList.months')}
               </span>
             </label>
           ))}
@@ -228,7 +231,7 @@ export function ScholarshipFilters({
               onChange={() => handleDeadlineChange(null)}
               className="h-4 w-4 text-primary-600 border-gray-300 focus:ring-primary-500"
             />
-            <span className="ml-2 text-sm text-gray-700">Any time</span>
+            <span className="ml-2 text-sm text-gray-700">{t('scholarships.filtersList.anyTime')}</span>
           </label>
         </div>
       </FilterSection>

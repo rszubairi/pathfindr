@@ -53,29 +53,33 @@ export default function ScholarshipsPage() {
 
   // Sort scholarships
   const sortedScholarships = useMemo(() => {
-    const sorted = [...scholarships];
+    const now = new Date().toISOString();
+    
+    // First, divide into featured and regular
+    const featured = scholarships.filter(s => s.isFeatured && s.featuredUntil && s.featuredUntil > now);
+    const regular = scholarships.filter(s => !(s.isFeatured && s.featuredUntil && s.featuredUntil > now));
 
-    switch (sortBy) {
-      case 'deadline':
-        return sorted.sort(
-          (a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
-        );
-      case 'value':
-        return sorted.sort((a, b) => b.value - a.value);
-      case 'recent':
-        return sorted.sort(
-          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-      case 'relevant':
-      default:
-        // If there's a search query, results are already sorted by relevance
-        // Otherwise, sort by deadline
-        return searchQuery
-          ? sorted
-          : sorted.sort(
-            (a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
-          );
-    }
+    // Sort regular results
+    const sortFunction = (a: any, b: any) => {
+      switch (sortBy) {
+        case 'deadline':
+          return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
+        case 'value':
+          return b.value - a.value;
+        case 'recent':
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        case 'relevant':
+        default:
+          return searchQuery
+            ? 0 // Search already sorts by relevance
+            : new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
+      }
+    };
+
+    featured.sort(sortFunction);
+    regular.sort(sortFunction);
+
+    return [...featured, ...regular];
   }, [scholarships, sortBy, searchQuery]);
 
   // Pagination

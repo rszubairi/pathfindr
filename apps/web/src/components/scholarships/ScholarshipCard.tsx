@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { Calendar, ExternalLink, MapPin, BookOpen, TrendingUp, Clock, Bell, Home, Trophy, Globe } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
@@ -14,6 +15,7 @@ export interface ScholarshipCardProps {
   scholarship: Scholarship;
   showMatchScore?: boolean;
   userCountry?: string;
+  isPremium?: boolean;
 }
 
 /**
@@ -69,7 +71,8 @@ function ProviderLogo({
   );
 }
 
-export function ScholarshipCard({ scholarship, showMatchScore = false, userCountry }: ScholarshipCardProps) {
+export function ScholarshipCard({ scholarship, showMatchScore = false, userCountry, isPremium = false }: ScholarshipCardProps) {
+  const { t } = useTranslation();
   const deadlineUrgency = getDeadlineUrgency(scholarship.deadline);
   const colors = getProviderTypeColor(scholarship.providerType);
 
@@ -84,8 +87,86 @@ export function ScholarshipCard({ scholarship, showMatchScore = false, userCount
   const displayFields = scholarship.eligibleFields.slice(0, 2);
   const remainingFields = scholarship.eligibleFields.length - 2;
 
+  if (isPremium) {
+    return (
+      <div className="group relative bg-white rounded-2xl border-2 border-primary-500 shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 flex flex-col h-full">
+        {/* Featured Badge */}
+        <div className="absolute top-0 right-0 z-10">
+          <div className="bg-primary-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-widest shadow-sm">
+            {t('scholarships.featuredBadge')}
+          </div>
+        </div>
+
+        {/* Premium Accent Bar */}
+        <div
+          className="h-1.5 w-full"
+          style={{
+            background: 'linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899)',
+          }}
+        />
+
+        <div className="p-6 flex-1 flex flex-col">
+          {/* Header row: logo + provider type badge */}
+          <div className="flex items-start justify-between gap-3 mb-4">
+            <ProviderLogo
+              provider={scholarship.provider}
+              providerType={scholarship.providerType}
+              size="md"
+            />
+            <div className="flex flex-col items-end gap-1.5">
+              <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold border ${colors.bg} ${colors.text} ${colors.border}`}>
+                {providerTypeLabel}
+              </span>
+              {isLocalProvider(scholarship.provider, userCountry) && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold border bg-emerald-50 text-emerald-700 border-emerald-200">
+                  <Home className="w-3 h-3" />
+                  Local
+                </span>
+              )}
+            </div>
+          </div>
+
+          <p className="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">
+            {scholarship.provider}
+          </p>
+
+          <h3 className="text-lg font-bold text-gray-900 mb-3 line-clamp-2 leading-snug group-hover:text-primary-600 transition-colors duration-200">
+            {scholarship.name}
+          </h3>
+
+          <div className="flex items-baseline gap-1 mb-4">
+            <span className="text-2xl font-black text-primary-600">
+              {formatCurrency(scholarship.value, scholarship.currency)}
+            </span>
+            <span className="text-xs text-gray-400 font-medium">/year (est.)</span>
+          </div>
+
+          <div className="space-y-2 mb-6">
+            <div className="flex items-center gap-2 text-gray-500 text-sm">
+              <BookOpen className="w-4 h-4 text-primary-400" />
+              <span className="line-clamp-1">{scholarship.eligibleFields.slice(0, 2).join(', ')}</span>
+            </div>
+            <div className="flex items-center gap-2 text-gray-500 text-sm">
+              <Calendar className="w-4 h-4 text-primary-400" />
+              <span className="font-semibold text-gray-700">Deadline: {formatDate(scholarship.deadline, 'short')}</span>
+            </div>
+          </div>
+
+          <div className="mt-auto pt-4 border-t border-gray-100 space-y-2">
+            <Link href={`/scholarships/detail?id=${scholarship.id}`} className="block w-full">
+              <Button variant="primary" size="md" className="w-full font-bold shadow-md hover:shadow-lg transition-shadow">
+                {t('scholarships.viewDetails')}
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="group relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden">
+...
 
       {/* Top accent bar coloured by provider type */}
       <div

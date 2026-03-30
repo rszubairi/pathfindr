@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { X, ChevronDown, ChevronUp } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Badge } from '@/components/ui/Badge';
 import { cn } from '@/lib/utils';
 import type { BoardingSchoolFilters as Filters } from '@/types';
@@ -51,22 +52,6 @@ const categories = [
   'MRSM',
 ];
 
-const managedByOptions = [
-  { value: 'KPM', label: 'KPM (Ministry of Education)' },
-  { value: 'MARA', label: 'MARA' },
-];
-
-const genderOptions = [
-  { value: 'male', label: 'Boys Only' },
-  { value: 'female', label: 'Girls Only' },
-  { value: 'mixed', label: 'Co-ed (Mixed)' },
-];
-
-const entryLevelOptions = [
-  { value: 'Tingkatan 1', label: 'Tingkatan 1 (Form 1)' },
-  { value: 'Tingkatan 4', label: 'Tingkatan 4 (Form 4)' },
-];
-
 export function BoardingSchoolFilters({
   filters,
   onFiltersChange,
@@ -74,6 +59,24 @@ export function BoardingSchoolFilters({
   availableStates,
   className,
 }: BoardingSchoolFiltersProps) {
+  const { t } = useTranslation();
+
+  const managedByOptions = [
+    { value: 'KPM', label: 'KPM (Ministry of Education)' },
+    { value: 'MARA', label: 'MARA' },
+  ];
+
+  const genderOptions = [
+    { value: 'male', label: t('boardingSchools.filtersList.boysOnly') },
+    { value: 'female', label: t('boardingSchools.filtersList.girlsOnly') },
+    { value: 'mixed', label: t('boardingSchools.filtersList.coed') },
+  ];
+
+  const entryLevelOptions = [
+    { value: 'Tingkatan 1', label: 'Tingkatan 1 (Form 1)' },
+    { value: 'Tingkatan 4', label: 'Tingkatan 4 (Form 4)' },
+  ];
+
   const handleStateToggle = (state: string) => {
     const current = filters.states || [];
     const newStates = current.includes(state)
@@ -113,7 +116,7 @@ export function BoardingSchoolFilters({
     <div className={cn('bg-white rounded-lg border border-gray-200 p-4', className)}>
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <h2 className="text-lg font-bold text-gray-900">Filters</h2>
+          <h2 className="text-lg font-bold text-gray-900">{t('boardingSchools.filters')}</h2>
           {activeFilterCount > 0 && (
             <Badge variant="primary" size="sm">
               {activeFilterCount}
@@ -126,13 +129,13 @@ export function BoardingSchoolFilters({
             className="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1"
           >
             <X className="h-3 w-3" />
-            Clear all
+            {t('scholarships.filtersList.clearAll')}
           </button>
         )}
       </div>
 
       {/* Category Filter */}
-      <FilterSection title="School Type">
+      <FilterSection title={t('boardingSchools.filtersList.schoolType')}>
         <div className="space-y-2">
           {categories.map((category) => (
             <label key={category} className="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded">
@@ -149,7 +152,7 @@ export function BoardingSchoolFilters({
       </FilterSection>
 
       {/* State Filter */}
-      <FilterSection title="State">
+      <FilterSection title={t('boardingSchools.state')}>
         <div className="space-y-2 max-h-48 overflow-y-auto">
           {availableStates.map((state) => (
             <label key={state} className="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded">
@@ -166,7 +169,7 @@ export function BoardingSchoolFilters({
       </FilterSection>
 
       {/* Managed By Filter */}
-      <FilterSection title="Managed By">
+      <FilterSection title={t('boardingSchools.filtersList.managedBy')}>
         <div className="space-y-2">
           {managedByOptions.map((option) => (
             <label key={option.value} className="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded">
@@ -188,13 +191,13 @@ export function BoardingSchoolFilters({
               onChange={() => handleManagedByChange(undefined)}
               className="h-4 w-4 text-primary-600 border-gray-300 focus:ring-primary-500"
             />
-            <span className="ml-2 text-sm text-gray-700">All</span>
+            <span className="ml-2 text-sm text-gray-700">{t('boardingSchools.filtersList.all')}</span>
           </label>
         </div>
       </FilterSection>
 
       {/* Gender Filter */}
-      <FilterSection title="Gender" defaultOpen={false}>
+      <FilterSection title={t('boardingSchools.filtersList.gender')} defaultOpen={false}>
         <div className="space-y-2">
           {genderOptions.map((option) => (
             <label key={option.value} className="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded">
@@ -216,13 +219,13 @@ export function BoardingSchoolFilters({
               onChange={() => handleGenderChange(undefined)}
               className="h-4 w-4 text-primary-600 border-gray-300 focus:ring-primary-500"
             />
-            <span className="ml-2 text-sm text-gray-700">All</span>
+            <span className="ml-2 text-sm text-gray-700">{t('boardingSchools.filtersList.all')}</span>
           </label>
         </div>
       </FilterSection>
 
       {/* Entry Level Filter */}
-      <FilterSection title="Entry Level" defaultOpen={false}>
+      <FilterSection title={t('boardingSchools.filtersList.entryLevel')} defaultOpen={false}>
         <div className="space-y-2">
           {entryLevelOptions.map((option) => (
             <label key={option.value} className="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded">
@@ -244,7 +247,7 @@ export function BoardingSchoolFilters({
               onChange={() => handleEntryLevelChange(undefined)}
               className="h-4 w-4 text-primary-600 border-gray-300 focus:ring-primary-500"
             />
-            <span className="ml-2 text-sm text-gray-700">All</span>
+            <span className="ml-2 text-sm text-gray-700">{t('boardingSchools.filtersList.all')}</span>
           </label>
         </div>
       </FilterSection>

@@ -13,7 +13,8 @@ import {
   User,
   Briefcase,
   FilePlus,
-  Heart
+  Heart,
+  CreditCard
 } from 'lucide-react';
 
 import { useState } from 'react';
@@ -34,8 +35,10 @@ export function DashboardSidebar() {
       return [
         ...common,
         { name: 'Internships', href: '/dashboard/internships', icon: Briefcase },
+        { name: 'Scholarships', href: '/dashboard/scholarships', icon: GraduationCap },
         { name: 'Post Internship', href: '/dashboard/internships/create', icon: FilePlus },
         { name: 'Donations', href: '/dashboard/donations', icon: Heart },
+        { name: 'Billing', href: '/dashboard/billing', icon: CreditCard },
         { name: 'Profile', href: '/dashboard/profile', icon: User },
       ];
     }

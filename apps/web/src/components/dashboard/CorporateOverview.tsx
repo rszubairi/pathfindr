@@ -4,7 +4,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { useQuery } from 'convex/react';
 import { api } from '@convex/_generated/api';
 import { StatsCard } from './StatsCard';
-import { Briefcase, Users, FilePlus, Building2, Globe, Mail, Phone, ExternalLink } from 'lucide-react';
+import { Briefcase, Users, FilePlus, Building2, Globe, Mail, Phone, ExternalLink, Star, GraduationCap } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import type { Id } from '@convex/_generated/dataModel';
 import { Card } from '@/components/ui/Card';
@@ -25,6 +26,15 @@ export function CorporateOverview() {
 
   const activeCount = internships?.filter(i => i.status === 'active').length || 0;
   const draftCount = internships?.filter(i => i.status === 'draft' || i.status === 'pending_payment').length || 0;
+
+  const scholarships = useQuery(
+    api.institutionScholarships.listByInstitution,
+    user?._id ? { userId: user._id as Id<'users'> } : 'skip'
+  );
+
+  const featuredScholarships = scholarships?.filter(s => s.isFeatured) || [];
+  const scholarshipCount = scholarships?.length || 0;
+  const { t } = useTranslation();
 
   if (!profile || internships === undefined) {
     return (
@@ -103,23 +113,55 @@ export function CorporateOverview() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <StatsCard
-          label="Active Internships"
-          value={activeCount}
+          label="Total Internships"
+          value={internships?.length || 0}
           icon={Briefcase}
         />
         <StatsCard
-          label="Draft/Pending"
-          value={draftCount}
-          icon={Users}
+          label="Total Scholarships"
+          value={scholarshipCount}
+          icon={GraduationCap}
           className="lg:delay-100"
         />
         <StatsCard
-          label="Total Responses"
-          value="0"
-          icon={Users}
+          label="Featured Scholarships"
+          value={featuredScholarships.length}
+          icon={Star}
           className="lg:delay-200"
         />
       </div>
+
+      {/* Featured Scholarships Section */}
+      {featuredScholarships.length > 0 && (
+        <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl shadow-sm border border-amber-200 overflow-hidden">
+          <div className="px-6 py-5 border-b border-amber-200 bg-amber-100/50 flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
+              <h3 className="font-bold text-amber-900">{t('dashboard.scholarships.isFeatured')}</h3>
+            </div>
+            <Link href="/dashboard/scholarships" className="text-sm text-amber-700 hover:underline font-medium">
+              Manage
+            </Link>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {featuredScholarships.map((s) => (
+                <div key={s._id} className="bg-white p-4 rounded-lg border border-amber-100 shadow-sm flex justify-between items-center">
+                  <div>
+                    <div className="font-semibold text-gray-900">{s.name}</div>
+                    <div className="text-xs text-gray-500">
+                      Until: {new Date(s.featuredUntil!).toLocaleDateString()}
+                    </div>
+                  </div>
+                  <Badge variant="success" className="bg-amber-100 text-amber-700">
+                    Active
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Recent Internships Table */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
