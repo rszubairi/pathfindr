@@ -43,6 +43,7 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+      "./plugins/withFirebaseCredentials",
       "@sentry/react-native/expo",
       "expo-secure-store",
       "expo-local-authentication",

@@ -13,7 +13,10 @@
       "distribution": "internal",
       "node": "20.18.0",
       "env": {
-        "EXPO_PUBLIC_SENTRY_DSN": "https://dfb6be406cd46a4a97c2b1e2d921f2c6@o4511131918008320.ingest.us.sentry.io/4511131918794752"
+        "EXPO_PUBLIC_SENTRY_DSN": "https://dfb6be406cd46a4a97c2b1e2d921f2c6@o4511131918008320.ingest.us.sentry.io/4511131918794752",
+        "EXPO_PUBLIC_CONVEX_URL": "https://joyous-pika-164.eu-west-1.convex.cloud",
+        "GOOGLE_SERVICES_JSON": "$GOOGLE_SERVICES_JSON",
+        "GOOGLE_SERVICE_INFO_PLIST": "$GOOGLE_SERVICE_INFO_PLIST"
       },
       "android": {
         "buildType": "apk"
@@ -22,7 +25,10 @@
     "production": {
       "node": "20.18.0",
       "env": {
-        "EXPO_PUBLIC_SENTRY_DSN": "https://dfb6be406cd46a4a97c2b1e2d921f2c6@o4511131918008320.ingest.us.sentry.io/4511131918794752"
+        "EXPO_PUBLIC_SENTRY_DSN": "https://dfb6be406cd46a4a97c2b1e2d921f2c6@o4511131918008320.ingest.us.sentry.io/4511131918794752",
+        "EXPO_PUBLIC_CONVEX_URL": "https://joyous-pika-164.eu-west-1.convex.cloud",
+        "GOOGLE_SERVICES_JSON": "$GOOGLE_SERVICES_JSON",
+        "GOOGLE_SERVICE_INFO_PLIST": "$GOOGLE_SERVICE_INFO_PLIST"
       }
     }
   },

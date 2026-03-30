@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
@@ -25,10 +25,6 @@ Sentry.init({
   enabled: !__DEV__ && !!sentryDsn,
 });
 
-const convex = new ConvexReactClient(
-  process.env.EXPO_PUBLIC_CONVEX_URL as string
-);
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -40,6 +36,7 @@ const queryClient = new QueryClient({
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
+  const convex = useRef(new ConvexReactClient(process.env.EXPO_PUBLIC_CONVEX_URL as string)).current;
 
   const handleSplashComplete = useCallback(() => {
     setShowSplash(false);

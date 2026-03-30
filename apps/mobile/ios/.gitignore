@@ -26,5 +26,8 @@ project.xcworkspace
 # Bundle artifacts
 *.jsbundle
 
+# Firebase — contains API keys, never commit
+GoogleService-Info.plist
+
 # CocoaPods
 /Pods/

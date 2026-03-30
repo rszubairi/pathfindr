@@ -57,7 +57,9 @@
       "Bash(git -C /Users/raheelzubairi/Documents/projects/pathfindr add apps/mobile/ios/Pathfindr/GoogleService-Info.plist apps/mobile/ios/Pathfindr.xcodeproj/project.pbxproj)",
       "Bash(git -C /Users/raheelzubairi/Documents/projects/pathfindr status --short)",
       "Bash(git -C /Users/raheelzubairi/Documents/projects/pathfindr add apps/mobile/ios/Pathfindr.xcodeproj/project.pbxproj)",
-      "Bash(npm uninstall:*)"
+      "Bash(npm uninstall:*)",
+      "Bash(pip3 show:*)",
+      "Bash(grep -r \"EXPO_PUBLIC_\\\\|process\\\\.env\\\\.\" /Users/raheelzubairi/Documents/projects/pathfindr/apps/mobile/src /Users/raheelzubairi/Documents/projects/pathfindr/apps/mobile/App.tsx --include=\"*.{ts,tsx}\")"
     ]
   }
 }
