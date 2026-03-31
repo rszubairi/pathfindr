@@ -6,7 +6,7 @@ import { Providers } from '@/app/[lang]/providers';
 
 const inter = Inter({ subsets: ['latin'] });
 
-const locales = ['en', 'ms', 'zh', 'es', 'pt', 'de', 'ja', 'ko', 'vi', 'id'];
+const locales = ['en', 'ms', 'zh', 'es', 'pt', 'de', 'ja', 'ko', 'vi', 'id', 'hi'];
 
 export async function generateMetadata({ params }: { params: any }): Promise<Metadata> {
   const { lang } = await params;

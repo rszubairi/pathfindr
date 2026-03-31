@@ -30,7 +30,7 @@ export function Header() {
   const { t, i18n } = useTranslation();
   const [mounted, setMounted] = useState(false);
 
-  const locales = ['en', 'ms', 'zh', 'es', 'pt', 'de', 'ja', 'ko', 'vi', 'id'];
+  const locales = ['en', 'ms', 'zh', 'es', 'pt', 'de', 'ja', 'ko', 'vi', 'id', 'hi'];
 
   // Helper to get localized href
   const getLocalizedHref = (href: string) => {
@@ -168,7 +168,8 @@ export function Header() {
                     { code: 'ja', label: '日本語' },
                     { code: 'ko', label: '한국어' },
                     { code: 'vi', label: 'Tiếng Việt' },
-                    { code: 'id', label: 'Bahasa Indonesia' }
+                    { code: 'id', label: 'Bahasa Indonesia' },
+                    { code: 'hi', label: 'हिन्दी' }
                   ].map((lng) => (
                     <button
                       key={lng.code}
@@ -346,6 +347,7 @@ export function Header() {
                       <option value="ko">한국어 (KO)</option>
                       <option value="vi">Tiếng Việt (VI)</option>
                       <option value="id">Bahasa Indonesia (ID)</option>
+                      <option value="hi">हिन्दी (HI)</option>
                     </select>
                     <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                     <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
