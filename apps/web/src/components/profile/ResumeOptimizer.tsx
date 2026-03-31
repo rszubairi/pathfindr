@@ -23,7 +23,8 @@ import {
   Copy,
   ExternalLink,
   Globe,
-  Flag
+  Flag,
+  Users
 } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -233,9 +234,14 @@ function calculateScore(profile: any, user: any) {
     suggestions.push('subjectScores');
   }
 
-  // 7. Extras (10 points)
-  if (profile.interests && profile.interests.length > 0) score += 5;
-  if (profile.preferredCountries && profile.preferredCountries.length > 0) score += 5;
+  // 7. Extracurriculars (15 points)
+  if (profile.extracurriculars && profile.extracurriculars.length > 0) {
+    score += 10;
+    if (profile.extracurriculars.length >= 3) score += 5;
+    else suggestions.push('extracurricularCount');
+  } else {
+    suggestions.push('extracurricularBasic');
+  }
 
   // Cap at 100
   score = Math.min(score, 100);
@@ -331,6 +337,8 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
         const total = safeProfile.subjectScores.reduce((s: number, e: any) => s + e.subjects.length, 0);
         return total >= 5 ? 100 : Math.round((total / 5) * 100);
       }
+      case 'extracurriculars':
+        return safeProfile.extracurriculars?.length > 0 ? (safeProfile.extracurriculars.every((e: any) => e.description?.length > 30) ? 100 : 50) : 0;
       default:
         return 0;
     }
@@ -454,6 +462,40 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
               </div>
             ) : (
               <p className="text-sm text-gray-400 italic no-print">{t('profileView.resumeOptimizer.placeholders.noProjects')}</p>
+            )}
+          </section>
+
+          {/* Extracurricular Activities */}
+          <section>
+            <ResumeSectionTitle
+              icon={Users}
+              title={t('profileView.resumeOptimizer.sections.extracurriculars')}
+              progress={getSectionProgress('extracurriculars')}
+              showProgress={showProgress}
+            />
+            {safeProfile.extracurriculars?.length > 0 ? (
+              <div className="space-y-6">
+                {safeProfile.extracurriculars.map((ec: any, i: number) => (
+                  <div key={i} className="relative pl-4 border-l-2 border-gray-100">
+                    <div className="flex justify-between items-start">
+                      <h4 className="font-bold text-lg leading-tight">{ec.name}</h4>
+                      <span className="text-xs text-gray-500 font-medium whitespace-nowrap ml-4">
+                        {ec.startDate} — {ec.endDate || t('profileView.fields.present')}
+                      </span>
+                    </div>
+                    <p className="text-sm font-semibold text-primary-700 mt-0.5">{ec.role}</p>
+                    {ec.description && <p className="text-sm text-gray-600 mt-1.5 leading-relaxed">{ec.description}</p>}
+                    {ec.achievement && (
+                      <div className="mt-2 flex items-center gap-2 text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md border border-amber-100/50">
+                        <Trophy className="w-3.5 h-3.5" />
+                        <span className="text-xs font-bold uppercase tracking-tight">{ec.achievement}</span>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-gray-400 italic no-print">{t('profileView.resumeOptimizer.placeholders.noExtracurriculars')}</p>
             )}
           </section>
         </div>
