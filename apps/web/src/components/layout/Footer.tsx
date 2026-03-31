@@ -5,27 +5,36 @@ import Link from 'next/link';
 import { GraduationCap, Facebook, Twitter, Instagram, Linkedin, Mail } from 'lucide-react';
 
 export function Footer() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [mounted, setMounted] = useState(false);
   const currentYear = new Date().getFullYear();
+
+  // Helper to get localized href
+  const getLocalizedHref = (href: string) => {
+    // Only localize internal absolute paths, not hashes or external URLs
+    if (href.startsWith('http') || href.startsWith('#')) return href;
+    const currentLang = i18n.language || 'en';
+    const cleanHref = href === '/' ? '' : href;
+    return `/${currentLang}${cleanHref}`;
+  };
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
   const platformLinks = [
-    { name: mounted ? t('nav.scholarships') : 'Scholarships', href: '/scholarships' },
-    { name: mounted ? t('nav.boardingschools') : 'Boarding Schools', href: '/boarding-schools' },
-    { name: mounted ? t('footer.links.internships') : 'Internships', href: '/internships' },
-    { name: mounted ? t('nav.internationalschools') : 'International Schools', href: '/international-schools' },
+    { name: t('nav.scholarships', { defaultValue: 'Scholarships' }), href: '/scholarships' },
+    { name: t('nav.boardingschools', { defaultValue: 'Boarding Schools' }), href: '/boarding-schools' },
+    { name: t('footer.links.internships', { defaultValue: 'Internships' }), href: '/internships' },
+    { name: t('nav.internationalschools', { defaultValue: 'International Schools' }), href: '/international-schools' },
   ];
 
   const resourceLinks = [
-    { name: mounted ? t('nav.features') : 'Features', href: '/#features' },
-    { name: mounted ? t('nav.pricing') : 'Pricing', href: '/#pricing' },
-    { name: mounted ? t('footer.links.knowledgeBase') : 'Knowledge Base', href: '/knowledge-base' },
-    { name: mounted ? t('footer.links.privacyPolicy') : 'Privacy Policy', href: '/privacy' },
-    { name: mounted ? t('footer.links.termsOfService') : 'Terms of Service', href: '/terms' },
+    { name: t('nav.features', { defaultValue: 'Features' }), href: '/#features' },
+    { name: t('nav.pricing', { defaultValue: 'Pricing' }), href: '/#pricing' },
+    { name: t('footer.links.knowledgeBase', { defaultValue: 'Knowledge Base' }), href: '/knowledge-base' },
+    { name: t('footer.links.privacyPolicy', { defaultValue: 'Privacy Policy' }), href: '/privacy' },
+    { name: t('footer.links.termsOfService', { defaultValue: 'Terms of Service' }), href: '/terms' },
   ];
 
   const socialLinks = [
@@ -41,23 +50,23 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Branding */}
           <div className="space-y-4">
-            <Link href="/" className="flex items-center gap-2 group">
+            <Link href={getLocalizedHref('/')} className="flex items-center gap-2 group">
               <GraduationCap className="h-8 w-8 text-primary-600 group-hover:text-primary-700 transition" />
               <span className="text-xl font-bold text-gray-900">Pathfindr</span>
             </Link>
             <p className="text-sm text-gray-600 leading-relaxed">
-              {mounted ? t('footer.description') : 'Your path to global educational opportunities. Connect with scholarships, boarding schools, international schools, and internships across Southeast Asia and beyond.'}
+              {t('footer.description', { defaultValue: 'Your path to global educational opportunities. Connect with scholarships, boarding schools, international schools, and internships across Southeast Asia and beyond.' })}
             </p>
           </div>
 
           {/* Platform Links */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-4">{mounted ? t('footer.platform') : 'Platform'}</h3>
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">{t('footer.platform', { defaultValue: 'Platform' })}</h3>
             <ul className="space-y-3">
               {platformLinks.map((link) => (
                 <li key={link.href}>
                   <Link
-                    href={link.href}
+                    href={getLocalizedHref(link.href)}
                     className="text-sm text-gray-600 hover:text-primary-600 transition"
                   >
                     {link.name}
@@ -69,12 +78,12 @@ export function Footer() {
 
           {/* Resources */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-4">{mounted ? t('footer.resources') : 'Resources'}</h3>
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">{t('footer.resources', { defaultValue: 'Resources' })}</h3>
             <ul className="space-y-3">
               {resourceLinks.map((link) => (
                 <li key={link.href}>
                   <Link
-                    href={link.href}
+                    href={getLocalizedHref(link.href)}
                     className="text-sm text-gray-600 hover:text-primary-600 transition"
                   >
                     {link.name}
@@ -86,7 +95,7 @@ export function Footer() {
 
           {/* Connect */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-4">{mounted ? t('footer.connect') : 'Connect'}</h3>
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">{t('footer.connect', { defaultValue: 'Connect' })}</h3>
 
             {/* Social Media */}
             <div className="flex gap-3 mb-4">
@@ -124,10 +133,10 @@ export function Footer() {
         <div className="mt-12 pt-8 border-t border-gray-200">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <p className="text-sm text-gray-500">
-              &copy; {currentYear} Pathfindr. {mounted ? t('footer.allRightsReserved') : 'All rights reserved.'}
+              &copy; {currentYear} Pathfindr. {t('footer.allRightsReserved', { defaultValue: 'All rights reserved.' })}
             </p>
             <p className="text-sm text-gray-500">
-              {mounted ? t('footer.madeWith') : 'Made with'} <span className="text-red-500">❤️</span> {mounted ? t('footer.inSEA') : 'in Southeast Asia'}
+              {t('footer.madeWith', { defaultValue: 'Made with' })} <span className="text-red-500">❤️</span> {t('footer.inSEA', { defaultValue: 'in Southeast Asia' })}
             </p>
           </div>
         </div>
@@ -135,4 +144,3 @@ export function Footer() {
     </footer>
   );
 }
-

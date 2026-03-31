@@ -1,9 +1,11 @@
 import { MetadataRoute } from 'next';
 
+const locales = ['en', 'ms', 'zh', 'es', 'pt', 'de', 'ja', 'ko', 'vi', 'id'];
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://pathfindr.com.my';
 
-  // Core public pages
+  // Core public routes
   const routes = [
     '',
     '/about',
@@ -15,12 +17,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/knowledge-base',
     '/login',
     '/register',
-  ].map((route) => ({
-    url: `${baseUrl}${route}`,
-    lastModified: new Date(),
-    changeFrequency: 'daily' as const,
-    priority: route === '' ? 1 : 0.8,
-  }));
+  ];
 
-  return routes;
+  // Generate localized versions of all core routes
+  const sitemapEntries = locales.flatMap((locale) => 
+    routes.map((route) => ({
+      url: `${baseUrl}/${locale}${route}`,
+      lastModified: new Date(),
+      changeFrequency: 'daily' as const,
+      priority: route === '' ? 1 : 0.8,
+    }))
+  );
+
+  return sitemapEntries;
 }

@@ -2,13 +2,12 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { GraduationCap, Menu, X, ChevronDown, User, LogOut } from 'lucide-react';
+import { GraduationCap, Menu, X, ChevronDown, User, LogOut, Globe } from 'lucide-react';
+import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 import { useTranslation } from 'react-i18next';
-import { Globe } from 'lucide-react';
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -26,16 +25,34 @@ export function Header() {
   const userMenuRef = useRef<HTMLDivElement>(null);
   const langMenuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+  const router = useRouter();
   const { user, isAuthenticated, logout } = useAuth();
   const { t, i18n } = useTranslation();
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const locales = ['en', 'ms', 'zh', 'es', 'pt', 'de', 'ja', 'ko', 'vi', 'id'];
+
+  // Helper to get localized href
+  const getLocalizedHref = (href: string) => {
+    const currentLang = i18n.language || 'en';
+    const cleanHref = href === '/' ? '' : href;
+    return `/${currentLang}${cleanHref}`;
+  };
 
   const changeLanguage = (lng: string) => {
+    // Get current path segments
+    const segments = pathname.split('/');
+    // Check if the first segment is a locale
+    if (locales.includes(segments[1])) {
+      segments[1] = lng;
+    } else {
+      // If no locale in path, add it
+      segments.splice(1, 0, lng);
+    }
+    
+    const newPath = segments.join('/') || '/';
     i18n.changeLanguage(lng);
+    router.push(newPath);
   };
 
   // Handle scroll effect
@@ -95,7 +112,7 @@ export function Header() {
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
+          <Link href={getLocalizedHref('/')} className="flex items-center gap-2 group">
             <GraduationCap className="h-8 w-8 text-primary-600 group-hover:text-primary-700 transition" />
             <span className="text-xl font-bold text-gray-900">Pathfindr</span>
             <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-primary-100 text-primary-700 uppercase tracking-wider">
@@ -110,7 +127,7 @@ export function Header() {
               return (
                 <Link
                   key={item.name}
-                  href={item.href}
+                  href={getLocalizedHref(item.href)}
                   className={cn(
                     'text-sm font-medium transition-colors relative py-2',
                     isActive
@@ -118,7 +135,7 @@ export function Header() {
                       : 'text-gray-700 hover:text-primary-600'
                   )}
                 >
-                  {mounted ? t(`nav.${item.name.toLowerCase().replace(' ', '')}`) : item.name}
+                  {t(`nav.${item.name.toLowerCase().replace(' ', '')}`, { defaultValue: item.name })}
                   {isActive && (
                     <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-600 rounded-full" />
                   )}
@@ -135,7 +152,7 @@ export function Header() {
                 className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium text-gray-700"
               >
                 <Globe className="w-4 h-4 text-gray-400" />
-                <span>{mounted ? (i18n?.language || 'en').toUpperCase().split('-')[0] : 'EN'}</span>
+                <span>{(i18n?.language || 'en').toUpperCase().split('-')[0]}</span>
                 <ChevronDown className={cn('w-3 h-3 text-gray-400 transition-transform', langMenuOpen && 'rotate-180')} />
               </button>
 
@@ -210,7 +227,7 @@ export function Header() {
                       onClick={() => setUserMenuOpen(false)}
                     >
                       <User className="w-4 h-4" />
-                      {mounted ? t('nav.myProfile', { defaultValue: 'My Profile' }) : 'My Profile'}
+                      {t('nav.myProfile', { defaultValue: 'My Profile' })}
                     </Link>
                     <button
                       onClick={() => {
@@ -220,7 +237,7 @@ export function Header() {
                       className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
                     >
                       <LogOut className="w-4 h-4" />
-                      {mounted ? t('nav.signOut', { defaultValue: 'Sign Out' }) : 'Sign Out'}
+                      {t('nav.signOut', { defaultValue: 'Sign Out' })}
                     </button>
                   </div>
                 )}
@@ -228,10 +245,10 @@ export function Header() {
             ) : (
               <>
                 <Button variant="ghost" size="sm" asChild>
-                  <Link href="/login">{mounted ? t('nav.signIn') : 'Sign In'}</Link>
+                  <Link href={getLocalizedHref('/login')}>{t('nav.signIn', { defaultValue: 'Sign In' })}</Link>
                 </Button>
                 <Button variant="primary" size="sm" asChild>
-                  <Link href="/register">{mounted ? t('nav.getStarted') : 'Get Started'}</Link>
+                  <Link href={getLocalizedHref('/register')}>{t('nav.getStarted', { defaultValue: 'Get Started' })}</Link>
                 </Button>
               </>
             )}
@@ -294,7 +311,7 @@ export function Header() {
                     return (
                       <Link
                         key={item.name}
-                        href={item.href}
+                        href={getLocalizedHref(item.href)}
                         className={cn(
                           'block px-4 py-3 rounded-lg text-base font-medium transition-colors',
                           isActive
@@ -303,7 +320,7 @@ export function Header() {
                         )}
                         onClick={() => setMobileMenuOpen(false)}
                       >
-                        {mounted ? t(`nav.${item.name.toLowerCase().replace(' ', '')}`) : item.name}
+                        {t(`nav.${item.name.toLowerCase().replace(' ', '')}`, { defaultValue: item.name })}
                       </Link>
                     );
                   })}
@@ -315,7 +332,7 @@ export function Header() {
                   </p>
                   <div className="relative">
                     <select
-                      value={mounted ? i18n?.language || 'en' : 'en'}
+                      value={i18n?.language || 'en'}
                       onChange={(e) => changeLanguage(e.target.value)}
                       className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-primary-500 appearance-none"
                     >
@@ -368,7 +385,7 @@ export function Header() {
                               : '/profile/view'
                         }
                       >
-                        {mounted ? t('nav.myProfile', { defaultValue: 'My Profile' }) : 'My Profile'}
+                        {t('nav.myProfile', { defaultValue: 'My Profile' })}
                       </Link>
                     </Button>
                     <Button
@@ -380,7 +397,7 @@ export function Header() {
                         logout();
                       }}
                     >
-                      {mounted ? t('nav.signOut', { defaultValue: 'Sign Out' }) : 'Sign Out'}
+                      {t('nav.signOut', { defaultValue: 'Sign Out' })}
                     </Button>
                   </>
                 ) : (
@@ -391,7 +408,7 @@ export function Header() {
                       className="w-full"
                       asChild
                     >
-                      <Link href="/login">{mounted ? t('nav.signIn') : 'Sign In'}</Link>
+                      <Link href={getLocalizedHref('/login')}>{t('nav.signIn', { defaultValue: 'Sign In' })}</Link>
                     </Button>
                     <Button
                       variant="primary"
@@ -399,7 +416,7 @@ export function Header() {
                       className="w-full"
                       asChild
                     >
-                      <Link href="/register">{mounted ? t('nav.getStarted') : 'Get Started'}</Link>
+                      <Link href={getLocalizedHref('/register')}>{t('nav.getStarted', { defaultValue: 'Get Started' })}</Link>
                     </Button>
                   </>
                 )}
