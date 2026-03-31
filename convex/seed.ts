@@ -3,6 +3,7 @@ import { v } from 'convex/values';
 import { seedScholarships as scholarshipData } from './seedData';
 import { scrapedScholarships } from './seedDataScraped';
 import { boardingSchoolsData } from './seedDataBoardingSchools';
+import { spm2025Scholarships } from './seedDataSPM2025';
 
 // This mutation will seed the database with initial scholarship data
 export const seedScholarships = mutation({
@@ -71,6 +72,33 @@ export const clearBoardingSchools = mutation({
       await ctx.db.delete(school._id);
     }
     return { message: 'All boarding schools cleared', count: schools.length };
+  },
+});
+
+// Seed SPM 2025 Top 25 scholarships (skips duplicates by exact name)
+export const seedSPM2025Scholarships = mutation({
+  handler: async (ctx) => {
+    const allExisting = await ctx.db.query('scholarships').collect();
+    const existingNames = new Set(allExisting.map((s) => s.name.toLowerCase().trim()));
+
+    const inserted = [];
+    const skipped = [];
+
+    for (const scholarship of spm2025Scholarships) {
+      if (existingNames.has(scholarship.name.toLowerCase().trim())) {
+        skipped.push(scholarship.name);
+        continue;
+      }
+
+      await ctx.db.insert('scholarships', scholarship);
+      inserted.push(scholarship.name);
+    }
+
+    return {
+      message: `SPM 2025 scholarships seeded. Inserted: ${inserted.length}, Skipped (already exist): ${skipped.length}`,
+      inserted,
+      skipped,
+    };
   },
 });
 

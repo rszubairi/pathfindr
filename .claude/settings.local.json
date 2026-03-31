@@ -64,7 +64,29 @@
       "Bash(convert apps/mobile/assets/icon.png -background \"#0538a3\" -alpha remove -alpha off apps/mobile/assets/icon.png)",
       "Bash(magick --version)",
       "Bash(python3 -c \"from PIL import Image; print\\(''ok''\\)\")",
-      "Bash(python3 -c \":*)"
+      "Bash(python3 -c \":*)",
+      "WebFetch(domain:esilav2.jpa.gov.my)",
+      "WebFetch(domain:educationloan.mara.gov.my)",
+      "WebFetch(domain:www.petronas.com)",
+      "WebFetch(domain:www.bpmb.com.my)",
+      "WebFetch(domain:www.yayasansimedarby.com)",
+      "WebFetch(domain:www.uem.com.my)",
+      "WebFetch(domain:www.yayasanbankrakyat.com.my)",
+      "WebFetch(domain:yayasanpeneraju.com.my)",
+      "WebFetch(domain:www.cimb.com)",
+      "WebFetch(domain:www.publicbankgroup.com)",
+      "WebFetch(domain:www.hongleongfoundation.com)",
+      "WebFetch(domain:yayasan.ioigroup.com)",
+      "WebFetch(domain:scholarship.sunway.edu.my)",
+      "WebFetch(domain:gamuda.com)",
+      "WebFetch(domain:www.axiata-foundation.com)",
+      "WebFetch(domain:www.sarawakenergy.com)",
+      "WebFetch(domain:www.mnrb.com.my)",
+      "WebFetch(domain:ytlfoundation.org)",
+      "WebFetch(domain:maybankfoundation.com)",
+      "WebFetch(domain:ytm.tm.com.my)",
+      "WebFetch(domain:penajaan.jpa.gov.my)",
+      "WebSearch"
     ]
   }
 }
