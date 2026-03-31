@@ -13,6 +13,8 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Container } from '@/components/ui/Container';
 import { MainLayout } from '@/components/layout/MainLayout';
+import { useTranslation } from 'react-i18next';
+import { Gift } from 'lucide-react';
 
 const registerSchema = z
   .object({
@@ -35,6 +37,7 @@ const registerSchema = z
 type RegisterFormData = z.infer<typeof registerSchema>;
 
 function RegisterContent() {
+  const { t } = useTranslation();
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('redirect');
@@ -133,6 +136,14 @@ function RegisterContent() {
                   Click here to register
                 </Link>
               </p>
+            </div>
+
+            <div className="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4 flex gap-3 text-blue-800 shadow-sm hover:shadow-md transition-shadow duration-300">
+              <Gift className="w-6 h-6 shrink-0 text-blue-600" />
+              <div>
+                <h3 className="font-bold text-sm uppercase tracking-wider">{t('referral.emphasize.title')}</h3>
+                <p className="text-sm mt-0.5">{t('referral.emphasize.description')}</p>
+              </div>
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

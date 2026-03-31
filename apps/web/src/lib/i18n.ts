@@ -481,6 +481,10 @@ const resources = {
           copyLink: 'Copy share link',
           description: 'Share this code or link with friends to earn rewards',
         },
+        emphasize: {
+          title: 'Earn 1 Year Free!',
+          description: 'Refer 5 friends to Pathfindr and get a 1-year Pro subscription automatically activated!',
+        },
         progress: {
           title: 'Referral Progress',
           count: '{{count}}/5 friends',
@@ -1143,6 +1147,10 @@ const resources = {
           copy: 'Salin kod',
           copyLink: 'Salin pautan rujukan',
           description: 'Kongsi kod atau pautan ini dengan rakan-rakan untuk mendapat ganjaran',
+        },
+        emphasize: {
+          title: 'Dapatkan 1 Tahun Percuma!',
+          description: 'Rujuk 5 rakan ke Pathfindr dan dapatkan langganan Pro selama 1 tahun diaktifkan secara automatik!',
         },
         progress: {
           title: 'Kemajuan Rujukan',
@@ -1807,6 +1815,10 @@ const resources = {
           copyLink: '复制分享链接',
           description: '与朋友分享此代码或链接以获得奖励',
         },
+        emphasize: {
+          title: '赚取 1 年免费订阅！',
+          description: '向朋友推荐 Pathfindr，如果 5 位好友通过您的代码注册，您将自动获得 1 年专业版订阅！',
+        },
         progress: {
           title: '推荐进度',
           count: '{{count}}/5 位朋友',
@@ -2447,6 +2459,10 @@ const resources = {
           copyLink: 'Copiar enlace',
           description: 'Comparte este código para ganar recompensas',
         },
+        emphasize: {
+          title: '¡Gana 1 año gratis!',
+          description: '¡Recomienda Pathfindr a 5 amigos y obtén una suscripción Pro de 1 año activada automáticamente!',
+        },
         progress: {
           title: 'Progreso de recomendación',
           count: '{{count}}/5 amigos',
@@ -2974,6 +2990,26 @@ const resources = {
           availability: 'Disponibilidade',
         }
       },
+      referral: {
+        title: 'Programa de Indicação',
+        code: {
+          label: 'Seu código de indicação',
+          copy: 'Copiar código',
+          copyLink: 'Copiar link',
+          description: 'Compartilhe este código para ganhar recompensas',
+        },
+        emphasize: {
+          title: 'Ganhe 1 ano grátis!',
+          description: 'Indique 5 amigos para o Pathfindr e ganhe uma assinatura Pro de 1 ano ativada automaticamente!',
+        },
+        progress: {
+          title: 'Progresso de Indicação',
+          count: '{{count}}/5 amigos',
+          inviteToEarn: 'Convide 5 amigos para ganhar um ano de assinatura Pro gratuita',
+          moreNeeded: 'Falta {{count}} amigo para ganhar Pro',
+          moreNeeded_plural: 'Faltam {{count}} amigos para ganhar Pro',
+        }
+      },
     }
   },
   de: {
@@ -3328,6 +3364,26 @@ const resources = {
           present: 'Gegenwart',
           preferredCountries: 'Bevorzugte Länder',
           availability: 'Verfügbarkeit',
+        }
+      },
+      referral: {
+        title: 'Empfehlungsprogramm',
+        code: {
+          label: 'Dein Empfehlungscode',
+          copy: 'Code kopieren',
+          copyLink: 'Link kopieren',
+          description: 'Teile diesen Code, um Belohnungen zu verdienen',
+        },
+        emphasize: {
+          title: 'Verdiene 1 Jahr gratis!',
+          description: 'Empfiehl 5 Freunde an Pathfindr und erhalte ein 1-jähriges Pro-Abonnement automatisch aktiviert!',
+        },
+        progress: {
+          title: 'Empfehlungsfortschritt',
+          count: '{{count}}/5 Freunde',
+          inviteToEarn: 'Lade 5 Freunde ein, um ein Jahr kostenloses Pro-Abo zu erhalten',
+          moreNeeded: 'Noch {{count}} Freund für Pro nötig',
+          moreNeeded_plural: 'Noch {{count}} Freunde für Pro nötig',
         }
       },
     }
@@ -3692,6 +3748,26 @@ const resources = {
           availability: '入学可能時期',
         }
       },
+      referral: {
+        title: '紹介プログラム',
+        code: {
+          label: 'あなたの紹介コード',
+          copy: 'コードをコピー',
+          copyLink: 'リンクをコピー',
+          description: '報酬を獲得するためにこのコードを共有してください',
+        },
+        emphasize: {
+          title: '1年間無料で利用しよう！',
+          description: 'Pathfindrを5人の友人に紹介すると、1年間のプロプラン・サブスクリプションが自動的に有効になります！',
+        },
+        progress: {
+          title: '紹介の進捗',
+          count: '{{count}}/5 人の友人',
+          inviteToEarn: '5人を招待して1年間の無料プロプランを獲得',
+          moreNeeded: 'あと {{count}} 人の友人でプロプラン獲得',
+          moreNeeded_plural: 'あと {{count}} 人の友人でプロプラン獲得',
+        }
+      },
     }
   },
   ko: {
@@ -4052,6 +4128,26 @@ const resources = {
           present: '현재',
           preferredCountries: '선호하는 유학 국가',
           availability: '입학 가능 시기',
+        }
+      },
+      referral: {
+        title: '추천 프로그램',
+        code: {
+          label: '내 추천 코드',
+          copy: '코드 복사',
+          copyLink: '링크 복사',
+          description: '보상을 받으려면 이 코드를 공유하세요',
+        },
+        emphasize: {
+          title: '1년 무료 혜택을 받으세요!',
+          description: 'Pathfindr를 친구 5명에게 추천하면 1년 프로 구독권이 자동으로 활성화됩니다!',
+        },
+        progress: {
+          title: '추천 진행 상황',
+          count: '{{count}}/5 명의 친구',
+          inviteToEarn: '친구 5명을 초대하고 1년 무료 프로 구독권을 받으세요',
+          moreNeeded: '프로 구독권까지 {{count}}명의 친구가 더 필요합니다',
+          moreNeeded_plural: '프로 구독권까지 {{count}}명의 친구가 더 필요합니다',
         }
       },
     }
@@ -4416,6 +4512,26 @@ const resources = {
           availability: 'Mức độ sẵn sàng',
         }
       },
+      referral: {
+        title: 'Chương trình giới thiệu',
+        code: {
+          label: 'Mã giới thiệu của bạn',
+          copy: 'Sao chép mã',
+          copyLink: 'Sao chép liên kết',
+          description: 'Chia sẻ mã này để nhận phần thưởng',
+        },
+        emphasize: {
+          title: 'Nhận 1 năm miễn phí!',
+          description: 'Giới thiệu 5 người bạn tham gia Pathfindr để tự động kích hoạt gói đăng ký Pro trong 1 năm!',
+        },
+        progress: {
+          title: 'Tiến trình giới thiệu',
+          count: '{{count}}/5 người bạn',
+          inviteToEarn: 'Mời 5 người bạn để nhận 1 năm đăng ký Pro miễn phí',
+          moreNeeded: 'Cần thêm {{count}} người bạn để nhận Pro',
+          moreNeeded_plural: 'Cần thêm {{count}} người bạn để nhận Pro',
+        }
+      },
     }
   },
   id: {
@@ -4776,6 +4892,26 @@ const resources = {
           present: 'Sekarang',
           preferredCountries: 'Negara Pilihan',
           availability: 'Ketersediaan',
+        }
+      },
+      referral: {
+        title: 'Program Referal',
+        code: {
+          label: 'Kode referal Anda',
+          copy: 'Salin kode',
+          copyLink: 'Salin pautan',
+          description: 'Bagikan kode ini untuk mendapatkan hadiah',
+        },
+        emphasize: {
+          title: 'Dapatkan 1 Tahun Gratis!',
+          description: 'Ajak 5 teman ke Pathfindr dan dapatkan langganan Pro selama 1 tahun yang diaktifkan secara otomatis!',
+        },
+        progress: {
+          title: 'Kemajuan Referal',
+          count: '{{count}}/5 teman',
+          inviteToEarn: 'Undang 5 teman untuk mendapatkan satu tahun langganan Pro gratis',
+          moreNeeded: 'Butuh {{count}} teman lagi untuk mendapatkan Pro',
+          moreNeeded_plural: 'Butuh {{count}} teman lagi untuk mendapatkan Pro',
         }
       },
     }

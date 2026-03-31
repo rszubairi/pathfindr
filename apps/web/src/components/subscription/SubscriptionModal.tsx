@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAction } from 'convex/react';
 import { api } from '@convex/_generated/api';
+import { useTranslation } from 'react-i18next';
 import { Modal } from '@/components/ui/Modal';
 import { PricingCard } from './PricingCard';
 import { useAuth } from '@/hooks/useAuth';
@@ -25,6 +26,7 @@ export function SubscriptionModal({
   title = "Research Subscription Required",
   description = "You need an active annual subscription to apply for internships and access premium features."
 }: SubscriptionModalProps) {
+  const { t } = useTranslation();
   const router = useRouter();
   const { user, isAuthenticated } = useAuth();
   const { tier: currentTier } = useSubscription();
@@ -70,6 +72,27 @@ export function SubscriptionModal({
             {error}
           </div>
         )}
+
+        <div className="bg-primary-50 border border-primary-200 rounded-lg p-5 flex gap-4 text-primary-900 shadow-sm hover:shadow-md transition-all duration-300">
+          <div className="bg-primary-100 p-2.5 rounded-full shrink-0 h-fit">
+            <Gift className="w-6 h-6 text-primary-600 animate-bounce" />
+          </div>
+          <div>
+            <h3 className="font-bold text-base">{t('referral.emphasize.title')}</h3>
+            <p className="text-sm text-primary-800 mt-1">{t('referral.emphasize.description')}</p>
+            {isAuthenticated && (
+              <button
+                onClick={() => {
+                  onClose();
+                  router.push('/profile/view');
+                }}
+                className="text-primary-700 hover:text-primary-900 text-xs font-bold underline mt-2 block"
+              >
+                Go to your profile to share your code
+              </button>
+            )}
+          </div>
+        </div>
 
         <div className="grid md:grid-cols-2 gap-6 pb-2">
           {(Object.entries(TIER_CONFIG) as [TierKey, typeof TIER_CONFIG[TierKey]][]).map(
