@@ -3,7 +3,7 @@ import { MetadataRoute } from 'next';
 const locales = ['en', 'ms', 'zh', 'es', 'pt', 'de', 'ja', 'ko', 'vi', 'id'];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://pathfindr.com.my';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.thepathfindr.com';
 
   // Core public routes
   const routes = [

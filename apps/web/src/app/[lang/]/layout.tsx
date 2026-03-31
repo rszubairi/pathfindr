@@ -10,7 +10,7 @@ const locales = ['en', 'ms', 'zh', 'es', 'pt', 'de', 'ja', 'ko', 'vi', 'id'];
 
 export async function generateMetadata({ params }: { params: any }): Promise<Metadata> {
   const { lang } = await params;
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://pathfindr.com.my';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.thepathfindr.com';
   
   // Generating alternate languages for SEO (hreflang)
   const alternates: Record<string, string> = {};
