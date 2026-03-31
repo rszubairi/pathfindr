@@ -1976,9 +1976,2281 @@ const resources = {
           featureSuccessTitle: '奖学金已设为精选！',
           featureSuccessDesc: '您的奖学金现在显示在列表的最顶部。',
           isFeatured: '精选',
-        }
       }
     },
+    },
+  },
+  es: {
+    translation: {
+      nav: {
+        home: 'Inicio',
+        scholarships: 'Becas',
+        boardingschools: 'Internados',
+        internationalschools: 'Escuelas Internacionales',
+        internships: 'Pasantías',
+        pricing: 'Precios',
+        features: 'Funciones',
+        about: 'Sobre nosotros',
+        signIn: 'Iniciar sesión',
+        getStarted: 'Empezar',
+      },
+      hero: {
+        badge: 'Descubre tu viaje educativo global',
+        titlePart1: 'Encuentra tu ',
+        titlePart2: 'beca perfecta',
+        subtitle: 'Conéctate con miles de becas, internados, escuelas internacionales y pasantías en el sudeste asiático y más allá. Tu futuro comienza aquí.',
+        browseBtn: 'Ver becas',
+        learnMoreBtn: 'Más información',
+        trustedBy: 'Con la confianza de más de 5,000 estudiantes',
+        available: 'Más de 10,000 becas disponibles',
+        countriesCount: 'Más de 50 países',
+      },
+      home: {
+        stats: {
+          scholarships: { label: 'Becas disponibles', desc: 'Diversas oportunidades en todos los campos' },
+          countries: { label: 'Países', desc: 'Alcance global en el sudeste asiático y más allá' },
+          students: { label: 'Estudiantes ayudados', desc: 'Historias de éxito de nuestra comunidad' },
+          awarded: { label: 'Becas otorgadas', desc: 'Valor total facilitado a través de nuestra plataforma' },
+        },
+        howItWorks: {
+          title: 'Cómo funciona Pathfindr',
+          subtitle: 'Tu viaje hacia una educación global comienza aquí. Sigue estos sencillos pasos para encontrar y asegurar tu beca perfecta.',
+          steps: {
+            step1: { title: 'Crea tu perfil', desc: 'Regístrate y cuéntanos sobre tu formación académica, intereses y objetivos.' },
+            step2: { title: 'Descubre oportunidades', desc: 'Explora miles de becas utilizando nuestros filtros inteligentes.' },
+            step3: { title: 'Solicita con confianza', desc: 'Realiza un seguimiento de tus solicitudes, gestiona los plazos y accede a recursos útiles.' },
+            step4: { title: 'Logra tus sueños', desc: 'Asegura tu beca y comienza tu viaje educativo.' },
+          }
+        },
+        features: {
+          title: 'Todo lo que necesitas para triunfar',
+          subtitle: 'Pathfindr proporciona herramientas y recursos potentes para ayudarte a descubrir y asegurar tu oportunidad de beca perfecta.',
+          list: {
+            smartSearch: { title: 'Búsqueda inteligente', desc: 'Filtros avanzados para encontrar becas que coincidan con tu perfil.' },
+            personalized: { title: 'Emparejamiento personalizado', desc: 'Recomendaciones impulsadas por IA basadas en tus objetivos.' },
+            global: { title: 'Oportunidades globales', desc: 'Acceso a becas de más de 50 países.' },
+            verified: { title: 'Listados verificados', desc: 'Todas las becas están verificadas para mayor precisión.' },
+            tracking: { title: 'Seguimiento de solicitudes', desc: 'Realiza un seguimiento de tus solicitudes en un solo panel de control.' },
+            secure: { title: 'Seguro y privado', desc: 'Tu información personal está protegida.' },
+          },
+          detailed: [
+            {
+              title: 'Búsqueda y filtros avanzados',
+              description: 'Encuentra exactamente lo que buscas con potentes capacidades de búsqueda y filtros inteligentes.',
+              benefits: [
+                'Filtrado por múltiples criterios',
+                'Resultados de búsqueda instantáneos',
+                'Preferencias de búsqueda guardadas',
+              ],
+            },
+            {
+              title: 'Emparejamiento impulsado por IA',
+              description: 'Nuestro algoritmo de emparejamiento inteligente analiza tu perfil para recomendar oportunidades con la mayor probabilidad de éxito.',
+              benefits: [
+                'Recomendaciones personalizadas',
+                'Puntuación de coincidencia para cada beca',
+                'Clasificación de prioridad inteligente',
+              ],
+            },
+            {
+              title: 'Notificaciones en tiempo real',
+              description: 'Nunca pierdas un plazo. Recibe notificaciones instantáneas de nuevas becas que coincidan con tu perfil.',
+              benefits: [
+                'Preferencias personalizables',
+                'Recordatorios de plazos',
+                'Alertas de cambio de estado',
+              ],
+            },
+          ]
+        },
+        featured: {
+          title: 'Becas destacadas',
+          subtitle: 'Explora nuestras mejores oportunidades de becas que aceptan solicitudes actualmente.',
+          viewAll: 'Ver todas las becas',
+        },
+        testimonials: {
+          title: 'Historias de éxito de nuestros estudiantes',
+          subtitle: 'Únete a miles de estudiantes que han encontrado su beca perfecta a través de Pathfindr.',
+          list: [
+            {
+              quote: "Pathfindr hizo que encontrar la beca adecuada fuera mucho más fácil. La función de emparejamiento personalizado me conectó con oportunidades que ni siquiera sabía que existían. ¡Ahora estoy estudiando Ciencias de la Computación en la NUS!",
+              university: 'Universidad Nacional de Singapur',
+              country: 'Singapur',
+            },
+            {
+              quote: "Estaba abrumado por la cantidad de becas disponibles hasta que encontré Pathfindr. Los filtros inteligentes de la plataforma y el seguimiento de los plazos me ayudaron a mantenerme organizada.",
+              university: 'Universidad de Melbourne',
+              country: 'Australia',
+            },
+            {
+              quote: "Como estudiante universitario de primera generación, navegar por las solicitudes de becas fue desalentador. El seguimiento de solicitudes de Pathfindr me dio confianza. ¡Ahora estoy estudiando Medicina!",
+              university: 'Universidad de Chulalongkorn',
+              country: 'Tailandia',
+            },
+          ]
+        },
+        cta: {
+          title: '¿Listo para comenzar tu viaje?',
+          subtitle: 'Crea tu perfil hoy y desbloquea el acceso a miles de oportunidades. Únete a nuestra comunidad de estudiantes exitosos.',
+          createAccount: 'Crear cuenta gratuita',
+          browseScholarships: 'Ver becas',
+        }
+      },
+      pricing: {
+        title: 'Elige tu plan',
+        subtitle: 'Suscríbete para empezar a solicitar becas. Elige el plan que se adapte a tus necesidades y desbloquea tu camino hacia las oportunidades educativas.',
+        mostPopular: 'Más popular',
+        currentPlan: 'Plan actual',
+        getStarted: 'Obtener {{name}}',
+        appsPerYear: '{{count}} solicitudes de beca al año',
+        whatsIncluded: 'Qué incluye:',
+        tiers: {
+          pro: {
+            name: 'Pro',
+            features: [
+              'Solicita 5 becas al año',
+              'Detalles completos de becas y elegibilidad',
+              'Panel de seguimiento de solicitudes',
+              'Notificaciones por correo sobre plazos',
+            ]
+          },
+          expert: {
+            name: 'Expert',
+            features: [
+              'Solicita 20 becas al año',
+              'Detalles completos de becas y elegibilidad',
+              'Panel de seguimiento de solicitudes',
+              'Notificaciones por correo sobre plazos',
+              'Soporte prioritario',
+              'Recomendaciones de becas personalizadas',
+            ]
+          }
+        },
+        faq: {
+          title: 'Preguntas frecuentes',
+          q1: {
+            q: '¿Qué cuenta como una solicitud?',
+            a: 'Cada vez que haces clic en "Solicitar ahora" en una beca y eres redirigido a la página de solicitud del proveedor de la beca, cuenta como una solicitud.'
+          },
+          q2: {
+            q: '¿Cuándo se restablece mi límite de solicitudes?',
+            a: 'El recuento de solicitudes se restablece anualmente cuando se renueva tu suscripción.'
+          },
+          q3: {
+            q: '¿Puedo mejorar mi plan?',
+            a: '¡Sí! Puedes pasar de Pro a Expert en cualquier momento. La diferencia de precio se prorrateará para el resto del periodo de facturación.'
+          },
+          q4: {
+            q: '¿Puedo cancelar en cualquier momento?',
+            a: 'Por supuesto. Puedes cancelar tu suscripción en cualquier momento desde la configuración de tu cuenta.'
+          }
+        }
+      },
+      profile: {
+        complete: {
+          title: 'Completa tu perfil académico',
+          subtitle: 'Ayúdanos a conectarte con las mejores becas',
+        },
+        steps: {
+          personalDetails: 'Detalles personales',
+          education: 'Educación',
+          testScores: 'Resultados de exámenes',
+          achievements: 'Logros',
+          preferences: 'Preferencias',
+          activities: 'Actividades',
+        },
+        forms: {
+          common: {
+            back: 'Atrás',
+            next: 'Siguiente',
+            required: 'obligatorio',
+            select: 'Seleccionar',
+            add: 'Añadir',
+            delete: 'Eliminar',
+            other: 'Otro',
+            saveProgress: 'Guardando progreso...',
+          },
+          personalDetails: {
+            title: 'Detalles personales',
+            subtitle: "Empecemos por una información básica sobre ti",
+            dateOfBirth: 'Fecha de nacimiento',
+            gender: {
+              label: 'Género',
+              placeholder: 'Seleccionar género',
+              male: 'Hombre',
+              female: 'Mujer',
+              other: 'Otro',
+              preferNotToSay: 'Prefiero no decirlo',
+            },
+            nationality: {
+              label: 'Nacionalidad',
+              placeholder: 'ej. Española, Mexicana',
+            },
+            country: {
+              label: 'País de residencia',
+              placeholder: 'ej. España, México',
+            },
+          },
+          education: {
+            title: 'Historial educativo',
+            subtitle: 'Añade tus cualificaciones académicas (la más reciente primero)',
+            entry: 'Educación {{index}}',
+            addAnother: 'Añadir otra educación',
+            institution: {
+              label: 'Nombre de la institución',
+              placeholder: 'ej. Universidad Complutense',
+            },
+            qualification: {
+              label: 'Cualificación',
+              placeholder: 'Seleccionar cualificación',
+            },
+            fieldOfStudy: {
+              label: 'Campo de estudio',
+              placeholder: 'ej. Ingeniería Informática',
+            },
+            startDate: 'Fecha de inicio',
+            endDate: {
+              label: 'Fecha de finalización',
+              helper: 'Dejar vacío si estás estudiando actualmente',
+            },
+            grade: {
+              label: 'Nota/Grado',
+              placeholder: 'ej. Matrícula de Honor, A+',
+            },
+            gpa: {
+              label: 'Nota media',
+              placeholder: 'ej. 3.8',
+            },
+            qualifications: {
+              highSchool: 'Diploma de Educación Secundaria',
+              associate: 'Grado asociado',
+              bachelorArts: 'Grado en Artes',
+              bachelorScience: 'Grado en Ciencias',
+              bachelorEng: 'Grado en Ingeniería',
+              masterArts: 'Máster en Artes',
+              masterScience: 'Máster en Ciencias',
+              mba: 'MBA',
+              phd: 'Doctorado',
+            },
+          },
+          testScores: {
+            title: 'Resultados de exámenes estandarizados',
+            subtitle: 'Añade los resultados de los exámenes que hayas realizado.',
+            sat: { label: 'Resultado SAT', placeholder: 'ej. 1450', helper: 'Puntuación total (400–1600)' },
+            ielts: { label: 'Resultado IELTS', placeholder: 'ej. 7.5', helper: 'Escala total (0–9)' },
+            toefl: { label: 'Resultado TOEFL', placeholder: 'ej. 105', helper: 'Puntuación total (0–120)' },
+            gre: { label: 'Resultado GRE', placeholder: 'ej. 325', helper: 'Combinada (260–340)' },
+            gmat: { label: 'Resultado GMAT', placeholder: 'ej. 720', helper: 'Puntuación total (200–800)' },
+          },
+          achievements: {
+            title: 'Logros y habilidades',
+            subtitle: 'Muestra tus certificados, proyectos y habilidades.',
+            certificates: {
+              title: 'Certificados',
+              entry: 'Certificado {{index}}',
+              addAnother: 'Añadir certificado',
+              itemTitle: 'Título del certificado',
+              issuer: 'Emisor',
+              dateIssued: 'Fecha de emisión',
+            },
+            projects: {
+              title: 'Proyectos académicos / personales',
+              entry: 'Proyecto {{index}}',
+              addAnother: 'Añadir proyecto',
+              itemTitle: 'Título del proyecto',
+              description: 'Descripción',
+              technologies: 'Tecnologías',
+            },
+            skills: {
+              title: 'Habilidades',
+              placeholder: 'Escribe una habilidad y pulsa Intro',
+            },
+          },
+          preferences: {
+            title: 'Preferencias profesionales',
+            subtitle: 'Cuéntanos lo que te interesa para buscar becas adecuadas',
+            interests: {
+              label: 'Intereses',
+              placeholder: 'ej. Tecnología, Sanidad, Educación',
+            },
+            studyCountries: {
+              label: 'Países de estudio preferidos',
+              placeholder: 'ej. Estados Unidos, Reino Unido, Alemania',
+            },
+            availability: {
+              label: '¿Cuándo planeas empezar?',
+              placeholder: 'ej. Otoño 2026',
+            },
+            complete: 'Completar perfil',
+            saving: 'Guardando perfil...',
+          },
+        },
+      },
+      footer: {
+        description: 'Tu camino hacia oportunidades educativas globales. Conéctate con becas, internados, escuelas internacionales y pasantías.',
+        platform: 'Plataforma',
+        resources: 'Recursos',
+        connect: 'Conectar',
+        links: {
+          universities: 'Universidades',
+          internships: 'Pasantías',
+          jobs: 'Empleos',
+          knowledgeBase: 'Base de conocimientos',
+          privacyPolicy: 'Política de privacidad',
+          termsOfService: 'Términos de servicio',
+        },
+        allRightsReserved: 'Todos los derechos reservados.',
+      },
+      internationalSchools: {
+        title: 'Escuelas Internacionales',
+        subtitle: 'Explora las mejores escuelas internacionales. Compara currículos, tarifas y encuentra la escuela perfecta.',
+        schoolsCount: '{{count}} escuelas',
+        search: {
+          placeholder: 'Buscar escuelas por nombre...',
+        },
+        sort: {
+          label: 'Ordenar por:',
+          name: 'Nombre',
+          country: 'País',
+          city: 'Ciudad',
+        },
+        results: {
+          school: '{{count}} escuela encontrada',
+          schools: '{{count}} escuelas encontradas',
+        },
+        empty: {
+          title: 'No se encontraron escuelas',
+          description: "No pudimos encontrar internados que coincidan con tus criterios.",
+          clearAll: 'Borrar todos los filtros',
+        },
+        filters: {
+          title: 'Filtros',
+          clearAll: 'Borrar todo',
+          country: 'País',
+          curriculum: 'Currículo',
+        },
+        location: {
+          title: 'Tu ubicación',
+          locating: 'Localizando...',
+          useCurrent: 'Usar mi ubicación',
+          or: 'o',
+          selectCity: 'Seleccionar ciudad',
+          distance: 'Distancia',
+        },
+        card: {
+          fees: 'Tarifas:',
+          visitWebsite: 'Visitar sitio web',
+        },
+        pagination: {
+          previous: 'Anterior',
+          next: 'Siguiente',
+        },
+      },
+      profileView: {
+        title: 'Mi perfil',
+        editProfile: 'Editar perfil',
+        notFound: 'Perfil no encontrado',
+        notFoundDesc: "Aún no has completado tu perfil.",
+        completeProfileBtn: 'Completar perfil',
+        resumeOptimizer: {
+          title: 'Optimizador de CV',
+          score: 'Puntuación del perfil',
+          scoreLabel: 'Puntuación',
+          ranking: 'Clasificación',
+          generateBtn: 'Generar CV optimizado',
+          suggestions: 'Sugerencias de mejora',
+          copyLink: 'Copiar enlace para compartir',
+          viewPublic: 'Ver CV público',
+          copySuccess: '¡Enlace copiado al portapapeles!',
+          perfectProfile: '¡Tu perfil es perfecto! Estás listo para generar tu CV optimizado.',
+          aiDescription: 'Nuestro sistema impulsado por IA da formato a tu perfil en un CV profesional listo para los reclutadores.',
+          previewTitle: 'Vista previa del CV',
+          printBtn: 'Imprimir / Guardar como PDF',
+          footer: 'Generado por el motor de optimización de CV de PathFindr',
+          percentageComplete: '{{progress}}% completado',
+        },
+        common: {
+          in: 'en',
+          score: 'Puntuación',
+        },
+        sections: {
+          personal: 'Detalles personales',
+          education: 'Educación',
+          testScores: 'Resultados de exámenes',
+          certificates: 'Certificados',
+          projects: 'Proyectos',
+          skills: 'Habilidades',
+          interests: 'Intereses',
+          preferences: 'Preferencias',
+          activities: 'Actividades extracurriculares',
+        },
+        fields: {
+          dob: 'Fecha de nacimiento',
+          gender: 'Género',
+          nationality: 'Nacionalidad',
+          country: 'País',
+          phone: 'Teléfono',
+          gpa: 'Nota media',
+          grade: 'Grado/Calificación',
+          present: 'Actualidad',
+          preferredCountries: 'Países preferidos',
+          availability: 'Disponibilidad',
+        }
+      },
+      referral: {
+        title: 'Programa de recomendación',
+        code: {
+          label: 'Tu código de recomendación',
+          copy: 'Copiar código',
+          copyLink: 'Copiar enlace',
+          description: 'Comparte este código para ganar recompensas',
+        },
+        progress: {
+          title: 'Progreso de recomendación',
+          count: '{{count}}/5 amigos',
+          earned: '¡Has ganado una recompensa!',
+          inviteToEarn: 'Invita a 5 amigos para ganar una suscripción Pro gratuita',
+          moreNeeded: 'Falta {{count}} amigo para ganar Pro',
+          moreNeeded_plural: 'Faltan {{count}} amigos para ganar Pro',
+        },
+        rewards: {
+          title: 'Tus recompensas',
+          proSubscription: 'Suscripción Pro',
+          coupon: 'Cupón: ',
+          status: {
+            active: 'Activo',
+            available: 'Disponible',
+            claimed: 'Canjeado'
+          }
+        },
+        claim: {
+          success: {
+            title: '¡Suscripción activada!',
+            description: 'Tu suscripción Pro gratuita ya está activa gracias a {{name}}.',
+            nextSteps: 'Ya puedes empezar a solicitar becas.',
+            browseBtn: 'Ver becas',
+            viewSubBtn: 'Ver suscripción',
+          },
+          validating: 'Validando código de cupón...',
+          error: {
+            notAvailable: 'Cupón no disponible',
+            invalidOrClaimed: 'Este código de cupón no es válido o ya ha sido canjeado.',
+            viewPricing: 'Ver planes de precios',
+            studentRequired: 'Se requiere cuenta de estudiante',
+            studentRequiredDesc: 'Los cupones de recomendación son solo para estudiantes.',
+            goToDashboard: 'Ir al panel de control',
+            generic: 'Error al canjear el cupón. Por favor, inténtalo de nuevo.',
+          },
+          gift: {
+            title: '¡Suscripción Pro gratuita!',
+            subtitle: '{{name}} está compartiendo una recompensa contigo.',
+            instruction: 'Regístrate o inicia sesión para canjear tu suscripción Pro gratuita.',
+            registerBtn: 'Registrarse para canjear',
+            loginBtn: 'Iniciar sesión para canjear',
+            claimTitle: 'Canjea tu suscripción Pro gratuita',
+            planFree: 'Plan Pro — Gratis por 1 año',
+            claimBtn: 'Canjear suscripción gratuita'
+          }
+        }
+      },
+      sponsorship: {
+        claim: {
+          success: {
+            title: '¡Suscripción activada!',
+            description: 'Tu suscripción {{tier}} ya está activa, patrocinada por {{company}}.',
+            nextSteps: 'Ya puedes empezar a solicitar becas.',
+            browseBtn: 'Ver becas',
+            viewSubBtn: 'Ver suscripción',
+          },
+          validating: 'Validando código de cupón...',
+          error: {
+            notAvailable: 'Cupón no disponible',
+            invalidOrExhausted: 'Este código de cupón no es válido o todas las suscripciones han sido canjeadas.',
+            viewPricing: 'Ver planes de precios',
+            generic: 'Error al canjear la suscripción.',
+          },
+          gift: {
+            title: '¡Suscripción gratuita disponible!',
+            subtitle: '{{company}} patrocina suscripciones {{tier}} para estudiantes.',
+            instruction: 'Regístrate o inicia sesión para canjear tu suscripción gratuita.',
+            claimTitle: 'Canjea tu suscripción gratuita',
+            planFree: 'Plan {{tier}} — Gratis por 1 año',
+            claimBtn: 'Canjear suscripción gratuita',
+          }
+        }
+      },
+      scholarships: {
+        title: 'Encuentra tu beca',
+        subtitle: 'Explora miles de becas de todo el mundo. Utiliza nuestros filtros avanzados.',
+        searchPlaceholder: 'Buscar becas por nombre, proveedor...',
+        sortBy: 'Ordenar por:',
+        sort: {
+          relevant: 'Relevante',
+          deadline: 'Plazo',
+          value: 'Valor',
+          recent: 'Reciente',
+        },
+        filters: 'Filtros',
+        showResults: 'Mostrar {{count}} resultados',
+        previous: 'Anterior',
+        next: 'Siguiente',
+        noResults: 'No se encontraron becas',
+        clearFilters: 'Borrar todos los filtros',
+        viewDetails: 'Ver detalles',
+        notifyMe: 'Notificarme',
+        filtersList: {
+          title: 'Filtros',
+          clearAll: 'Borrar todo',
+          countries: 'Países',
+          fieldsOfStudy: 'Campos de estudio',
+          providerType: 'Tipo de proveedor',
+          scholarshipValue: 'Valor de la beca',
+          minValue: 'Valor mínimo (USD)',
+          maxValue: 'Valor máximo (USD)',
+          deadline: 'Plazo de solicitud',
+          anyTime: 'Cualquier momento',
+        }
+      },
+      boardingSchools: {
+        title: 'Internados',
+        subtitle: 'Descubre los mejores internados en el sudeste asiático.',
+        searchPlaceholder: 'Buscar escuelas por nombre...',
+        filters: 'Filtros',
+        noResults: 'No se encontraron escuelas',
+        category: 'Categoría',
+        state: 'Estado/Provincia',
+        managedBy: 'Gestionado por {{provider}}',
+        filtersList: {
+          schoolType: 'Tipo de escuela',
+          gender: 'Género',
+          boysOnly: 'Solo niños',
+          girlsOnly: 'Solo niñas',
+          coed: 'Mixto',
+          entryLevel: 'Nivel de entrada',
+          managedBy: 'Gestionado por',
+          all: 'Todos',
+        }
+      },
+      internships: {
+        title: 'Pasantías',
+        subtitle: 'Encuentra tu próximo paso profesional con pasantías en grandes empresas.',
+        searchPlaceholder: 'Buscar roles o empresas...',
+        filters: 'Filtros',
+        noResults: 'No se encontraron pasantías',
+        applyBy: 'Solicitar antes del {{date}}',
+        filtersList: {
+          fullTime: 'Tiempo completo',
+          partTime: 'Tiempo parcial',
+          remote: 'Remoto',
+        }
+      },
+      dashboard: {
+        scholarships: {
+          featureAction: 'Destacar',
+          featureModalTitle: 'Destacar beca',
+          featureModalDesc: 'Destaca tu beca al principio de la lista durante 30 días.',
+          featureBtn: 'Pagar y destacar ahora',
+          featureSuccessTitle: '¡Beca destacada!',
+          isFeatured: 'Destacada',
+        }
+      }
+    }
+  },
+  pt: {
+    translation: {
+      nav: {
+        home: 'Início',
+        scholarships: 'Bolsas de Estudo',
+        boardingschools: 'Internatos',
+        internationalschools: 'Escolas Internacionais',
+        internships: 'Estágios',
+        pricing: 'Preços',
+        features: 'Recursos',
+        about: 'Sobre',
+        signIn: 'Entrar',
+        getStarted: 'Começar',
+      },
+      hero: {
+        badge: 'Descubra sua jornada educacional global',
+        titlePart1: 'Encontre sua ',
+        titlePart2: 'bolsa perfeita',
+        subtitle: 'Conecte-se com milhares de bolsas de estudo, internatos, escolas internacionais e estágios no Sudeste Asiático e além. Seu futuro começa aqui.',
+        browseBtn: 'Ver bolsas',
+        learnMoreBtn: 'Saiba mais',
+        trustedBy: 'Confiado por mais de 5.000 alunos',
+        available: 'Mais de 10.000 bolsas disponíveis',
+        countriesCount: 'Mais de 50 países',
+      },
+      home: {
+        stats: {
+          scholarships: { label: 'Bolsas disponíveis', desc: 'Diversas oportunidades em todas as áreas' },
+          countries: { label: 'Países', desc: 'Alcance global no Sudeste Asiático e além' },
+          students: { label: 'Alunos ajudados', desc: 'Histórias de sucesso da nossa comunidade' },
+          awarded: { label: 'Bolsas concedidas', desc: 'Valor total facilitado através da nossa plataforma' },
+        },
+        howItWorks: {
+          title: 'Como o Pathfindr funciona',
+          subtitle: 'Sua jornada para uma educação global começa aqui. Siga estes passos simples para encontrar e garantir sua bolsa perfeita.',
+          steps: {
+            step1: { title: 'Crie seu perfil', desc: 'Cadastre-se e conte-nos sobre sua formação acadêmica, interesses e objetivos.' },
+            step2: { title: 'Descubra oportunidades', desc: 'Navegue por milhares de bolsas usando nossos filtros inteligentes.' },
+            step3: { title: 'Candidate-se com confiança', desc: 'Acompanhe suas candidaturas, gerencie prazos e acesse recursos úteis.' },
+            step4: { title: 'Realize seus sonhos', desc: 'Garanta sua bolsa e embarque em sua jornada educacional.' },
+          }
+        },
+        features: {
+          title: 'Tudo o que você precisa para ter sucesso',
+          subtitle: 'O Pathfindr oferece ferramentas e recursos poderosos para ajudá-lo a descobrir e garantir sua oportunidade de bolsa ideal.',
+          list: {
+            smartSearch: { title: 'Busca Inteligente', desc: 'Filtros avançados para encontrar bolsas que correspondam ao seu perfil.' },
+            personalized: { title: 'Correspondência Personalizada', desc: 'Recomendações baseadas em IA com base em seus objetivos.' },
+            global: { title: 'Oportunidades Globais', desc: 'Acesse bolsas de mais de 50 países.' },
+            verified: { title: 'Listagens Verificadas', desc: 'Todas as bolsas são verificadas quanto à precisão.' },
+            tracking: { title: 'Acompanhamento de Candidaturas', desc: 'Acompanhe suas candidaturas em um único painel.' },
+            secure: { title: 'Seguro e Privado', desc: 'Suas informações pessoais estão protegidas.' },
+          },
+          detailed: [
+            {
+              title: 'Busca Avançada e Filtros',
+              description: 'Encontre exatamente o que você procura com recursos de busca poderosos e filtros inteligentes.',
+              benefits: [
+                'Filtragem por múltiplos critérios',
+                'Resultados de busca instantâneos',
+                'Preferências de busca salvas',
+              ],
+            },
+            {
+              title: 'Correspondência por IA',
+              description: 'Nosso algoritmo de correspondência inteligente analisa seu perfil para recomendar oportunidades com maior probabilidade de sucesso.',
+              benefits: [
+                'Recomendações personalizadas',
+                'Pontuação de correspondência para cada bolsa',
+                'Ranking de prioridade inteligente',
+              ],
+            },
+            {
+              title: 'Notificações em Tempo Real',
+              description: 'Nunca perca um prazo. Receba notificações instantâneas para novas bolsas que correspondam ao seu perfil.',
+              benefits: [
+                'Preferências personalizáveis',
+                'Lembretes de prazos',
+                'Alertas de mudança de status',
+              ],
+            },
+          ]
+        },
+        featured: {
+          title: 'Bolsas em Destaque',
+          subtitle: 'Explore nossas principais oportunidades de bolsas que estão aceitando candidaturas no momento.',
+          viewAll: 'Ver Todas as Bolsas',
+        },
+        testimonials: {
+          title: 'Histórias de Sucesso de Nossos Alunos',
+          subtitle: 'Junte-se a milhares de alunos que encontraram sua bolsa perfeita através do Pathfindr.',
+          list: [
+            {
+              quote: "O Pathfindr tornou a busca pela bolsa certa muito mais fácil. O recurso de correspondência personalizada me conectou a oportunidades que eu nem sabia que existiam.",
+              university: 'Universidade Nacional de Singapura',
+              country: 'Singapura',
+            },
+          ]
+        },
+        cta: {
+          title: 'Pronto para começar sua jornada?',
+          subtitle: 'Crie seu perfil hoje e desbloqueie o acesso a milhares de oportunidades.',
+          createAccount: 'Criar conta gratuita',
+          browseScholarships: 'Ver bolsas',
+        }
+      },
+      pricing: {
+        title: 'Escolha seu plano',
+        subtitle: 'Assine para começar a se candidatar a bolsas. Escolha o plano que melhor se adapta às suas necessidades.',
+        mostPopular: 'Mais Popular',
+        currentPlan: 'Plano Atual',
+        getStarted: 'Obter {{name}}',
+        appsPerYear: '{{count}} candidaturas a bolsas por ano',
+        whatsIncluded: 'O que está incluído:',
+        tiers: {
+          pro: {
+            name: 'Pro',
+            features: [
+              'Candidate-se a 5 bolsas por ano',
+              'Detalhes completos da bolsa e elegibilidade',
+              'Painel de acompanhamento de candidaturas',
+              'Notificações por e-mail para prazos',
+            ]
+          },
+          expert: {
+            name: 'Expert',
+            features: [
+              'Candidate-se a 20 bolsas por ano',
+              'Detalhes completos da bolsa e elegibilidade',
+              'Painel de acompanhamento de candidaturas',
+              'Notificações por e-mail para prazos',
+              'Suporte prioritário',
+              'Recomendações de bolsas personalizadas',
+            ]
+          }
+        },
+        faq: {
+          title: 'Perguntas frequentes',
+          q1: {
+            q: 'O que conta como uma candidatura?',
+            a: 'Cada vez que você clica em "Candidatar-se agora" em uma bolsa e é redirecionado para a página de inscrição do provedor, isso conta como uma candidatura.'
+          },
+          q2: {
+            q: 'Quando o meu limite de candidaturas é redefinido?',
+            a: 'Sua contagem de candidaturas é redefinida anualmente quando sua assinatura é renovada.'
+          },
+          q3: {
+            q: 'Posso atualizar o meu plano?',
+            a: 'Sim! Você pode atualizar de Pro para Expert a qualquer momento. A diferença de preço será rateada pelo restante do seu período de faturamento.'
+          },
+          q4: {
+            q: 'Posso cancelar a qualquer momento?',
+            a: 'Com certeza. Você pode cancelar sua assinatura a qualquer momento nas configurações da sua conta.'
+          }
+        }
+      },
+      profile: {
+        complete: {
+          title: 'Complete seu Perfil Acadêmico',
+          subtitle: 'Ajude-nos a encontrar as melhores bolsas para você',
+        },
+        steps: {
+          personalDetails: 'Dados Pessoais',
+          education: 'Educação',
+          testScores: 'Notas de Testes',
+          achievements: 'Conquistas',
+          preferences: 'Preferências',
+          activities: 'Atividades',
+        }
+      },
+      footer: {
+        description: 'Seu caminho para oportunidades educacionais globais. Conecte-se com bolsas de estudo, internatos, escolas internacionais e estágios.',
+        platform: 'Plataforma',
+        resources: 'Recursos',
+        connect: 'Conectar',
+        links: {
+          universities: 'Universidades',
+          internships: 'Estágios',
+          jobs: 'Empregos',
+          knowledgeBase: 'Base de Conhecimento',
+          privacyPolicy: 'Política de Privacidade',
+          termsOfService: 'Termos de Serviço',
+        },
+        allRightsReserved: 'Todos os direitos reservados.',
+      },
+      internationalSchools: {
+        title: 'Escolas Internacionais',
+        subtitle: 'Explore as melhores escolas internacionais. Compare currículos, taxas e encontre a escola perfeita para a jornada educacional do seu filho.',
+        schoolsCount: '{{count}} escolas',
+        search: {
+          placeholder: 'Buscar escolas por nome...',
+        },
+        sort: {
+          label: 'Ordenar por:',
+          name: 'Nome',
+          country: 'País',
+          city: 'Cidade',
+        },
+        results: {
+          school: '{{count}} escola encontrada',
+          schools: '{{count}} escolas encontradas',
+        },
+        empty: {
+          title: 'Nenhuma escola encontrada',
+          description: "Não conseguimos encontrar nenhuma escola que corresponda aos seus critérios. Tente ajustar seus filtros.",
+          clearAll: 'Limpar Todos os Filtros',
+        },
+        filters: {
+          title: 'Filtros',
+          clearAll: 'Limpar tudo',
+          country: 'País',
+          curriculum: 'Currículo',
+        },
+        location: {
+          title: 'Sua Localização',
+          locating: 'Localizando...',
+          useCurrent: 'Usar Minha Localização',
+          or: 'ou',
+          selectCity: 'Selecionar cidade',
+          distance: 'Distância',
+        },
+        card: {
+          fees: 'Taxas:',
+          visitWebsite: 'Visitar Website',
+        },
+        pagination: {
+          previous: 'Anterior',
+          next: 'Próximo',
+        },
+      },
+      scholarships: {
+        title: 'Encontre sua Bolsa',
+        subtitle: 'Navegue por milhares de bolsas de estudo de todo o mundo. Use nossos filtros avançados para encontrar oportunidades que correspondam ao seu perfil.',
+        searchPlaceholder: 'Buscar bolsas por nome, provedor...',
+        sortBy: 'Ordenar por:',
+        sort: {
+          relevant: 'Relevante',
+          deadline: 'Prazo',
+          value: 'Valor',
+          recent: 'Recente',
+        },
+        filters: 'Filtros',
+        showResults: 'Mostrar {{count}} resultados',
+        previous: 'Anterior',
+        next: 'Próximo',
+        noResults: 'Nenhuma bolsa encontrada',
+        clearFilters: 'Limpar todos os filtros',
+        viewDetails: 'Ver detalhes',
+        notifyMe: 'Notificar-me',
+        filtersList: {
+          title: 'Filtros',
+          clearAll: 'Limpar Tudo',
+          countries: 'Países',
+          fieldsOfStudy: 'Campos de Estudo',
+          providerType: 'Tipo de Provedor',
+          scholarshipValue: 'Valor da Bolsa',
+          minValue: 'Valor Mínimo (USD)',
+          maxValue: 'Valor Máximo (USD)',
+          deadline: 'Prazo de Inscrição',
+          anyTime: 'Qualquer momento',
+        }
+      },
+      boardingSchools: {
+        title: 'Internatos',
+        subtitle: 'Descubra os melhores internatos no sudeste asiático.',
+        searchPlaceholder: 'Buscar escolas por nome...',
+        filters: 'Filtros',
+        noResults: 'Nenhuma escola encontrada',
+        category: 'Categoria',
+        state: 'Estado/Província',
+        managedBy: 'Gerido por {{provider}}',
+        filtersList: {
+          schoolType: 'Tipo de escola',
+          gender: 'Gênero',
+          boysOnly: 'Apenas meninos',
+          girlsOnly: 'Apenas meninas',
+          coed: 'Misto',
+          entryLevel: 'Nível de entrada',
+          managedBy: 'Gerido por',
+          all: 'Todos',
+        }
+      },
+      internships: {
+        title: 'Estágios',
+        subtitle: 'Encontre seu próximo passo na carreira com estágios em grandes empresas.',
+        searchPlaceholder: 'Buscar funções ou empresas...',
+        filters: 'Filtros',
+        noResults: 'Nenhum estágio encontrado',
+        applyBy: 'Candidatar-se até {{date}}',
+        filtersList: {
+          fullTime: 'Tempo integral',
+          partTime: 'Meio período',
+          remote: 'Remoto',
+        }
+      },
+    }
+  },
+  de: {
+    translation: {
+      nav: {
+        home: 'Startseite',
+        scholarships: 'Stipendien',
+        boardingschools: 'Internate',
+        internationalschools: 'Internationale Schulen',
+        internships: 'Praktika',
+        pricing: 'Preise',
+        features: 'Funktionen',
+        about: 'Über uns',
+        signIn: 'Anmelden',
+        getStarted: 'Loslegen',
+      },
+      hero: {
+        badge: 'Entdecke deine globale Bildungsreise',
+        titlePart1: 'Finde dein ',
+        titlePart2: 'perfektes Stipendium',
+        subtitle: 'Verbinde dich mit Tausenden von Stipendien, Internaten, internationalen Schulen und Praktika in Südostasien und darüber hinaus. Deine Zukunft beginnt hier.',
+        browseBtn: 'Stipendien durchsuchen',
+        learnMoreBtn: 'Mehr erfahren',
+        trustedBy: 'Über 5.000 Studenten vertrauen uns',
+        available: 'Über 10.000 Stipendien verfügbar',
+        countriesCount: 'Über 50 Länder',
+      },
+      home: {
+        stats: {
+          scholarships: { label: 'Verfügbare Stipendien', desc: 'Vielfältige Möglichkeiten in allen Bereichen' },
+          countries: { label: 'Länder', desc: 'Globale Reichweite in Südostasien und darüber hinaus' },
+          students: { label: 'Unterstützte Studenten', desc: 'Erfolgsgeschichten aus unserer Community' },
+          awarded: { label: 'Vergebene Stipendien', desc: 'Gesamtwert über unsere Plattform vermittelt' },
+        },
+        howItWorks: {
+          title: 'So funktioniert Pathfindr',
+          subtitle: 'Deine Reise zu einer globalen Ausbildung beginnt hier. Folge diesen einfachen Schritten, um dein perfektes Stipendium zu finden.',
+          steps: {
+            step1: { title: 'Profil erstellen', desc: 'Melde dich an und erzähle uns von deinem akademischen Hintergrund und deinen Zielen.' },
+            step2: { title: 'Möglichkeiten entdecken', desc: 'Durchsuche Tausende von Stipendien mit unseren intelligenten Filtern.' },
+            step3: { title: 'Sicher bewerben', desc: 'Verfolge deine Bewerbungen, verwalte Fristen und greife auf Ressourcen zu.' },
+            step4: { title: 'Träume verwirklichen', desc: 'Sichere dir dein Stipendium und beginne deine Bildungsreise.' },
+          }
+        },
+        features: {
+          title: 'Alles, was Sie zum Erfolg brauchen',
+          subtitle: 'Pathfindr bietet leistungsstarke Tools und Ressourcen, die Ihnen helfen, Ihre perfekte Stipendienmöglichkeit zu entdecken und zu sichern.',
+          list: {
+            smartSearch: { title: 'Intelligente Suche', desc: 'Erweiterte Filter, um Stipendien zu finden, die zu Ihrem Profil passen.' },
+            personalized: { title: 'Personalisiertes Matching', desc: 'KI-gestützte Empfehlungen basierend auf Ihren Zielen.' },
+            global: { title: 'Globale Möglichkeiten', desc: 'Greifen Sie auf Stipendien aus über 50 Ländern zu.' },
+            verified: { title: 'Verifizierte Angebote', desc: 'Alle Stipendien werden auf ihre Richtigkeit überprüft.' },
+            tracking: { title: 'Bewerbungsverfolgung', desc: 'Verfolgen Sie Ihre Bewerbungen in einem einzigen Dashboard.' },
+            secure: { title: 'Sicher & Privat', desc: 'Ihre persönlichen Daten sind geschützt.' },
+          },
+          detailed: [
+            {
+              title: 'Erweiterte Suche & Filter',
+              description: 'Finden Sie genau das, was Sie suchen, mit leistungsstarken Suchfunktionen und intelligenten Filtern.',
+              benefits: ['Filterung nach mehreren Kriterien', 'Sofortige Suchergebnisse', 'Gespeicherte Sucheinstellungen'],
+            },
+            {
+              title: 'KI-gestütztes Matching',
+              description: 'Unser intelligenter Matching-Algorithmus analysiert Ihr Profil, um Möglichkeiten mit der höchsten Erfolgswahrscheinlichkeit zu empfehlen.',
+              benefits: ['Personalisierte Empfehlungen', 'Match-Score für jedes Stipendium', 'Intelligentes Prioritätsranking'],
+            },
+            {
+              title: 'Echtzeit-Benachrichtigungen',
+              description: 'Verpassen Sie nie wieder eine Frist. Erhalten Sie sofortige Benachrichtigungen für neue Stipendien, die zu Ihrem Profil passen.',
+              benefits: ['Anpassbare Einstellungen', 'Erinnerungen an Fristen', 'Statusänderungsalarme'],
+            },
+          ]
+        },
+        featured: {
+          title: 'Hervorgehobene Stipendien',
+          subtitle: 'Entdecken Sie unsere besten Stipendienmöglichkeiten, die derzeit Bewerbungen entgegennehmen.',
+          viewAll: 'Alle Stipendien anzeigen',
+        },
+        testimonials: {
+          title: 'Erfolgsgeschichten unserer Studenten',
+          subtitle: 'Schließen Sie sich Tausenden von Studenten an, die ihr perfektes Stipendium über Pathfindr gefunden haben.',
+          list: [
+            {
+              quote: "Pathfindr hat die Suche nach dem richtigen Stipendium so viel einfacher gemacht. Die personalisierte Matching-Funktion hat mich mit Möglichkeiten verbunden, von denen ich nicht einmal wusste, dass sie existieren. Jetzt studiere ich Informatik an der NUS!",
+              university: 'National University of Singapore',
+              country: 'Singapur',
+            },
+            {
+              quote: "Ich war überwältigt von der Anzahl der verfügbaren Stipendien, bis ich Pathfindr fand. Die intelligenten Filter der Plattform und die Fristenverfolgung halfen mir, organisiert zu bleiben und schließlich ein Vollstipendium für das Ingenieurstudium zu gewinnen.",
+              university: 'University of Melbourne',
+              country: 'Australien',
+            },
+            {
+              quote: "Als Student der ersten Generation war es entmutigend, sich durch Stipendienbewerbungen zu navigieren. Die verifizierten Angebote und die Bewerbungsverfolgung von Pathfindr gaben mir das Vertrauen, meine Träume zu verfolgen. Ich studiere jetzt Medizin!",
+              university: 'Chulalongkorn University',
+              country: 'Thailand',
+            },
+          ]
+        },
+      },
+      pricing: {
+        title: 'Wähle deinen Plan',
+        subtitle: 'Abonniere, um dich für Stipendien zu bewerben. Wähle den Plan, der zu deinen Bedürfnissen passt.',
+        mostPopular: 'Beliebteste',
+        currentPlan: 'Aktueller Plan',
+        getStarted: '{{name}} wählen',
+        appsPerYear: '{{count}} Bewerbungen pro Jahr',
+        whatsIncluded: 'Was enthalten ist:',
+        tiers: {
+          pro: {
+            name: 'Pro',
+            features: [
+              'Bewerbe dich auf 5 Stipendien pro Jahr',
+              'Vollständige Details & Berechtigung',
+              'Bewerbungs-Dashboard',
+              'E-Mail-Benachrichtigungen für Fristen',
+            ]
+          },
+          expert: {
+            name: 'Expert',
+            features: [
+              'Bewerbe dich auf 20 Stipendien pro Jahr',
+              'Vollständige Details & Berechtigung',
+              'Bewerbungs-Dashboard',
+              'E-Mail-Benachrichtigungen für Fristen',
+              'Prioritärer Support',
+              'Personalisierte Stipendienempfehlungen',
+            ]
+          }
+        },
+        faq: {
+          title: 'Häufig gestellte Fragen',
+          q1: {
+            q: 'Was zählt als Bewerbung?',
+            a: 'Jedes Mal, wenn Sie bei einem Stipendium auf „Jetzt bewerben“ klicken und zur Bewerbungsseite des Stipendienanbieters weitergeleitet werden, zählt dies als eine Bewerbung.'
+          },
+          q2: {
+            q: 'Wann wird mein Bewerbungslimit zurückgesetzt?',
+            a: 'Ihre Bewerbungsanzahl wird jährlich zurückgesetzt, wenn Ihr Abonnement verlängert wird.'
+          },
+          q3: {
+            q: 'Kann ich meinen Plan upgraden?',
+            a: 'Ja! Sie können jederzeit von Pro zu Expert wechseln. Die Preisdifferenz wird für den Rest Ihres Abrechnungszeitraums anteilig berechnet.'
+          },
+          q4: {
+            q: 'Kann ich jederzeit kündigen?',
+            a: 'Absolut. Sie können Ihr Abonnement jederzeit über Ihre Kontoeinstellungen kündigen.'
+          }
+        }
+      },
+      footer: {
+        description: 'Dein Weg zu globalen Bildungschancen. Verbinde dich mit Stipendien, Internaten, internationalen Schulen und Praktika.',
+        platform: 'Plattform',
+        resources: 'Ressourcen',
+        connect: 'Verbinden',
+        links: {
+          universities: 'Universitäten',
+          internships: 'Praktika',
+          jobs: 'Jobs',
+          knowledgeBase: 'Wissensdatenbank',
+          privacyPolicy: 'Datenschutz',
+          termsOfService: 'Nutzungsbedingungen',
+        },
+        allRightsReserved: 'Alle Rechte vorbehalten.',
+      },
+      internationalSchools: {
+        title: 'Internationale Schulen',
+        subtitle: 'Entdecken Sie erstklassige internationale Schulen. Vergleichen Sie Lehrpläne, Gebühren und finden Sie die perfekte Schule.',
+        schoolsCount: '{{count}} Schulen',
+        search: {
+          placeholder: 'Schulen nach Namen suchen...',
+        },
+        sort: {
+          label: 'Sortieren nach:',
+          name: 'Name',
+          country: 'Land',
+          city: 'Stadt',
+        },
+        results: {
+          school: '{{count}} Schule gefunden',
+          schools: '{{count}} Schulen gefunden',
+        },
+        empty: {
+          title: 'Keine Schulen gefunden',
+          description: "Wir konnten keine Schulen finden, die Ihren Kriterien entsprechen.",
+          clearAll: 'Alle Filter löschen',
+        },
+        filters: {
+          title: 'Filter',
+          clearAll: 'Alle löschen',
+          country: 'Land',
+          curriculum: 'Lehrplan',
+        },
+        location: {
+          title: 'Ihr Standort',
+          locating: 'Ortung...',
+          useCurrent: 'Meinen Standort verwenden',
+          or: 'oder',
+          selectCity: 'Stadt wählen',
+          distance: 'Entfernung',
+        },
+        card: {
+          fees: 'Gebühren:',
+          visitWebsite: 'Website besuchen',
+        },
+        pagination: {
+          previous: 'Zurück',
+          next: 'Weiter',
+        },
+      },
+      scholarships: {
+        title: 'Finden Sie Ihr Stipendium',
+        subtitle: 'Durchsuchen Sie Tausende von Stipendien aus der ganzen Welt. Nutzen Sie unsere erweiterten Filter.',
+        searchPlaceholder: 'Stipendien nach Namen, Anbieter suchen...',
+        sortBy: 'Sortieren nach:',
+        sort: {
+          relevant: 'Relevant',
+          deadline: 'Frist',
+          value: 'Wert',
+          recent: 'Neu',
+        },
+        filters: 'Filter',
+        showResults: '{{count}} Ergebnisse anzeigen',
+        previous: 'Zurück',
+        next: 'Weiter',
+        noResults: 'Keine Stipendien gefunden',
+        clearFilters: 'Alle Filter löschen',
+        viewDetails: 'Details anzeigen',
+        notifyMe: 'Benachrichtige mich',
+        filtersList: {
+          title: 'Filter',
+          clearAll: 'Alle löschen',
+          countries: 'Länder',
+          fieldsOfStudy: 'Studienbereiche',
+          providerType: 'Anbietertyp',
+          scholarshipValue: 'Stipendienwert',
+          minValue: 'Mindestwert (USD)',
+          maxValue: 'Maximalwert (USD)',
+          deadline: 'Bewerbungsfrist',
+          anyTime: 'Jederzeit',
+        }
+      },
+      boardingSchools: {
+        title: 'Internate',
+        subtitle: 'Entdecken Sie die besten Internate in Südostasien.',
+        searchPlaceholder: 'Schulen nach Namen suchen...',
+        filters: 'Filter',
+        noResults: 'Keine Schulen gefunden',
+        category: 'Kategorie',
+        state: 'Bundesland/Provinz',
+        managedBy: 'Verwaltet von {{provider}}',
+        filtersList: {
+          schoolType: 'Schultyp',
+          gender: 'Geschlecht',
+          boysOnly: 'Nur Jungen',
+          girlsOnly: 'Nur Mädchen',
+          coed: 'Koedukativ',
+          entryLevel: 'Einstiegslevel',
+          managedBy: 'Verwaltet von',
+          all: 'Alle',
+        }
+      },
+      internships: {
+        title: 'Praktika',
+        subtitle: 'Finden Sie Ihren nächsten Karriereschritt mit Praktika bei Top-Unternehmen.',
+        searchPlaceholder: 'Rollen oder Unternehmen suchen...',
+        filters: 'Filter',
+        noResults: 'Keine Praktika gefunden',
+        applyBy: 'Bewerben bis {{date}}',
+        filtersList: {
+          fullTime: 'Vollzeit',
+          partTime: 'Teilzeit',
+          remote: 'Remote',
+        }
+      },
+    }
+  },
+  ja: {
+    translation: {
+      nav: {
+        home: 'ホーム',
+        scholarships: '奨学金',
+        boardingschools: '寄宿学校',
+        internationalschools: 'インターナショナルスクール',
+        internships: 'インターンシップ',
+        pricing: '料金',
+        features: '特徴',
+        about: 'Pathfindrについて',
+        signIn: 'サインイン',
+        getStarted: '今すぐ始める',
+      },
+      hero: {
+        badge: 'あなたのグローバルな教育の旅を見つけよう',
+        titlePart1: 'あなたにぴったりの ',
+        titlePart2: '奨学金を見つける',
+        subtitle: '東南アジア内外の数千の奨学金、寄宿学校、インターナショナルスクール、インターンシップとつながりましょう。あなたの未来はここから始まります。',
+        browseBtn: '奨学金を探す',
+        learnMoreBtn: '詳細を見る',
+        trustedBy: '5,000人以上の学生に信頼されています',
+        available: '10,000以上の奨学金が利用可能',
+        countriesCount: '50カ国以上',
+      },
+      home: {
+        stats: {
+          scholarships: { label: '利用可能な奨学金', desc: 'あらゆる分野の多様な機会' },
+          countries: { label: '対象国', desc: '東南アジアおよび世界中をカバー' },
+          students: { label: '支援した学生', desc: 'コミュニティからの成功事例' },
+          awarded: { label: '授与された奨学金', desc: 'プラットフォームを通じて促進された総額' },
+        },
+        howItWorks: {
+          title: 'Pathfindrの仕組み',
+          subtitle: 'グローバル教育への旅はここから始まります。完璧な奨学金を見つけて確保するための簡単なステップ。',
+          steps: {
+            step1: { title: 'プロフィールを作成', desc: '登録して、学歴、興味、目標を教えてください。' },
+            step2: { title: '機会を見つける', desc: 'スマートフィルターを使用して数千の奨学金を検索。' },
+            step3: { title: '自信を持って応募', desc: '応募状況を追跡し、期限を管理し、便利なリソースにアクセス。' },
+            step4: { title: '夢を実現する', desc: '奨学金を獲得し、教育の旅を始めましょう。' },
+          }
+        },
+        features: {
+          title: '成功するために必要なすべてがここに',
+          subtitle: 'Pathfindrは、あなたにぴったりの奨学金を見つけ、獲得するための強力なツールとリソースを提供します。',
+          list: {
+            smartSearch: { title: 'スマート検索', desc: 'あなたのプロフィールに合う奨学金を見つけるための高度なフィルター。' },
+            personalized: { title: 'パーソナライズされたマッチング', desc: 'あなたの目標に基づいたAIによる推奨。' },
+            global: { title: 'グローバルな機会', desc: '50カ国以上の奨学金にアクセス。' },
+            verified: { title: '確認済みの掲載', desc: 'すべての奨学金は正確性が確認されています。' },
+            tracking: { title: '応募追跡', desc: '一つのダッシュボードで応募状況を管理。' },
+            secure: { title: '安全。プライベート', desc: 'あなたの個人情報は保護されています。' },
+          },
+          detailed: [
+            {
+              title: '高度な検索とフィルター',
+              description: '強力な検索機能とスマートなフィルターで、探しているものを正確に見つけます。',
+              benefits: ['複数条件によるフィルタリング', '即時の検索結果', '検索条件の保存'],
+            },
+            {
+              title: 'AI搭載マッチング',
+              description: '当社のインテリジェントなマッチングアルゴリズムがあなたのプロフィールを分析し、成功確率の高い機会を推奨します。',
+              benefits: ['パーソナライズされた推奨', '各奨学金のマッチスコア', 'スマートな優先順位付け'],
+            },
+            {
+              title: 'リアルタイム通知',
+              description: '期限を逃しません。あなたのプロフィールに合う新しい奨学金や期限について、即座に通知を受け取れます。',
+              benefits: ['カスタマイズ可能な設定', '期限のリマインダー', 'ステータス変更アラート'],
+            },
+          ]
+        },
+        featured: {
+          title: '注目の奨学金',
+          subtitle: '现在応募受付中のトップクラスの奨学金をチェックしましょう。',
+          viewAll: 'すべての奨学金を見る',
+        },
+        testimonials: {
+          title: '学生たちの成功ストーリー',
+          subtitle: 'Pathfindrを通じてぴったりの奨学金を見つけた数千人の学生の仲間に加わりましょう。',
+          list: [
+            {
+              quote: "Pathfindrのおかげで、自分に合った奨学金を見つけるのがとても簡単になりました。パーソナライズされたマッチング機能により、存在すら知らなかった機会に巡り合うことができました。今、私はNUSでコンピューターサイエンスを学んでいます！",
+              university: 'シンガポール国立大学',
+              country: 'シンガポール',
+            },
+            {
+              quote: "利用可能な奨学金の多さに圧倒されていましたが、Pathfindrを見つけて救われました。スマートフィルターと期限管理機能のおかげで整理整頓ができ、最終的に工学を学ぶための全額奨学金を獲得することができました。",
+              university: 'メルボルン大学',
+              country: 'オーストラリア',
+            },
+            {
+              quote: "第一世代の大学生として、奨学金の申請は不安でしたが、Pathfindrの確認済みリストと申請追跡機能が自信を与えてくれました。今、私はバンコクで医学を学んでいます！",
+              university: 'チュラロンコン大学',
+              country: 'タイ',
+            },
+          ]
+        },
+        cta: {
+          title: 'あなたの旅を始める準備はできましたか？',
+          subtitle: '今すぐプロフィールを作成して、数千の機会へのアクセスを解放しましょう。成功した学生たちのコミュニティに参加してください。',
+          createAccount: '無料アカウントを作成',
+          browseScholarships: '奨学金を探す',
+        }
+      },
+      pricing: {
+        title: 'プランを選択',
+        subtitle: '奨学金への応募を開始するために購読してください。ニーズに合ったプランを選択して、教育の機会への道を切り開きましょう。',
+        mostPopular: '一番人気',
+        currentPlan: '現在のプラン',
+        getStarted: '{{name}}を選択',
+        appsPerYear: '年間{{count}}件の奨学金申請',
+        whatsIncluded: '含まれるもの:',
+        tiers: {
+          pro: {
+            name: 'Pro',
+            features: [
+              '年間5件の奨学金に応募',
+              '奨学金の詳細と資格をフル表示',
+              '申請管理ダッシュボード',
+              '期限のメール通知',
+            ]
+          },
+          expert: {
+            name: 'Expert',
+            features: [
+              '年間20件の奨学金に応募',
+              '奨学金の詳細と資格をフル表示',
+              '申請管理ダッシュボード',
+              '期限のメール通知',
+              '優先サポート',
+              'パーソナライズされた奨学金の推奨',
+            ]
+          }
+        },
+        faq: {
+          title: 'よくある質問',
+          q1: {
+            q: '何が「申請」としてカウントされますか？',
+            a: '奨学金の「今すぐ応募」をクリックし、提供元の申請ページにリダイレクトされるたびに、1件の申請としてカウントされます。'
+          },
+          q2: {
+            q: '申請上限はいつリセットされますか？',
+            a: '申請数は、購読が更新される際に毎年リセットされます。'
+          },
+          q3: {
+            q: 'プランをアップグレードできますか？',
+            a: 'はい！いつでもProからExpertにアップグレード可能です。差額は請求期間の残りに応じて日割り計算されます。'
+          },
+          q4: {
+            q: 'いつでもキャンセルできますか？',
+            a: 'もちろんです。アカウント設定からいつでもキャンセル可能です。'
+          }
+        }
+      },
+      footer: {
+        description: 'グローバルな教育機会への道。東南アジア内外の奨学金、寄宿学校、インターナショナルスクール、インターンシップとつながりましょう。',
+        platform: 'プラットフォーム',
+        resources: 'リソース',
+        connect: '公式SNS',
+        links: {
+          universities: '大学',
+          internships: 'インターンシップ',
+          jobs: '求人',
+          knowledgeBase: 'ナレッジベース',
+          privacyPolicy: 'プライバシーポリシー',
+          termsOfService: '利用規約',
+        },
+        allRightsReserved: 'All rights reserved.',
+      },
+      internationalSchools: {
+        title: 'インターナショナルスクール',
+        subtitle: 'トップクラスのインターナショナルスクールを探索。カリキュラムや学費を比較し、お子様にぴったりの学校を見つけましょう。',
+        schoolsCount: '{{count}} 校',
+        search: {
+          placeholder: '学校名で検索...',
+        },
+        sort: {
+          label: '並べ替え:',
+          name: '名前',
+          country: '国',
+          city: '都市',
+        },
+        results: {
+          school: '{{count}} 件の学校が見つかりました',
+          schools: '{{count}} 件の学校が見つかりました',
+        },
+        empty: {
+          title: '学校が見つかりません',
+          description: "条件に一致するインターナショナルスクールが見つかりませんでした。フィルターを調整してみてください。",
+          clearAll: 'すべてのフィルターをクリア',
+        },
+        filters: {
+          title: 'フィルター',
+          clearAll: 'すべてクリア',
+          country: '国',
+          curriculum: 'カリキュラム',
+        },
+        location: {
+          title: '現在地',
+          locating: '位置情報を取得中...',
+          useCurrent: '現在地を使用する',
+          or: 'または',
+          selectCity: '都市を選択',
+          distance: '距離',
+        },
+        card: {
+          fees: '学費:',
+          visitWebsite: 'ウェブサイトを訪問',
+        },
+        pagination: {
+          previous: '前へ',
+          next: '次へ',
+        },
+      },
+      scholarships: {
+        title: '奨学金を探す',
+        subtitle: '世界中の数千の奨学金を閲覧。高度なフィルターを使用して、あなたのプロフィールに合う機会を見つけましょう。',
+        searchPlaceholder: '名前や提供元で奨学金を検索...',
+        sortBy: '並べ替え:',
+        sort: {
+          relevant: '関連度順',
+          deadline: '締切順',
+          value: '金額順',
+          recent: '新着順',
+        },
+        filters: 'フィルター',
+        showResults: '{{count}} 件の結果を表示',
+        previous: '前へ',
+        next: '次へ',
+        noResults: '奨学金が見つかりません',
+        clearFilters: 'すべてのフィルターをクリア',
+        viewDetails: '詳細を見る',
+        notifyMe: '通知を受け取る',
+        filtersList: {
+          title: 'フィルター',
+          clearAll: 'すべてクリア',
+          countries: '国',
+          fieldsOfStudy: '専攻分野',
+          providerType: '提供元の種類',
+          scholarshipValue: '奨学金の金額',
+          minValue: '最小金額 (USD)',
+          maxValue: '最大金額 (USD)',
+          deadline: '申請締切',
+          anyTime: 'いつでも',
+        }
+      },
+      boardingSchools: {
+        title: '寄宿学校',
+        subtitle: '東南アジアで最高の寄宿学校を見つけましょう。',
+        searchPlaceholder: '学校名で検索...',
+        filters: 'フィルター',
+        noResults: '学校が見つかりません',
+        category: 'カテゴリー',
+        state: '州/県',
+        managedBy: '{{provider}}による運営',
+        filtersList: {
+          schoolType: '学校の種類',
+          gender: '性別',
+          boysOnly: '男子校',
+          girlsOnly: '女子校',
+          coed: '共学',
+          entryLevel: '入学レベル',
+          managedBy: '運営主体',
+          all: 'すべて',
+        }
+      },
+      internships: {
+        title: 'インターンシップ',
+        subtitle: 'トップ企業でのインターンシップで、キャリアの次の一歩を見つけましょう。',
+        searchPlaceholder: '職種や企業名で検索...',
+        filters: 'フィルター',
+        noResults: 'インターンシップが見つかりません',
+        applyBy: '締切: {{date}}',
+        filtersList: {
+          fullTime: 'フルタイム',
+          partTime: 'パートタイム',
+          remote: 'リモート',
+        }
+      },
+    }
+  },
+  ko: {
+    translation: {
+      nav: {
+        home: '홈',
+        scholarships: '장학금',
+        boardingschools: '기숙 학교',
+        internationalschools: '국제 학교',
+        internships: '인턴십',
+        pricing: '가격',
+        features: '기능',
+        about: 'Pathfindr 소개',
+        signIn: '로그인',
+        getStarted: '시작하기',
+      },
+      hero: {
+        badge: '글로벌 교육 여정을 발견하세요',
+        titlePart1: '당신에게 완벽한 ',
+        titlePart2: '장학금 찾기',
+        subtitle: '동남아시아 및 그 이상의 수천 개의 장학금, 기숙 학교, 국제 학교 및 인턴십과 연결하세요. 당신의 미래가 여기서 시작됩니다.',
+        browseBtn: '장학금 둘러보기',
+        learnMoreBtn: '더 알아보기',
+        trustedBy: '5,000명 이상의 학생이 신뢰함',
+        available: '10,000개 이상의 장학금 이용 가능',
+        countriesCount: '50개국 이상',
+      },
+      home: {
+        stats: {
+          scholarships: { label: '이용 가능한 장학금', desc: '모든 분야의 다양한 기회' },
+          countries: { label: '국가', desc: '동남아시아 및 전 세계 글로벌 활동' },
+          students: { label: '도움을 받은 학생들', desc: '우리 커뮤니티의 성공 사례' },
+          awarded: { label: '수여된 장학금', desc: '플랫폼을 통해 연결된 총 가치' },
+        },
+        howItWorks: {
+          title: 'Pathfindr 작동 방식',
+          subtitle: '글로벌 교육을 향한 여정이 여기서 시작됩니다. 완벽한 장학금을 찾고 확보하기 위한 간단한 단계.',
+          steps: {
+            step1: { title: '프로필 생성', desc: '가입하고 학업 배경, 관심사 및 목표를 알려주세요.' },
+            step2: { title: '기회 발견', desc: '스마트 필터를 사용하여 수천 개의 장학금을 검색하세요.' },
+            step3: { title: '자신 있게 지원', desc: '지원 현황을 추적하고, 마감일을 관리하며, 유용한 리소스에 액세스하세요.' },
+            step4: { title: '꿈을 이루세요', desc: '장학금을 확보하고 교육 여정을 시작하세요.' },
+          }
+        },
+        features: {
+          title: '성공을 위해 필요한 모든 것',
+          subtitle: 'Pathfindr는 당신에게 완벽한 장학금 기회를 발견하고 확보할 수 있도록 강력한 도구와 리소스를 제공합니다.',
+          list: {
+            smartSearch: { title: '스마트 검색', desc: '당신의 프로필에 맞는 장학금을 찾기 위한 고급 필터.' },
+            personalized: { title: '개인화된 매칭', desc: '당신의 목표에 기반한 AI 추동 추천.' },
+            global: { title: '글로벌 기회', desc: '50개국 이상의 장학금에 액세스.' },
+            verified: { title: '확인된 목록', desc: '모든 장학금은 정확성이 확인되었습니다.' },
+            tracking: { title: '지원 추적', desc: '하나의 대시보드에서 지원 현황을 관리하세요.' },
+            secure: { title: '안정성 및 개인정보 보호', desc: '당신의 개인 정보는 안전하게 보호됩니다.' },
+          },
+          detailed: [
+            {
+              title: '고급 검색 및 필터',
+              description: '강력한 검색 기능과 스마트 필터로 찾고 있는 것을 정확하게 찾으세요.',
+              benefits: ['다중 기준 필터링', '즉각적인 검색 결과', '검색 기본 설정 저장'],
+            },
+            {
+              title: 'AI 기반 매칭',
+              description: '당사의 지능형 매칭 알고리즘이 당신의 프로필을 분석하여 성공 확률이 가장 높은 기회를 추천합니다.',
+              benefits: ['개인화된 추천', '각 장학금에 대한 매칭 점수', '스마트 우선순위 랭킹'],
+            },
+            {
+              title: '실시간 알림',
+              description: '마감일을 절대 놓치지 마세요. 당신의 프로필과 일치하는 새로운 장학금에 대해 즉시 알림을 받으세요.',
+              benefits: ['사용자 지정 기본 설정', '마감일 알림', '상태 변경 알림'],
+            },
+          ]
+        },
+        featured: {
+          title: '추천 장학금',
+          subtitle: '현재 지원을 받고 있는 최고의 장학금 기회를 살펴보세요.',
+          viewAll: '모든 장학금 보기',
+        },
+        testimonials: {
+          title: '학생 성공 사례',
+          subtitle: 'Pathfindr를 통해 완벽한 장학금을 찾은 수천 명의 학생들과 함께하세요.',
+          list: [
+            {
+              quote: "Pathfindr 덕분에 나에게 맞는 장학금을 찾는 것이 훨씬 쉬워졌습니다. 개인화된 매칭 기능을 통해 존재조차 몰랐던 기회들을 접할 수 있었고, 지금은 NUS에서 컴퓨터 공학을 공부하고 있습니다!",
+              university: '싱가포르 국립대학교',
+              country: '싱가포르',
+            },
+            {
+              quote: "수많은 장학금 정보에 막막했었는데 Pathfindr를 만나고 정리가 되었습니다. 스마트 필터와 마감일 추적 기능 덕분에 체계적으로 준비할 수 있었고, 결국 공학 전공 전액 장학금을 받을 수 있었습니다.",
+              university: '멜버른 대학교',
+              country: '호주',
+            },
+            {
+              quote: "가족 중 처음으로 대학에 진학하는 학생으로서 장학금 신청이 막막했지만, Pathfindr의 검증된 목록과 지원 추적 기능이 큰 자신감을 주었습니다. 지금은 방콕에서 의학을 공부하고 있습니다!",
+              university: '쭐라롱껀 대학교',
+              country: '태국',
+            },
+          ]
+        },
+        cta: {
+          title: '여정을 시작할 준비가 되셨나요?',
+          subtitle: '지금 프로필을 작성하고 수천 개의 장학금 기회를 확인하세요. 성공적인 학생 커뮤니티의 일원이 되어보세요.',
+          createAccount: '무료 계정 생성',
+          browseScholarships: '장학금 둘러보기',
+        }
+      },
+      pricing: {
+        title: '플랜 선택',
+        subtitle: '장학금 지원을 시작하려면 구독하세요. 당신의 요구에 맞는 플랜을 선택하고 교육의 기회를 잡으세요.',
+        mostPopular: '가장 인기 있는 플랜',
+        currentPlan: '현재 플랜',
+        getStarted: '{{name}} 선택하기',
+        appsPerYear: '연간 {{count}}회 장학금 지원',
+        whatsIncluded: '포함 내역:',
+        tiers: {
+          pro: {
+            name: 'Pro',
+            features: [
+              '연간 5회 장학금 지원',
+              '장학금 상세 정보 및 자격 조건 전체 공개',
+              '지원 관리 대시보드',
+              '마감일 이메일 알림',
+            ]
+          },
+          expert: {
+            name: 'Expert',
+            features: [
+              '연간 20회 장학금 지원',
+              '장학금 상세 정보 및 자격 조건 전체 공개',
+              '지원 관리 대시보드',
+              '마감일 이메일 알림',
+              '우선 지원 서비스',
+              '개인화된 장학금 추천',
+            ]
+          }
+        },
+        faq: {
+          title: '자주 묻는 질문',
+          q1: {
+            q: '어떤 것이 "지원"으로 집계되나요?',
+            a: '장학금의 "지금 지원하기"를 클릭하여 해당 기관의 지원 페이지로 이동할 때마다 1회의 지원으로 집계됩니다.'
+          },
+          q2: {
+            q: '지원 한도는 언제 초기화되나요?',
+            a: '지원 횟수는 매년 구독이 갱신될 때 초기화됩니다.'
+          },
+          q3: {
+            q: '플랜을 업그레이드할 수 있나요?',
+            a: '네! 언제든지 Pro에서 Expert로 업그레이드할 수 있습니다. 차액은 남은 기간에 따라 일할 계산됩니다.'
+          },
+          q4: {
+            q: '언제든지 해지할 수 있나요?',
+            a: '물론입니다. 계정 설정에서 언제든지 구독을 해지할 수 있습니다.'
+          }
+        }
+      },
+      footer: {
+        description: '글로벌 교육 기회로 향하는 길. 동남아시아와 전 세계의 장학금, 기숙 학교, 국제 학교, 인턴십 정보를 확인하세요.',
+        platform: '플랫폼',
+        resources: '리소스',
+        connect: '소셜 미디어',
+        links: {
+          universities: '대학교',
+          internships: '인턴십',
+          jobs: '채용',
+          knowledgeBase: '지식 베이스',
+          privacyPolicy: '개인정보 처리방침',
+          termsOfService: '이용 약관',
+        },
+        allRightsReserved: 'All rights reserved.',
+      },
+      internationalSchools: {
+        title: '국제 학교',
+        subtitle: '최고의 국제 학교를 탐색하세요. 교과 과정과 학비를 비교하고 자녀에게 딱 맞는 학교를 찾아보세요.',
+        schoolsCount: '{{count}}개 학교',
+        search: {
+          placeholder: '학교 이름으로 검색...',
+        },
+        sort: {
+          label: '정렬 기준:',
+          name: '이름',
+          country: '국가',
+          city: '도시',
+        },
+        results: {
+          school: '{{count}}개의 학교를 찾았습니다',
+          schools: '{{count}}개의 학교를 찾았습니다',
+        },
+        empty: {
+          title: '학교를 찾을 수 없습니다',
+          description: "조건에 맞는 국제 학교를 찾지 못했습니다. 필터를 조정해 보세요.",
+          clearAll: '모든 필터 초기화',
+        },
+        filters: {
+          title: '필터',
+          clearAll: '모두 지우기',
+          country: '국가',
+          curriculum: '교과 과정',
+        },
+        location: {
+          title: '현재 위치',
+          locating: '위치 정보 확인 중...',
+          useCurrent: '현재 위치 사용',
+          or: '또는',
+          selectCity: '도시 선택',
+          distance: '거리',
+        },
+        card: {
+          fees: '학비:',
+          visitWebsite: '웹사이트 방문',
+        },
+        pagination: {
+          previous: '이전',
+          next: '다음',
+        },
+      },
+      scholarships: {
+        title: '장학금 찾기',
+        subtitle: '전 세계 수천 개의 장학금을 둘러보세요. 고급 필터를 사용해 나에게 맞는 기회를 찾아보세요.',
+        searchPlaceholder: '장학금 이름이나 기관으로 검색...',
+        sortBy: '정렬 기준:',
+        sort: {
+          relevant: '관련성 높은 순',
+          deadline: '마감임박 순',
+          value: '금액 높은 순',
+          recent: '최신 순',
+        },
+        filters: '필터',
+        showResults: '{{count}}개의 결과 보기',
+        previous: '이전',
+        next: '다음',
+        noResults: '장학금을 찾을 수 없습니다',
+        clearFilters: '모든 필터 초기화',
+        viewDetails: '상세 보기',
+        notifyMe: '알림받기',
+        filtersList: {
+          title: '필터',
+          clearAll: '모두 지우기',
+          countries: '국가',
+          fieldsOfStudy: '전공 분야',
+          providerType: '기관 유형',
+          scholarshipValue: '장학금 금액',
+          minValue: '최소 금액 (USD)',
+          maxValue: '최대 금액 (USD)',
+          deadline: '지원 마감일',
+          anyTime: '언제든지',
+        }
+      },
+      boardingSchools: {
+        title: '기숙 학교',
+        subtitle: '동남아시아 최고의 기숙 학교를 발견하세요.',
+        searchPlaceholder: '학교 이름으로 검색...',
+        filters: '필터',
+        noResults: '학교를 찾을 수 없습니다',
+        category: '카테고리',
+        state: '주/광역시',
+        managedBy: '{{provider}} 관리',
+        filtersList: {
+          schoolType: '학교 유형',
+          gender: '성별',
+          boysOnly: '남학교',
+          girlsOnly: '여학교',
+          coed: '남녀공학',
+          entryLevel: '입학 수준',
+          managedBy: '운영 주체',
+          all: '전체',
+        }
+      },
+      internships: {
+        title: '인턴십',
+        subtitle: '최고의 기업 인턴십을 통해 커리어를 시작하세요.',
+        searchPlaceholder: '직무 또는 회사 검색...',
+        filters: '필터',
+        noResults: '인턴십을 찾을 수 없습니다',
+        applyBy: '지원 마감: {{date}}',
+        filtersList: {
+          fullTime: '풀타임',
+          partTime: '파트타임',
+          remote: '원격 근무',
+        }
+      },
+    }
+  },
+  vi: {
+    translation: {
+      nav: {
+        home: 'Trang chủ',
+        scholarships: 'Học bổng',
+        boardingschools: 'Trường nội trú',
+        internationalschools: 'Trường quốc tế',
+        internships: 'Thực tập',
+        pricing: 'Bảng giá',
+        features: 'Tính năng',
+        about: 'Giới thiệu',
+        signIn: 'Đăng nhập',
+        getStarted: 'Bắt đầu',
+      },
+      hero: {
+        badge: 'Khám phá hành trình giáo dục toàn cầu của bạn',
+        titlePart1: 'Tìm kiếm ',
+        titlePart2: 'học bổng hoàn hảo',
+        subtitle: 'Kết nối với hàng ngàn học bổng, trường nội trú, trường quốc tế và thực tập tại Đông Nam Á và hơn thế nữa. Tương lai của bạn bắt đầu từ đây.',
+        browseBtn: 'Xem học bổng',
+        learnMoreBtn: 'Tìm hiểu thêm',
+        trustedBy: 'Được tin tưởng bởi hơn 5.000 sinh viên',
+        available: 'Hơn 10.000 học bổng có sẵn',
+        countriesCount: 'Hơn 50 quốc gia',
+      },
+      home: {
+        stats: {
+          scholarships: { label: 'Học bổng hiện có', desc: 'Cơ hội đa dạng trong mọi lĩnh vực' },
+          countries: { label: 'Quốc gia', desc: 'Phạm vi toàn cầu tại Đông Nam Á và thế giới' },
+          students: { label: 'Sinh viên đã hỗ trợ', desc: 'Câu chuyện thành công từ cộng đồng của chúng tôi' },
+          awarded: { label: 'Học bổng đã trao', desc: 'Tổng giá trị được kết nối qua nền tảng' },
+        },
+        howItWorks: {
+          title: 'Pathfindr hoạt động như thế nào',
+          subtitle: 'Hành trình đến với giáo dục toàn cầu bắt đầu từ đây. Các bước đơn giản để tìm và đạt được học bổng hoàn hảo.',
+          steps: {
+            step1: { title: 'Tạo hồ sơ', desc: 'Đăng ký và cho chúng tôi biết về nền tảng học vấn, sở thích và mục tiêu của bạn.' },
+            step2: { title: 'Khám phá cơ hội', desc: 'Duyệt qua hàng ngàn học bổng bằng bộ lọc thông minh.' },
+            step3: { title: 'Ứng tuyển tự tin', desc: 'Theo dõi hồ sơ, quản lý thời hạn và tiếp cận các nguồn tài liệu hữu ích.' },
+            step4: { title: 'Đạt được ước mơ', desc: 'Giành học bổng và bắt đầu hành trình giáo dục của bạn.' },
+          }
+        },
+        features: {
+          title: 'Mọi thứ bạn cần để thành công',
+          subtitle: 'Pathfindr cung cấp các công cụ và nguồn lực mạnh mẽ để giúp bạn khám phá và giành được cơ hội học bổng hoàn hảo.',
+          list: {
+            smartSearch: { title: 'Tìm kiếm thông minh', desc: 'Bộ lọc nâng cao để tìm học bổng phù hợp với hồ sơ của bạn.' },
+            personalized: { title: 'Ghép đôi cá nhân hóa', desc: 'Đề xuất dựa trên AI dựa trên mục tiêu của bạn.' },
+            global: { title: 'Cơ hội toàn cầu', desc: 'Tiếp cận học bổng từ hơn 50 quốc gia.' },
+            verified: { title: 'Danh sách đã xác minh', desc: 'Tất cả học bổng đều được xác minh độ chính xác.' },
+            tracking: { title: 'Theo dõi ứng tuyển', desc: 'Theo dõi các đơn ứng tuyển của bạn trong một trang điều khiển.' },
+            secure: { title: 'An toàn & Riêng tư', desc: 'Thông tin cá nhân của bạn được bảo vệ.' },
+          },
+          detailed: [
+            {
+              title: 'Tìm kiếm & Bộ lọc nâng cao',
+              description: 'Tìm chính xác những gì bạn đang tìm kiếm với khả năng tìm kiếm mạnh mẽ và bộ lọc thông minh.',
+              benefits: ['Lọc đa tiêu chí', 'Kết quả tìm kiếm tức thì', 'Lưu tùy chọn tìm kiếm'],
+            },
+            {
+              title: 'Ghép đôi bằng AI',
+              description: 'Thuật toán ghép đôi thông minh của chúng tôi phân tích hồ sơ của bạn để đề xuất các cơ hội có xác suất thành công cao nhất.',
+              benefits: ['Đề xuất cá nhân hóa', 'Điểm phù hợp cho mỗi học bổng', 'Xếp hạng ưu tiên thông minh'],
+            },
+            {
+              title: 'Thông báo thời gian thực',
+              description: 'Không bao giờ bỏ lỡ thời hạn. Nhận thông báo tức thì cho các học bổng mới phù hợp với hồ sơ của bạn.',
+              benefits: ['Tùy chỉnh thông báo', 'Nhắc nhở thời hạn', 'Cảnh báo thay đổi trạng thái'],
+            },
+          ]
+        },
+        featured: {
+          title: 'Học bổng nổi bật',
+          subtitle: 'Khám phá các cơ hội học bổng hàng đầu hiện đang nhận đơn đăng ký.',
+          viewAll: 'Xem tất cả học bổng',
+        },
+        testimonials: {
+          title: 'Câu chuyện thành công từ sinh viên',
+          subtitle: 'Tham gia cùng hàng ngàn sinh viên đã tìm thấy học bổng hoàn hảo thông qua Pathfindr.',
+          list: [
+            {
+              quote: "Pathfindr đã giúp việc tìm kiếm học bổng phù hợp trở nên dễ dàng hơn nhiều. Tính năng ghép đôi cá nhân hóa đã kết nối tôi với những cơ hội mà tôi thậm chí không biết là có tồn tại. Hiện tôi đang học Khoa học Máy tính tại NUS!",
+              university: 'Đại học Quốc gia Singapore',
+              country: 'Singapore',
+            },
+            {
+              quote: "Tôi đã bị choáng ngợp bởi số lượng học bổng hiện có cho đến khi tìm thấy Pathfindr. Bộ lọc thông minh và tính năng theo dõi thời hạn của nền tảng đã giúp tôi luôn ngăn nắp và cuối cùng giành được học bổng toàn phần để học Kỹ thuật.",
+              university: 'Đại học Melbourne',
+              country: 'Australia',
+            },
+            {
+              quote: "Là một sinh viên đại học thế hệ đầu tiên, việc ứng tuyển học bổng rất đáng sợ. Danh sách đã được xác minh và tính năng theo dõi ứng tuyển của Pathfindr đã cho tôi sự tự tin để theo đuổi ước mơ. Hiện tôi đang học Y khoa!",
+              university: 'Đại học Chulalongkorn',
+              country: 'Thái Lan',
+            },
+          ]
+        },
+        cta: {
+          title: 'Sẵn sàng bắt đầu hành trình của bạn?',
+          subtitle: 'Tạo hồ sơ của bạn ngay hôm nay và mở khóa quyền truy cập vào hàng ngàn cơ hội. Tham gia cộng đồng sinh viên thành công của chúng tôi.',
+          createAccount: 'Tạo tài khoản miễn phí',
+          browseScholarships: 'Xem học bổng',
+        }
+      },
+      pricing: {
+        title: 'Chọn gói của bạn',
+        subtitle: 'Đăng ký để bắt đầu ứng tuyển học bổng. Chọn gói phù hợp với nhu cầu của bạn và mở lối tới những cơ hội giáo dục.',
+        mostPopular: 'Phổ biến nhất',
+        currentPlan: 'Gói hiện tại',
+        getStarted: 'Chọn {{name}}',
+        appsPerYear: '{{count}} đơn ứng tuyển mỗi năm',
+        whatsIncluded: 'Bao gồm:',
+        tiers: {
+          pro: {
+            name: 'Pro',
+            features: [
+              'Ứng tuyển 5 học bổng mỗi năm',
+              'Thông tin chi tiết & điều kiện đầy đủ',
+              'Trang điều khiển ứng tuyển',
+              'Thông báo thời hạn qua email',
+            ]
+          },
+          expert: {
+            name: 'Expert',
+            features: [
+              'Ứng tuyển 20 học bổng mỗi năm',
+              'Thông tin chi tiết & điều kiện đầy đủ',
+              'Trang điều khiển ứng tuyển',
+              'Thông báo thời hạn qua email',
+              'Hỗ trợ ưu tiên',
+              'Đề xuất học bổng cá nhân hóa',
+            ]
+          }
+        },
+        faq: {
+          title: 'Câu hỏi thường gặp',
+          q1: {
+            q: 'Điều gì được tính là một đơn ứng tuyển?',
+            a: 'Mỗi khi bạn nhấp vào "Ứng tuyển ngay" trên một học bổng và được chuyển hướng đến trang ứng tuyển của nhà cung cấp, đó được tính là một lần ứng tuyển.'
+          },
+          q2: {
+            q: 'Khi nào giới hạn ứng tuyển của tôi được đặt lại?',
+            a: 'Số lượng ứng tuyển của bạn sẽ được đặt lại hàng năm khi gói đăng ký của bạn được gia hạn.'
+          },
+          q3: {
+            q: 'Tôi có thể nâng cấp gói của mình không?',
+            a: 'Có! Bạn có thể nâng cấp từ Pro lên Expert bất cứ lúc nào. Chênh lệch giá sẽ được tính theo tỷ lệ cho phần còn lại của chu kỳ thanh toán.'
+          },
+          q4: {
+            q: 'Tôi có thể hủy bất cứ lúc nào không?',
+            a: 'Chắc chắn rồi. Bạn có thể hủy gói đăng ký bất cứ lúc nào từ phần cài đặt tài khoản.'
+          }
+        }
+      },
+      footer: {
+        description: 'Con đường dẫn đến các cơ hội giáo dục toàn cầu. Kết nối với học bổng, trường nội trú, trường quốc tế và thực tập khắp Đông Nam Á và thế giới.',
+        platform: 'Nền tảng',
+        resources: 'Tài nguyên',
+        connect: 'Kết nối',
+        links: {
+          universities: 'Đại học',
+          internships: 'Thực tập',
+          jobs: 'Việc làm',
+          knowledgeBase: 'Trung tâm kiến thức',
+          privacyPolicy: 'Chính sách bảo mật',
+          termsOfService: 'Điều khoản dịch vụ',
+        },
+        allRightsReserved: 'All rights reserved.',
+      },
+      internationalSchools: {
+        title: 'Trường quốc tế',
+        subtitle: 'Khám phá các trường quốc tế hàng đầu. So sánh chương trình học, học phí và tìm ngôi trường hoàn hảo cho hành trình giáo dục của bạn.',
+        schoolsCount: '{{count}} trường',
+        search: {
+          placeholder: 'Tìm trường theo tên...',
+        },
+        sort: {
+          label: 'Sắp xếp theo:',
+          name: 'Tên',
+          country: 'Quốc gia',
+          city: 'Thành phố',
+        },
+        results: {
+          school: 'Tìm thấy {{count}} trường',
+          schools: 'Tìm thấy {{count}} trường',
+        },
+        empty: {
+          title: 'Không tìm thấy trường nào',
+          description: "Chúng tôi không tìm thấy trường nào phù hợp với tiêu chí của bạn. Hãy thử điều chỉnh bộ lọc.",
+          clearAll: 'Xóa tất cả bộ lọc',
+        },
+        filters: {
+          title: 'Bộ lọc',
+          clearAll: 'Xóa tất cả',
+          country: 'Quốc gia',
+          curriculum: 'Chương trình học',
+        },
+        location: {
+          title: 'Vị trí của bạn',
+          locating: 'Đang xác định vị trí...',
+          useCurrent: 'Sử dụng vị trí hiện tại',
+          or: 'hoặc',
+          selectCity: 'Chọn thành phố',
+          distance: 'Khoảng cách',
+        },
+        card: {
+          fees: 'Học phí:',
+          visitWebsite: 'Truy cập website',
+        },
+        pagination: {
+          previous: 'Trang trước',
+          next: 'Trang sau',
+        },
+      },
+      scholarships: {
+        title: 'Tìm học bổng của bạn',
+        subtitle: 'Duyệt qua hàng ngàn học bổng từ khắp nơi trên thế giới. Sử dụng bộ lọc nâng cao để tìm cơ hội phù hợp với hồ sơ của bạn.',
+        searchPlaceholder: 'Tìm học bổng theo tên, nhà cung cấp...',
+        sortBy: 'Sắp xếp theo:',
+        sort: {
+          relevant: 'Phù hợp nhất',
+          deadline: 'Thời hạn',
+          value: 'Giá trị',
+          recent: 'Mới nhất',
+        },
+        filters: 'Bộ lọc',
+        showResults: 'Hiển thị {{count}} kết quả',
+        previous: 'Trang trước',
+        next: 'Trang sau',
+        noResults: 'Không tìm thấy học bổng nào',
+        clearFilters: 'Xóa tất cả bộ lọc',
+        viewDetails: 'Xem chi tiết',
+        notifyMe: 'Thông báo cho tôi',
+        filtersList: {
+          title: 'Bộ lọc',
+          clearAll: 'Xóa tất cả',
+          countries: 'Quốc gia',
+          fieldsOfStudy: 'Lĩnh vực học tập',
+          providerType: 'Loại nhà cung cấp',
+          scholarshipValue: 'Giá trị học bổng',
+          minValue: 'Giá trị tối thiểu (USD)',
+          maxValue: 'Giá trị tối đa (USD)',
+          deadline: 'Hạn nộp hồ sơ',
+          anyTime: 'Bất cứ lúc nào',
+        }
+      },
+      boardingSchools: {
+        title: 'Trường nội trú',
+        subtitle: 'Khám phá những trường nội trú tốt nhất tại Đông Nam Á.',
+        searchPlaceholder: 'Tìm trường theo tên...',
+        filters: 'Bộ lọc',
+        noResults: 'Không tìm thấy trường nào',
+        category: 'Danh mục',
+        state: 'Bang/Tỉnh',
+        managedBy: 'Quản lý bởi {{provider}}',
+        filtersList: {
+          schoolType: 'Loại trường',
+          gender: 'Giới tính',
+          boysOnly: 'Chỉ nam',
+          girlsOnly: 'Chỉ nữ',
+          coed: 'Nam nữ chung',
+          entryLevel: 'Cấp bậc nhập học',
+          managedBy: 'Đơn vị quản lý',
+          all: 'Tất cả',
+        }
+      },
+      internships: {
+        title: 'Thực tập',
+        subtitle: 'Tìm bước tiến sự nghiệp tiếp theo với các kỳ thực tập tại các công ty hàng đầu.',
+        searchPlaceholder: 'Tìm vị trí hoặc công ty...',
+        filters: 'Bộ lọc',
+        noResults: 'Không tìm thấy kỳ thực tập nào',
+        applyBy: 'Hạn ứng tuyển {{date}}',
+        filtersList: {
+          fullTime: 'Toàn thời gian',
+          partTime: 'Bán thời gian',
+          remote: 'Làm việc từ xa',
+        }
+      },
+    }
+  },
+  id: {
+    translation: {
+      nav: {
+        home: 'Beranda',
+        scholarships: 'Beasiswa',
+        boardingschools: 'Sekolah Berasrama',
+        internationalschools: 'Sekolah Internasional',
+        internships: 'Magang',
+        pricing: 'Harga',
+        features: 'Fitur',
+        about: 'Tentang Kami',
+        signIn: 'Masuk',
+        getStarted: 'Mulai',
+      },
+      hero: {
+        badge: 'Temukan perjalanan pendidikan global Anda',
+        titlePart1: 'Temukan ',
+        titlePart2: 'beasiswa sempurna Anda',
+        subtitle: 'Terhubung dengan ribuan beasiswa, sekolah berasrama, sekolah internasional, dan magang di Asia Tenggara dan sekitarnya. Masa depan Anda dimulai di sini.',
+        browseBtn: 'Lihat Beasiswa',
+        learnMoreBtn: 'Pelajari Lebih Lanjut',
+        trustedBy: 'Dipercaya oleh 5.000+ pelajar',
+        available: '10.000+ beasiswa tersedia',
+        countriesCount: '50+ negara',
+      },
+      home: {
+        stats: {
+          scholarships: { label: 'Beasiswa Tersedia', desc: 'Beragam peluang di semua bidang' },
+          countries: { label: 'Negara', desc: 'Jangkauan global di Asia Tenggara dan seiyanya' },
+          students: { label: 'Pelajar Terbantu', desc: 'Kisah sukses dari komunitas kami' },
+          awarded: { label: 'Beasiswa Terfasilitasi', desc: 'Total nilai yang disalurkan melalui platform kami' },
+        },
+        howItWorks: {
+          title: 'Cara Kerja Pathfindr',
+          subtitle: 'Perjalanan Anda menuju pendidikan global dimulai di sini. Ikuti langkah mudah ini untuk menemukan beasiswa impian.',
+          steps: {
+            step1: { title: 'Buat Profil', desc: 'Daftar dan beri tahu kami tentang latar belakang akademik, minat, dan tujuan Anda.' },
+            step2: { title: 'Temukan Peluang', desc: 'Cari ribuan beasiswa menggunakan filter cerdas kami.' },
+            step3: { title: 'Daftar dengan Percaya Diri', desc: 'Pantau aplikasi Anda, kelola tenggat waktu, dan akses sumber daya bermanfaat.' },
+            step4: { title: 'Raih Impian Anda', desc: 'Dapatkan beasiswa dan mulai perjalanan pendidikan Anda.' },
+          }
+        },
+        features: {
+          title: 'Semua yang Anda Butuhkan untuk Sukses',
+          subtitle: 'Pathfindr menyediakan alat dan sumber daya yang kuat untuk membantu Anda menemukan dan mengamankan peluang beasiswa yang sempurna.',
+          list: {
+            smartSearch: { title: 'Pencarian Cerdas', desc: 'Filter canggih untuk menemukan beasiswa yang sesuai dengan profil Anda.' },
+            personalized: { title: 'Pencocokan Personalisasi', desc: 'Rekomendasi bertenaga AI berdasarkan tujuan Anda.' },
+            global: { title: 'Peluang Global', desc: 'Akses beasiswa dari 50+ negara.' },
+            verified: { title: 'Daftar Terverifikasi', desc: 'Semua beasiswa diverifikasi untuk akurasi.' },
+            tracking: { title: 'Pelacakan Aplikasi', desc: 'Pantau aplikasi Anda dalam satu dasbor.' },
+            secure: { title: 'Aman & Pribadi', desc: 'Informasi pribadi Anda terlindungi.' },
+          },
+          detailed: [
+            {
+              title: 'Pencarian & Filter Canggih',
+              description: 'Temukan apa yang Anda cari dengan kemampuan pencarian yang kuat dan filter cerdas.',
+              benefits: ['Pemfilteran multi-kriteria', 'Hasil pencarian instan', 'Simpan preferensi pencarian'],
+            },
+            {
+              title: 'Pencocokan Bertenaga AI',
+              description: 'Algoritma pencocokan cerdas kami menganalisis profil Anda untuk merekomendasikan peluang dengan probabilitas keberhasilan tertinggi.',
+              benefits: ['Rekomendasi personal', 'Skor cocok untuk setiap beasiswa', 'Peringkat prioritas cerdas'],
+            },
+            {
+              title: 'Notifikasi Real-Time',
+              description: 'Jangan pernah melewatkan tenggat waktu. Dapatkan notifikasi instan untuk beasiswa baru yang sesuai dengan profil Anda.',
+              benefits: ['Preferensi yang dapat disesuaikan', 'Pengingat tenggat waktu', 'Peringatan perubahan status'],
+            },
+          ]
+        },
+        featured: {
+          title: 'Beasiswa Unggulan',
+          subtitle: 'Jelajahi peluang beasiswa terbaik kami yang sedang menerima aplikasi saat ini.',
+          viewAll: 'Lihat Semua Beasiswa',
+        },
+        testimonials: {
+          title: 'Kisah Sukses dari Pelajar Kami',
+          subtitle: 'Bergabunglah dengan ribuan pelajar yang telah menemukan beasiswa sempurna mereka melalui Pathfindr.',
+          list: [
+            {
+              quote: "Pathfindr membuat pencarian beasiswa yang tepat menjadi jauh lebih mudah. Fitur pencocokan personal menghubungkan saya dengan peluang yang bahkan tidak saya ketahui sebelumnya. Sekarang saya belajar Ilmu Komputer di NUS!",
+              university: 'National University of Singapore',
+              country: 'Singapura',
+            },
+            {
+              quote: "Saya sempat merasa kewalahan dengan banyaknya beasiswa yang tersedia sampai saya menemukan Pathfindr. Filter cerdas dan pelacakan tenggat waktu membantu saya tetap teratur dan akhirnya memenangkan beasiswa penuh untuk belajar Teknik.",
+              university: 'University of Melbourne',
+              country: 'Australia',
+            },
+            {
+              quote: "Sebagai mahasiswa generasi pertama, menavigasi aplikasi beasiswa sangatlah menakutkan. Daftar terverifikasi dan pelacakan aplikasi Pathfindr memberi saya kepercayaan diri. Sekarang saya belajar Kedokteran!",
+              university: 'Chulalongkorn University',
+              country: 'Thailand',
+            },
+          ]
+        },
+        cta: {
+          title: 'Siap untuk memulai perjalanan Anda?',
+          subtitle: 'Buat profil Anda hari ini dan buka akses ke ribuan peluang. Bergabunglah dengan komunitas pelajar sukses kami.',
+          createAccount: 'Buat Akun Gratis',
+          browseScholarships: 'Lihat Beasiswa',
+        }
+      },
+      pricing: {
+        title: 'Pilih Paket Anda',
+        subtitle: 'Berlangganan untuk mulai melamar beasiswa. Pilih paket yang sesuai dengan kebutuhan Anda dan buka jalan menuju peluang pendidikan.',
+        mostPopular: 'Paling Populer',
+        currentPlan: 'Paket Saat Ini',
+        getStarted: 'Pilih {{name}}',
+        appsPerYear: '{{count}} lamaran beasiswa per tahun',
+        whatsIncluded: 'Apa yang termasuk:',
+        tiers: {
+          pro: {
+            name: 'Pro',
+            features: [
+              'Lamar ke 5 beasiswa per tahun',
+              'Detail lengkap & kelayakan beasiswa',
+              'Dasbor pelacakan aplikasi',
+              'Notifikasi tenggat waktu via email',
+            ]
+          },
+          expert: {
+            name: 'Expert',
+            features: [
+              'Lamar ke 20 beasiswa per tahun',
+              'Detail lengkap & kelayakan beasiswa',
+              'Dasbor pelacakan aplikasi',
+              'Notifikasi tenggat waktu via email',
+              'Dukungan prioritas',
+              'Rekomendasi beasiswa personal',
+            ]
+          }
+        },
+        faq: {
+          title: 'Pertanyaan yang Sering Diajukan',
+          q1: {
+            q: 'Apa yang dihitung sebagai satu lamaran?',
+            a: 'Setiap kali Anda menekan "Lamar Sekarang" pada suatu beasiswa dan diarahkan ke halaman aplikasi penyedia beasiswa, itu dihitung sebagai satu lamaran.'
+          },
+          q2: {
+            q: 'Kapan batas lamaran saya direset?',
+            a: 'Jumlah lamaran Anda direset setiap tahun saat langganan Anda diperbarui.'
+          },
+          q3: {
+            q: 'Dapatkah saya upgrade paket saya?',
+            a: 'Ya! Anda dapat upgrade dari Pro ke Expert kapan saja. Selisih harga akan dihitung secara prorata untuk sisa periode penagihan Anda.'
+          },
+          q4: {
+            q: 'Dapatkah saya membatalkan kapan saja?',
+            a: 'Tentu saja. Anda dapat membatalkan langganan kapan saja melalui pengaturan akun Anda.'
+          }
+        }
+      },
+      footer: {
+        description: 'Jalan Anda menuju peluang pendidikan global. Terhubung dengan beasiswa, sekolah berasrama, sekolah internasional, dan magang di seluruh Asia Tenggara dan sekitarnya.',
+        platform: 'Platform',
+        resources: 'Sumber Daya',
+        connect: 'Hubungi Kami',
+        links: {
+          universities: 'Universitas',
+          internships: 'Magang',
+          jobs: 'Pekerjaan',
+          knowledgeBase: 'Pusat Pengetahuan',
+          privacyPolicy: 'Kebijakan Privasi',
+          termsOfService: 'Syarat dan Ketentuan',
+        },
+        allRightsReserved: 'All rights reserved.',
+      },
+      internationalSchools: {
+        title: 'Sekolah Internasional',
+        subtitle: 'Jelajahi sekolah internasional terbaik. Bandingkan kurikulum, biaya, dan temukan sekolah yang sempurna untuk perjalanan pendidikan Anda.',
+        schoolsCount: '{{count}} sekolah',
+        search: {
+          placeholder: 'Cari sekolah berdasarkan nama...',
+        },
+        sort: {
+          label: 'Urutkan berdasarkan:',
+          name: 'Nama',
+          country: 'Negara',
+          city: 'Kota',
+        },
+        results: {
+          school: '{{count}} sekolah ditemukan',
+          schools: '{{count}} sekolah ditemukan',
+        },
+        empty: {
+          title: 'Sekolah tidak ditemukan',
+          description: "Kami tidak dapat menemukan sekolah yang cocok dengan kriteria Anda. Coba sesuaikan filter Anda.",
+          clearAll: 'Hapus Semua Filter',
+        },
+        filters: {
+          title: 'Filter',
+          clearAll: 'Hapus semua',
+          country: 'Negara',
+          curriculum: 'Kurikulum',
+        },
+        location: {
+          title: 'Lokasi Anda',
+          locating: 'Mencari lokasi...',
+          useCurrent: 'Gunakan Lokasi Saya',
+          or: 'atau',
+          selectCity: 'Pilih Kota',
+          distance: 'Jarak',
+        },
+        card: {
+          fees: 'Biaya:',
+          visitWebsite: 'Kunjungi Situs Web',
+        },
+        pagination: {
+          previous: 'Sebelumnya',
+          next: 'Berikutnya',
+        },
+      },
+      scholarships: {
+        title: 'Cari Beasiswa Anda',
+        subtitle: 'Jelajahi ribuan beasiswa dari seluruh dunia. Gunakan filter canggih kami untuk menemukan peluang yang sesuai dengan profil Anda.',
+        searchPlaceholder: 'Cari beasiswa berdasarkan nama, penyedia...',
+        sortBy: 'Urutkan berdasarkan:',
+        sort: {
+          relevant: 'Relevan',
+          deadline: 'Tenggat Waktu',
+          value: 'Nilai',
+          recent: 'Terbaru',
+        },
+        filters: 'Filter',
+        showResults: 'Tampilkan {{count}} Hasil',
+        previous: 'Sebelumnya',
+        next: 'Berikutnya',
+        noResults: 'Beasiswa tidak ditemukan',
+        clearFilters: 'Hapus Semua Filter',
+        viewDetails: 'Lihat Detail',
+        notifyMe: 'Beri Tahu Saya',
+        filtersList: {
+          title: 'Filter',
+          clearAll: 'Hapus Semua',
+          countries: 'Negara',
+          fieldsOfStudy: 'Bidang Studi',
+          providerType: 'Tipe Penyedia',
+          scholarshipValue: 'Nilai Beasiswa',
+          minValue: 'Nilai Minimum (USD)',
+          maxValue: 'Nilai Maksimum (USD)',
+          deadline: 'Tenggat Aplikasi',
+          anyTime: 'Kapan saja',
+        }
+      },
+      boardingSchools: {
+        title: 'Sekolah Berasrama',
+        subtitle: 'Temukan sekolah berasrama terbaik di Asia Tenggara.',
+        searchPlaceholder: 'Cari sekolah berdasarkan nama...',
+        filters: 'Filter',
+        noResults: 'Sekolah tidak ditemukan',
+        category: 'Kategori',
+        state: 'Negara Bagian/Provinsi',
+        managedBy: 'Dikelola oleh {{provider}}',
+        filtersList: {
+          schoolType: 'Tipe Sekolah',
+          gender: 'Jenis Kelamin',
+          boysOnly: 'Hanya laki-laki',
+          girlsOnly: 'Hanya perempuan',
+          coed: 'Campuran',
+          entryLevel: 'Tingkat masuk',
+          managedBy: 'Dikelola oleh',
+          all: 'Semua',
+        }
+      },
+      internships: {
+        title: 'Magang',
+        subtitle: 'Temukan langkah karier Anda selanjutnya dengan magang di perusahaan terkemuka.',
+        searchPlaceholder: 'Cari peran atau perusahaan...',
+        filters: 'Filter',
+        noResults: 'Magang tidak ditemukan',
+        applyBy: 'Lamar sebelum {{date}}',
+        filtersList: {
+          fullTime: 'Penuh waktu',
+          partTime: 'Paruh waktu',
+          remote: 'Remote',
+        }
+      },
+    }
   },
 };
 

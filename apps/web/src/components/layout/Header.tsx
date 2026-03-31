@@ -144,7 +144,14 @@ export function Header() {
                   {[
                     { code: 'en', label: 'English' },
                     { code: 'ms', label: 'Bahasa' },
-                    { code: 'zh', label: '中文' }
+                    { code: 'zh', label: '中文' },
+                    { code: 'es', label: 'Español' },
+                    { code: 'pt', label: 'Português' },
+                    { code: 'de', label: 'Deutsch' },
+                    { code: 'ja', label: '日本語' },
+                    { code: 'ko', label: '한국어' },
+                    { code: 'vi', label: 'Tiếng Việt' },
+                    { code: 'id', label: 'Bahasa Indonesia' }
                   ].map((lng) => (
                     <button
                       key={lng.code}
@@ -315,6 +322,13 @@ export function Header() {
                       <option value="en">English (EN)</option>
                       <option value="ms">Bahasa Melayu (BM)</option>
                       <option value="zh">中文 (ZH)</option>
+                      <option value="es">Español (ES)</option>
+                      <option value="pt">Português (PT)</option>
+                      <option value="de">Deutsch (DE)</option>
+                      <option value="ja">日本語 (JA)</option>
+                      <option value="ko">한국어 (KO)</option>
+                      <option value="vi">Tiếng Việt (VI)</option>
+                      <option value="id">Bahasa Indonesia (ID)</option>
                     </select>
                     <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                     <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
