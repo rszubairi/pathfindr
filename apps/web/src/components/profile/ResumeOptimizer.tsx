@@ -182,62 +182,69 @@ export function ResumeOptimizer({ profile, user }: ResumeOptimizerProps) {
 function calculateScore(profile: any, user: any) {
   let score = 0;
   const suggestions: string[] = [];
+  const safeProfile = profile || { education: [], projects: [], skills: [], certificates: [], extracurriculars: [] };
 
   // 1. Basic Info (10 points)
   if (user.fullName) score += 3;
   if (user.email) score += 3;
-  if (profile.phone) score += 2; else suggestions.push('phone');
-  if (profile.country || profile.nationality) score += 2;
+  if (safeProfile.phone) score += 2; else suggestions.push('phone');
+  if (safeProfile.country || safeProfile.nationality) score += 2;
 
-  // 2. Education (25 points)
-  if (profile.education && profile.education.length > 0) {
+  // 2. Education (25 points) - More granular based on levels
+  if (safeProfile.education && safeProfile.education.length > 0) {
+    const quals = safeProfile.education.map((e: any) => e.qualificationTitle?.toLowerCase() || '');
+    const isUni = quals.some((q: string) => q.includes('bachelor') || q.includes('master') || q.includes('phd') || q.includes('mba') || q.includes('university'));
+    const isCollege = quals.some((q: string) => q.includes('associate') || q.includes('diploma') || q.includes('college'));
+    const isSchool = quals.some((q: string) => q.includes('high school') || q.includes('secondary') || q.includes('school'));
+
+    // Base education score
     score += 15;
-    const hasGpa = profile.education.some((edu: any) => edu.gpa !== undefined || edu.grade !== undefined);
-    if (hasGpa) score += 10;
-    else suggestions.push('gpa');
+
+    // Level-specific suggestions
+    if (isUni) {
+      // University students should have GPA
+      const hasGpa = safeProfile.education.some((edu: any) => (edu.gpa !== undefined && edu.gpa > 0) || edu.grade);
+      if (hasGpa) score += 10; else suggestions.push('gpa');
+    } else if (isCollege || isSchool) {
+      // School/College students should have subject scores or GPA
+      const hasAcademicResults = (safeProfile.subjectScores && safeProfile.subjectScores.length > 0) || 
+                                 safeProfile.education.some((edu: any) => edu.gpa || edu.grade);
+      if (hasAcademicResults) score += 10; else suggestions.push('subjectScores');
+    }
   } else {
     suggestions.push('education');
   }
 
   // 3. Skills (20 points)
-  if (profile.skills && profile.skills.length > 0) {
-    if (profile.skills.length >= 8) score += 20;
-    else if (profile.skills.length >= 5) score += 15;
+  if (safeProfile.skills && safeProfile.skills.length > 0) {
+    if (safeProfile.skills.length >= 8) score += 20;
+    else if (safeProfile.skills.length >= 5) score += 15;
     else score += 10;
-    if (profile.skills.length < 8) suggestions.push('skills');
+    if (safeProfile.skills.length < 8) suggestions.push('skills');
   } else {
     suggestions.push('skillsBasic');
   }
 
-  // 4. Projects (20 points)
-  if (profile.projects && profile.projects.length > 0) {
-    score += 10;
-    const hasDetailedProjects = profile.projects.every((p: any) => p.description && p.description.length > 50);
-    if (hasDetailedProjects) score += 10;
+  // 4. Projects (15 points)
+  if (safeProfile.projects && safeProfile.projects.length > 0) {
+    score += 8;
+    const hasDetailedProjects = safeProfile.projects.every((p: any) => p.description && p.description.length > 50);
+    if (hasDetailedProjects) score += 7;
     else suggestions.push('projectDetail');
   } else {
     suggestions.push('projectDetailBasic');
   }
 
-  // 5. Credentials (15 points)
-  if (profile.certificates && profile.certificates.length > 0) score += 10;
+  // 5. Credentials & Tests (15 points)
+  if (safeProfile.certificates && safeProfile.certificates.length > 0) score += 8;
   else suggestions.push('certificates');
 
-  if (profile.testScores && Object.values(profile.testScores).some(v => v !== undefined)) score += 5;
+  if (safeProfile.testScores && Object.values(safeProfile.testScores).some(v => v !== undefined)) score += 7;
 
-  // 6. Subject Scores (10 points)
-  if (profile.subjectScores && profile.subjectScores.length > 0) {
-    const totalSubjects = profile.subjectScores.reduce((sum: number, e: any) => sum + e.subjects.length, 0);
-    if (totalSubjects >= 5) score += 10;
-    else score += 5;
-  } else {
-    suggestions.push('subjectScores');
-  }
-
-  // 7. Extracurriculars (15 points)
-  if (profile.extracurriculars && profile.extracurriculars.length > 0) {
+  // 6. Extracurriculars (15 points)
+  if (safeProfile.extracurriculars && safeProfile.extracurriculars.length > 0) {
     score += 10;
-    if (profile.extracurriculars.length >= 3) score += 5;
+    if (safeProfile.extracurriculars.length >= 3) score += 5;
     else suggestions.push('extracurricularCount');
   } else {
     suggestions.push('extracurricularBasic');
@@ -247,9 +254,9 @@ function calculateScore(profile: any, user: any) {
   score = Math.min(score, 100);
 
   let level: 'needsImprovement' | 'goodProgress' | 'professional' | 'elite' = 'needsImprovement';
-  if (score > 90) level = 'elite';
-  else if (score > 70) level = 'professional';
-  else if (score > 40) level = 'goodProgress';
+  if (score >= 90) level = 'elite';
+  else if (score >= 70) level = 'professional';
+  else if (score >= 40) level = 'goodProgress';
 
   return { score, suggestions: suggestions.slice(0, 3), level };
 }
@@ -322,8 +329,20 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
   const getSectionProgress = (section: string) => {
     if (!profile) return 0;
     switch (section) {
-      case 'education':
-        return safeProfile.education?.length > 0 ? (safeProfile.education.some((e: any) => e.gpa) ? 100 : 70) : 0;
+      case 'education': {
+        if (!safeProfile.education?.length) return 0;
+        const quals = safeProfile.education.map((e: any) => e.qualificationTitle?.toLowerCase() || '');
+        const isUni = quals.some((q: string) => q.includes('bachelor') || q.includes('master') || q.includes('phd') || q.includes('mba') || q.includes('university'));
+        const isCollege = quals.some((q: string) => q.includes('associate') || q.includes('diploma') || q.includes('college'));
+        
+        let progress = 60; // Has entries
+        const hasGpa = safeProfile.education.some((e: any) => e.gpa || e.grade);
+        if (hasGpa) progress += 20;
+        if (isUni || isCollege) progress += 20;
+        else if (safeProfile.subjectScores?.length) progress += 20;
+        
+        return Math.min(100, progress);
+      }
       case 'projects':
         return safeProfile.projects?.length > 0 ? (safeProfile.projects.every((p: any) => p.description?.length > 50) ? 100 : 50) : 0;
       case 'skills':
@@ -345,28 +364,63 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
   };
 
   return (
-    <div className="bg-white p-8 sm:p-12 border shadow-sm print:shadow-none print:border-none font-sans text-gray-900 relative" id="resume-content">
+    <div className="bg-[#faf9f6] p-8 sm:p-14 border border-gray-200/50 shadow-2xl print:shadow-none print:border-none font-sans text-gray-900 relative overflow-hidden" id="resume-content">
+      {/* Design accents */}
+      <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/5 blur-[100px] pointer-events-none rounded-full" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary-500/5 blur-[120px] pointer-events-none rounded-full" />
+      
+      {/* Decorative Retro Grid (Subtle) */}
+      <div className="absolute inset-0 opacity-[0.015] pointer-events-none no-print" 
+           style={{ backgroundImage: 'radial-gradient(#000 0.5px, transparent 0.5px)', backgroundSize: '16px 16px' }} />
+
       {/* Print Only Watermark */}
-      <div className="hidden print:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-45 opacity-[0.03] text-[100px] font-black pointer-events-none whitespace-nowrap z-0">
-        ThePathFindr
+      <div className="hidden print:block absolute top-[15%] left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-[-25deg] opacity-[0.03] text-[120px] font-black pointer-events-none whitespace-nowrap z-0 select-none">
+        PATHFINDR
       </div>
 
       {/* Header */}
-      <div className="border-b-2 border-gray-900 pb-6 mb-8 flex justify-between items-start relative z-10">
-        <div className="space-y-2">
-          <h1 className="text-4xl font-extrabold tracking-tight uppercase leading-none">
-            {user.fullName}
-          </h1>
-          <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-600">
-            <span className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5" /> {user.email}</span>
-            {safeProfile.phone && <span className="flex items-center gap-1.5"><Phone className="w-3.5 h-3.5" /> {safeProfile.phone}</span>}
-            {safeProfile.country && <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5" /> {safeProfile.country}</span>}
+      <div className="relative z-10 mb-12">
+        <div className="flex flex-col md:flex-row justify-between items-start gap-8">
+          <div className="space-y-4 max-w-2xl">
+            <h1 className="text-5xl font-black tracking-tighter uppercase leading-[0.85] text-gray-900">
+              {user.fullName}
+            </h1>
+            <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium">
+              <a href={`mailto:${user.email}`} className="flex items-center gap-2 text-gray-600 hover:text-primary-600 transition-colors">
+                <span className="p-1.5 bg-gray-100 rounded-md"><Mail className="w-3.5 h-3.5" /></span>
+                {user.email}
+              </a>
+              {safeProfile.phone && (
+                <span className="flex items-center gap-2 text-gray-600">
+                  <span className="p-1.5 bg-gray-100 rounded-md"><Phone className="w-3.5 h-3.5" /></span>
+                  {safeProfile.phone}
+                </span>
+              )}
+              {safeProfile.country && (
+                <span className="flex items-center gap-2 text-gray-600">
+                  <span className="p-1.5 bg-gray-100 rounded-md"><MapPin className="w-3.5 h-3.5" /></span>
+                  {safeProfile.country}
+                </span>
+              )}
+            </div>
+          </div>
+          <div className="relative no-print">
+            {user.profileImageUrl ? (
+              <div className="relative">
+                <div className="absolute -inset-1 bg-gradient-to-tr from-primary-500 to-secondary-500 rounded-lg blur opacity-20" />
+                <img src={user.profileImageUrl} alt="" className="relative w-24 h-24 object-cover rounded-lg border-2 border-white shadow-xl" />
+              </div>
+            ) : (
+              <div className="w-24 h-24 bg-gray-100 rounded-lg border-2 border-white shadow-inner flex items-center justify-center">
+                <User className="w-10 h-10 text-gray-300" />
+              </div>
+            )}
           </div>
         </div>
-        <div className="hidden sm:block">
-          {user.profileImageUrl && (
-            <img src={user.profileImageUrl} alt="" className="w-20 h-20 rounded shadow-inner" />
-          )}
+        <div className="h-2 w-full bg-gray-900 mt-8 rounded-full overflow-hidden flex">
+          <div className="h-full bg-primary-500 w-1/3" />
+          <div className="h-full bg-secondary-500 w-1/4" />
+          <div className="h-full bg-primary-300 flex-1" />
         </div>
       </div>
 
@@ -382,20 +436,23 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
               showProgress={showProgress}
             />
             {safeProfile.education?.length > 0 ? (
-              <div className="space-y-6">
+              <div className="space-y-8">
                 {safeProfile.education.map((edu: any, i: number) => (
-                  <div key={i} className="relative pl-4 border-l-2 border-gray-100">
-                    <h4 className="font-bold text-lg leading-tight">{edu.institutionName}</h4>
-                    <p className="text-gray-700 italic">{edu.qualificationTitle} • {edu.fieldOfStudy}</p>
-                    <div className="flex justify-between mt-1 text-sm text-gray-500 font-medium">
+                  <div key={i} className="group relative pl-6 border-l-4 border-gray-900/10 hover:border-gray-900 transition-colors">
+                    <div className="absolute -left-[5px] top-0 w-2 h-2 rounded-full bg-gray-900 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <h4 className="font-bold text-xl leading-tight text-gray-900">{edu.institutionName}</h4>
+                    <p className="text-gray-600 font-semibold mt-1">{edu.qualificationTitle} • <span className="text-primary-600">{edu.fieldOfStudy}</span></p>
+                    <div className="flex justify-between mt-2 text-xs text-gray-400 font-bold uppercase tracking-widest">
                       <span>{edu.startDate} — {edu.endDate || t('profileView.fields.present')}</span>
-                      {edu.gpa && <span>{t('profileView.fields.gpa')}: {edu.gpa}</span>}
+                      {edu.gpa && <span className="text-gray-900">{t('profileView.fields.gpa')}: {edu.gpa}</span>}
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-gray-400 italic no-print">{t('profileView.resumeOptimizer.placeholders.noEducation')}</p>
+              <p className="text-sm text-gray-400 italic no-print px-4 py-3 bg-gray-50 rounded-lg border border-dashed border-gray-200">
+                {t('profileView.resumeOptimizer.placeholders.noEducation')}
+              </p>
             )}
           </section>
 
@@ -408,23 +465,27 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
                 progress={getSectionProgress('subjectScores')}
                 showProgress={showProgress}
               />
-              <div className="space-y-5">
+              <div className="space-y-6 bg-white/40 backdrop-blur-sm p-6 rounded-2xl border border-gray-200/50 shadow-sm">
                 {safeProfile.subjectScores.map((entry: any, ei: number) => (
-                  <div key={ei}>
-                    <div className="flex items-baseline gap-2 mb-2">
-                      <h4 className="font-bold text-base">{entry.examType}</h4>
-                      {entry.year && <span className="text-xs text-gray-500 font-medium">({entry.year})</span>}
+                  <div key={ei} className="last:mb-0 mb-6 border-b border-gray-100 last:border-0 pb-6 last:pb-0">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-baseline gap-3">
+                        <h4 className="font-black text-lg tracking-tight uppercase">{entry.examType}</h4>
+                        {entry.year && <span className="text-[10px] text-gray-400 font-black tracking-widest uppercase">{entry.year}</span>}
+                      </div>
+                      <div className="h-0.5 flex-1 mx-4 bg-gray-100 no-print" />
                     </div>
                     {buildSubjectSummary(entry) && (
-                      <p className="text-sm text-gray-600 italic mb-2 leading-relaxed">
+                      <p className="text-xs text-primary-700 font-semibold mb-4 flex items-center gap-2">
+                        <TrendingUp className="w-3 h-3" />
                         {buildSubjectSummary(entry)}
                       </p>
                     )}
-                    <div className="grid grid-cols-2 gap-x-6 gap-y-1">
+                    <div className="grid grid-cols-2 gap-x-10 gap-y-2">
                       {entry.subjects.map((s: any, si: number) => (
-                        <div key={si} className="flex items-center justify-between border-b border-gray-100 py-0.5">
-                          <span className="text-sm text-gray-700">{s.subject}</span>
-                          <span className="text-sm font-bold text-gray-900 ml-2">{s.grade}</span>
+                        <div key={si} className="flex items-center justify-between border-b border-gray-100/50 py-1 transition-colors hover:border-gray-200">
+                          <span className="text-sm text-gray-600 font-medium">{s.subject}</span>
+                          <span className="text-sm font-black text-gray-900 min-w-[24px] text-right">{s.grade}</span>
                         </div>
                       ))}
                     </div>
@@ -443,15 +504,16 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
               showProgress={showProgress}
             />
             {safeProfile.projects?.length > 0 ? (
-              <div className="space-y-6">
+              <div className="space-y-8">
                 {safeProfile.projects.map((proj: any, i: number) => (
-                  <div key={i} className="relative pl-4 border-l-2 border-gray-100">
-                    <h4 className="font-bold text-lg leading-tight">{proj.title}</h4>
-                    <p className="text-sm text-gray-600 mt-1 leading-relaxed">{proj.description}</p>
+                  <div key={i} className="group relative pl-6 border-l-4 border-gray-900/10 hover:border-gray-900 transition-colors">
+                    <div className="absolute -left-[5px] top-0 w-2 h-2 rounded-full bg-gray-900 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <h4 className="font-bold text-xl leading-tight text-gray-900">{proj.title}</h4>
+                    <p className="text-sm text-gray-600 mt-2 leading-relaxed font-medium">{proj.description}</p>
                     {proj.technologies?.length > 0 && (
-                      <div className="mt-2 flex flex-wrap gap-2">
+                      <div className="mt-3 flex flex-wrap gap-2">
                         {proj.technologies.map((tech: string) => (
-                          <span key={tech} className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">
+                          <span key={tech} className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 bg-gray-900 text-white rounded">
                             {tech}
                           </span>
                         ))}
@@ -461,7 +523,9 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-gray-400 italic no-print">{t('profileView.resumeOptimizer.placeholders.noProjects')}</p>
+              <p className="text-sm text-gray-400 italic no-print px-4 py-3 bg-gray-50 rounded-lg border border-dashed border-gray-200">
+                {t('profileView.resumeOptimizer.placeholders.noProjects')}
+              </p>
             )}
           </section>
 
@@ -474,28 +538,31 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
               showProgress={showProgress}
             />
             {safeProfile.extracurriculars?.length > 0 ? (
-              <div className="space-y-6">
+              <div className="space-y-8">
                 {safeProfile.extracurriculars.map((ec: any, i: number) => (
-                  <div key={i} className="relative pl-4 border-l-2 border-gray-100">
+                  <div key={i} className="group relative pl-6 border-l-4 border-gray-900/10 hover:border-gray-900 transition-colors">
+                    <div className="absolute -left-[5px] top-0 w-2 h-2 rounded-full bg-gray-900 opacity-0 group-hover:opacity-100 transition-opacity" />
                     <div className="flex justify-between items-start">
-                      <h4 className="font-bold text-lg leading-tight">{ec.name}</h4>
-                      <span className="text-xs text-gray-500 font-medium whitespace-nowrap ml-4">
+                      <h4 className="font-bold text-xl leading-tight text-gray-900">{ec.name}</h4>
+                      <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest whitespace-nowrap ml-4">
                         {ec.startDate} — {ec.endDate || t('profileView.fields.present')}
                       </span>
                     </div>
-                    <p className="text-sm font-semibold text-primary-700 mt-0.5">{ec.role}</p>
-                    {ec.description && <p className="text-sm text-gray-600 mt-1.5 leading-relaxed">{ec.description}</p>}
+                    <p className="text-sm font-semibold text-primary-600 mt-1 uppercase tracking-tight">{ec.role}</p>
+                    {ec.description && <p className="text-sm text-gray-600 mt-2 leading-relaxed font-medium">{ec.description}</p>}
                     {ec.achievement && (
-                      <div className="mt-2 flex items-center gap-2 text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md border border-amber-100/50">
+                      <div className="mt-3 flex items-center gap-2 text-amber-700 bg-amber-50/50 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-amber-200/50 w-fit">
                         <Trophy className="w-3.5 h-3.5" />
-                        <span className="text-xs font-bold uppercase tracking-tight">{ec.achievement}</span>
+                        <span className="text-[10px] font-black uppercase tracking-widest">{ec.achievement}</span>
                       </div>
                     )}
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-gray-400 italic no-print">{t('profileView.resumeOptimizer.placeholders.noExtracurriculars')}</p>
+              <p className="text-sm text-gray-400 italic no-print px-4 py-3 bg-gray-50 rounded-lg border border-dashed border-gray-200">
+                {t('profileView.resumeOptimizer.placeholders.noExtracurriculars')}
+              </p>
             )}
           </section>
         </div>
@@ -513,7 +580,7 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
             {safeProfile.skills?.length > 0 ? (
               <div className="flex flex-wrap gap-2">
                 {safeProfile.skills.map((skill: string) => (
-                  <span key={skill} className="px-2.5 py-1 bg-gray-900 text-white text-[11px] font-bold uppercase tracking-wide">
+                  <span key={skill} className="px-3 py-1 bg-white border border-gray-200 text-gray-900 text-[10px] font-black uppercase tracking-widest shadow-sm hover:shadow-md hover:border-gray-900 transition-all">
                     {skill}
                   </span>
                 ))}
@@ -532,11 +599,12 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
               showProgress={showProgress}
             />
             {safeProfile.certificates?.length > 0 ? (
-              <div className="space-y-4">
+              <div className="space-y-5">
                 {safeProfile.certificates.map((cert: any, i: number) => (
-                  <div key={i}>
-                    <h5 className="font-bold text-sm">{cert.title}</h5>
-                    <p className="text-xs text-gray-600">{cert.issuer} • {cert.dateIssued}</p>
+                  <div key={i} className="bg-white/40 backdrop-blur-sm p-4 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+                    <h5 className="font-bold text-sm text-gray-900">{cert.title}</h5>
+                    <p className="text-[11px] text-gray-500 font-medium mt-1">{cert.issuer}</p>
+                    <p className="text-[10px] text-primary-600 font-bold uppercase tracking-widest mt-2">{cert.dateIssued}</p>
                   </div>
                 ))}
               </div>
@@ -554,13 +622,13 @@ export function ResumeContent({ profile, user, showProgress = false }: { profile
               showProgress={showProgress}
             />
             {(safeProfile.testScores && Object.values(safeProfile.testScores || {}).some(v => v !== undefined)) ? (
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3">
                 {Object.entries(safeProfile.testScores || {}).map(([key, value]) => {
                   if (value === undefined) return null;
                   return (
-                    <div key={key} className="bg-gray-50 p-2 border border-gray-100 rounded">
-                      <p className="text-[10px] text-gray-500 uppercase font-bold">{t(`profile.forms.testScores.${key}.label`, { defaultValue: key })}</p>
-                      <p className="text-lg font-black text-gray-800 leading-none mt-1">{value as any}</p>
+                    <div key={key} className="flex items-center justify-between bg-white/40 backdrop-blur-sm p-3 border border-gray-100 rounded-xl shadow-sm">
+                      <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest">{t(`profile.forms.testScores.${key}.label`, { defaultValue: key })}</p>
+                      <p className="text-lg font-black text-gray-900 leading-none">{value as any}</p>
                     </div>
                   );
                 })}
@@ -597,25 +665,29 @@ function buildSubjectSummary(entry: { examType: string; subjects: { subject: str
 function ResumeSectionTitle({ icon: Icon, title, progress, showProgress }: { icon: any, title: string, progress: number, showProgress: boolean }) {
   const { t } = useTranslation();
   return (
-    <div className="mb-5 border-b border-gray-900 pb-1.5 flex flex-col gap-1">
-      <div className="flex items-center justify-between">
+    <div className="mb-6 relative">
+      <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-3">
-          <Icon className="w-5 h-5 text-gray-900" strokeWidth={2.5} />
+          <div className="w-10 h-10 rounded-lg bg-white border border-gray-200 shadow-sm flex items-center justify-center no-print">
+            <Icon className="w-5 h-5 text-gray-900" strokeWidth={2.5} />
+          </div>
+          <Icon className="w-5 h-5 text-gray-900 hidden print:block" strokeWidth={2.5} />
           <h3 className="text-xl font-black uppercase tracking-tight text-gray-900">{title}</h3>
         </div>
         {showProgress && (
-          <div className="no-print flex items-center gap-2">
+          <div className="no-print flex items-center gap-2 px-2 py-1 bg-white/50 backdrop-blur-md rounded-full border border-gray-100 shadow-sm">
             <span className={cn(
-              "text-[10px] font-bold uppercase",
-              progress === 100 ? "text-green-600" : progress > 0 ? "text-amber-500" : "text-gray-400"
+              "text-[9px] font-black uppercase tracking-tighter px-1",
+              progress === 100 ? "text-green-600" : progress > 0 ? "text-amber-600" : "text-gray-400"
             )}>
               {t('profileView.resumeOptimizer.percentageComplete', { progress })}
             </span>
           </div>
         )}
       </div>
+      
       {showProgress && (
-        <div className="no-print w-full h-1 bg-gray-100 rounded-full overflow-hidden">
+        <div className="no-print w-full h-1.5 bg-gray-100 rounded-full overflow-hidden border border-gray-50">
           <div 
             className={cn(
               "h-full transition-all duration-1000",
@@ -625,6 +697,9 @@ function ResumeSectionTitle({ icon: Icon, title, progress, showProgress }: { ico
           />
         </div>
       )}
+      
+      {/* Decorative background for the title line in print */}
+      <div className="hidden print:block w-full h-0.5 bg-gray-900 mt-1" />
     </div>
   );
 }
