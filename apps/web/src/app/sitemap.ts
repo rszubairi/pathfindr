@@ -2,25 +2,26 @@ import { MetadataRoute } from 'next';
 
 const locales = ['en', 'ms', 'zh', 'es', 'pt', 'de', 'ja', 'ko', 'vi', 'id', 'hi'];
 
+const RANKINGS_YEARS = [2025];
+
+const rankingCountries = [
+  'united-states',
+  'united-kingdom',
+  'germany',
+  'france',
+  'spain',
+  'italy',
+  'netherlands',
+  'finland',
+  'sweden',
+  'croatia',
+  'malaysia',
+  'indonesia',
+  'pakistan',
+];
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.thepathfindr.com';
-
-  // Country slugs for university rankings
-  const rankingCountries = [
-    'united-states',
-    'united-kingdom',
-    'germany',
-    'france',
-    'spain',
-    'italy',
-    'netherlands',
-    'finland',
-    'sweden',
-    'croatia',
-    'malaysia',
-    'indonesia',
-    'pakistan',
-  ];
 
   // Core public routes
   const routes = [
@@ -34,11 +35,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/knowledge-base',
     '/login',
     '/register',
-    '/university-rankings',
   ];
 
-  // Generate localized versions of all core routes
-  const sitemapEntries = locales.flatMap((locale) =>
+  const coreEntries = locales.flatMap((locale) =>
     routes.map((route) => ({
       url: `${baseUrl}/${locale}${route}`,
       lastModified: new Date(),
@@ -47,15 +46,27 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }))
   );
 
-  // Generate localized versions of country ranking pages
-  const rankingEntries = locales.flatMap((locale) =>
-    rankingCountries.map((country) => ({
-      url: `${baseUrl}/${locale}/university-rankings/${country}`,
+  // Global rankings index per year: /en/university-rankings/2025
+  const globalRankingEntries = locales.flatMap((locale) =>
+    RANKINGS_YEARS.map((year) => ({
+      url: `${baseUrl}/${locale}/university-rankings/${year}`,
       lastModified: new Date(),
       changeFrequency: 'weekly' as const,
-      priority: 0.7,
+      priority: 0.9,
     }))
   );
 
-  return [...sitemapEntries, ...rankingEntries];
+  // Country ranking pages per year: /en/university-rankings/2025/malaysia
+  const countryRankingEntries = locales.flatMap((locale) =>
+    RANKINGS_YEARS.flatMap((year) =>
+      rankingCountries.map((country) => ({
+        url: `${baseUrl}/${locale}/university-rankings/${year}/${country}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      }))
+    )
+  );
+
+  return [...coreEntries, ...globalRankingEntries, ...countryRankingEntries];
 }

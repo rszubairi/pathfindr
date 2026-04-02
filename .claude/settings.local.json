@@ -86,7 +86,12 @@
       "WebFetch(domain:maybankfoundation.com)",
       "WebFetch(domain:ytm.tm.com.my)",
       "WebFetch(domain:penajaan.jpa.gov.my)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(mkdir -p '/Users/raheelzubairi/Documents/projects/pathfindr/apps/web/src/app/[lang]/university-rankings/2025')",
+      "Bash(mkdir -p '/Users/raheelzubairi/Documents/projects/pathfindr/apps/web/src/app/[lang]/university-rankings/2025/__TRACKED_VAR__')",
+      "Bash(mv '/Users/raheelzubairi/Documents/projects/pathfindr/apps/web/src/app/[lang]/university-rankings/__TRACKED_VAR__/page.tsx' '/Users/raheelzubairi/Documents/projects/pathfindr/apps/web/src/app/[lang]/university-rankings/2025/__TRACKED_VAR__/page.tsx')",
+      "Bash(rmdir '/Users/raheelzubairi/Documents/projects/pathfindr/apps/web/src/app/[lang]/university-rankings/__TRACKED_VAR__')",
+      "Bash(mv '/Users/raheelzubairi/Documents/projects/pathfindr/apps/web/src/app/[lang]/university-rankings/page.tsx' '/Users/raheelzubairi/Documents/projects/pathfindr/apps/web/src/app/[lang]/university-rankings/2025/page.tsx')"
     ]
   }
 }

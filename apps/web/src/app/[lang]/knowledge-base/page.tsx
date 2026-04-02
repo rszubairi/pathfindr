@@ -9,7 +9,7 @@ import { Footer } from '@/components/layout/Footer';
 import { countryMeta } from '@/data/universityRankings';
 
 const featuredArticle = {
-  slug: 'university-rankings',
+  slug: 'university-rankings/2025',
   title: "World's Top 25 Universities (QS 2025)",
   description:
     "Explore the definitive global leaderboard of higher education institutions, ranked by academic reputation, employer outcomes, and research impact. Featuring MIT, Oxford, Cambridge, Harvard and more.",
@@ -20,7 +20,7 @@ const featuredArticle = {
 };
 
 const countryArticles = countryMeta.map((c) => ({
-  slug: `university-rankings/${c.slug}`,
+  slug: `university-rankings/2025/${c.slug}`,
   title: `Top Universities in ${c.name}`,
   description: c.description,
   category: 'Country Rankings',
@@ -49,8 +49,8 @@ export default function KnowledgeBasePage() {
     return matchesCategory && matchesSearch;
   });
 
-  const featured = filtered.find((a) => a.slug === 'university-rankings');
-  const rest = filtered.filter((a) => a.slug !== 'university-rankings');
+  const featured = filtered.find((a) => a.slug === 'university-rankings/2025');
+  const rest = filtered.filter((a) => a.slug !== 'university-rankings/2025');
 
   return (
     <div className="min-h-screen bg-gray-50">

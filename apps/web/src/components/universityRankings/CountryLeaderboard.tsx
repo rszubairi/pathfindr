@@ -2,12 +2,13 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useParams, notFound } from 'next/navigation';
-import { ChevronLeft, ExternalLink, Search, BookOpen, ArrowRight } from 'lucide-react';
-import { MainLayout } from '@/components/layout/MainLayout';
+import { useParams } from 'next/navigation';
+import { ChevronLeft, ExternalLink, Search, BookOpen, ArrowRight, Calendar } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { Badge } from '@/components/ui/Badge';
 import { countryRankings, countryMeta } from '@/data/universityRankings';
+
+const RANKINGS_YEAR = 2025;
 
 const medalColors: Record<number, { bg: string; border: string; text: string; label: string; avatar: string }> = {
   1: { bg: 'bg-amber-50', border: 'border-amber-300', text: 'text-amber-600', label: '🥇', avatar: 'bg-amber-500' },
@@ -26,18 +27,19 @@ function getInitials(name: string) {
     .join('');
 }
 
-export default function CountryUniversityRankingsPage() {
+interface Props {
+  countrySlug: string;
+}
+
+export function CountryLeaderboard({ countrySlug }: Props) {
   const params = useParams();
   const lang = (params?.lang as string) ?? 'en';
-  const countrySlug = params?.country as string;
   const [search, setSearch] = useState('');
 
   const meta = countryMeta.find((c) => c.slug === countrySlug);
   const universities = countryRankings[countrySlug];
 
-  if (!meta || !universities) {
-    notFound();
-  }
+  if (!meta || !universities) return null;
 
   const top3 = universities.slice(0, Math.min(3, universities.length));
   const rest = universities.slice(3);
@@ -56,7 +58,7 @@ export default function CountryUniversityRankingsPage() {
   const otherCountries = countryMeta.filter((c) => c.slug !== countrySlug);
 
   return (
-    <MainLayout>
+    <>
       {/* Hero */}
       <div className="relative bg-gradient-to-br from-indigo-800 via-indigo-700 to-blue-600 py-14 sm:py-20 text-white overflow-hidden">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -66,7 +68,7 @@ export default function CountryUniversityRankingsPage() {
         <Container>
           <div className="relative z-10">
             <Link
-              href={`/${lang}/university-rankings`}
+              href={`/${lang}/university-rankings/2025`}
               className="inline-flex items-center gap-1.5 text-blue-200 hover:text-white text-sm mb-6 transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -75,9 +77,14 @@ export default function CountryUniversityRankingsPage() {
             <div className="flex items-center gap-4 mb-4">
               <span className="text-5xl sm:text-6xl leading-none">{meta.flag}</span>
               <div>
-                <div className="text-blue-200 text-sm font-medium mb-1 uppercase tracking-wider">QS Rankings 2025</div>
+                <div className="flex items-center gap-3 mb-1.5">
+                  <span className="inline-flex items-center gap-1.5 bg-white/10 border border-white/20 rounded-full px-3 py-1 text-xs font-semibold">
+                    <Calendar className="w-3 h-3" />
+                    QS Rankings {RANKINGS_YEAR}
+                  </span>
+                </div>
                 <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-                  Top Universities in {meta.name}
+                  Top Universities in {meta.name} {RANKINGS_YEAR}
                 </h1>
               </div>
             </div>
@@ -93,7 +100,7 @@ export default function CountryUniversityRankingsPage() {
           {[
             { label: 'Universities Listed', value: String(universities.length) },
             { label: 'Best Global Rank', value: `#${universities[0]?.globalRank}` },
-            { label: 'Source', value: 'QS 2025' },
+            { label: 'Rankings Year', value: String(RANKINGS_YEAR) },
           ].map((stat) => (
             <div key={stat.label} className="bg-white rounded-2xl border border-gray-200 p-4 text-center shadow-sm">
               <div className="text-2xl font-extrabold text-indigo-700">{stat.value}</div>
@@ -165,10 +172,15 @@ export default function CountryUniversityRankingsPage() {
 
         {/* Leaderboard list */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mb-12">
-          <div className="px-5 py-4 border-b border-gray-100">
+          <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
             <h2 className="font-semibold text-gray-800 text-sm">
               {search ? `Results for "${search}"` : `Ranks 4–${universities.length}`}
             </h2>
+            {!search && (
+              <span className="text-xs text-gray-400 flex items-center gap-1">
+                <Calendar className="w-3 h-3" /> {RANKINGS_YEAR}
+              </span>
+            )}
           </div>
 
           {(search ? [...filteredTop3, ...filteredRest] : filteredRest).map((u, idx) => (
@@ -176,47 +188,34 @@ export default function CountryUniversityRankingsPage() {
               key={u.rank}
               className={`flex items-center gap-4 px-5 py-3.5 hover:bg-gray-50 transition-colors ${idx !== 0 ? 'border-t border-gray-100' : ''}`}
             >
-              {/* Country rank */}
               <div className="w-8 shrink-0 text-center">
                 <span className="text-sm font-bold text-gray-400">#{u.rank}</span>
               </div>
-
-              {/* Avatar */}
               <div className="w-9 h-9 shrink-0 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs font-bold">
                 {getInitials(u.name)}
               </div>
-
-              {/* Name + city */}
               <div className="flex-1 min-w-0">
                 <div className="font-medium text-gray-900 text-sm truncate">{u.name}</div>
                 <div className="text-xs text-gray-400 truncate">{u.city}</div>
               </div>
-
-              {/* Global rank */}
               <div className="hidden sm:block shrink-0">
                 <Badge variant="outline" size="sm">Global #{u.globalRank}</Badge>
               </div>
-
-              {/* Type */}
               <div className="hidden md:block shrink-0">
                 <Badge variant={u.type === 'Public' ? 'primary' : 'secondary'} size="sm">{u.type}</Badge>
               </div>
-
-              {/* Score bar */}
               <div className="hidden lg:flex items-center gap-2 shrink-0">
                 <div className="w-20 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                   <div className="h-full bg-indigo-500 rounded-full" style={{ width: `${u.score}%` }} />
                 </div>
                 <span className="text-xs font-semibold text-gray-600 w-8 text-right">{u.score}</span>
               </div>
-
-              {/* Website */}
               <a
                 href={u.website}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="shrink-0 text-gray-400 hover:text-indigo-600 transition-colors"
-                aria-label="Visit website"
+                aria-label={`Visit ${u.name} website`}
               >
                 <ExternalLink className="w-4 h-4" />
               </a>
@@ -226,7 +225,6 @@ export default function CountryUniversityRankingsPage() {
           {search && filteredTop3.length === 0 && filteredRest.length === 0 && (
             <div className="py-12 text-center text-gray-400 text-sm">No universities match your search.</div>
           )}
-
           {rest.length === 0 && search === '' && (
             <div className="py-6 text-center text-gray-400 text-sm">All universities shown in top 3 above.</div>
           )}
@@ -235,13 +233,13 @@ export default function CountryUniversityRankingsPage() {
         {/* Other Countries */}
         <div className="mb-5">
           <h2 className="text-xl font-bold text-gray-900 mb-1">Explore Other Countries</h2>
-          <p className="text-sm text-gray-500">Find top universities in other regions.</p>
+          <p className="text-sm text-gray-500">Find top universities in other regions — {RANKINGS_YEAR} rankings.</p>
         </div>
         <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2 mb-10">
           {otherCountries.map((country) => (
             <Link
               key={country.slug}
-              href={`/${lang}/university-rankings/${country.slug}`}
+              href={`/${lang}/university-rankings/2025/${country.slug}`}
               className="group bg-white rounded-2xl border border-gray-200 p-3 hover:border-indigo-400 hover:shadow-md transition-all text-center"
             >
               <div className="text-2xl mb-1">{country.flag}</div>
@@ -270,13 +268,13 @@ export default function CountryUniversityRankingsPage() {
         </div>
 
         <p className="text-xs text-gray-400">
-          Rankings based on QS World University Rankings 2025. Visit{' '}
+          Rankings based on QS World University Rankings {RANKINGS_YEAR}. Visit{' '}
           <a href="https://www.topuniversities.com" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-600">
             topuniversities.com
           </a>{' '}
           for the official full rankings.
         </p>
       </Container>
-    </MainLayout>
+    </>
   );
 }
