@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next';
+import { allUniversitySlugs } from '@/data/universityProfiles';
 
 const locales = ['en', 'ms', 'zh', 'es', 'pt', 'de', 'ja', 'ko', 'vi', 'id', 'hi'];
 
@@ -68,5 +69,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     )
   );
 
-  return [...coreEntries, ...globalRankingEntries, ...countryRankingEntries];
+  // Individual university profile pages: /en/universities/mit
+  const universityProfileEntries = locales.flatMap((locale) =>
+    allUniversitySlugs.map((slug) => ({
+      url: `${baseUrl}/${locale}/universities/${slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.8,
+    }))
+  );
+
+  return [...coreEntries, ...globalRankingEntries, ...countryRankingEntries, ...universityProfileEntries];
 }

@@ -1,12 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Globe, ExternalLink, Search, ArrowRight, BookOpen, Calendar } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { Badge } from '@/components/ui/Badge';
 import { globalRankings, countryMeta } from '@/data/universityRankings';
+import { getUniversityLogo } from '@/data/universityProfiles';
 
 const RANKINGS_YEAR = 2025;
 
@@ -98,10 +100,20 @@ export function GlobalLeaderboard() {
                       </div>
                     )}
                     <div className="text-3xl mb-2">{m.label}</div>
-                    <div className={`w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold text-white mb-3 ${m.avatar}`}>
-                      {getInitials(u.name)}
-                    </div>
-                    <div className="font-semibold text-gray-900 text-sm leading-snug mb-1">{u.name}</div>
+                    {u.profileSlug && getUniversityLogo(u.profileSlug) ? (
+                      <div className="w-12 h-12 rounded-full bg-white ring-2 ring-gray-200 flex items-center justify-center mb-3 overflow-hidden p-0.5">
+                        <Image src={getUniversityLogo(u.profileSlug)!} alt={u.name} width={44} height={44} className="object-contain w-full h-full" />
+                      </div>
+                    ) : (
+                      <div className={`w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold text-white mb-3 ${m.avatar}`}>
+                        {getInitials(u.name)}
+                      </div>
+                    )}
+                    {u.profileSlug ? (
+                      <Link href={`/${lang}/universities/${u.profileSlug}`} className="font-semibold text-indigo-700 hover:underline text-sm leading-snug mb-1 block">{u.name}</Link>
+                    ) : (
+                      <div className="font-semibold text-gray-900 text-sm leading-snug mb-1">{u.name}</div>
+                    )}
                     <div className="text-xs text-gray-500 mb-3">{u.city}, {u.country}</div>
                     <div className="flex items-center gap-1.5 mb-4">
                       <div className="h-1.5 w-20 bg-gray-200 rounded-full overflow-hidden">
@@ -157,11 +169,24 @@ export function GlobalLeaderboard() {
               <div className="w-8 shrink-0 text-center">
                 <span className="text-sm font-bold text-gray-400">#{u.rank}</span>
               </div>
-              <div className="w-9 h-9 shrink-0 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs font-bold">
-                {getInitials(u.name)}
+              <div className="w-9 h-9 shrink-0 rounded-full bg-white ring-1 ring-gray-200 flex items-center justify-center overflow-hidden">
+                {u.profileSlug && getUniversityLogo(u.profileSlug) ? (
+                  <Image src={getUniversityLogo(u.profileSlug)!} alt={u.name} width={36} height={36} className="object-contain w-full h-full p-0.5" />
+                ) : (
+                  <span className="text-xs font-bold text-indigo-700 bg-indigo-100 w-full h-full flex items-center justify-center rounded-full">{getInitials(u.name)}</span>
+                )}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="font-medium text-gray-900 text-sm truncate">{u.name}</div>
+                {u.profileSlug ? (
+                  <Link
+                    href={`/${lang}/universities/${u.profileSlug}`}
+                    className="font-medium text-indigo-700 hover:underline text-sm truncate block"
+                  >
+                    {u.name}
+                  </Link>
+                ) : (
+                  <div className="font-medium text-gray-900 text-sm truncate">{u.name}</div>
+                )}
                 <div className="text-xs text-gray-400 truncate">{u.city}, {u.country}</div>
               </div>
               <div className="hidden sm:block shrink-0">

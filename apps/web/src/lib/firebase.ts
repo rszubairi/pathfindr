@@ -11,7 +11,8 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-function getFirebaseApp(): FirebaseApp {
+function getFirebaseApp(): FirebaseApp | null {
+  if (!firebaseConfig.apiKey || !firebaseConfig.appId) return null;
   return getApps().length ? getApp() : initializeApp(firebaseConfig);
 }
 
@@ -20,9 +21,11 @@ let analyticsInstance: Analytics | null = null;
 export async function getFirebaseAnalytics(): Promise<Analytics | null> {
   if (typeof window === 'undefined') return null;
   if (analyticsInstance) return analyticsInstance;
+  const app = getFirebaseApp();
+  if (!app) return null;
   const supported = await isSupported();
   if (supported) {
-    analyticsInstance = getAnalytics(getFirebaseApp());
+    analyticsInstance = getAnalytics(app);
   }
   return analyticsInstance;
 }

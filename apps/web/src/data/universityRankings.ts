@@ -8,6 +8,8 @@ export interface University {
   type: 'Public' | 'Private';
   founded: number;
   website: string;
+  /** slug matching a UniversityProfile — enables link to detail page */
+  profileSlug?: string;
 }
 
 export interface CountryRankingMeta {
@@ -35,12 +37,12 @@ export const countryMeta: CountryRankingMeta[] = [
 
 // Source: QS World University Rankings 2025
 export const globalRankings: University[] = [
-  { rank: 1, globalRank: 1, name: 'Massachusetts Institute of Technology (MIT)', country: 'United States', city: 'Cambridge, MA', score: 100, type: 'Private', founded: 1861, website: 'https://www.mit.edu' },
-  { rank: 2, globalRank: 2, name: 'Imperial College London', country: 'United Kingdom', city: 'London', score: 98.3, type: 'Public', founded: 1907, website: 'https://www.imperial.ac.uk' },
-  { rank: 3, globalRank: 3, name: 'University of Oxford', country: 'United Kingdom', city: 'Oxford', score: 96.7, type: 'Public', founded: 1096, website: 'https://www.ox.ac.uk' },
-  { rank: 4, globalRank: 4, name: 'Harvard University', country: 'United States', city: 'Cambridge, MA', score: 96.5, type: 'Private', founded: 1636, website: 'https://www.harvard.edu' },
-  { rank: 5, globalRank: 5, name: 'University of Cambridge', country: 'United Kingdom', city: 'Cambridge', score: 96.4, type: 'Public', founded: 1209, website: 'https://www.cam.ac.uk' },
-  { rank: 6, globalRank: 6, name: 'Stanford University', country: 'United States', city: 'Stanford, CA', score: 95.3, type: 'Private', founded: 1885, website: 'https://www.stanford.edu' },
+  { rank: 1, globalRank: 1, name: 'Massachusetts Institute of Technology (MIT)', country: 'United States', city: 'Cambridge, MA', score: 100, type: 'Private', founded: 1861, website: 'https://www.mit.edu', profileSlug: 'mit' },
+  { rank: 2, globalRank: 2, name: 'Imperial College London', country: 'United Kingdom', city: 'London', score: 98.3, type: 'Public', founded: 1907, website: 'https://www.imperial.ac.uk', profileSlug: 'imperial-college-london' },
+  { rank: 3, globalRank: 3, name: 'University of Oxford', country: 'United Kingdom', city: 'Oxford', score: 96.7, type: 'Public', founded: 1096, website: 'https://www.ox.ac.uk', profileSlug: 'university-of-oxford' },
+  { rank: 4, globalRank: 4, name: 'Harvard University', country: 'United States', city: 'Cambridge, MA', score: 96.5, type: 'Private', founded: 1636, website: 'https://www.harvard.edu', profileSlug: 'harvard' },
+  { rank: 5, globalRank: 5, name: 'University of Cambridge', country: 'United Kingdom', city: 'Cambridge', score: 96.4, type: 'Public', founded: 1209, website: 'https://www.cam.ac.uk', profileSlug: 'university-of-cambridge' },
+  { rank: 6, globalRank: 6, name: 'Stanford University', country: 'United States', city: 'Stanford, CA', score: 95.3, type: 'Private', founded: 1885, website: 'https://www.stanford.edu', profileSlug: 'stanford' },
   { rank: 7, globalRank: 7, name: 'ETH Zurich', country: 'Switzerland', city: 'Zurich', score: 93.8, type: 'Public', founded: 1855, website: 'https://ethz.ch' },
   { rank: 8, globalRank: 8, name: 'National University of Singapore (NUS)', country: 'Singapore', city: 'Singapore', score: 92.6, type: 'Public', founded: 1905, website: 'https://www.nus.edu.sg' },
   { rank: 9, globalRank: 9, name: 'UCL (University College London)', country: 'United Kingdom', city: 'London', score: 90.1, type: 'Public', founded: 1826, website: 'https://www.ucl.ac.uk' },
@@ -64,9 +66,9 @@ export const globalRankings: University[] = [
 
 export const countryRankings: Record<string, University[]> = {
   'united-states': [
-    { rank: 1, globalRank: 1, name: 'Massachusetts Institute of Technology (MIT)', country: 'United States', city: 'Cambridge, MA', score: 100, type: 'Private', founded: 1861, website: 'https://www.mit.edu' },
-    { rank: 2, globalRank: 4, name: 'Harvard University', country: 'United States', city: 'Cambridge, MA', score: 96.5, type: 'Private', founded: 1636, website: 'https://www.harvard.edu' },
-    { rank: 3, globalRank: 6, name: 'Stanford University', country: 'United States', city: 'Stanford, CA', score: 95.3, type: 'Private', founded: 1885, website: 'https://www.stanford.edu' },
+    { rank: 1, globalRank: 1, name: 'Massachusetts Institute of Technology (MIT)', country: 'United States', city: 'Cambridge, MA', score: 100, type: 'Private', founded: 1861, website: 'https://www.mit.edu', profileSlug: 'mit' },
+    { rank: 2, globalRank: 4, name: 'Harvard University', country: 'United States', city: 'Cambridge, MA', score: 96.5, type: 'Private', founded: 1636, website: 'https://www.harvard.edu', profileSlug: 'harvard' },
+    { rank: 3, globalRank: 6, name: 'Stanford University', country: 'United States', city: 'Stanford, CA', score: 95.3, type: 'Private', founded: 1885, website: 'https://www.stanford.edu', profileSlug: 'stanford' },
     { rank: 4, globalRank: 10, name: 'California Institute of Technology (Caltech)', country: 'United States', city: 'Pasadena, CA', score: 89.6, type: 'Private', founded: 1891, website: 'https://www.caltech.edu' },
     { rank: 5, globalRank: 11, name: 'University of Pennsylvania', country: 'United States', city: 'Philadelphia, PA', score: 89.1, type: 'Private', founded: 1740, website: 'https://www.upenn.edu' },
     { rank: 6, globalRank: 13, name: 'Duke University', country: 'United States', city: 'Durham, NC', score: 86.7, type: 'Private', founded: 1838, website: 'https://www.duke.edu' },
@@ -81,9 +83,9 @@ export const countryRankings: Record<string, University[]> = {
     { rank: 15, globalRank: 39, name: 'New York University (NYU)', country: 'United States', city: 'New York, NY', score: 77.2, type: 'Private', founded: 1831, website: 'https://www.nyu.edu' },
   ],
   'united-kingdom': [
-    { rank: 1, globalRank: 2, name: 'Imperial College London', country: 'United Kingdom', city: 'London', score: 98.3, type: 'Public', founded: 1907, website: 'https://www.imperial.ac.uk' },
-    { rank: 2, globalRank: 3, name: 'University of Oxford', country: 'United Kingdom', city: 'Oxford', score: 96.7, type: 'Public', founded: 1096, website: 'https://www.ox.ac.uk' },
-    { rank: 3, globalRank: 5, name: 'University of Cambridge', country: 'United Kingdom', city: 'Cambridge', score: 96.4, type: 'Public', founded: 1209, website: 'https://www.cam.ac.uk' },
+    { rank: 1, globalRank: 2, name: 'Imperial College London', country: 'United Kingdom', city: 'London', score: 98.3, type: 'Public', founded: 1907, website: 'https://www.imperial.ac.uk', profileSlug: 'imperial-college-london' },
+    { rank: 2, globalRank: 3, name: 'University of Oxford', country: 'United Kingdom', city: 'Oxford', score: 96.7, type: 'Public', founded: 1096, website: 'https://www.ox.ac.uk', profileSlug: 'university-of-oxford' },
+    { rank: 3, globalRank: 5, name: 'University of Cambridge', country: 'United Kingdom', city: 'Cambridge', score: 96.4, type: 'Public', founded: 1209, website: 'https://www.cam.ac.uk', profileSlug: 'university-of-cambridge' },
     { rank: 4, globalRank: 9, name: 'UCL (University College London)', country: 'United Kingdom', city: 'London', score: 90.1, type: 'Public', founded: 1826, website: 'https://www.ucl.ac.uk' },
     { rank: 5, globalRank: 12, name: 'University of Edinburgh', country: 'United Kingdom', city: 'Edinburgh', score: 87.1, type: 'Public', founded: 1583, website: 'https://www.ed.ac.uk' },
     { rank: 6, globalRank: 34, name: 'University of Manchester', country: 'United Kingdom', city: 'Manchester', score: 73.0, type: 'Public', founded: 1824, website: 'https://www.manchester.ac.uk' },
@@ -93,7 +95,7 @@ export const countryRankings: Record<string, University[]> = {
     { rank: 10, globalRank: 67, name: 'University of Warwick', country: 'United Kingdom', city: 'Coventry', score: 66.2, type: 'Public', founded: 1965, website: 'https://www.warwick.ac.uk' },
   ],
   'germany': [
-    { rank: 1, globalRank: 37, name: 'Technical University of Munich (TUM)', country: 'Germany', city: 'Munich', score: 78.5, type: 'Public', founded: 1868, website: 'https://www.tum.de' },
+    { rank: 1, globalRank: 37, name: 'Technical University of Munich (TUM)', country: 'Germany', city: 'Munich', score: 78.5, type: 'Public', founded: 1868, website: 'https://www.tum.de', profileSlug: 'technical-university-munich' },
     { rank: 2, globalRank: 63, name: 'Ludwig Maximilian University of Munich (LMU)', country: 'Germany', city: 'Munich', score: 69.8, type: 'Public', founded: 1472, website: 'https://www.lmu.de' },
     { rank: 3, globalRank: 87, name: 'Heidelberg University', country: 'Germany', city: 'Heidelberg', score: 63.2, type: 'Public', founded: 1386, website: 'https://www.uni-heidelberg.de' },
     { rank: 4, globalRank: 106, name: 'RWTH Aachen University', country: 'Germany', city: 'Aachen', score: 59.4, type: 'Public', founded: 1870, website: 'https://www.rwth-aachen.de' },
@@ -180,19 +182,19 @@ export const countryRankings: Record<string, University[]> = {
     { rank: 5, globalRank: '1201+', name: 'University of Zadar', country: 'Croatia', city: 'Zadar', score: 15.2, type: 'Public', founded: 1396, website: 'https://www.unizd.hr' },
   ],
   'malaysia': [
-    { rank: 1, globalRank: 65, name: 'Universiti Malaya (UM)', country: 'Malaysia', city: 'Kuala Lumpur', score: 62.4, type: 'Public', founded: 1949, website: 'https://www.um.edu.my' },
-    { rank: 2, globalRank: 148, name: 'Universiti Putra Malaysia (UPM)', country: 'Malaysia', city: 'Serdang', score: 54.1, type: 'Public', founded: 1971, website: 'https://www.upm.edu.my' },
-    { rank: 3, globalRank: 166, name: 'Universiti Teknologi Malaysia (UTM)', country: 'Malaysia', city: 'Johor Bahru', score: 52.8, type: 'Public', founded: 1904, website: 'https://www.utm.my' },
-    { rank: 4, globalRank: 181, name: 'Universiti Kebangsaan Malaysia (UKM)', country: 'Malaysia', city: 'Bangi', score: 51.4, type: 'Public', founded: 1970, website: 'https://www.ukm.my' },
-    { rank: 5, globalRank: 200, name: 'Universiti Sains Malaysia (USM)', country: 'Malaysia', city: 'Penang', score: 50.2, type: 'Public', founded: 1969, website: 'https://www.usm.my' },
+    { rank: 1, globalRank: 65, name: 'Universiti Malaya (UM)', country: 'Malaysia', city: 'Kuala Lumpur', score: 62.4, type: 'Public', founded: 1949, website: 'https://www.um.edu.my', profileSlug: 'universiti-malaya' },
+    { rank: 2, globalRank: 148, name: 'Universiti Putra Malaysia (UPM)', country: 'Malaysia', city: 'Serdang', score: 54.1, type: 'Public', founded: 1971, website: 'https://www.upm.edu.my', profileSlug: 'universiti-putra-malaysia' },
+    { rank: 3, globalRank: 166, name: 'Universiti Teknologi Malaysia (UTM)', country: 'Malaysia', city: 'Johor Bahru', score: 52.8, type: 'Public', founded: 1904, website: 'https://www.utm.my', profileSlug: 'universiti-teknologi-malaysia' },
+    { rank: 4, globalRank: 181, name: 'Universiti Kebangsaan Malaysia (UKM)', country: 'Malaysia', city: 'Bangi', score: 51.4, type: 'Public', founded: 1970, website: 'https://www.ukm.my', profileSlug: 'universiti-kebangsaan-malaysia' },
+    { rank: 5, globalRank: 200, name: 'Universiti Sains Malaysia (USM)', country: 'Malaysia', city: 'Penang', score: 50.2, type: 'Public', founded: 1969, website: 'https://www.usm.my', profileSlug: 'universiti-sains-malaysia' },
     { rank: 6, globalRank: '401–450', name: 'Universiti Teknologi MARA (UiTM)', country: 'Malaysia', city: 'Shah Alam', score: 42.5, type: 'Public', founded: 1956, website: 'https://www.uitm.edu.my' },
     { rank: 7, globalRank: '451–500', name: 'Universiti Utara Malaysia (UUM)', country: 'Malaysia', city: 'Sintok', score: 39.8, type: 'Public', founded: 1984, website: 'https://www.uum.edu.my' },
     { rank: 8, globalRank: '451–500', name: 'Monash University Malaysia', country: 'Malaysia', city: 'Petaling Jaya', score: 37.8, type: 'Private', founded: 1998, website: 'https://www.monash.edu.my' },
-    { rank: 9, globalRank: '501–550', name: "Taylor's University", country: 'Malaysia', city: 'Subang Jaya', score: 35.4, type: 'Private', founded: 1969, website: 'https://university.taylors.edu.my' },
+    { rank: 9, globalRank: '501–550', name: "Taylor's University", country: 'Malaysia', city: 'Subang Jaya', score: 35.4, type: 'Private', founded: 1969, website: 'https://university.taylors.edu.my', profileSlug: 'taylors-university' },
     { rank: 10, globalRank: '551–600', name: 'UCSI University', country: 'Malaysia', city: 'Kuala Lumpur', score: 32.1, type: 'Private', founded: 1986, website: 'https://www.ucsiuniversity.edu.my' },
   ],
   'indonesia': [
-    { rank: 1, globalRank: 237, name: 'Universitas Indonesia (UI)', country: 'Indonesia', city: 'Depok', score: 45.8, type: 'Public', founded: 1849, website: 'https://www.ui.ac.id' },
+    { rank: 1, globalRank: 237, name: 'Universitas Indonesia (UI)', country: 'Indonesia', city: 'Depok', score: 45.8, type: 'Public', founded: 1849, website: 'https://www.ui.ac.id', profileSlug: 'universitas-indonesia' },
     { rank: 2, globalRank: 265, name: 'Institut Teknologi Bandung (ITB)', country: 'Indonesia', city: 'Bandung', score: 44.2, type: 'Public', founded: 1920, website: 'https://www.itb.ac.id' },
     { rank: 3, globalRank: 298, name: 'Universitas Gadjah Mada (UGM)', country: 'Indonesia', city: 'Yogyakarta', score: 42.5, type: 'Public', founded: 1949, website: 'https://www.ugm.ac.id' },
     { rank: 4, globalRank: 364, name: 'Universitas Airlangga', country: 'Indonesia', city: 'Surabaya', score: 39.8, type: 'Public', founded: 1954, website: 'https://www.unair.ac.id' },
@@ -204,9 +206,9 @@ export const countryRankings: Record<string, University[]> = {
     { rank: 10, globalRank: '801–850', name: 'Universitas Hasanuddin', country: 'Indonesia', city: 'Makassar', score: 25.4, type: 'Public', founded: 1956, website: 'https://www.unhas.ac.id' },
   ],
   'pakistan': [
-    { rank: 1, globalRank: 386, name: 'Quaid-i-Azam University', country: 'Pakistan', city: 'Islamabad', score: 38.5, type: 'Public', founded: 1967, website: 'https://www.qau.edu.pk' },
+    { rank: 1, globalRank: 386, name: 'Quaid-i-Azam University', country: 'Pakistan', city: 'Islamabad', score: 38.5, type: 'Public', founded: 1967, website: 'https://www.qau.edu.pk', profileSlug: 'quaid-i-azam-university' },
     { rank: 2, globalRank: '451–500', name: 'University of the Punjab', country: 'Pakistan', city: 'Lahore', score: 35.2, type: 'Public', founded: 1882, website: 'https://www.pu.edu.pk' },
-    { rank: 3, globalRank: '501–550', name: 'National University of Sciences and Technology (NUST)', country: 'Pakistan', city: 'Islamabad', score: 33.8, type: 'Public', founded: 1991, website: 'https://www.nust.edu.pk' },
+    { rank: 3, globalRank: '501–550', name: 'National University of Sciences and Technology (NUST)', country: 'Pakistan', city: 'Islamabad', score: 33.8, type: 'Public', founded: 1991, website: 'https://www.nust.edu.pk', profileSlug: 'nust' },
     { rank: 4, globalRank: '551–600', name: 'University of Karachi', country: 'Pakistan', city: 'Karachi', score: 31.4, type: 'Public', founded: 1951, website: 'https://www.uok.edu.pk' },
     { rank: 5, globalRank: '601–650', name: 'COMSATS University Islamabad', country: 'Pakistan', city: 'Islamabad', score: 28.7, type: 'Public', founded: 1998, website: 'https://www.comsats.edu.pk' },
     { rank: 6, globalRank: '701–750', name: 'University of Peshawar', country: 'Pakistan', city: 'Peshawar', score: 26.5, type: 'Public', founded: 1950, website: 'https://www.uop.edu.pk' },
