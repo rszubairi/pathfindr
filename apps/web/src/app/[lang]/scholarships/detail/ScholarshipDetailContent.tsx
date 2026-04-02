@@ -2,7 +2,7 @@
 
 import React, { useCallback, useState } from 'react';
 import Link from 'next/link';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams, useRouter, useParams } from 'next/navigation';
 import {
     ChevronRight,
     Building2,
@@ -38,8 +38,10 @@ import { formatCurrency, formatDate, isDeadlinePassed } from '@/lib/utils';
 
 export function ScholarshipDetailContent() {
     const searchParams = useSearchParams();
+    const params = useParams();
     const router = useRouter();
     const id = searchParams.get('id') || '';
+    const lang = (params?.lang as string) || 'en';
 
     const { data: scholarship, isLoading } = useScholarship(id);
     const { data: relatedScholarships } = useFeaturedScholarships(4);
@@ -302,6 +304,8 @@ export function ScholarshipDetailContent() {
                         <ShareButton
                             scholarshipName={scholarship.name}
                             scholarshipValue={formatCurrency(scholarship.value, scholarship.currency)}
+                            scholarshipId={id}
+                            lang={lang}
                         />
                     </div>
                 </Container>

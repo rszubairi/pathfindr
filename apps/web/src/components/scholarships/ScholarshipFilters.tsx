@@ -12,6 +12,11 @@ export interface ScholarshipFiltersProps {
   filters: ScholarshipFilters;
   onFiltersChange: (filters: ScholarshipFilters) => void;
   onClearFilters: () => void;
+  availableValues?: {
+    countries: string[];
+    fields: string[];
+    providerTypes: string[];
+  };
   className?: string;
 }
 
@@ -46,6 +51,7 @@ export function ScholarshipFilters({
   filters,
   onFiltersChange,
   onClearFilters,
+  availableValues,
   className,
 }: ScholarshipFiltersProps) {
   const { t } = useTranslation();
@@ -126,51 +132,90 @@ export function ScholarshipFilters({
       {/* Countries Filter */}
       <FilterSection title={t('scholarships.filtersList.countries')}>
         <div className="space-y-2 max-h-48 overflow-y-auto">
-          {filterOptions.countries.map((country) => (
-            <label key={country} className="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded">
-              <input
-                type="checkbox"
-                checked={filters.countries?.includes(country) || false}
-                onChange={() => handleCountryToggle(country)}
-                className="h-4 w-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
-              />
-              <span className="ml-2 text-sm text-gray-700">{country}</span>
-            </label>
-          ))}
+          {filterOptions.countries.map((country) => {
+            const isAvailable = !availableValues || availableValues.countries.includes(country);
+            return (
+              <label
+                key={country}
+                className={cn(
+                  "flex items-center p-1 rounded transition-colors",
+                  isAvailable ? "cursor-pointer hover:bg-gray-50" : "cursor-not-allowed opacity-50 bg-gray-100"
+                )}
+              >
+                <input
+                  type="checkbox"
+                  checked={filters.countries?.includes(country) || false}
+                  onChange={() => isAvailable && handleCountryToggle(country)}
+                  disabled={!isAvailable}
+                  className={cn(
+                    "h-4 w-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500",
+                    !isAvailable && "opacity-50 pointer-events-none"
+                  )}
+                />
+                <span className="ml-2 text-sm text-gray-700">{country}</span>
+              </label>
+            );
+          })}
         </div>
       </FilterSection>
 
       {/* Fields of Study Filter */}
       <FilterSection title={t('scholarships.filtersList.fieldsOfStudy')}>
         <div className="space-y-2 max-h-48 overflow-y-auto">
-          {filterOptions.fields.map((field) => (
-            <label key={field} className="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded">
-              <input
-                type="checkbox"
-                checked={filters.fields?.includes(field) || false}
-                onChange={() => handleFieldToggle(field)}
-                className="h-4 w-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
-              />
-              <span className="ml-2 text-sm text-gray-700">{field}</span>
-            </label>
-          ))}
+          {filterOptions.fields.map((field) => {
+            const isAvailable = !availableValues || availableValues.fields.includes(field);
+            return (
+              <label
+                key={field}
+                className={cn(
+                  "flex items-center p-1 rounded transition-colors",
+                  isAvailable ? "cursor-pointer hover:bg-gray-50" : "cursor-not-allowed opacity-50 bg-gray-100"
+                )}
+              >
+                <input
+                  type="checkbox"
+                  checked={filters.fields?.includes(field) || false}
+                  onChange={() => isAvailable && handleFieldToggle(field)}
+                  disabled={!isAvailable}
+                  className={cn(
+                    "h-4 w-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500",
+                    !isAvailable && "opacity-50 pointer-events-none"
+                  )}
+                />
+                <span className="ml-2 text-sm text-gray-700">{field}</span>
+              </label>
+            );
+          })}
         </div>
       </FilterSection>
 
       {/* Provider Type Filter */}
       <FilterSection title={t('scholarships.filtersList.providerType')}>
         <div className="space-y-2">
-          {filterOptions.providerTypes.map((type) => (
-            <label key={type} className="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded">
-              <input
-                type="checkbox"
-                checked={filters.providerTypes?.includes(type) || false}
-                onChange={() => handleProviderTypeToggle(type)}
-                className="h-4 w-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
-              />
-              <span className="ml-2 text-sm text-gray-700 capitalize">{type}</span>
-            </label>
-          ))}
+          {filterOptions.providerTypes.map((type) => {
+            const isAvailable = !availableValues || availableValues.providerTypes.includes(type);
+            return (
+              <label
+                key={type}
+                className={cn(
+                  "flex items-center p-1 rounded transition-colors",
+                  isAvailable ? "cursor-pointer hover:bg-gray-50" : "cursor-not-allowed opacity-50 bg-gray-100"
+                )}
+              >
+                <input
+                  type="checkbox"
+                  checked={filters.providerTypes?.includes(type) || false}
+                  onChange={() => isAvailable && handleProviderTypeToggle(type)}
+                  disabled={!isAvailable}
+                  className={cn(
+                    "h-4 w-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500",
+                    !isAvailable && "opacity-50 pointer-events-none"
+                  )}
+                />
+                <span className="ml-2 text-sm text-gray-700 capitalize">{type}</span>
+              </label>
+            );
+          })}
         </div>
       </FilterSection>
 

@@ -192,6 +192,14 @@ export const stats = query({
     const countries = new Set<string>();
     scholarships.forEach((s) => s.eligibleCountries.forEach((c) => countries.add(c)));
 
+    // Get unique fields and provider types
+    const fields = new Set<string>();
+    const providerTypes = new Set<string>();
+    scholarships.forEach((s) => {
+      s.eligibleFields.forEach((f) => fields.add(f));
+      providerTypes.add(s.providerType);
+    });
+
     // Calculate total value
     const totalValue = scholarships.reduce((sum, s) => sum + s.value, 0);
 
@@ -200,6 +208,11 @@ export const stats = query({
       activeScholarships,
       totalCountries: countries.size,
       totalValue,
+      availableValues: {
+        countries: Array.from(countries).sort(),
+        fields: Array.from(fields).sort(),
+        providerTypes: Array.from(providerTypes).sort(),
+      },
     };
   },
 });

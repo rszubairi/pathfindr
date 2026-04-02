@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/Button';
 import { ScholarshipList } from '@/components/scholarships/ScholarshipList';
 import { ScholarshipFilters } from '@/components/scholarships/ScholarshipFilters';
 import { ScholarshipSearch } from '@/components/scholarships/ScholarshipSearch';
-import { useScholarshipSearch } from '@/lib/convexQueries';
+import { useScholarshipSearch, useScholarshipStats } from '@/lib/convexQueries';
 import type { ScholarshipFilters as Filters } from '@/types';
 
 const ITEMS_PER_PAGE = 20;
@@ -142,6 +142,9 @@ export default function ScholarshipsPage() {
     };
   }, [isMobileFilterOpen]);
 
+  // Fetch stats for available filter values
+  const { data: stats } = useScholarshipStats();
+
   return (
     <MainLayout>
       {/* Page Header */}
@@ -215,6 +218,7 @@ export default function ScholarshipsPage() {
                   filters={filters}
                   onFiltersChange={setFilters}
                   onClearFilters={handleClearFilters}
+                  availableValues={stats?.availableValues}
                 />
               </div>
             </aside>
@@ -311,6 +315,7 @@ export default function ScholarshipsPage() {
                 filters={filters}
                 onFiltersChange={setFilters}
                 onClearFilters={handleClearFilters}
+                availableValues={stats?.availableValues}
               />
             </div>
 

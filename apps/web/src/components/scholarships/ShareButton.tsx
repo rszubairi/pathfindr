@@ -8,12 +8,26 @@ import { cn } from '@/lib/utils';
 export interface ShareButtonProps {
   scholarshipName: string;
   scholarshipValue: string;
+  scholarshipId: string;
+  lang: string;
 }
 
-export function ShareButton({ scholarshipName, scholarshipValue }: ShareButtonProps) {
+import { useMutation } from 'convex/react';
+import { api } from '@convex/_generated/api';
+
+export function ShareButton({
+  scholarshipName,
+  scholarshipValue,
+  scholarshipId,
+  lang
+}: ShareButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [shortUrl, setShortUrl] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const getOrCreateShortUrl = useMutation(api.shortUrls.getOrCreateShortUrl);
 
   const shareText = `Check out this scholarship: ${scholarshipName} worth ${scholarshipValue} on Pathfindr`;
 
@@ -28,14 +42,37 @@ export function ShareButton({ scholarshipName, scholarshipValue }: ShareButtonPr
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const getUrl = async () => {
+    if (shortUrl) return shortUrl;
+    setLoading(true);
+    try {
+      const targetPath = `/${lang}/scholarships/detail?id=${scholarshipId}`;
+      const shortCode = await getOrCreateShortUrl({
+        targetPath,
+        type: 'scholarship',
+      });
+      const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+      const fullShortUrl = `${baseUrl}/s/${shortCode}`;
+      setShortUrl(fullShortUrl);
+      return fullShortUrl;
+    } catch (error) {
+      console.error('Error generating short URL:', error);
+      return typeof window !== 'undefined' ? window.location.href : '';
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleShare = async () => {
+    const urlToShare = await getUrl();
+
     // Try native Web Share API first (mobile)
     if (typeof navigator !== 'undefined' && navigator.share) {
       try {
         await navigator.share({
           title: scholarshipName,
           text: shareText,
-          url: window.location.href,
+          url: urlToShare,
         });
         return;
       } catch {
@@ -48,8 +85,9 @@ export function ShareButton({ scholarshipName, scholarshipValue }: ShareButtonPr
   };
 
   const handleCopyLink = async () => {
+    const urlToShare = await getUrl();
     try {
-      await navigator.clipboard.writeText(window.location.href);
+      await navigator.clipboard.writeText(urlToShare);
       setCopied(true);
       setTimeout(() => {
         setCopied(false);
@@ -58,7 +96,7 @@ export function ShareButton({ scholarshipName, scholarshipValue }: ShareButtonPr
     } catch {
       // Fallback for older browsers
       const textArea = document.createElement('textarea');
-      textArea.value = window.location.href;
+      textArea.value = urlToShare;
       document.body.appendChild(textArea);
       textArea.select();
       document.execCommand('copy');
@@ -71,22 +109,25 @@ export function ShareButton({ scholarshipName, scholarshipValue }: ShareButtonPr
     }
   };
 
-  const handleTwitterShare = () => {
-    const url = encodeURIComponent(window.location.href);
+  const handleTwitterShare = async () => {
+    const urlToShare = await getUrl();
+    const url = encodeURIComponent(urlToShare);
     const text = encodeURIComponent(shareText);
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
     setIsOpen(false);
   };
 
-  const handleWhatsAppShare = () => {
-    const text = encodeURIComponent(`${shareText}\n${window.location.href}`);
+  const handleWhatsAppShare = async () => {
+    const urlToShare = await getUrl();
+    const text = encodeURIComponent(`${shareText}\n${urlToShare}`);
     window.open(`https://wa.me/?text=${text}`, '_blank');
     setIsOpen(false);
   };
 
-  const handleEmailShare = () => {
+  const handleEmailShare = async () => {
+    const urlToShare = await getUrl();
     const subject = encodeURIComponent(`Scholarship Opportunity: ${scholarshipName}`);
-    const body = encodeURIComponent(`${shareText}\n\nLearn more: ${window.location.href}`);
+    const body = encodeURIComponent(`${shareText}\n\nLearn more: ${urlToShare}`);
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
     setIsOpen(false);
   };
@@ -98,6 +139,7 @@ export function ShareButton({ scholarshipName, scholarshipValue }: ShareButtonPr
         size="lg"
         onClick={handleShare}
         className="flex items-center gap-2"
+        isLoading={loading}
       >
         <Share2 className="h-5 w-5" />
         Share

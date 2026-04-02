@@ -478,4 +478,13 @@ export default defineSchema({
     .index('by_corporate_user', ['corporateUserId'])
     .index('by_scholarship', ['scholarshipId']),
 
+  shortUrls: defineTable({
+    shortCode: v.string(),
+    targetPath: v.string(),
+    type: v.union(v.literal('university'), v.literal('scholarship'), v.literal('other')),
+    createdAt: v.string(),
+  })
+    .index('by_shortCode', ['shortCode'])
+    .index('by_targetPath', ['targetPath']),
+
 });

@@ -38,6 +38,7 @@ export function middleware(request: NextRequest) {
   // Exclude static files and robots/sitemap
   const isPublicFile = pathname.match(/\.(.*)$/) || 
                        pathname.startsWith('/api/') ||
+                       pathname.startsWith('/s/') ||
                        pathname === '/robots.txt' ||
                        pathname === '/sitemap.xml';
 
@@ -50,6 +51,6 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Matcher ignoring `/_next/`, `/api/` and static files
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)'],
+  // Matcher ignoring `/_next/`, `/api/`, `/s/`, and static files
+  matcher: ['/((?!api|s/|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)'],
 };

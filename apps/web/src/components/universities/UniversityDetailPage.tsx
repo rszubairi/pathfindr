@@ -7,7 +7,13 @@ import { useParams } from 'next/navigation';
 import {
   MapPin, Globe, Phone, Mail, Calendar, Users, BookOpen,
   ChevronLeft, Trophy, Star, ChevronDown, ChevronUp, ExternalLink,
+  Share2, Copy, Check,
 } from 'lucide-react';
+import { useMutation } from 'convex/react';
+import { api } from '@convex/_generated/api';
+import { Modal } from '@/components/ui/Modal';
+import { Button } from '@/components/ui/Button';
+import { cn } from '@/lib/utils';
 import { Container } from '@/components/ui/Container';
 import { Badge } from '@/components/ui/Badge';
 import type { UniversityProfile } from '@/data/universityProfiles';
@@ -31,6 +37,40 @@ export function UniversityDetailPage({ profile }: Props) {
   const params = useParams();
   const lang = (params?.lang as string) ?? 'en';
   const [expandedCategory, setExpandedCategory] = useState<string | null>(profile.courseCategories[0]?.name ?? null);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [shortUrl, setShortUrl] = useState<string | null>(null);
+  const [isCopied, setIsCopied] = useState(false);
+  const [loadingShortUrl, setLoadingShortUrl] = useState(false);
+
+  const getOrCreateShortUrl = useMutation(api.shortUrls.getOrCreateShortUrl);
+
+  const handleShare = async () => {
+    setIsShareModalOpen(true);
+    if (!shortUrl) {
+      setLoadingShortUrl(true);
+      try {
+        const targetPath = `/${lang}/universities/${profile.slug}`;
+        const shortCode = await getOrCreateShortUrl({
+          targetPath,
+          type: 'university',
+        });
+        const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+        setShortUrl(`${baseUrl}/s/${shortCode}`);
+      } catch (error) {
+        console.error('Error generating short URL:', error);
+      } finally {
+        setLoadingShortUrl(false);
+      }
+    }
+  };
+
+  const handleCopy = () => {
+    if (shortUrl) {
+      navigator.clipboard.writeText(shortUrl);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
+    }
+  };
 
   const backHref = `/${lang}/university-rankings/2025/${profile.countrySlug}`;
 
@@ -142,9 +182,67 @@ export function UniversityDetailPage({ profile }: Props) {
                 <Phone className="w-4 h-4 text-indigo-500" /> {profile.phone}
               </a>
             )}
+            <button
+              onClick={handleShare}
+              className="flex items-center justify-center gap-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold text-sm px-5 py-3 rounded-xl transition-colors border border-indigo-200 whitespace-nowrap"
+            >
+              <Share2 className="w-4 h-4" /> Share
+            </button>
           </div>
         </Container>
       </div>
+
+      <Modal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        title="Share University"
+      >
+        <div className="space-y-4">
+          <p className="text-sm text-gray-600">
+            Share this university profile with others using this short link:
+          </p>
+          <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-xl border border-gray-200">
+            <div className="flex-1 text-sm font-medium text-gray-900 overflow-hidden text-ellipsis whitespace-nowrap px-1">
+              {loadingShortUrl ? (
+                <span className="text-gray-400 italic">Generating link...</span>
+              ) : (
+                shortUrl || 'Failed to generate link'
+              )}
+            </div>
+            <Button
+              size="sm"
+              variant="secondary"
+              className={cn(
+                "h-9 px-3 rounded-lg flex items-center gap-2 transition-all",
+                isCopied ? "border-green-500 bg-green-50 text-green-700" : ""
+              )}
+              onClick={handleCopy}
+              disabled={loadingShortUrl || !shortUrl}
+            >
+              {isCopied ? (
+                <>
+                  <Check className="w-3.5 h-3.5" />
+                  Copied
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3.5 h-3.5" />
+                  Copy
+                </>
+              )}
+            </Button>
+          </div>
+          <div className="flex justify-end gap-3 pt-2">
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => setIsShareModalOpen(false)}
+            >
+              Close
+            </Button>
+          </div>
+        </div>
+      </Modal>
 
       <Container className="py-10 sm:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
