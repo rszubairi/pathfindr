@@ -4,6 +4,7 @@ import { seedScholarships as scholarshipData } from './seedData';
 import { scrapedScholarships } from './seedDataScraped';
 import { boardingSchoolsData } from './seedDataBoardingSchools';
 import { spm2025Scholarships } from './seedDataSPM2025';
+import { UNIVERSITIES_DATA } from './seedDataUniversities';
 
 // This mutation will seed the database with initial scholarship data
 export const seedScholarships = mutation({
@@ -129,5 +130,40 @@ export const seedAdminUser = mutation({
     });
 
     return { message: 'Created new admin user successfully.' };
+  },
+});
+
+// Seed universities data
+export const seedUniversities = mutation({
+  handler: async (ctx) => {
+    let inserted = 0;
+    let skipped = 0;
+    const now = new Date().toISOString();
+
+    for (const uni of UNIVERSITIES_DATA) {
+      const existing = await ctx.db
+        .query('universities')
+        .withIndex('by_name', (q) => q.eq('name', uni.name))
+        .first();
+
+      if (existing) {
+        skipped++;
+        continue;
+      }
+
+      await ctx.db.insert('universities', {
+        ...uni,
+        status: 'active',
+        createdAt: now,
+        updatedAt: now,
+      });
+      inserted++;
+    }
+
+    return {
+      message: `Universities seeded. Inserted: ${inserted}, Skipped: ${skipped}`,
+      inserted,
+      skipped,
+    };
   },
 });

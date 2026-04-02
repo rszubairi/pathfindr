@@ -487,4 +487,27 @@ export default defineSchema({
     .index('by_shortCode', ['shortCode'])
     .index('by_targetPath', ['targetPath']),
 
+  universities: defineTable({
+    name: v.string(),
+    country: v.string(),
+    city: v.optional(v.string()),
+    worldRanking: v.optional(v.number()),
+    localRanking: v.optional(v.number()),
+    website: v.optional(v.string()),
+    logoUrl: v.optional(v.string()),
+    description: v.optional(v.string()),
+    type: v.union(v.literal('public'), v.literal('private'), v.literal('branch')),
+    status: v.union(v.literal('active'), v.literal('closed')),
+    createdAt: v.string(),
+    updatedAt: v.string(),
+  })
+    .index('by_country', ['country'])
+    .index('by_name', ['name'])
+    .index('by_world_ranking', ['worldRanking'])
+    .index('by_local_ranking', ['localRanking'])
+    .searchIndex('search_name', {
+      searchField: 'name',
+      filterFields: ['country'],
+    }),
+
 });
