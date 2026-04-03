@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
 import { useTheme, ThemeColors } from '../theme';
 
-type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
+type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 
 export function HomeScreen() {
   const navigation = useNavigation<HomeScreenNavigationProp>();
