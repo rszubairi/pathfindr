@@ -8,7 +8,8 @@ import type { Scholarship } from '../types';
 const countries = [
   'Singapore', 'Malaysia', 'Indonesia', 'Thailand', 'Vietnam', 'Philippines',
   'United Kingdom', 'United States', 'Australia', 'Canada', 'Germany', 'France',
-  'Japan', 'South Korea', 'China', 'New Zealand'
+  'Japan', 'South Korea', 'China', 'New Zealand',
+  'Saudi Arabia', 'Qatar', 'Bahrain', 'Kuwait'
 ];
 
 const fields = [
