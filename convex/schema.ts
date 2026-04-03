@@ -510,4 +510,244 @@ export default defineSchema({
       filterFields: ['country'],
     }),
 
+  // ==========================================
+  // Learning App Tables
+  // ==========================================
+
+  // Kid Profiles - allows a user to manage multiple children's learning
+  kidProfiles: defineTable({
+    userId: v.id('users'),
+    name: v.string(),
+    dateOfBirth: v.string(),
+    grade: v.string(),
+    learningGoals: v.optional(v.array(v.string())),
+    avatarUrl: v.optional(v.string()),
+    createdAt: v.string(),
+    updatedAt: v.string(),
+  })
+    .index('by_user', ['userId'])
+    .index('by_user_and_name', ['userId', 'name']),
+
+  // Course Categories - organize courses by subject/age
+  courseCategories: defineTable({
+    name: v.string(),
+    description: v.optional(v.string()),
+    icon: v.optional(v.string()),
+    color: v.optional(v.string()),
+    order: v.number(),
+    ageRange: v.object({ min: v.number(), max: v.number() }),
+    isActive: v.boolean(),
+    createdAt: v.string(),
+  })
+    .index('by_order', ['order'])
+    .index('by_active', ['isActive']),
+
+  // Courses - main learning content
+  courses: defineTable({
+    categoryId: v.id('courseCategories'),
+    title: v.string(),
+    description: v.string(),
+    thumbnailUrl: v.optional(v.string()),
+    videoUrl: v.optional(v.string()),
+    script: v.string(), // Full script for AI tutor
+    duration: v.number(), // Total duration in minutes
+    ageRange: v.object({ min: v.number(), max: v.number() }),
+    difficulty: v.union(v.literal('beginner'), v.literal('intermediate'), v.literal('advanced')),
+    language: v.string(),
+    tags: v.array(v.string()),
+    learningObjectives: v.array(v.string()),
+    prerequisites: v.optional(v.array(v.string())),
+    status: v.union(v.literal('draft'), v.literal('published'), v.literal('archived')),
+    publishedAt: v.optional(v.string()),
+    createdAt: v.string(),
+    updatedAt: v.string(),
+  })
+    .index('by_category', ['categoryId'])
+    .index('by_status', ['status'])
+    .index('by_age_range', ['ageRange'])
+    .index('by_difficulty', ['difficulty'])
+    .index('by_language', ['language'])
+    .index('by_tags', ['tags'])
+    .searchIndex('search_title', {
+      searchField: 'title',
+      filterFields: ['status', 'categoryId'],
+    }),
+
+  // Lessons - individual lesson units within a course
+  lessons: defineTable({
+    courseId: v.id('courses'),
+    title: v.string(),
+    description: v.optional(v.string()),
+    sequenceOrder: v.number(),
+    videoUrl: v.optional(v.string()),
+    script: v.string(), // Lesson-specific script
+    breakpoints: v.array(v.object({
+      timestamp: v.number(), // Seconds into video
+      type: v.union(v.literal('question'), v.literal('hint'), v.literal('summary'), v.literal('activity')),
+      content: v.string(),
+      correctAnswer: v.optional(v.string()),
+      options: v.optional(v.array(v.string())),
+      points: v.optional(v.number()),
+    })),
+    duration: v.number(), // Duration in minutes
+    learningObjectives: v.optional(v.array(v.string())),
+    status: v.union(v.literal('draft'), v.literal('published'), v.literal('archived')),
+    createdAt: v.string(),
+  })
+    .index('by_course', ['courseId'])
+    .index('by_sequence', ['courseId', 'sequenceOrder'])
+    .index('by_status', ['status']),
+
+  // Course Enrollments - track user/kid progress in courses
+  courseEnrollments: defineTable({
+    userId: v.id('users'),
+    kidProfileId: v.id('kidProfiles'),
+    courseId: v.id('courses'),
+    progress: v.number(), // 0-100 percentage
+    currentLessonIndex: v.number(),
+    completedLessons: v.array(v.object({
+      lessonId: v.id('lessons'),
+      completedAt: v.string(),
+      score: v.optional(v.number()),
+    })),
+    totalScore: v.optional(v.number()),
+    enrolledAt: v.string(),
+    completedAt: v.optional(v.string()),
+    lastAccessedAt: v.optional(v.string()),
+  })
+    .index('by_user', ['userId'])
+    .index('by_kid', ['kidProfileId'])
+    .index('by_course', ['courseId'])
+    .index('by_user_and_course', ['userId', 'courseId'])
+    .index('by_kid_and_course', ['kidProfileId', 'courseId']),
+
+  // AI Tutor Interactions - log all AI tutor engagements
+  aiTutorInteractions: defineTable({
+    userId: v.id('users'),
+    kidProfileId: v.id('kidProfiles'),
+    lessonId: v.id('lessons'),
+    breakpointIndex: v.number(),
+    interactionType: v.union(v.literal('question'), v.literal('hint'), v.literal('correction'), v.literal('encouragement'), v.literal('explanation')),
+    question: v.optional(v.string()),
+    userResponse: v.optional(v.string()),
+    aiResponse: v.string(),
+    isCorrect: v.optional(v.boolean()),
+    scoreDelta: v.optional(v.number()),
+    responseTimeMs: v.optional(v.number()),
+    hintsUsed: v.optional(v.number()),
+    createdAt: v.string(),
+  })
+    .index('by_lesson', ['lessonId'])
+    .index('by_user', ['userId'])
+    .index('by_kid', ['kidProfileId'])
+    .index('by_user_and_lesson', ['userId', 'lessonId'])
+    .index('by_kid_and_lesson', ['kidProfileId', 'lessonId'])
+    .index('by_created_at', ['createdAt']),
+
+  // Assessments - quizzes and exams for courses
+  assessments: defineTable({
+    courseId: v.id('courses'),
+    title: v.string(),
+    description: v.optional(v.string()),
+    type: v.union(v.literal('quiz'), v.literal('midterm'), v.literal('final'), v.literal('practice')),
+    passingScore: v.number(), // Percentage required to pass
+    timeLimit: v.optional(v.number()), // Minutes, null for untimed
+    questions: v.array(v.object({
+      id: v.string(),
+      question: v.string(),
+      type: v.union(v.literal('multiple_choice'), v.literal('true_false'), v.literal('short_answer'), v.literal('essay')),
+      options: v.optional(v.array(v.string())),
+      correctAnswer: v.string(),
+      points: v.number(),
+      explanation: v.optional(v.string()),
+    })),
+    totalPoints: v.number(),
+    shuffleQuestions: v.boolean(),
+    shuffleOptions: v.boolean(),
+    attemptsAllowed: v.optional(v.number()), // null for unlimited
+    status: v.union(v.literal('draft'), v.literal('published'), v.literal('archived')),
+    createdAt: v.string(),
+    updatedAt: v.string(),
+  })
+    .index('by_course', ['courseId'])
+    .index('by_type', ['type'])
+    .index('by_status', ['status']),
+
+  // Assessment Results - store user assessment submissions
+  assessmentResults: defineTable({
+    userId: v.id('users'),
+    kidProfileId: v.id('kidProfiles'),
+    assessmentId: v.id('assessments'),
+    courseId: v.id('courses'),
+    answers: v.array(v.object({
+      questionId: v.string(),
+      answer: v.string(),
+      isCorrect: v.boolean(),
+      pointsEarned: v.number(),
+    })),
+    score: v.number(),
+    totalPoints: v.number(),
+    percentage: v.number(),
+    passed: v.boolean(),
+    timeSpentSeconds: v.optional(v.number()),
+    attemptNumber: v.number(),
+    completedAt: v.string(),
+  })
+    .index('by_user', ['userId'])
+    .index('by_kid', ['kidProfileId'])
+    .index('by_assessment', ['assessmentId'])
+    .index('by_course', ['courseId'])
+    .index('by_user_and_course', ['userId', 'courseId'])
+    .index('by_kid_and_course', ['kidProfileId', 'courseId'])
+    .index('by_completed_at', ['completedAt']),
+
+  // Leaderboard - ranking system for courses
+  leaderboard: defineTable({
+    userId: v.id('users'),
+    kidProfileId: v.id('kidProfiles'),
+    courseId: v.id('courses'),
+    totalScore: v.number(),
+    completedAssessments: v.number(),
+    averageScore: v.number(),
+    rank: v.number(),
+    streak: v.optional(v.number()), // Current learning streak
+    lastActivityAt: v.string(),
+    updatedAt: v.string(),
+  })
+    .index('by_course', ['courseId'])
+    .index('by_user', ['userId'])
+    .index('by_kid', ['kidProfileId'])
+    .index('by_course_and_score', ['courseId', 'totalScore'])
+    .index('by_updated_at', ['updatedAt']),
+
+  // Learning Achievements - badges and milestones
+  achievements: defineTable({
+    code: v.string(),
+    name: v.string(),
+    description: v.string(),
+    icon: v.string(),
+    category: v.union(v.literal('completion'), v.literal('streak'), v.literal('score'), v.literal('speed'), v.literal('special')),
+    requirement: v.string(), // Description of what's needed
+    points: v.optional(v.number()),
+    isActive: v.boolean(),
+    createdAt: v.string(),
+  })
+    .index('by_code', ['code'])
+    .index('by_category', ['category'])
+    .index('by_active', ['isActive']),
+
+  // User Achievements - track earned achievements
+  userAchievements: defineTable({
+    userId: v.id('users'),
+    kidProfileId: v.id('kidProfiles'),
+    achievementCode: v.string(),
+    courseId: v.optional(v.id('courses')),
+    earnedAt: v.string(),
+    metadata: v.optional(v.any()),
+  })
+    .index('by_user', ['userId'])
+    .index('by_kid', ['kidProfileId'])
+    .index('by_achievement', ['achievementCode'])
+    .index('by_user_and_course', ['userId', 'courseId']),
+
 });

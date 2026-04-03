@@ -1,0 +1,203 @@
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  TextInput,
+  ActivityIndicator,
+} from 'react-native';
+import { useQuery } from 'convex/react';
+import { useTranslation } from 'react-i18next';
+import { api } from '../../../../convex/_generated/api';
+import { Feather } from '@expo/vector-icons';
+import { InternationalSchoolFilterModal } from '../components/InternationalSchoolFilterModal';
+import { useTheme, ThemeColors } from '../theme';
+
+export function InternationalSchoolsScreen({ navigation }: any) {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isFilterVisible, setIsFilterVisible] = useState(false);
+  const [filters, setFilters] = useState<any>({});
+  const { colors } = useTheme();
+  const { t } = useTranslation();
+  const styles = createStyles(colors);
+
+  const schools = useQuery(api.internationalSchools.filter, {
+    ...filters
+  });
+
+  const filteredSchools = schools?.filter((s: any) =>
+    s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    s.city.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <View style={styles.searchBox}>
+          <Feather name="search" size={20} color={colors.placeholderText} style={styles.searchIcon} />
+          <TextInput
+            style={styles.searchInput}
+            placeholder={t('mobile.internationalSchools.searchPlaceholder')}
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            placeholderTextColor={colors.placeholderText}
+          />
+        </View>
+        <TouchableOpacity
+          style={[styles.filterBtn, Object.keys(filters).length > 0 && styles.activeFilterBtn]}
+          onPress={() => setIsFilterVisible(true)}
+        >
+          <Feather name="sliders" size={20} color={Object.keys(filters).length > 0 ? '#fff' : colors.textMuted} />
+        </TouchableOpacity>
+      </View>
+
+      {schools === undefined ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+      ) : (
+        <FlatList
+          data={filteredSchools}
+          keyExtractor={(item) => item._id}
+          contentContainerStyle={styles.listContent}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() => navigation.navigate('UniversityDetail', { id: item._id, type: 'International' })}
+              activeOpacity={0.7}
+            >
+              <View style={styles.accentLine} />
+              <View style={styles.cardHeader}>
+                <View style={styles.countryBadge}>
+                  <Text style={styles.countryBadgeText}>{item.country}</Text>
+                </View>
+                <View style={[styles.statusBadge, item.status === 'closed' && styles.closedBadge]}>
+                  <Text style={[styles.statusText, item.status === 'closed' && styles.closedText]}>
+                    {item.status.toUpperCase()}
+                  </Text>
+                </View>
+              </View>
+
+              <Text style={styles.schoolName}>{item.name}</Text>
+
+              <View style={styles.locationRow}>
+                <Feather name="map-pin" size={14} color={colors.placeholderText} />
+                <Text style={styles.locationText}>{item.city}, {item.country}</Text>
+              </View>
+
+              <View style={styles.footer}>
+                <View style={styles.tagContainer}>
+                  {item.curriculum.slice(0, 2).map((c: string) => (
+                    <View key={c} style={styles.tag}>
+                      <Text style={styles.tagText}>{c}</Text>
+                    </View>
+                  ))}
+                  {item.curriculum.length > 2 && (
+                    <Text style={styles.moreText}>{t('mobile.scholarships.more', { count: item.curriculum.length - 2 })}</Text>
+                  )}
+                </View>
+                <Feather name="chevron-right" size={20} color={colors.border} />
+              </View>
+            </TouchableOpacity>
+          )}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <Feather name="globe" size={48} color={colors.border} />
+              <Text style={styles.emptyTitle}>{t('mobile.internationalSchools.noSchools')}</Text>
+              <Text style={styles.emptySubtitle}>{t('mobile.internationalSchools.tryAdjusting')}</Text>
+            </View>
+          }
+        />
+      )}
+
+      <InternationalSchoolFilterModal
+        visible={isFilterVisible}
+        onClose={() => setIsFilterVisible(false)}
+        filters={filters}
+        onApply={setFilters}
+      />
+    </View>
+  );
+}
+
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
+  container: { flex: 1, backgroundColor: colors.background },
+  header: {
+    flexDirection: 'row',
+    padding: 16,
+    backgroundColor: colors.card,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderLight,
+    gap: 12,
+  },
+  searchBox: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.borderLight,
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    borderWidth: 1,
+    borderColor: colors.border
+  },
+  searchIcon: { marginRight: 8 },
+  searchInput: { flex: 1, height: 44, fontSize: 15, color: colors.text },
+  filterBtn: {
+    width: 44,
+    height: 44,
+    backgroundColor: colors.card,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.border,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  activeFilterBtn: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+  },
+  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  listContent: { padding: 16, paddingBottom: 32 },
+  card: {
+    backgroundColor: colors.card,
+    borderRadius: 16,
+    marginBottom: 16,
+    padding: 16,
+    shadowColor: colors.shadow,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
+    borderWidth: 1,
+    borderColor: colors.borderLight,
+    overflow: 'hidden'
+  },
+  accentLine: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 3,
+    backgroundColor: '#3b82f6',
+  },
+  cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
+  countryBadge: { backgroundColor: '#f0f9ff', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6, borderWidth: 1, borderColor: '#e0f2fe' },
+  countryBadgeText: { fontSize: 10, fontWeight: '700', color: '#0369a1' },
+  statusBadge: { backgroundColor: '#f0fdf4', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6, borderWidth: 1, borderColor: '#dcfce7' },
+  closedBadge: { backgroundColor: '#fef2f2', borderColor: '#fee2e2' },
+  statusText: { fontSize: 10, fontWeight: '700', color: '#166534' },
+  closedText: { color: '#991b1b' },
+  schoolName: { fontSize: 18, fontWeight: 'bold', color: colors.text, marginBottom: 4, lineHeight: 24 },
+  locationRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 16 },
+  locationText: { fontSize: 12, color: colors.placeholderText, fontWeight: '500' },
+  footer: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderTopWidth: 1, borderTopColor: colors.borderLight, paddingTop: 12 },
+  tagContainer: { flexDirection: 'row', alignItems: 'center', gap: 6, flex: 1 },
+  tag: { backgroundColor: colors.borderLight, paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6 },
+  tagText: { fontSize: 11, color: colors.textMuted, fontWeight: '600' },
+  moreText: { fontSize: 11, color: colors.placeholderText, fontWeight: '500' },
+  emptyContainer: { alignItems: 'center', paddingTop: 60, paddingHorizontal: 40 },
+  emptyTitle: { fontSize: 18, fontWeight: 'bold', color: colors.text, marginTop: 16, marginBottom: 8 },
+  emptySubtitle: { fontSize: 14, color: colors.textMuted, textAlign: 'center', lineHeight: 20 },
+});

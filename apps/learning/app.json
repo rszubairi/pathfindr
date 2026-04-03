@@ -1,0 +1,67 @@
+{
+  "expo": {
+    "name": "Pathfindr Learning",
+    "slug": "pathfindr-learning",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.thepathfindr.learning",
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "Allow Pathfindr Learning to use Face ID for secure authentication",
+        "NSCameraUsageDescription": "Allow Pathfindr Learning to access your camera to upload documents",
+        "NSPhotoLibraryUsageDescription": "Allow Pathfindr Learning to access your photo library to upload documents",
+        "NSMicrophoneUsageDescription": "Allow Pathfindr Learning to access your microphone for AI tutor voice interaction",
+        "NSSpeechRecognitionUsageDescription": "Allow Pathfindr Learning to use speech recognition for AI tutor"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.thepathfindr.learning",
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "USE_BIOMETRIC",
+        "USE_FINGERPRINT",
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT",
+        "RECORD_AUDIO"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "./plugins/withFirebaseCredentials",
+      "@sentry.react-native/expo",
+      "expo-secure-store",
+      "expo-local-authentication",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#ffffff"
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "your-learning-app-project-id"
+      }
+    }
+  }
+}
