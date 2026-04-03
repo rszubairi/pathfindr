@@ -1,47 +1,98 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, SafeAreaView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, SafeAreaView, ActivityIndicator, Alert } from 'react-native';
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState, AppDispatch } from '../../store';
-import { addProfile, updateProfile, setSelectedProfile } from '../../store/slices/kidProfilesSlice';
+import { useMutation, useQuery } from 'convex/react';
+import { useSelector } from 'react-redux';
+import { api } from '../../../../../convex/_generated/api';
+import { Id } from '../../../../../convex/_generated/dataModel';
 import { useTheme } from '../../theme';
+import { RootState } from '../../store';
 import { RootStackParamList } from '../../navigation/RootNavigator';
+import { Feather } from '@expo/vector-icons';
 
 type KidProfileSetupRouteProp = RouteProp<RootStackParamList, 'KidProfileSetup'>;
 
 export function KidProfileSetupScreen() {
     const route = useRoute<KidProfileSetupRouteProp>();
     const navigation = useNavigation();
-    const dispatch = useDispatch<AppDispatch>();
     const { colors } = useTheme();
     const { kidId } = route.params || {};
+    const { user } = useSelector((state: RootState) => state.auth);
+
+    // Convex Mutations and Queries
+    const createProfile = useMutation(api.kidProfiles.createKidProfile);
+    const updateProfile = useMutation(api.kidProfiles.updateKidProfile);
+    const existingProfile = useQuery(api.kidProfiles.getKidProfileById,
+        kidId && user?.id ? { kidProfileId: kidId as Id<'kidProfiles'>, userId: user.id as Id<'users'> } : 'skip'
+    );
 
     const [name, setName] = useState('');
     const [dateOfBirth, setDateOfBirth] = useState('');
     const [grade, setGrade] = useState('');
     const [learningGoals, setLearningGoals] = useState('');
+    const [isSaving, setIsSaving] = useState(false);
 
-    const handleSave = () => {
-        const profileData = {
-            id: kidId || `kid_${Date.now()}`,
-            userId: 'user_1', // Will come from auth state
-            name,
-            dateOfBirth,
-            grade,
-            learningGoals: learningGoals.split(',').map((g) => g.trim()).filter(Boolean),
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-        };
+    useEffect(() => {
+        if (existingProfile) {
+            setName(existingProfile.name);
+            setDateOfBirth(existingProfile.dateOfBirth);
+            setGrade(existingProfile.grade);
+            setLearningGoals(existingProfile.learningGoals?.join(', ') || '');
+        }
+    }, [existingProfile]);
 
-        if (kidId) {
-            dispatch(updateProfile(profileData));
-        } else {
-            dispatch(addProfile(profileData));
-            dispatch(setSelectedProfile(profileData));
+    const handleSave = async () => {
+        if (!name || !dateOfBirth || !grade) {
+            Alert.alert('Missing Info', 'Please fill in all required fields.');
+            return;
         }
 
-        navigation.goBack();
+        if (!user?.id) {
+            Alert.alert('Error', 'You must be logged in to save a profile.');
+            return;
+        }
+
+        setIsSaving(true);
+        try {
+            const goalsArray = learningGoals.split(',').map((g) => g.trim()).filter(Boolean);
+
+            if (kidId) {
+                await updateProfile({
+                    kidProfileId: kidId as Id<'kidProfiles'>,
+                    userId: user.id as Id<'users'>,
+                    name,
+                    dateOfBirth,
+                    grade,
+                    learningGoals: goalsArray,
+                });
+            } else {
+                await createProfile({
+                    userId: user.id as Id<'users'>,
+                    name,
+                    dateOfBirth,
+                    grade,
+                    learningGoals: goalsArray,
+                });
+            }
+            navigation.goBack();
+        } catch (error: any) {
+            const raw: string = error.message || '';
+            const extracted = raw.includes('Uncaught Error:')
+                ? raw.split('Uncaught Error:').pop()?.trim()
+                : raw;
+            Alert.alert('Error', extracted || 'Failed to save profile. Please try again.');
+        } finally {
+            setIsSaving(false);
+        }
     };
+
+    if (kidId && !existingProfile) {
+        return (
+            <View style={[styles.container, { backgroundColor: colors.background, justifyContent: 'center' }]}>
+                <ActivityIndicator size="large" color={colors.primary} />
+            </View>
+        );
+    }
 
     return (
         <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
@@ -88,10 +139,15 @@ export function KidProfileSetupScreen() {
 
             <View style={[styles.footer, { backgroundColor: colors.surface }]}>
                 <TouchableOpacity
-                    style={[styles.saveButton, { backgroundColor: colors.primary }]}
+                    style={[styles.saveButton, { backgroundColor: colors.primary, opacity: isSaving ? 0.7 : 1 }]}
                     onPress={handleSave}
+                    disabled={isSaving}
                 >
-                    <Text style={styles.saveButtonText}>Save Profile</Text>
+                    {isSaving ? (
+                        <ActivityIndicator color="#ffffff" />
+                    ) : (
+                        <Text style={styles.saveButtonText}>{kidId ? 'Update Profile' : 'Save Profile'}</Text>
+                    )}
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -128,6 +184,8 @@ const styles = StyleSheet.create({
         padding: 16,
         borderRadius: 8,
         alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'center',
     },
     saveButtonText: {
         color: '#ffffff',

@@ -15,6 +15,7 @@
     "build:web": "npm run build --workspace=@pathfindr/web",
     "build:mobile": "npm run build --workspace=@pathfindr/mobile",
     "build:backend": "npm run build --workspace=@pathfindr/backend",
+    "build:learning": "npm run build --workspace=@pathfindr/learning",
     "lint": "npm run lint --workspaces",
     "test": "npm run test --workspaces",
     "clean": "rm -rf node_modules && rm -rf apps/*/node_modules && rm -rf packages/*/node_modules",

@@ -2,20 +2,20 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { DashboardScreen } from '../screens/DashboardScreen';
 import { ProfileScreen } from '../screens/ProfileScreen';
-import { ScholarshipsScreen } from '../screens/ScholarshipsScreen';
-import { InternshipsScreen } from '../screens/InternshipsScreen';
-import { BoardingSchoolsScreen } from '../screens/BoardingSchoolsScreen';
-import { InternationalSchoolsScreen } from '../screens/InternationalSchoolsScreen';
+import { CoursesScreen } from '../screens/learning/CoursesScreen';
+import { KidProfileListScreen } from '../screens/learning/KidProfileListScreen';
+import { ProgressScreen } from '../screens/learning/ProgressScreen';
+import { LeaderboardScreen } from '../screens/learning/LeaderboardScreen';
 import { Feather } from '@expo/vector-icons';
 import { useTheme } from '../theme';
 import { useTranslation } from 'react-i18next';
 
 export type MainTabParamList = {
   Dashboard: undefined;
-  Scholarships: undefined;
-  Internships: undefined;
-  BoardingSchools: undefined;
-  InternationalSchools: undefined;
+  Courses: undefined;
+  Kids: undefined;
+  Progress: undefined;
+  Leaderboard: undefined;
   Profile: undefined;
 };
 
@@ -40,17 +40,17 @@ export function MainTabNavigator() {
             case 'Dashboard':
               iconName = 'layout';
               break;
-            case 'Scholarships':
-              iconName = 'award';
-              break;
-            case 'Internships':
-              iconName = 'briefcase';
-              break;
-            case 'BoardingSchools':
+            case 'Courses':
               iconName = 'book-open';
               break;
-            case 'InternationalSchools':
-              iconName = 'globe';
+            case 'Kids':
+              iconName = 'users';
+              break;
+            case 'Progress':
+              iconName = 'trending-up';
+              break;
+            case 'Leaderboard':
+              iconName = 'award';
               break;
             case 'Profile':
               iconName = 'user';
@@ -67,32 +67,32 @@ export function MainTabNavigator() {
       <Tab.Screen 
         name="Dashboard" 
         component={DashboardScreen} 
-        options={{ title: t('nav.home') }}
+        options={{ title: 'Home' }}
       />
       <Tab.Screen 
-        name="Scholarships" 
-        component={ScholarshipsScreen} 
-        options={{ title: t('nav.scholarships') }}
+        name="Courses" 
+        component={CoursesScreen} 
+        options={{ title: 'Courses' }}
       />
       <Tab.Screen 
-        name="Internships" 
-        component={InternshipsScreen} 
-        options={{ title: t('nav.internships') }}
+        name="Kids" 
+        component={KidProfileListScreen} 
+        options={{ title: 'Kids' }}
       />
       <Tab.Screen 
-        name="BoardingSchools" 
-        component={BoardingSchoolsScreen} 
-        options={{ title: t('nav.boardingschools') }} 
+        name="Progress" 
+        component={ProgressScreen} 
+        options={{ title: 'Progress' }} 
       />
       <Tab.Screen 
-        name="InternationalSchools" 
-        component={InternationalSchoolsScreen} 
-        options={{ title: t('nav.internationalschools') }} 
+        name="Leaderboard" 
+        component={LeaderboardScreen} 
+        options={{ title: 'Ranks' }} 
       />
       <Tab.Screen 
         name="Profile" 
         component={ProfileScreen} 
-        options={{ title: t('nav.profile') }}
+        options={{ title: 'Profile' }}
       />
     </Tab.Navigator>
   );

@@ -58,7 +58,11 @@ export function LoginScreen() {
         })
       );
     } catch (error: any) {
-      Alert.alert('Login Failed', error.message || 'An error occurred during login.');
+      const raw: string = error.message || '';
+      const extracted = raw.includes('Uncaught Error:')
+        ? raw.split('Uncaught Error:').pop()?.trim()
+        : raw;
+      Alert.alert('Login Failed', extracted || 'An error occurred during login.');
     } finally {
       setIsLoading(false);
     }
