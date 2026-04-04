@@ -16,6 +16,7 @@ import { CourseDetailScreen } from '../screens/learning/CourseDetailScreen';
 import { CoursePlayerScreen } from '../screens/learning/CoursePlayerScreen';
 import { AssessmentScreen } from '../screens/learning/AssessmentScreen';
 import { KidProfileSetupScreen } from '../screens/learning/KidProfileSetupScreen';
+import { KidProfileSelectScreen } from '../screens/learning/KidProfileSelectScreen';
 
 export type RootStackParamList = {
   // Auth
@@ -26,10 +27,11 @@ export type RootStackParamList = {
   Main: undefined;
 
   // Learning screens (modal/stack)
-  CourseDetail: { courseId: string };
-  CoursePlayer: { courseId: string; enrollmentId: string; lessonIndex?: number };
-  Assessment: { assessmentId: string; courseId: string; enrollmentId: string };
+  CourseDetail: { courseId: string; autoEnroll?: boolean };
+  CoursePlayer: { courseId: string; enrollmentId: string; kidProfileId: string; lessonIndex?: number };
+  Assessment: { assessmentId: string; courseId: string; enrollmentId: string; kidProfileId: string };
   KidProfileSetup: { kidId?: string };
+  KidProfileSelect: { courseId: string };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -87,6 +89,11 @@ export function RootNavigator() {
             name="KidProfileSetup"
             component={KidProfileSetupScreen}
             options={{ title: 'Kid Profile', presentation: 'modal' }}
+          />
+          <Stack.Screen
+            name="KidProfileSelect"
+            component={KidProfileSelectScreen}
+            options={{ title: 'Select Profile' }}
           />
         </>
       )}

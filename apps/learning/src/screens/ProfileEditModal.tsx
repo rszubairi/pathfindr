@@ -8,8 +8,8 @@ import {
   ActivityIndicator,
   Alert,
   Modal,
-  SafeAreaView
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import { useSelector } from 'react-redux';

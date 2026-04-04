@@ -1,97 +1,139 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useQuery } from 'convex/react';
 import { api } from '../../../../../convex/_generated/api';
 import { useTheme } from '../../theme';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { Feather } from '@expo/vector-icons';
+import { Image } from 'expo-image';
+import { setSelectedProfile } from '../../store/slices/kidProfilesSlice';
+import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 export function ProgressScreen() {
     const { colors } = useTheme();
-    const { selectedProfile } = useSelector((state: RootState) => state.kidProfiles);
-    
-    // Get enrollments for the selected kid
-    const enrollments = useQuery(api.enrollments.getKidEnrollments, 
-        selectedProfile ? { kidProfileId: (selectedProfile as any)._id } : 'skip'
+    const { t } = useTranslation();
+    const { user } = useSelector((state: RootState) => state.auth);
+    const { profiles } = useSelector((state: RootState) => state.kidProfiles);
+    const dispatch = useDispatch();
+    const navigation = useNavigation<any>();
+
+    // Get aggregate statistics for all kids
+    const multiKidProgress = useQuery(
+        api.analytics.getUserKidsProgress,
+        user?.id ? { userId: user.id as any } : 'skip'
     );
 
-    const renderProgressItem = ({ item }: { item: any }) => (
-        <View style={[styles.progressCard, { backgroundColor: colors.surface }]}>
-            <View style={styles.cardHeader}>
-                <View style={[styles.iconContainer, { backgroundColor: colors.primary + '20' }]}>
-                    <Feather name="book" size={24} color={colors.primary} />
+    const formatTime = (seconds: number) => {
+        const hours = Math.floor(seconds / 3600);
+        const mins = Math.floor((seconds % 3600) / 60);
+        if (hours > 0) return `${hours}h ${mins}m`;
+        return `${mins}m`;
+    };
+
+    const handleSelectKid = (kidId: string) => {
+        const profile = profiles.find(p => (p as any)._id === kidId || p.id === kidId);
+        if (profile) {
+            dispatch(setSelectedProfile(profile));
+            // Navigate to or stay on appropriate screen? We stay here for now or maybe just update selected profile
+        }
+    };
+
+    const renderKidProgressItem = ({ item }: { item: any }) => (
+        <View style={[styles.kidCard, { backgroundColor: colors.surface }]}>
+            <View style={styles.cardTop}>
+                <View style={styles.avatarContainer}>
+                    {item.avatarUrl ? (
+                        <Image source={{ uri: item.avatarUrl }} style={styles.avatar} />
+                    ) : (
+                        <View style={[styles.initialsAvatar, { backgroundColor: colors.primary + '20' }]}>
+                            <Text style={[styles.initialsText, { color: colors.primary }]}>
+                                {item.name.charAt(0).toUpperCase()}
+                            </Text>
+                        </View>
+                    )}
                 </View>
-                <View style={styles.cardHeaderText}>
-                    <Text style={[styles.courseTitle, { color: colors.text }]}>{item.courseTitle || 'Course'}</Text>
-                    <Text style={[styles.lastAccessed, { color: colors.textSecondary }]}>
-                        Last active: {new Date(item.lastAccessedAt).toLocaleDateString()}
+                <View style={styles.kidInfo}>
+                    <Text style={[styles.kidName, { color: colors.text }]}>{item.name}</Text>
+                    <Text style={[styles.lastActive, { color: colors.textSecondary }]}>
+                        {t('learning.progress.lastSession')}: {new Date(item.lastActive).toLocaleDateString()}
                     </Text>
                 </View>
+                <TouchableOpacity 
+                    style={[styles.detailsBtn, { borderColor: colors.border }]}
+                    onPress={() => handleSelectKid(item.kidId)}
+                >
+                    <Feather name="chevron-right" size={20} color={colors.textSecondary} />
+                </TouchableOpacity>
             </View>
 
-            <View style={styles.progressContainer}>
-                <View style={styles.progressHeader}>
-                    <Text style={[styles.progressLabel, { color: colors.textSecondary }]}>Total Progress</Text>
-                    <Text style={[styles.progressPercentage, { color: colors.primary }]}>{item.progress}%</Text>
+            <View style={styles.statsGrid}>
+                <View style={styles.statBox}>
+                    <Text style={[styles.statNum, { color: colors.text }]}>{item.totalCourses}</Text>
+                    <Text style={[styles.statLabel, { color: colors.textSecondary }]}>{t('common.courses') || 'Courses'}</Text>
                 </View>
-                <View style={[styles.progressBarBackground, { backgroundColor: colors.borderLight }]}>
-                    <View 
-                        style={[
-                            styles.progressBarFill, 
-                            { 
-                                backgroundColor: colors.primary, 
-                                width: `${item.progress}%` 
-                            }
-                        ]} 
-                    />
+                <View style={styles.statDivider} />
+                <View style={styles.statBox}>
+                    <Text style={[styles.statNum, { color: colors.text }]}>{item.completedCourses}</Text>
+                    <Text style={[styles.statLabel, { color: colors.textSecondary }]}>{t('learning.progress.completed')}</Text>
+                </View>
+                <View style={styles.statDivider} />
+                <View style={styles.statBox}>
+                    <Text style={[styles.statNum, { color: colors.text }]}>{item.totalPoints}</Text>
+                    <Text style={[styles.statLabel, { color: colors.textSecondary }]}>{t('learning.progress.points')}</Text>
                 </View>
             </View>
 
-            <View style={styles.statsContainer}>
-                <View style={styles.statItem}>
-                    <Text style={[styles.statValue, { color: colors.text }]}>{item.completedLessons.length}</Text>
-                    <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Lessons Done</Text>
+            <View style={styles.progressRow}>
+                <View style={styles.barWrap}>
+                    <View style={styles.barInfo}>
+                        <Text style={[styles.barLabel, { color: colors.textSecondary }]}>{t('learning.progress.avgProgress')}</Text>
+                        <Text style={[styles.barPercentage, { color: colors.primary }]}>{item.averageProgress}%</Text>
+                    </View>
+                    <View style={[styles.barBg, { backgroundColor: colors.borderLight }]}>
+                        <View style={[styles.barFill, { backgroundColor: colors.primary, width: `${item.averageProgress}%` }]} />
+                    </View>
                 </View>
-                <View style={[styles.statDivider, { backgroundColor: colors.border }]} />
-                <View style={styles.statItem}>
-                    <Text style={[styles.statValue, { color: colors.text }]}>{item.totalScore || 0}</Text>
-                    <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Points Earned</Text>
-                </View>
+            </View>
+
+            <View style={styles.timeWrap}>
+                <Feather name="clock" size={12} color={colors.textSecondary} style={{ marginRight: 4 }} />
+                <Text style={[styles.timeText, { color: colors.textSecondary }]}>
+                    {t('learning.progress.timeSpent')}: {formatTime(item.totalTimeSpent || 0)}
+                </Text>
+                {item.latestCourse && (
+                    <>
+                        <View style={[styles.dot, { backgroundColor: colors.textSecondary }]} />
+                        <Text style={[styles.currentCourse, { color: colors.textSecondary }]} numberOfLines={1}>
+                            {t('learning.progress.active')}: {item.latestCourse}
+                        </Text>
+                    </>
+                )}
             </View>
         </View>
     );
 
-    if (!selectedProfile) {
-        return (
-            <SafeAreaView style={[styles.container, { backgroundColor: colors.background, justifyContent: 'center', alignItems: 'center' }]}>
-                <Feather name="users" size={64} color={colors.textMuted} />
-                <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
-                    Please select a kid profile to see progress!
-                </Text>
-            </SafeAreaView>
-        );
-    }
-
     return (
         <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
             <View style={styles.header}>
-                <Text style={[styles.title, { color: colors.text }]}>Learning Progress</Text>
+                <Text style={[styles.title, { color: colors.text }]}>{t('learning.progress.title')}</Text>
                 <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-                    Tracking for {selectedProfile.name}
+                    {t('learning.progress.subtitle')}
                 </Text>
             </View>
 
             <FlatList
-                data={enrollments}
-                renderItem={renderProgressItem}
-                keyExtractor={(item) => item._id}
+                data={multiKidProgress}
+                renderItem={renderKidProgressItem}
+                keyExtractor={(item) => item.kidId}
                 contentContainerStyle={styles.listContent}
                 ListEmptyComponent={
                     <View style={styles.emptyContainer}>
-                        <Feather name="layout" size={48} color={colors.textMuted} />
+                        <Feather name="users" size={48} color={colors.textMuted} />
                         <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
-                            No enrollments found. Start learning a course!
+                            {t('learning.progress.noProfiles')}
                         </Text>
                     </View>
                 }
@@ -106,112 +148,165 @@ const styles = StyleSheet.create({
     },
     header: {
         padding: 20,
+        paddingBottom: 10,
     },
     title: {
         fontSize: 28,
         fontWeight: '800',
     },
     subtitle: {
-        fontSize: 16,
+        fontSize: 15,
         marginTop: 4,
     },
     listContent: {
         padding: 16,
     },
-    progressCard: {
-        borderRadius: 20,
+    kidCard: {
+        borderRadius: 24,
         padding: 20,
         marginBottom: 16,
         elevation: 3,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.08,
+        shadowRadius: 12,
     },
-    cardHeader: {
+    cardTop: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 20,
     },
-    iconContainer: {
-        width: 48,
-        height: 48,
-        borderRadius: 12,
+    avatarContainer: {
+        width: 54,
+        height: 54,
+        borderRadius: 18,
+        overflow: 'hidden',
+    },
+    avatar: {
+        width: '100%',
+        height: '100%',
+    },
+    initialsAvatar: {
+        width: '100%',
+        height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        marginRight: 16,
     },
-    cardHeaderText: {
-        flex: 1,
-    },
-    courseTitle: {
-        fontSize: 18,
+    initialsText: {
+        fontSize: 20,
         fontWeight: 'bold',
     },
-    lastAccessed: {
+    kidInfo: {
+        flex: 1,
+        marginLeft: 16,
+    },
+    kidName: {
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
+    lastActive: {
         fontSize: 12,
         marginTop: 2,
     },
-    progressContainer: {
-        marginBottom: 20,
+    detailsBtn: {
+        width: 36,
+        height: 36,
+        borderRadius: 10,
+        borderWidth: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    progressHeader: {
+    statsGrid: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        marginBottom: 20,
+        backgroundColor: 'rgba(0,0,0,0.02)',
+        borderRadius: 16,
+        paddingVertical: 12,
+    },
+    statBox: {
+        flex: 1,
         alignItems: 'center',
+    },
+    statNum: {
+        fontSize: 18,
+        fontWeight: '800',
+    },
+    statLabel: {
+        fontSize: 11,
+        marginTop: 2,
+        textTransform: 'uppercase',
+        letterSpacing: 0.5,
+    },
+    statDivider: {
+        width: 1,
+        height: '60%',
+        backgroundColor: '#e2e8f0',
+        alignSelf: 'center',
+    },
+    progressRow: {
+        marginBottom: 16,
+    },
+    barWrap: {
+        width: '100%',
+    },
+    barInfo: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-end',
         marginBottom: 8,
     },
-    progressLabel: {
-        fontSize: 14,
-        fontWeight: '600',
+    barLabel: {
+        fontSize: 12,
+        fontWeight: '700',
     },
-    progressPercentage: {
-        fontSize: 16,
+    barPercentage: {
+        fontSize: 14,
         fontWeight: 'bold',
     },
-    progressBarBackground: {
+    barBg: {
         height: 8,
         borderRadius: 4,
         width: '100%',
         overflow: 'hidden',
     },
-    progressBarFill: {
+    barFill: {
         height: '100%',
         borderRadius: 4,
     },
-    statsContainer: {
+    timeWrap: {
         flexDirection: 'row',
         alignItems: 'center',
         borderTopWidth: 1,
         borderTopColor: '#f1f5f9',
-        paddingTop: 16,
+        paddingTop: 12,
     },
-    statItem: {
-        flex: 1,
-        alignItems: 'center',
-    },
-    statValue: {
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    statLabel: {
+    timeText: {
         fontSize: 12,
-        marginTop: 2,
+        fontWeight: '600',
     },
-    statDivider: {
-        width: 1,
-        height: 30,
+    dot: {
+        width: 3,
+        height: 3,
+        borderRadius: 1.5,
+        marginHorizontal: 8,
+    },
+    currentCourse: {
+        fontSize: 12,
+        fontWeight: '500',
+        flex: 1,
     },
     emptyContainer: {
         marginTop: 100,
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 20,
+        padding: 24,
     },
     emptyText: {
         marginTop: 16,
         fontSize: 16,
         textAlign: 'center',
+        lineHeight: 24,
     },
 });
 

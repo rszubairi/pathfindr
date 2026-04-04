@@ -72,3 +72,13 @@ export const getCourseLessons = query({
       .collect();
   },
 });
+export const getPopularCourses = query({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.db
+      .query('courses')
+      .withIndex('by_status', (q) => q.eq('status', 'published'))
+      .order('desc')
+      .take(4);
+  },
+});

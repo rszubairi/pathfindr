@@ -1,0 +1,3 @@
+{
+  "ignoreBuildStep": "git diff --quiet HEAD^ HEAD . ../../packages ../../package.json ../../package-lock.json ../../convex"
+}

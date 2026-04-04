@@ -1,84 +1,77 @@
-import React, { useEffect } from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
-import Svg, { Path, G, Rect } from 'react-native-svg';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withRepeat,
-  withTiming,
-  withDelay,
-  Easing,
-  interpolate
-} from 'react-native-reanimated';
+import React, { useEffect, useRef } from 'react';
+import { View, StyleSheet, Dimensions, Animated, Easing, Text } from 'react-native';
+import Svg, { Path, Rect } from 'react-native-svg';
 import { useTheme, ThemeColors } from '../../theme';
 
 const { width } = Dimensions.get('window');
 
-const AnimatedPath = Animated.createAnimatedComponent(Path);
-const AnimatedG = Animated.createAnimatedComponent(G);
-
 export const PathfindrLoader = () => {
   const { colors } = useTheme();
   const styles = createStyles(colors);
-  const rotation = useSharedValue(0);
-  const scale = useSharedValue(1);
-  const float = useSharedValue(0);
-  const opacity = useSharedValue(0.3);
+
+  const float = useRef(new Animated.Value(0)).current;
+  const scale = useRef(new Animated.Value(1)).current;
+  const glowOpacity = useRef(new Animated.Value(0.3)).current;
+  const glowScale = useRef(new Animated.Value(1)).current;
+
+  // Title entrance animations
+  const titleOpacity = useRef(new Animated.Value(0)).current;
+  const titleTranslateY = useRef(new Animated.Value(16)).current;
+  const subtitleOpacity = useRef(new Animated.Value(0)).current;
+  const subtitleTranslateY = useRef(new Animated.Value(10)).current;
+  const subtitleLetterSpacing = useRef(new Animated.Value(8)).current;
 
   useEffect(() => {
-    // Rotation animation
-    rotation.value = withRepeat(
-      withTiming(360, { duration: 2500, easing: Easing.linear }),
-      -1,
-      false
-    );
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(float, { toValue: -10, duration: 1500, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+        Animated.timing(float, { toValue: 0, duration: 1500, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+      ])
+    ).start();
 
-    // Pulse animation
-    scale.value = withRepeat(
-      withTiming(1.1, { duration: 1200, easing: Easing.inOut(Easing.ease) }),
-      -1,
-      true
-    );
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(scale, { toValue: 1.1, duration: 1200, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+        Animated.timing(scale, { toValue: 1, duration: 1200, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+      ])
+    ).start();
 
-    // Floating animation
-    float.value = withRepeat(
-      withTiming(1, { duration: 1500, easing: Easing.inOut(Easing.ease) }),
-      -1,
-      true
-    );
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(glowOpacity, { toValue: 0.6, duration: 1000, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+        Animated.timing(glowOpacity, { toValue: 0.3, duration: 1000, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+      ])
+    ).start();
 
-    // Opacity pulse for the background glow
-    opacity.value = withRepeat(
-      withTiming(0.6, { duration: 1000, easing: Easing.inOut(Easing.ease) }),
-      -1,
-      true
-    );
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(glowScale, { toValue: 1.3, duration: 1200, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+        Animated.timing(glowScale, { toValue: 1, duration: 1200, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+      ])
+    ).start();
+
+    // Staggered title entrance: "Pathfindr" slides up first, then "Learning" fans in
+    Animated.sequence([
+      Animated.delay(300),
+      Animated.parallel([
+        Animated.timing(titleOpacity, { toValue: 1, duration: 500, easing: Easing.out(Easing.cubic), useNativeDriver: true }),
+        Animated.timing(titleTranslateY, { toValue: 0, duration: 500, easing: Easing.out(Easing.cubic), useNativeDriver: true }),
+      ]),
+      Animated.delay(150),
+      Animated.parallel([
+        Animated.timing(subtitleOpacity, { toValue: 1, duration: 450, easing: Easing.out(Easing.cubic), useNativeDriver: true }),
+        Animated.timing(subtitleTranslateY, { toValue: 0, duration: 450, easing: Easing.out(Easing.cubic), useNativeDriver: true }),
+        Animated.timing(subtitleLetterSpacing, { toValue: 3, duration: 600, easing: Easing.out(Easing.cubic), useNativeDriver: false }),
+      ]),
+    ]).start();
   }, []);
-
-  const animatedLogoStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        { translateY: interpolate(float.value, [0, 1], [0, -10]) },
-        { scale: scale.value }
-      ],
-    };
-  });
-
-  const animatedGlowStyle = useAnimatedStyle(() => {
-    return {
-      opacity: opacity.value,
-      transform: [{ scale: interpolate(scale.value, [1, 1.1], [1, 1.3]) }]
-    };
-  });
 
   return (
     <View style={styles.container}>
-      {/* Background Glow */}
-      <Animated.View style={[styles.glow, animatedGlowStyle]} />
+      <Animated.View style={[styles.glow, { opacity: glowOpacity, transform: [{ scale: glowScale }] }]} />
 
-      <Animated.View style={animatedLogoStyle}>
+      <Animated.View style={{ transform: [{ translateY: float }, { scale }] }}>
         <Svg width="120" height="120" viewBox="0 0 100 100">
-          {/* Graduation Cap Main Part */}
           <Path
             d="M50 25L15 42L50 59L85 42L50 25Z"
             fill={colors.primary}
@@ -86,7 +79,6 @@ export const PathfindrLoader = () => {
             strokeWidth="2"
             strokeLinejoin="round"
           />
-          {/* Graduation Cap Bottom Part */}
           <Path
             d="M30 52V62C30 62 40 70 50 70C60 70 70 62 70 62V52"
             fill="none"
@@ -94,7 +86,6 @@ export const PathfindrLoader = () => {
             strokeWidth="5"
             strokeLinecap="round"
           />
-          {/* Tassel */}
           <Path
             d="M85 42V55C85 55 83 60 81 60"
             fill="none"
@@ -107,7 +98,12 @@ export const PathfindrLoader = () => {
       </Animated.View>
 
       <View style={styles.textContainer}>
-        <Animated.Text style={styles.brandText}>Pathfindr</Animated.Text>
+        <Animated.Text style={[styles.brandText, { opacity: titleOpacity, transform: [{ translateY: titleTranslateY }] }]}>
+          Pathfindr
+        </Animated.Text>
+        <Animated.Text style={[styles.subtitleText, { opacity: subtitleOpacity, transform: [{ translateY: subtitleTranslateY }], letterSpacing: subtitleLetterSpacing }]}>
+          LEARNING
+        </Animated.Text>
         <View style={styles.dotContainer}>
           {[0, 1, 2].map((i) => (
             <Dot key={i} index={i} colors={colors} />
@@ -120,34 +116,29 @@ export const PathfindrLoader = () => {
 
 const Dot = ({ index, colors }: { index: number; colors: ThemeColors }) => {
   const styles = createStyles(colors);
-  const dotScale = useSharedValue(1);
-  const dotOpacity = useSharedValue(0.4);
+  const dotScale = useRef(new Animated.Value(1)).current;
+  const dotOpacity = useRef(new Animated.Value(0.4)).current;
 
   useEffect(() => {
-    dotScale.value = withDelay(
-      index * 200,
-      withRepeat(
-        withTiming(1.5, { duration: 600, easing: Easing.inOut(Easing.ease) }),
-        -1,
-        true
-      )
-    );
-    dotOpacity.value = withDelay(
-      index * 200,
-      withRepeat(
-        withTiming(1, { duration: 600, easing: Easing.inOut(Easing.ease) }),
-        -1,
-        true
-      )
-    );
+    const delay = index * 200;
+    Animated.loop(
+      Animated.sequence([
+        Animated.delay(delay),
+        Animated.parallel([
+          Animated.sequence([
+            Animated.timing(dotScale, { toValue: 1.5, duration: 600, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+            Animated.timing(dotScale, { toValue: 1, duration: 600, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+          ]),
+          Animated.sequence([
+            Animated.timing(dotOpacity, { toValue: 1, duration: 600, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+            Animated.timing(dotOpacity, { toValue: 0.4, duration: 600, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+          ]),
+        ]),
+      ])
+    ).start();
   }, []);
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: dotScale.value }],
-    opacity: dotOpacity.value,
-  }));
-
-  return <Animated.View style={[styles.dot, animatedStyle]} />;
+  return <Animated.View style={[styles.dot, { transform: [{ scale: dotScale }], opacity: dotOpacity }]} />;
 };
 
 const createStyles = (colors: ThemeColors) => StyleSheet.create({
@@ -172,6 +163,12 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
     fontWeight: '800',
     color: colors.text,
     letterSpacing: -0.5,
+  },
+  subtitleText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: colors.primary,
+    marginTop: 2,
   },
   dotContainer: {
     flexDirection: 'row',

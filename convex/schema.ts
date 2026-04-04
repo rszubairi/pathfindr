@@ -609,8 +609,10 @@ export default defineSchema({
       lessonId: v.id('lessons'),
       completedAt: v.string(),
       score: v.optional(v.number()),
+      revisionCount: v.optional(v.number()), // Track how many times they revisited
     })),
     totalScore: v.optional(v.number()),
+    totalTimeSpent: v.optional(v.number()), // Total time in seconds
     enrolledAt: v.string(),
     completedAt: v.optional(v.string()),
     lastAccessedAt: v.optional(v.string()),
@@ -626,8 +628,9 @@ export default defineSchema({
     userId: v.id('users'),
     kidProfileId: v.id('kidProfiles'),
     lessonId: v.id('lessons'),
-    breakpointIndex: v.number(),
-    interactionType: v.union(v.literal('question'), v.literal('hint'), v.literal('correction'), v.literal('encouragement'), v.literal('explanation')),
+    breakpointIndex: v.optional(v.number()), 
+    interactionType: v.union(v.literal('question'), v.literal('hint'), v.literal('correction'), v.literal('encouragement'), v.literal('explanation'), v.literal('student_question')),
+    initiatedBy: v.union(v.literal('student'), v.literal('system')),
     question: v.optional(v.string()),
     userResponse: v.optional(v.string()),
     aiResponse: v.string(),
@@ -638,11 +641,23 @@ export default defineSchema({
     createdAt: v.string(),
   })
     .index('by_lesson', ['lessonId'])
-    .index('by_user', ['userId'])
     .index('by_kid', ['kidProfileId'])
-    .index('by_user_and_lesson', ['userId', 'lessonId'])
-    .index('by_kid_and_lesson', ['kidProfileId', 'lessonId'])
-    .index('by_created_at', ['createdAt']),
+    .index('by_kid_and_lesson', ['kidProfileId', 'lessonId']),
+
+  // Learning Sessions - track time and engagement per session
+  learningSessions: defineTable({
+    userId: v.id('users'),
+    kidProfileId: v.id('kidProfiles'),
+    courseId: v.id('courses'),
+    lessonId: v.id('lessons'),
+    startTime: v.string(),
+    endTime: v.optional(v.string()),
+    durationSeconds: v.number(),
+    platform: v.string(), // ios, android, web
+  })
+    .index('by_kid', ['kidProfileId'])
+    .index('by_course', ['courseId'])
+    .index('by_lesson', ['lessonId']),
 
   // Assessments - quizzes and exams for courses
   assessments: defineTable({

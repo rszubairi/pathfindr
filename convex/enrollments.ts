@@ -31,6 +31,7 @@ export const enrollInCourse = mutation({
       progress: 0,
       currentLessonIndex: 0,
       completedLessons: [],
+      totalTimeSpent: 0,
       enrolledAt: new Date().toISOString(),
       lastAccessedAt: new Date().toISOString(),
     });
@@ -77,6 +78,7 @@ export const updateProgress = mutation({
         lessonId: args.lessonId,
         completedAt: new Date().toISOString(),
         score: args.score,
+        revisionCount: 0,
       });
     }
 
@@ -111,14 +113,48 @@ export const getKidEnrollments = query({
     const enrollmentDetails = await Promise.all(
       enrollments.map(async (e) => {
         const course = await ctx.db.get(e.courseId);
+        const lessons = await ctx.db
+          .query('lessons')
+          .withIndex('by_course', (q) => q.eq('courseId', e.courseId))
+          .collect();
         return {
           ...e,
           courseTitle: course?.title,
           courseThumbnail: course?.thumbnailUrl,
+          totalLessons: lessons.length,
         };
       })
     );
 
     return enrollmentDetails;
+  },
+});
+
+export const getUserEnrollments = query({
+  args: { userId: v.id('users') },
+  handler: async (ctx, args) => {
+    const enrollments = await ctx.db
+      .query('courseEnrollments')
+      .withIndex('by_user', (q) => q.eq('userId', args.userId))
+      .order('desc')
+      .take(5);
+
+    return await Promise.all(
+      enrollments.map(async (e) => {
+        const course = await ctx.db.get(e.courseId);
+        const kid = await ctx.db.get(e.kidProfileId);
+        const lessons = await ctx.db
+          .query('lessons')
+          .withIndex('by_course', (q) => q.eq('courseId', e.courseId))
+          .collect();
+        return {
+          ...e,
+          courseTitle: course?.title,
+          courseThumbnail: course?.thumbnailUrl,
+          kidName: kid?.name,
+          totalLessons: lessons.length,
+        };
+      })
+    );
   },
 });

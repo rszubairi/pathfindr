@@ -1,4 +1,4 @@
-package com.thepathfindr.app
+package com.thepathfindr.learning
 
 import android.app.Application
 import android.content.res.Configuration

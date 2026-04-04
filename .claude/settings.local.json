@@ -93,7 +93,9 @@
       "Bash(rmdir '/Users/raheelzubairi/Documents/projects/pathfindr/apps/web/src/app/[lang]/university-rankings/__TRACKED_VAR__')",
       "Bash(mv '/Users/raheelzubairi/Documents/projects/pathfindr/apps/web/src/app/[lang]/university-rankings/page.tsx' '/Users/raheelzubairi/Documents/projects/pathfindr/apps/web/src/app/[lang]/university-rankings/2025/page.tsx')",
       "Bash(node apps/web/scripts/fetchUniversityLogos.mjs)",
-      "Bash(node -)"
+      "Bash(node -)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('expo',{}\\).get\\('plugins',[]\\), indent=2\\)\\)\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); deps=d['dependencies']; print\\('\\\\n'.join\\(k for k in deps if 'webview' in k.lower\\(\\) or 'youtube' in k.lower\\(\\) or 'video' in k.lower\\(\\)\\)\\)\")"
     ]
   }
 }

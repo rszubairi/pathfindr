@@ -39,7 +39,8 @@
         "USE_FINGERPRINT",
         "android.permission.USE_BIOMETRIC",
         "android.permission.USE_FINGERPRINT",
-        "RECORD_AUDIO"
+        "RECORD_AUDIO",
+        "android.permission.RECORD_AUDIO"
       ]
     },
     "web": {
@@ -56,12 +57,14 @@
           "icon": "./assets/notification-icon.png",
           "color": "#ffffff"
         }
-      ]
+      ],
+      "@react-native-voice/voice"
     ],
     "extra": {
       "eas": {
-        "projectId": "your-learning-app-project-id"
+        "projectId": "806aec68-cae1-4996-bb39-303cd3ef7ea3"
       }
-    }
+    },
+    "owner": "rzubairi"
   }
 }

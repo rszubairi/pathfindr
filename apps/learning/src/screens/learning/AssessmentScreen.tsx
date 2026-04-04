@@ -1,68 +1,99 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
-import { useRoute, RouteProp } from '@react-navigation/native';
+import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import { useTheme } from '../../theme';
 import { RootStackParamList } from '../../navigation/RootNavigator';
+import { useQuery, useMutation } from 'convex/react';
+import { api } from '../../../../../convex/_generated/api';
+import { Id } from '../../../../../convex/_generated/dataModel';
+import { Skeleton } from '../../components/loading/Skeleton';
+import { Feather } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
 
 type AssessmentRouteProp = RouteProp<RootStackParamList, 'Assessment'>;
 
 export function AssessmentScreen() {
     const route = useRoute<AssessmentRouteProp>();
+    const navigation = useNavigation();
     const { colors } = useTheme();
     const { assessmentId, courseId, enrollmentId } = route.params;
+
+    const assessment = useQuery(api.assessments.getAssessmentByCourse, { courseId: courseId as Id<'courses'> });
+    const submit = useMutation(api.assessments.submitAssessment);
 
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState<Record<string, string>>({});
     const [showResults, setShowResults] = useState(false);
-
-    // Mock assessment data (will be replaced with actual Convex data)
-    const mockAssessment = {
-        id: assessmentId,
-        title: 'Course Assessment',
-        questions: [
-            {
-                id: 'q1',
-                question: 'What is the main concept covered in this course?',
-                type: 'multiple_choice' as const,
-                options: ['Concept A', 'Concept B', 'Concept C', 'Concept D'],
-                correctAnswer: 'Concept A',
-                points: 10,
-            },
-            {
-                id: 'q2',
-                question: 'True or False: This is an important principle.',
-                type: 'true_false' as const,
-                options: ['True', 'False'],
-                correctAnswer: 'True',
-                points: 10,
-            },
-            {
-                id: 'q3',
-                question: 'Explain the key takeaway from this lesson.',
-                type: 'short_answer' as const,
-                correctAnswer: 'sample answer',
-                points: 20,
-            },
-        ],
-    };
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleAnswer = (questionId: string, answer: string) => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         setAnswers({ ...answers, [questionId]: answer });
     };
 
-    const handleSubmit = () => {
-        // Calculate score (mock)
+    const handleSubmit = async () => {
+        if (!assessment || isSubmitting) return;
+
+        setIsSubmitting(true);
         let score = 0;
-        mockAssessment.questions.forEach((q) => {
-            if (answers[q.id] === q.correctAnswer) {
-                score += q.points;
-            }
+        const totalPoints = assessment.questions.reduce((acc: number, q: any) => acc + q.points, 0);
+
+        const results = assessment.questions.map((q: any) => {
+            const isCorrect = answers[q.id]?.trim().toLowerCase() === q.correctAnswer.trim().toLowerCase();
+            if (isCorrect) score += q.points;
+            return {
+                questionId: q.id,
+                answer: answers[q.id] || '',
+                isCorrect,
+                pointsEarned: isCorrect ? q.points : 0,
+            };
         });
-        setShowResults(true);
+
+        const percentage = Math.round((score / totalPoints) * 100);
+        const passed = percentage >= assessment.passingScore;
+
+        try {
+            await submit({
+                assessmentId: assessment._id,
+                kidProfileId: route.params.kidProfileId as any,
+                answers: results,
+                score,
+                totalPoints,
+                percentage,
+                passed,
+            });
+            Haptics.notificationAsync(passed ? Haptics.NotificationFeedbackType.Success : Haptics.NotificationFeedbackType.Warning);
+            setShowResults(true);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
-    const currentQuestion = mockAssessment.questions[currentQuestionIndex];
-    const progress = ((currentQuestionIndex + 1) / mockAssessment.questions.length) * 100;
+    if (!assessment) {
+        return (
+            <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+                <View style={styles.header}>
+                    <Skeleton width="60%" height={24} style={{ marginBottom: 16 }} />
+                    <Skeleton width="100%" height={4} />
+                    <Skeleton width="40%" height={14} style={{ alignSelf: 'center', marginTop: 8 }} />
+                </View>
+                <View style={styles.scrollContent}>
+                    <View style={[styles.questionCard, { backgroundColor: colors.surface }]}>
+                        <Skeleton width="90%" height={20} style={{ marginBottom: 12 }} />
+                        <Skeleton width="70%" height={20} style={{ marginBottom: 24 }} />
+                        {[1, 2, 3, 4].map(i => (
+                            <Skeleton key={i} width="100%" height={56} borderRadius={8} style={{ marginBottom: 12 }} />
+                        ))}
+                    </View>
+                </View>
+            </SafeAreaView>
+        );
+    }
+
+    const currentQuestion = assessment.questions[currentQuestionIndex];
+    const progress = ((currentQuestionIndex + 1) / assessment.questions.length) * 100;
 
     if (showResults) {
         return (
@@ -70,14 +101,14 @@ export function AssessmentScreen() {
                 <View style={[styles.resultsCard, { backgroundColor: colors.surface }]}>
                     <Text style={[styles.resultsTitle, { color: colors.text }]}>Assessment Complete!</Text>
                     <Text style={[styles.score, { color: colors.primary }]}>
-                        {Math.round((Object.keys(answers).length / mockAssessment.questions.length) * 100)}%
+                        {Math.round((Object.keys(answers).length / assessment.questions.length) * 100)}%
                     </Text>
                     <Text style={[styles.resultsText, { color: colors.textSecondary }]}>
-                        You answered {Object.keys(answers).length} out of {mockAssessment.questions.length} questions.
+                        You answered {Object.keys(answers).length} out of {assessment.questions.length} questions.
                     </Text>
                     <TouchableOpacity
                         style={[styles.doneButton, { backgroundColor: colors.primary }]}
-                        onPress={() => { /* Navigate back */ }}
+                        onPress={() => navigation.goBack()}
                     >
                         <Text style={styles.doneButtonText}>Done</Text>
                     </TouchableOpacity>
@@ -89,13 +120,13 @@ export function AssessmentScreen() {
     return (
         <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
             <View style={[styles.header, { backgroundColor: colors.surface }]}>
-                <Text style={[styles.title, { color: colors.text }]}>{mockAssessment.title}</Text>
+                <Text style={[styles.title, { color: colors.text }]}>{assessment.title}</Text>
                 <View style={styles.progressContainer}>
                     <View style={[styles.progressBar, { backgroundColor: colors.border }]} />
                     <View style={[styles.progressFill, { width: `${progress}%`, backgroundColor: colors.primary }]} />
                 </View>
                 <Text style={[styles.progressText, { color: colors.textSecondary }]}>
-                    Question {currentQuestionIndex + 1} of {mockAssessment.questions.length}
+                    Question {currentQuestionIndex + 1} of {assessment.questions.length}
                 </Text>
             </View>
 
@@ -106,7 +137,7 @@ export function AssessmentScreen() {
                     </Text>
 
                     <View style={styles.optionsContainer}>
-                        {currentQuestion.options?.map((option, index) => (
+                        {currentQuestion.options?.map((option: string, index: number) => (
                             <TouchableOpacity
                                 key={index}
                                 style={[
@@ -135,7 +166,7 @@ export function AssessmentScreen() {
                     </TouchableOpacity>
                 )}
 
-                {currentQuestionIndex < mockAssessment.questions.length - 1 ? (
+                {currentQuestionIndex < assessment.questions.length - 1 ? (
                     <TouchableOpacity
                         style={[styles.navButton, { backgroundColor: colors.primary }]}
                         onPress={() => setCurrentQuestionIndex(currentQuestionIndex + 1)}

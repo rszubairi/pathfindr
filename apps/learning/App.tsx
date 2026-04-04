@@ -12,6 +12,7 @@ import './src/lib/i18n';
 import { store } from './src/store';
 import { RootNavigator } from './src/navigation/RootNavigator';
 import { AnimatedSplashScreen } from './src/components/AnimatedSplashScreen';
+import { ErrorBoundary } from './src/components/common/ErrorBoundary';
 import { ThemeProvider, useTheme } from './src/theme';
 
 const sentryDsn = process.env.EXPO_PUBLIC_SENTRY_DSN;
@@ -49,7 +50,9 @@ function App() {
           <QueryClientProvider client={queryClient}>
             <ThemeProvider>
               <SafeAreaProvider>
-                <AppContent showSplash={showSplash} onSplashComplete={handleSplashComplete} />
+                <ErrorBoundary>
+                  <AppContent showSplash={showSplash} onSplashComplete={handleSplashComplete} />
+                </ErrorBoundary>
               </SafeAreaProvider>
             </ThemeProvider>
           </QueryClientProvider>

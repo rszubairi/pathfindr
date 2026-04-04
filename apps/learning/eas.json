@@ -15,6 +15,7 @@
       "env": {
         "EXPO_PUBLIC_SENTRY_DSN": "https://dfb6be406cd46a4a97c2b1e2d921f2c6@o4511131918008320.ingest.us.sentry.io/4511131918794752",
         "EXPO_PUBLIC_CONVEX_URL": "https://joyous-pika-164.eu-west-1.convex.cloud",
+        "EXPO_PUBLIC_YOUTUBE_API_KEY": "AIzaSyB1aLghiWU6nUCVmlDSX7Kcg4K0vF4TWN0",
         "GOOGLE_SERVICES_JSON": "$GOOGLE_SERVICES_JSON",
         "GOOGLE_SERVICE_INFO_PLIST": "$GOOGLE_SERVICE_INFO_PLIST"
       },
@@ -27,6 +28,7 @@
       "env": {
         "EXPO_PUBLIC_SENTRY_DSN": "https://dfb6be406cd46a4a97c2b1e2d921f2c6@o4511131918008320.ingest.us.sentry.io/4511131918794752",
         "EXPO_PUBLIC_CONVEX_URL": "https://joyous-pika-164.eu-west-1.convex.cloud",
+        "EXPO_PUBLIC_YOUTUBE_API_KEY": "AIzaSyB1aLghiWU6nUCVmlDSX7Kcg4K0vF4TWN0",
         "GOOGLE_SERVICES_JSON": "$GOOGLE_SERVICES_JSON",
         "GOOGLE_SERVICE_INFO_PLIST": "$GOOGLE_SERVICE_INFO_PLIST"
       }
