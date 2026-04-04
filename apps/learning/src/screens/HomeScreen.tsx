@@ -32,7 +32,7 @@ export function HomeScreen() {
           <LanguageSwitcher />
         </View>
 
-        <Text style={styles.title}>Pathfindr</Text>
+        <Text style={styles.title}>PathFindr</Text>
         <Text style={styles.subtitle}>
           {t('mobile.home.subtitle')}
         </Text>

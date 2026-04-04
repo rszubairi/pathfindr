@@ -199,7 +199,7 @@ export function ProfileScreen({ navigation }: any) {
                     style={styles.iconBtn}
                     onPress={() => {
                       Share.share({
-                        message: `Join Pathfindr with my referral code: ${referralStats.referralCode}`,
+                        message: `Join PathFindr with my referral code: ${referralStats.referralCode}`,
                       }).catch(() => {});
                     }}
                   >

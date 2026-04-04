@@ -5,7 +5,7 @@ import { useTheme, ThemeColors } from '../../theme';
 
 const { width } = Dimensions.get('window');
 
-export const PathfindrLoader = () => {
+export const PathFindrLoader = () => {
   const { colors } = useTheme();
   const styles = createStyles(colors);
 
@@ -50,7 +50,7 @@ export const PathfindrLoader = () => {
       ])
     ).start();
 
-    // Staggered title entrance: "Pathfindr" slides up first, then "Learning" fans in
+    // Staggered title entrance: "PathFindr" slides up first, then "Learning" fans in
     Animated.sequence([
       Animated.delay(300),
       Animated.parallel([
@@ -99,7 +99,7 @@ export const PathfindrLoader = () => {
 
       <View style={styles.textContainer}>
         <Animated.Text style={[styles.brandText, { opacity: titleOpacity, transform: [{ translateY: titleTranslateY }] }]}>
-          Pathfindr
+          PathFindr
         </Animated.Text>
         <Animated.Text style={[styles.subtitleText, { opacity: subtitleOpacity, transform: [{ translateY: subtitleTranslateY }], letterSpacing: subtitleLetterSpacing }]}>
           LEARNING

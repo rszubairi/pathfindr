@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Modal, Text } from 'react-native';
-import { PathfindrLoader } from './PathfindrLoader';
+import { PathFindrLoader } from './PathFindrLoader';
 
 interface FullScreenLoadingProps {
   visible: boolean;
@@ -12,7 +12,7 @@ export const FullScreenLoading = ({ visible, message = 'Finding your path...' }:
     <Modal visible={visible} transparent animationType="fade">
       <View style={styles.overlay}>
         <View style={styles.content}>
-          <PathfindrLoader />
+          <PathFindrLoader />
           {message && <Text style={styles.message}>{message}</Text>}
         </View>
       </View>

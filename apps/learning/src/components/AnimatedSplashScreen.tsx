@@ -152,7 +152,7 @@ export function AnimatedSplashScreen({ onAnimationComplete }: AnimatedSplashScre
             { opacity: textOpacity, transform: [{ translateY: textTranslateY }] },
           ]}
         >
-          Pathfindr
+          PathFindr
         </Animated.Text>
 
         <Animated.Text

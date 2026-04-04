@@ -169,7 +169,7 @@ export function DashboardScreen() {
               <Feather name="award" size={32} color="#fff" />
             </View>
             <View style={styles.advertTextContainer}>
-              <Text style={styles.advertTitle}>Pathfindr Scholarships</Text>
+              <Text style={styles.advertTitle}>PathFindr Scholarships</Text>
               <Text style={styles.advertDesc}>Search & apply for 10,000+ scholarships worldwide. Free for students!</Text>
             </View>
           </View>

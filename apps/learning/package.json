@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "main": "./index.js",
-  "description": "Pathfindr Learning Application - AI-Powered Education Platform",
+  "description": "PathFindr Learning Application - AI-Powered Education Platform",
   "scripts": {
     "start": "expo start",
     "android": "expo run:android",

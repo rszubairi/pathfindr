@@ -42,7 +42,7 @@ const resources = {
           awarded: { label: 'Scholarships Awarded', desc: 'Total value facilitated through our platform' },
         },
         howItWorks: {
-          title: 'How Pathfindr Works',
+          title: 'How PathFindr Works',
           subtitle: 'Your journey to a global education starts here. Follow these simple steps to find and secure your perfect scholarship.',
           steps: {
             step1: { title: 'Create Your Profile', desc: 'Sign up and tell us about your academic background, interests, and goals.' },
@@ -53,7 +53,7 @@ const resources = {
         },
         features: {
           title: 'Everything You Need to Succeed',
-          subtitle: 'Pathfindr provides powerful tools and resources to help you discover and secure your perfect scholarship opportunity.',
+          subtitle: 'PathFindr provides powerful tools and resources to help you discover and secure your perfect scholarship opportunity.',
           list: {
             smartSearch: { title: 'Smart Search', desc: 'Advanced filters to find scholarships that match your profile.' },
             personalized: { title: 'Personalized Matching', desc: 'AI-powered recommendations based on your goals.' },
@@ -70,7 +70,7 @@ const resources = {
         },
         testimonials: {
           title: 'Success Stories from Our Students',
-          subtitle: 'Join thousands of students who have found their perfect scholarship through Pathfindr.',
+          subtitle: 'Join thousands of students who have found their perfect scholarship through PathFindr.',
         },
         cta: {
           title: 'Ready to Start Your Journey?',
@@ -245,7 +245,7 @@ const resources = {
           noAccount: "Don't have an account? ",
           signUp: 'Sign Up',
           createAccount: 'Create Account',
-          createAccountSubtitle: 'Join Pathfindr to discover opportunities',
+          createAccountSubtitle: 'Join PathFindr to discover opportunities',
           fullName: 'Full Name',
           fullNamePlaceholder: 'Enter your full name',
           confirmPassword: 'Confirm Password',
@@ -454,7 +454,7 @@ const resources = {
           awarded: { label: 'Biasiswa Dianugerahkan', desc: 'Jumlah nilai yang difasilitasi melalui platform kami' },
         },
         howItWorks: {
-          title: 'Cara Pathfindr Berfungsi',
+          title: 'Cara PathFindr Berfungsi',
           subtitle: 'Perjalanan anda ke pendidikan global bermula di sini.',
           steps: {
             step1: { title: 'Bina Profil Anda', desc: 'Daftar dan beritahu kami tentang latar belakang akademik, minat, dan matlamat anda.' },
@@ -465,7 +465,7 @@ const resources = {
         },
         features: {
           title: 'Semua yang Anda Perlukan untuk Berjaya',
-          subtitle: 'Pathfindr menyediakan alat dan sumber yang hebat untuk membantu anda menemui peluang biasiswa yang sempurna.',
+          subtitle: 'PathFindr menyediakan alat dan sumber yang hebat untuk membantu anda menemui peluang biasiswa yang sempurna.',
           list: {
             smartSearch: { title: 'Carian Pintar', desc: 'Penapis canggih untuk mencari biasiswa yang sepadan dengan profil anda.' },
             personalized: { title: 'Padanan Peribadi', desc: 'Syor dikuasakan AI berdasarkan matlamat anda.' },
@@ -476,7 +476,7 @@ const resources = {
           }
         },
         featured: { title: 'Biasiswa Pilihan', subtitle: 'Terokai peluang biasiswa terbaik kami.', viewAll: 'Lihat Semua Biasiswa' },
-        testimonials: { title: 'Kisah Kejayaan Pelajar Kami', subtitle: 'Sertai beribu-ribu pelajar yang telah menemui biasiswa sempurna melalui Pathfindr.' },
+        testimonials: { title: 'Kisah Kejayaan Pelajar Kami', subtitle: 'Sertai beribu-ribu pelajar yang telah menemui biasiswa sempurna melalui PathFindr.' },
         cta: {
           title: 'Sedia untuk Memulai Perjalanan Anda?',
           subtitle: 'Bina profil anda hari ini dan buka akses ke beribu-ribu peluang.',
@@ -590,7 +590,7 @@ const resources = {
           noAccount: 'Tiada akaun? ',
           signUp: 'Daftar',
           createAccount: 'Buat Akaun',
-          createAccountSubtitle: 'Sertai Pathfindr untuk menemui peluang',
+          createAccountSubtitle: 'Sertai PathFindr untuk menemui peluang',
           fullName: 'Nama Penuh',
           fullNamePlaceholder: 'Masukkan nama penuh anda',
           confirmPassword: 'Sahkan Kata Laluan',
@@ -799,7 +799,7 @@ const resources = {
           awarded: { label: '已颁发奖学金', desc: '通过我们平台促成的总价值' },
         },
         howItWorks: {
-          title: 'Pathfindr 如何运作',
+          title: 'PathFindr 如何运作',
           subtitle: '您的全球教育之旅从这里开始。',
           steps: {
             step1: { title: '创建个人资料', desc: '注册并告诉我们您的学术背景、兴趣和目标。' },
@@ -810,7 +810,7 @@ const resources = {
         },
         features: {
           title: '助您成功所需的一切',
-          subtitle: 'Pathfindr 提供强大的工具和资源。',
+          subtitle: 'PathFindr 提供强大的工具和资源。',
           list: {
             smartSearch: { title: '智能搜索', desc: '高级过滤器，寻找匹配您资料的奖学金。' },
             personalized: { title: '个性化匹配', desc: '基于您目标的 AI 驱动推荐。' },
@@ -821,7 +821,7 @@ const resources = {
           }
         },
         featured: { title: '精选奖学金', subtitle: '探索我们目前正在接受申请的热门奖学金。', viewAll: '查看所有奖学金' },
-        testimonials: { title: '我们学生的成功故事', subtitle: '加入成千上万通过 Pathfindr 找到完美奖学金的学生行列。' },
+        testimonials: { title: '我们学生的成功故事', subtitle: '加入成千上万通过 PathFindr 找到完美奖学金的学生行列。' },
         cta: {
           title: '准备好开启您的旅程了吗？',
           subtitle: '立即创建您的资料，开启成千上万个机会的大门。',
@@ -935,7 +935,7 @@ const resources = {
           noAccount: '没有账户？',
           signUp: '注册',
           createAccount: '创建账户',
-          createAccountSubtitle: '加入 Pathfindr 发现更多机会',
+          createAccountSubtitle: '加入 PathFindr 发现更多机会',
           fullName: '全名',
           fullNamePlaceholder: '输入您的全名',
           confirmPassword: '确认密码',
