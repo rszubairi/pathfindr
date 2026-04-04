@@ -22,7 +22,7 @@ export function DashboardScreen() {
   const styles = createStyles(colors);
 
   const notifications = useQuery(
-    api.notifications.getUserNotifications,
+    api.notifications.getScholarshipNotifications,
     user?.id ? { userId: user.id as Id<'users'> } : 'skip'
   );
 
@@ -166,28 +166,28 @@ export function DashboardScreen() {
         <View style={styles.advertCard}>
           <View style={styles.advertContent}>
             <View style={styles.advertIconContainer}>
-                <Feather name="award" size={32} color="#fff" />
+              <Feather name="award" size={32} color="#fff" />
             </View>
             <View style={styles.advertTextContainer}>
-                <Text style={styles.advertTitle}>Pathfindr Scholarships</Text>
-                <Text style={styles.advertDesc}>Search & apply for 10,000+ scholarships worldwide. Free for students!</Text>
+              <Text style={styles.advertTitle}>Pathfindr Scholarships</Text>
+              <Text style={styles.advertDesc}>Search & apply for 10,000+ scholarships worldwide. Free for students!</Text>
             </View>
           </View>
           
           <View style={styles.storeButtons}>
             <TouchableOpacity 
-                style={[styles.storeBtn, { backgroundColor: '#000' }]}
-                onPress={() => { /* Open iOS App Store URL */ }}
+              style={[styles.storeBtn, { backgroundColor: '#000' }]}
+              onPress={() => { /* Open iOS App Store URL */ }}
             >
-                <Feather name="smartphone" size={18} color="#fff" />
-                <Text style={styles.storeBtnText}>App Store</Text>
+              <Feather name="smartphone" size={18} color="#fff" />
+              <Text style={styles.storeBtnText}>App Store</Text>
             </TouchableOpacity>
             <TouchableOpacity 
-                style={[styles.storeBtn, { backgroundColor: '#3DDC84' }]}
-                onPress={() => { /* Open Play Store URL */ }}
+              style={[styles.storeBtn, { backgroundColor: '#3DDC84' }]}
+              onPress={() => { /* Open Play Store URL */ }}
             >
-                <Feather name="play" size={18} color="#fff" />
-                <Text style={styles.storeBtnText}>Play Store</Text>
+              <Feather name="play" size={18} color="#fff" />
+              <Text style={styles.storeBtnText}>Play Store</Text>
             </TouchableOpacity>
           </View>
         </View>

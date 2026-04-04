@@ -1,6 +1,32 @@
 import { query, mutation } from './_generated/server';
 import { v } from 'convex/values';
 
+// Get user's active scholarship notifications
+export const getScholarshipNotifications = query({
+  args: { userId: v.id('users') },
+  handler: async (ctx, args) => {
+    const notifications = await ctx.db
+      .query('scholarshipNotifications')
+      .withIndex('by_user_id', (q) => q.eq('userId', args.userId))
+      .collect();
+
+    const results = [];
+    for (const notification of notifications) {
+      const scholarship = await ctx.db.get(notification.scholarshipId);
+      if (scholarship && scholarship.status === 'active') {
+        results.push({
+          ...notification,
+          scholarshipName: scholarship.name,
+          deadline: scholarship.deadline,
+        });
+      }
+    }
+    
+    // Sort by most recent first
+    return results.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  },
+});
+
 // Check if a user has already subscribed to notifications for a scholarship
 export const hasUserSubscribed = query({
   args: {
@@ -110,28 +136,4 @@ export const unsubscribe = mutation({
   },
 });
 
-// Get user's active notifications (where they requested to be notified)
-export const getUserNotifications = query({
-  args: { userId: v.id('users') },
-  handler: async (ctx, args) => {
-    const notifications = await ctx.db
-      .query('scholarshipNotifications')
-      .withIndex('by_user_id', (q) => q.eq('userId', args.userId))
-      .collect();
-
-    const results = [];
-    for (const notification of notifications) {
-      const scholarship = await ctx.db.get(notification.scholarshipId);
-      if (scholarship && scholarship.status === 'active') {
-        results.push({
-          ...notification,
-          scholarshipName: scholarship.name,
-          deadline: scholarship.deadline,
-        });
-      }
-    }
-    
-    // Sort by most recent first
-    return results.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
-  },
-});
+// Redeplyment sync

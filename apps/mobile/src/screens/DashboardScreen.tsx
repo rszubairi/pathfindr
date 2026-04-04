@@ -20,7 +20,7 @@ export function DashboardScreen() {
   const styles = createStyles(colors);
 
   const notifications = useQuery(
-    api.notifications.getUserNotifications,
+    api.notifications.getScholarshipNotifications,
     user?.id ? { userId: user.id as Id<'users'> } : 'skip'
   );
 

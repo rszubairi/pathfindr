@@ -25,7 +25,7 @@ export function NotificationModal({ visible, onClose, userId, navigation }: Noti
   const { colors } = useTheme();
   const styles = createStyles(colors);
   const notifications = useQuery(
-    api.notifications.getUserNotifications,
+    api.notifications.getScholarshipNotifications,
     { userId: userId as Id<'users'> }
   );
 

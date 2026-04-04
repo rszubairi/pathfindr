@@ -1,5 +1,5 @@
 import { v } from 'convex/values';
-import { query } from './_generated/server';
+import { query, mutation } from './_generated/server';
 
 export const getUserKidsProgress = query({
   args: { userId: v.id('users') },
@@ -90,4 +90,64 @@ export const getRecentLearners = query({
             })
         );
     }
+});
+
+// Start a new learning session
+export const startSession = mutation({
+  args: {
+    userId: v.id('users'),
+    kidProfileId: v.id('kidProfiles'),
+    courseId: v.id('courses'),
+    lessonId: v.id('lessons'),
+    platform: v.string(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.insert('learningSessions', {
+      ...args,
+      startTime: new Date().toISOString(),
+      durationSeconds: 0,
+    });
+  },
+});
+
+// Update session heartbeat (time spent)
+export const updateHeartbeat = mutation({
+  args: {
+    sessionId: v.id('learningSessions'),
+    incrementSeconds: v.number(),
+  },
+  handler: async (ctx, args) => {
+    const session = await ctx.db.get(args.sessionId);
+    if (!session) return;
+
+    await ctx.db.patch(args.sessionId, {
+      durationSeconds: session.durationSeconds + args.incrementSeconds,
+      endTime: new Date().toISOString(),
+    });
+
+    // Also update the course enrollment total time
+    const enrollment = await ctx.db
+      .query('courseEnrollments')
+      .withIndex('by_kid_and_course', (q) => q.eq('kidProfileId', session.kidProfileId).eq('courseId', session.courseId))
+      .unique();
+
+    if (enrollment) {
+      await ctx.db.patch(enrollment._id, {
+        totalTimeSpent: (enrollment.totalTimeSpent || 0) + args.incrementSeconds,
+        lastAccessedAt: new Date().toISOString(),
+      });
+    }
+  },
+});
+
+// End a learning session
+export const endSession = mutation({
+  args: {
+    sessionId: v.id('learningSessions'),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.sessionId, {
+      endTime: new Date().toISOString(),
+    });
+  },
 });

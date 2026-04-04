@@ -32,9 +32,9 @@ export function LeaderboardScreen() {
     );
 
     const getRankIcon = (index: number) => {
-        if (index === 0) return { name: 'trophy', color: '#FFD700', size: 28 };
-        if (index === 1) return { name: 'award', color: '#C0C0C0', size: 26 };
-        if (index === 2) return { name: 'award', color: '#CD7F32', size: 24 };
+        if (index === 0) return { name: 'award' as const, color: '#FFD700', size: 28 };
+        if (index === 1) return { name: 'award' as const, color: '#C0C0C0', size: 26 };
+        if (index === 2) return { name: 'award' as const, color: '#CD7F32', size: 24 };
         return null;
     };
 
