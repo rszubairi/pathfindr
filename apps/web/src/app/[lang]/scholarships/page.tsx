@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import Image from 'next/image';
-import { Filter, X } from 'lucide-react';
+import { Filter, Sparkles, X } from 'lucide-react';
 import { useQuery as useConvexQuery } from 'convex/react';
 import { useTranslation } from 'react-i18next';
 import { api } from '@convex/_generated/api';
@@ -25,6 +25,7 @@ export default function ScholarshipsPage() {
   const [sortBy, setSortBy] = useState<'relevant' | 'deadline' | 'value' | 'recent'>('relevant');
   const [currentPage, setCurrentPage] = useState(1);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [showRecommendations, setShowRecommendations] = useState(false);
 
   // Get user's country from profile for "Local" tags
   const [storedUserId, setStoredUserId] = useState<string | null>(null);
@@ -37,8 +38,30 @@ export default function ScholarshipsPage() {
   );
   const userCountry = userProfile?.country;
 
+  // Determine if recommendations are available for this user
+  const hasRecommendationData =
+    !!storedUserId &&
+    ((userProfile?.interests && userProfile.interests.length > 0) ||
+      (userProfile?.preferredCountries && userProfile.preferredCountries.length > 0));
+
+  // Compute effective filters — merge profile data when recommendations mode is on
+  const effectiveFilters = useMemo<Filters>(() => {
+    if (!showRecommendations || !userProfile) return filters;
+    return {
+      ...filters,
+      fields:
+        userProfile.interests && userProfile.interests.length > 0
+          ? userProfile.interests
+          : filters.fields,
+      countries:
+        userProfile.preferredCountries && userProfile.preferredCountries.length > 0
+          ? userProfile.preferredCountries
+          : filters.countries,
+    };
+  }, [showRecommendations, userProfile, filters]);
+
   // Fetch scholarships with search and filters
-  const { data: scholarshipsData = [], isLoading } = useScholarshipSearch(searchQuery, filters);
+  const { data: scholarshipsData = [], isLoading } = useScholarshipSearch(searchQuery, effectiveFilters);
 
   // Convert Convex _id to id for compatibility
   const scholarships = useMemo(
@@ -190,6 +213,29 @@ export default function ScholarshipsPage() {
               onSortChange={setSortBy}
             />
           </div>
+
+          {/* Recommendations Filter */}
+          {hasRecommendationData && (
+            <div className="mb-4">
+              <button
+                onClick={() => setShowRecommendations((prev) => !prev)}
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border transition-all ${
+                  showRecommendations
+                    ? 'bg-primary-600 text-white border-primary-600 shadow-md'
+                    : 'bg-white text-primary-700 border-primary-300 hover:bg-primary-50'
+                }`}
+              >
+                <Sparkles className="h-4 w-4" />
+                {t('scholarships.recommendations')}
+                {showRecommendations && <X className="h-3.5 w-3.5 ml-1" />}
+              </button>
+              {showRecommendations && (
+                <p className="mt-2 text-xs text-gray-500">
+                  {t('scholarships.recommendationsHint')}
+                </p>
+              )}
+            </div>
+          )}
 
           {/* Mobile Filter Button */}
           <div className="lg:hidden mb-4">

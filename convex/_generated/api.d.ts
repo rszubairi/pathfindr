@@ -10,6 +10,7 @@
 
 import type * as adminDashboard from "../adminDashboard.js";
 import type * as adminInstitutions from "../adminInstitutions.js";
+import type * as adminPartners from "../adminPartners.js";
 import type * as adminSubscriptions from "../adminSubscriptions.js";
 import type * as adminUsers from "../adminUsers.js";
 import type * as aiActions from "../aiActions.js";
@@ -39,6 +40,8 @@ import type * as kidProfiles from "../kidProfiles.js";
 import type * as leaderboard from "../leaderboard.js";
 import type * as notificationActions from "../notificationActions.js";
 import type * as notifications from "../notifications.js";
+import type * as partnerActions from "../partnerActions.js";
+import type * as partners from "../partners.js";
 import type * as profiles from "../profiles.js";
 import type * as referrals from "../referrals.js";
 import type * as scholarshipFeaturePayments from "../scholarshipFeaturePayments.js";
@@ -71,6 +74,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   adminDashboard: typeof adminDashboard;
   adminInstitutions: typeof adminInstitutions;
+  adminPartners: typeof adminPartners;
   adminSubscriptions: typeof adminSubscriptions;
   adminUsers: typeof adminUsers;
   aiActions: typeof aiActions;
@@ -100,6 +104,8 @@ declare const fullApi: ApiFromModules<{
   leaderboard: typeof leaderboard;
   notificationActions: typeof notificationActions;
   notifications: typeof notifications;
+  partnerActions: typeof partnerActions;
+  partners: typeof partners;
   profiles: typeof profiles;
   referrals: typeof referrals;
   scholarshipFeaturePayments: typeof scholarshipFeaturePayments;

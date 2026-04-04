@@ -58,7 +58,8 @@ export default defineSchema({
       v.literal('institution'),
       v.literal('philanthropist'),
       v.literal('admin'),
-      v.literal('corporate')
+      v.literal('corporate'),
+      v.literal('partner')
     ),
     emailVerified: v.boolean(),
     verificationToken: v.optional(v.string()),
@@ -764,5 +765,52 @@ export default defineSchema({
     .index('by_kid', ['kidProfileId'])
     .index('by_achievement', ['achievementCode'])
     .index('by_user_and_course', ['userId', 'courseId']),
+
+  // ==========================================
+  // Partner Tables
+  // ==========================================
+
+  // Partner Profiles - submitted during registration (no userId until approved)
+  partnerProfiles: defineTable({
+    userId: v.optional(v.id('users')), // Set when admin approves and creates user account
+    partnerType: v.union(v.literal('individual'), v.literal('company')),
+    companyName: v.optional(v.string()), // Required for company type
+    personInChargeName: v.string(),
+    location: v.string(),
+    address: v.string(),
+    phone: v.string(),
+    email: v.string(), // Login email; also used before user account is created
+    website: v.optional(v.string()),
+    partnerCode: v.string(), // Unique code partners share with students
+    commissionPercentage: v.optional(v.number()), // Set by admin
+    approvalStatus: v.union(
+      v.literal('pending'),
+      v.literal('approved'),
+      v.literal('rejected')
+    ),
+    approvedBy: v.optional(v.id('users')),
+    approvedAt: v.optional(v.string()),
+    rejectionReason: v.optional(v.string()),
+    adminNotes: v.optional(v.string()),
+    createdAt: v.string(),
+    updatedAt: v.string(),
+  })
+    .index('by_user_id', ['userId'])
+    .index('by_email', ['email'])
+    .index('by_partner_code', ['partnerCode'])
+    .index('by_approval_status', ['approvalStatus']),
+
+  // Partner Referrals - tracks students who registered using a partner code
+  partnerReferrals: defineTable({
+    partnerProfileId: v.id('partnerProfiles'),
+    partnerUserId: v.optional(v.id('users')), // Partner user account id (once approved)
+    studentUserId: v.id('users'),
+    partnerCode: v.string(),
+    createdAt: v.string(),
+  })
+    .index('by_partner_profile', ['partnerProfileId'])
+    .index('by_partner_user', ['partnerUserId'])
+    .index('by_student', ['studentUserId'])
+    .index('by_partner_code', ['partnerCode']),
 
 });

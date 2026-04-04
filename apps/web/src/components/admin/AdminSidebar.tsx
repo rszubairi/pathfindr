@@ -2,15 +2,16 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { 
-  LayoutDashboard, 
-  Building2, 
-  Users, 
-  CreditCard, 
-  Mail, 
-  Menu, 
+import {
+  LayoutDashboard,
+  Building2,
+  Users,
+  CreditCard,
+  Mail,
+  Menu,
   X,
-  ShieldCheck
+  ShieldCheck,
+  Handshake,
 } from 'lucide-react';
 import { useState } from 'react';
 import { clsx } from 'clsx';
@@ -19,6 +20,7 @@ import { twMerge } from 'tailwind-merge';
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { name: 'Institutions', href: '/admin/institutions', icon: Building2 },
+  { name: 'Partners', href: '/admin/partners', icon: Handshake },
   { name: 'Users', href: '/admin/users', icon: Users },
   { name: 'Subscriptions', href: '/admin/subscriptions', icon: CreditCard },
   { name: 'Email Logs', href: '/admin/email-logs', icon: Mail },

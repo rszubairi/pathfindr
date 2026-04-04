@@ -95,7 +95,14 @@
       "Bash(node apps/web/scripts/fetchUniversityLogos.mjs)",
       "Bash(node -)",
       "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('expo',{}\\).get\\('plugins',[]\\), indent=2\\)\\)\")",
-      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); deps=d['dependencies']; print\\('\\\\n'.join\\(k for k in deps if 'webview' in k.lower\\(\\) or 'youtube' in k.lower\\(\\) or 'video' in k.lower\\(\\)\\)\\)\")"
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); deps=d['dependencies']; print\\('\\\\n'.join\\(k for k in deps if 'webview' in k.lower\\(\\) or 'youtube' in k.lower\\(\\) or 'video' in k.lower\\(\\)\\)\\)\")",
+      "Bash(mkdir -p /Users/raheelzubairi/Documents/projects/pathfindr/apps/web/src/app/\\\\[lang\\\\]/register/partner)",
+      "Bash(mkdir -p /Users/raheelzubairi/Documents/projects/pathfindr/apps/web/src/app/\\\\[lang\\\\]/admin/partners)",
+      "Bash(mkdir -p /Users/raheelzubairi/Documents/projects/pathfindr/apps/web/src/app/\\\\[lang\\\\]/partner/dashboard)",
+      "Bash(mkdir -p /Users/raheelzubairi/Documents/projects/pathfindr/apps/web/src/app/\\\\[lang\\\\]/partner/profile)",
+      "Bash(mkdir -p /Users/raheelzubairi/Documents/projects/pathfindr/apps/web/src/app/\\\\[lang\\\\]/partner/students)",
+      "Bash(grep -l \"academicProfiles\\\\|interests\\\\|preferredCountries\" /Users/raheelzubairi/Documents/projects/pathfindr/convex/*.ts)",
+      "Bash(grep -r \"matchScore\\\\|match\\\\|recommend\" /Users/raheelzubairi/Documents/projects/pathfindr/convex/*.ts)"
     ]
   }
 }

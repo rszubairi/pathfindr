@@ -28,6 +28,7 @@ const registerSchema = z
       .regex(/[0-9]/, 'Password must contain at least one number'),
     confirmPassword: z.string(),
     referralCode: z.string().optional(),
+    partnerCode: z.string().optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
@@ -43,6 +44,7 @@ function RegisterContent() {
   const redirectTo = searchParams.get('redirect');
   const couponCode = searchParams.get('coupon');
   const refCode = searchParams.get('ref');
+  const partnerCodeParam = searchParams.get('partner');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -56,6 +58,11 @@ function RegisterContent() {
   const referralValidation = useQuery(
     api.referrals.validateReferralCode,
     refCode ? { referralCode: refCode } : 'skip'
+  );
+
+  const partnerValidation = useQuery(
+    api.partners.validatePartnerCode,
+    partnerCodeParam ? { partnerCode: partnerCodeParam } : 'skip'
   );
 
   const {
@@ -77,6 +84,7 @@ function RegisterContent() {
         fullName: data.fullName,
         phone: data.phone,
         referredByCode: data.referralCode || refCode || undefined,
+        partnerCode: data.partnerCode || partnerCodeParam || undefined,
       });
       // Bypassing check-email screen for development
       const claimRedirect = couponCode ? `/claim/${couponCode}` : null;
@@ -126,7 +134,16 @@ function RegisterContent() {
               </div>
             )}
 
-            <div className="mb-6 bg-primary-50 border border-primary-200 rounded-lg p-4 text-center">
+            {partnerCodeParam && partnerValidation?.valid && (
+              <div className="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+                <p className="text-sm text-blue-800">
+                  Registering via partner <span className="font-bold">{partnerValidation.partnerName}</span>!
+                  You'll be linked to their partner account.
+                </p>
+              </div>
+            )}
+
+            <div className="mb-4 bg-primary-50 border border-primary-200 rounded-lg p-4 text-center">
               <p className="text-sm text-primary-800">
                 Are you a scholarship provider or institution?{' '}
                 <Link
@@ -134,6 +151,13 @@ function RegisterContent() {
                   className="font-bold underline hover:text-primary-900"
                 >
                   Click here to register
+                </Link>
+                {' · '}
+                <Link
+                  href="/register/partner"
+                  className="font-bold underline hover:text-primary-900"
+                >
+                  Register as a partner
                 </Link>
               </p>
             </div>
@@ -204,6 +228,15 @@ function RegisterContent() {
                   placeholder="Enter a friend's referral code"
                   {...register('referralCode')}
                   error={errors.referralCode?.message}
+                />
+              )}
+
+              {!partnerCodeParam && (
+                <Input
+                  label="Partner Code (optional)"
+                  placeholder="Enter a partner's code if you have one"
+                  {...register('partnerCode')}
+                  error={errors.partnerCode?.message}
                 />
               )}
 

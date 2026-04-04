@@ -105,6 +105,7 @@ export const registerUser = action({
     fullName: v.string(),
     phone: v.string(),
     referredByCode: v.optional(v.string()),
+    partnerCode: v.optional(v.string()),
   },
   handler: async (ctx, args): Promise<{ userId: string; success: boolean }> => {
     const passwordHash = await bcrypt.hash(args.password, 10);
@@ -119,6 +120,7 @@ export const registerUser = action({
       phone: args.phone,
       verificationToken,
       referredByCode: args.referredByCode,
+      partnerCode: args.partnerCode,
     });
 
     await sendEmail(ctx, args.email.toLowerCase(), args.fullName, verificationToken, userId as Id<'users'>);
@@ -170,6 +172,19 @@ export const loginUser = action({
           'Your institution registration was not approved. Reason: ' +
             (profile.rejectionReason || 'Not specified') +
             '. Please contact support.'
+        );
+      }
+    }
+
+    // Block partner accounts that somehow exist without an approved profile
+    if (user.role === 'partner') {
+      const partnerProfile = await ctx.runQuery(
+        api.partners.getPartnerProfileByUserId,
+        { userId: user._id }
+      );
+      if (!partnerProfile || partnerProfile.approvalStatus !== 'approved') {
+        throw new Error(
+          'Your partner account is not active. Please contact support.'
         );
       }
     }

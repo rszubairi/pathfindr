@@ -40,6 +40,7 @@ export const createUser = mutation({
     phone: v.string(),
     verificationToken: v.string(),
     referredByCode: v.optional(v.string()),
+    partnerCode: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const email = args.email.toLowerCase();
@@ -171,6 +172,33 @@ export const createUser = mutation({
               await ctx.db.patch(id, { status: 'rewarded' as const });
             }
           }
+        }
+      }
+    }
+
+    // Handle partner code — link student to partner if valid code provided
+    if (args.partnerCode) {
+      const code = args.partnerCode.trim().toUpperCase();
+      const partnerProfile = await ctx.db
+        .query('partnerProfiles')
+        .withIndex('by_partner_code', (q) => q.eq('partnerCode', code))
+        .first();
+
+      if (partnerProfile && partnerProfile.approvalStatus === 'approved') {
+        // Ensure this student isn't already linked to a partner
+        const existingPartnerReferral = await ctx.db
+          .query('partnerReferrals')
+          .withIndex('by_student', (q) => q.eq('studentUserId', userId))
+          .first();
+
+        if (!existingPartnerReferral) {
+          await ctx.db.insert('partnerReferrals', {
+            partnerProfileId: partnerProfile._id,
+            partnerUserId: partnerProfile.userId,
+            studentUserId: userId,
+            partnerCode: code,
+            createdAt: now,
+          });
         }
       }
     }
