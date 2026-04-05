@@ -11,8 +11,9 @@ import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
 import { Table, TableHead, TableBody, TableRow, TableCell, TableHeaderCell } from '@/components/ui/Table';
 import { useAuth } from '@/hooks/useAuth';
-import { CheckCircle, XCircle, Handshake, Percent } from 'lucide-react';
+import { CheckCircle, XCircle, Handshake, Percent, Loader2 } from 'lucide-react';
 import type { Id } from '@convex/_generated/dataModel';
+import { useToast } from '@/components/ui/Toast';
 
 type TabStatus = 'pending' | 'approved' | 'rejected' | undefined;
 
@@ -35,15 +36,22 @@ export default function AdminPartnersPage() {
   const [rejectReason, setRejectReason] = useState('');
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
+  const { showToast } = useToast();
   const partners = useQuery(api.adminPartners.listPartners, { status: activeTab });
   const approvePartner = useAction(api.partnerActions.approvePartner);
   const rejectPartner = useAction(api.partnerActions.rejectPartner);
   const updateCommission = useMutation(api.adminPartners.updateCommission);
 
   const handleApprove = async () => {
-    if (!user || !approveModal.profileId) return;
+    if (!user || !approveModal.profileId) {
+      showToast('Unable to approve: user session not found. Please refresh and try again.', 'error');
+      return;
+    }
     const pct = parseFloat(commission);
-    if (isNaN(pct) || pct < 0 || pct > 100) return;
+    if (isNaN(pct) || pct < 0 || pct > 100) {
+      showToast('Please enter a valid commission percentage between 0 and 100.', 'error');
+      return;
+    }
     setActionLoading(approveModal.profileId);
     try {
       await approvePartner({
@@ -53,14 +61,19 @@ export default function AdminPartnersPage() {
       });
       setApproveModal({ isOpen: false, profileId: null });
       setCommission('');
+      showToast('Partner approved and credentials sent successfully.', 'success');
     } catch (err) {
       console.error('Failed to approve partner:', err);
+      showToast(`Failed to approve partner: ${err instanceof Error ? err.message : 'Unknown error'}`, 'error');
     }
     setActionLoading(null);
   };
 
   const handleReject = async () => {
-    if (!user || !rejectModal.profileId) return;
+    if (!user || !rejectModal.profileId) {
+      showToast('Unable to reject: user session not found. Please refresh and try again.', 'error');
+      return;
+    }
     setActionLoading(rejectModal.profileId);
     try {
       await rejectPartner({
@@ -70,16 +83,24 @@ export default function AdminPartnersPage() {
       });
       setRejectModal({ isOpen: false, profileId: null });
       setRejectReason('');
+      showToast('Partner application rejected.', 'success');
     } catch (err) {
       console.error('Failed to reject partner:', err);
+      showToast(`Failed to reject partner: ${err instanceof Error ? err.message : 'Unknown error'}`, 'error');
     }
     setActionLoading(null);
   };
 
   const handleUpdateCommission = async () => {
-    if (!user || !commissionModal.profileId) return;
+    if (!user || !commissionModal.profileId) {
+      showToast('Unable to update: user session not found. Please refresh and try again.', 'error');
+      return;
+    }
     const pct = parseFloat(commission);
-    if (isNaN(pct) || pct < 0 || pct > 100) return;
+    if (isNaN(pct) || pct < 0 || pct > 100) {
+      showToast('Please enter a valid commission percentage between 0 and 100.', 'error');
+      return;
+    }
     setActionLoading(commissionModal.profileId);
     try {
       await updateCommission({
@@ -89,8 +110,10 @@ export default function AdminPartnersPage() {
       });
       setCommissionModal({ isOpen: false, profileId: null });
       setCommission('');
+      showToast('Commission updated successfully.', 'success');
     } catch (err) {
       console.error('Failed to update commission:', err);
+      showToast(`Failed to update commission: ${err instanceof Error ? err.message : 'Unknown error'}`, 'error');
     }
     setActionLoading(null);
   };
@@ -294,8 +317,9 @@ export default function AdminPartnersPage() {
               variant="primary"
               onClick={handleApprove}
               disabled={!commission || actionLoading !== null}
-              className="bg-green-600 hover:bg-green-700 shadow-lg shadow-green-200"
+              className="bg-green-600 hover:bg-green-700 shadow-lg shadow-green-200 flex items-center gap-2"
             >
+              {actionLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
               Approve & Send Credentials
             </Button>
           </div>

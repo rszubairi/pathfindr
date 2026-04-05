@@ -164,6 +164,26 @@ export function ScholarshipDetailScreen({ route, navigation }: any) {
           </View>
         )}
 
+        {/* Required Documents Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>{t('mobile.details.requiredDocuments')}</Text>
+          {[
+            t('mobile.details.documents.passport'),
+            t('mobile.details.documents.transcripts'),
+            t('mobile.details.documents.languageCert'),
+            t('mobile.details.documents.recommendationLetters'),
+            t('mobile.details.documents.personalStatement'),
+            t('mobile.details.documents.visa'),
+          ].map((doc, index) => (
+            <View key={index} style={styles.documentRow}>
+              <View style={styles.documentBullet}>
+                <Feather name="file-text" size={14} color={colors.primary} />
+              </View>
+              <Text style={styles.documentText}>{doc}</Text>
+            </View>
+          ))}
+        </View>
+
         {/* Requirements Section */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>{t('mobile.details.globalApplicability')}</Text>
@@ -260,6 +280,9 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
   },
   criteriaKey: { fontSize: 14, color: colors.textMuted, fontWeight: '500' },
   criteriaValue: { fontSize: 14, color: colors.text, fontWeight: '600' },
+  documentRow: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: colors.borderLight },
+  documentBullet: { width: 28, height: 28, borderRadius: 8, backgroundColor: colors.primaryLight, justifyContent: 'center', alignItems: 'center' },
+  documentText: { fontSize: 14, color: colors.textSecondary, flex: 1, fontWeight: '500' },
   infoRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 10, marginBottom: 16 },
   infoLabel: { fontSize: 14, fontWeight: '600', color: colors.text, width: 130 },
   infoValue: { fontSize: 14, color: colors.textSecondary, flex: 1 },

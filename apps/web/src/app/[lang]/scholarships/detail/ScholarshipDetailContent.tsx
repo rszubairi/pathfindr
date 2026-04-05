@@ -17,7 +17,8 @@ import {
     Bell,
     BellOff,
     Clock,
-    Trophy
+    Trophy,
+    FileText
 } from 'lucide-react';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Container } from '@/components/ui/Container';
@@ -382,6 +383,29 @@ export function ScholarshipDetailContent() {
                                                 {formatDate(scholarship.updatedAt, 'long')}
                                             </span>
                                         </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                            {/* Required Documents */}
+                            <Card>
+                                <CardContent className="pt-6">
+                                    <h2 className="text-2xl font-bold text-gray-900 mb-4">Required Documents</h2>
+                                    <div className="divide-y divide-gray-100">
+                                        {[
+                                            'Valid Passport (minimum 6 months validity)',
+                                            'Official Academic Transcripts & Certificates',
+                                            'English Language Proficiency Certificate (IELTS/TOEFL)',
+                                            'Two Letters of Recommendation',
+                                            'Personal Statement / Statement of Purpose',
+                                            'Student Visa Application Documents',
+                                        ].map((doc) => (
+                                            <div key={doc} className="flex items-center gap-3 py-3">
+                                                <div className="flex-shrink-0 w-7 h-7 rounded-lg bg-primary-50 flex items-center justify-center">
+                                                    <FileText className="h-4 w-4 text-primary-600" />
+                                                </div>
+                                                <span className="text-gray-700 font-medium">{doc}</span>
+                                            </div>
+                                        ))}
                                     </div>
                                 </CardContent>
                             </Card>
