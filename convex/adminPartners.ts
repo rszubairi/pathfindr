@@ -91,6 +91,21 @@ export const createPartnerUserAccount = mutation({
   },
 });
 
+// Upgrade an existing user account to partner role and reset their password
+export const upgradeUserToPartner = mutation({
+  args: {
+    userId: v.id('users'),
+    passwordHash: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.userId, {
+      role: 'partner',
+      passwordHash: args.passwordHash,
+      updatedAt: new Date().toISOString(),
+    });
+  },
+});
+
 // Update partner profile: set approved status + link userId + set commission
 export const setPartnerApproved = mutation({
   args: {

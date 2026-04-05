@@ -117,18 +117,31 @@ export const approvePartner = action({
     const rawPassword = crypto.randomBytes(6).toString('hex').toUpperCase().replace(/(.{3})/, '$1-');
     const passwordHash = await bcrypt.hash(rawPassword, 10);
 
-    // Create user account for the partner
-    const userId = await ctx.runMutation(api.adminPartners.createPartnerUserAccount, {
-      email: profile.email,
-      passwordHash,
-      fullName: profile.personInChargeName,
-      phone: profile.phone,
-    });
+    // Check if a user account already exists for this email
+    const existingUser = await ctx.runQuery(api.auth.getUserByEmail, { email: profile.email });
+
+    let userId: Id<'users'>;
+    if (existingUser) {
+      // Reuse existing account — update role to partner and reset password
+      await ctx.runMutation(api.adminPartners.upgradeUserToPartner, {
+        userId: existingUser._id as Id<'users'>,
+        passwordHash,
+      });
+      userId = existingUser._id as Id<'users'>;
+    } else {
+      // Create a new user account for the partner
+      userId = (await ctx.runMutation(api.adminPartners.createPartnerUserAccount, {
+        email: profile.email,
+        passwordHash,
+        fullName: profile.personInChargeName,
+        phone: profile.phone,
+      })) as Id<'users'>;
+    }
 
     // Update the partner profile: link userId, set approved, set commission
     await ctx.runMutation(api.adminPartners.setPartnerApproved, {
       profileId: args.partnerProfileId,
-      userId: userId as Id<'users'>,
+      userId,
       adminUserId: args.adminUserId,
       commissionPercentage: args.commissionPercentage,
     });
@@ -195,7 +208,7 @@ export const approvePartner = action({
       recipientEmail: profile.email,
       subject,
       body,
-      userId: userId as Id<'users'>,
+      userId,
       type: 'partner_approved',
       status: 'sent',
     });
