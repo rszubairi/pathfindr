@@ -64,6 +64,7 @@ import type * as stripeActions from "../stripeActions.js";
 import type * as subscriptions from "../subscriptions.js";
 import type * as updateRankings from "../updateRankings.js";
 import type * as utils from "../utils.js";
+import type * as xenditActions from "../xenditActions.js";
 
 import type {
   ApiFromModules,
@@ -128,6 +129,7 @@ declare const fullApi: ApiFromModules<{
   subscriptions: typeof subscriptions;
   updateRankings: typeof updateRankings;
   utils: typeof utils;
+  xenditActions: typeof xenditActions;
 }>;
 
 /**

@@ -300,7 +300,7 @@ export const handleWebhook = action({
 
           await ctx.runMutation(api.internshipPayments.markAsPaid, {
             paymentId,
-            stripePaymentIntentId: session.payment_intent as string,
+            xenditInvoiceId: session.payment_intent as string,
           });
         } else if (paymentType === 'corporate_donation') {
           const userId = session.metadata?.userId;
@@ -331,8 +331,8 @@ export const handleWebhook = action({
               quantityPurchased: quantity,
               totalAmountPaid: totalAmount,
               currency: 'usd',
-              stripePaymentIntentId: session.payment_intent as string,
-              stripeCheckoutSessionId: session.id,
+              xenditInvoiceId: session.payment_intent as string,
+              xenditExternalId: session.id,
               couponCode,
             }
           );
@@ -373,9 +373,9 @@ export const handleWebhook = action({
             userId: userId as Id<'users'>,
             tier,
             status: 'active',
-            stripeCustomerId: session.customer as string,
-            stripeSubscriptionId: stripeSubscription.id,
-            stripePriceId: priceId,
+            xenditCustomerId: session.customer as string,
+            xenditSubscriptionId: stripeSubscription.id,
+            xenditPlanId: priceId,
             currentPeriodStart: period.start,
             currentPeriodEnd: period.end,
             cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end,
