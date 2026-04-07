@@ -64,6 +64,8 @@ export default defineSchema({
     emailVerified: v.boolean(),
     verificationToken: v.optional(v.string()),
     tokenExpiry: v.optional(v.number()),
+    resetPasswordToken: v.optional(v.string()),
+    resetPasswordTokenExpiry: v.optional(v.number()),
     profileCompleted: v.boolean(),
     profileImageId: v.optional(v.id('_storage')),
     referralCode: v.optional(v.string()),
@@ -72,6 +74,7 @@ export default defineSchema({
   })
     .index('by_email', ['email'])
     .index('by_verification_token', ['verificationToken'])
+    .index('by_reset_password_token', ['resetPasswordToken'])
     .index('by_referral_code', ['referralCode']),
 
   academicProfiles: defineTable({

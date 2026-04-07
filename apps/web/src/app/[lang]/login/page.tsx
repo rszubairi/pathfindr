@@ -114,14 +114,24 @@ function LoginContent() {
                 required
               />
 
-              <Input
-                label="Password"
-                type="password"
-                placeholder="Enter your password"
-                {...register('password')}
-                error={errors.password?.message}
-                required
-              />
+              <div>
+                <Input
+                  label="Password"
+                  type="password"
+                  placeholder="Enter your password"
+                  {...register('password')}
+                  error={errors.password?.message}
+                  required
+                />
+                <div className="mt-1 text-right">
+                  <Link
+                    href="/forgot-password"
+                    className="text-sm text-primary-600 hover:text-primary-700"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
+              </div>
 
               <Button
                 type="submit"

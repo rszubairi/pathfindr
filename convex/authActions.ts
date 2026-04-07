@@ -236,6 +236,124 @@ export const resendVerification = action({
   },
 });
 
+// ─── Forgot Password ────────────────────────────────────────
+
+export const requestPasswordReset = action({
+  args: { email: v.string() },
+  handler: async (ctx, args): Promise<{ success: boolean }> => {
+    const user = await ctx.runQuery(api.auth.getUserByEmail, {
+      email: args.email,
+    });
+
+    // Always return success to prevent email enumeration
+    if (!user) {
+      return { success: true };
+    }
+
+    const crypto = await import('crypto');
+    const resetToken = crypto.randomBytes(32).toString('hex');
+
+    await ctx.runMutation(api.auth.setResetPasswordToken, {
+      userId: user._id,
+      token: resetToken,
+    });
+
+    const resendApiKey = process.env.RESEND_API_KEY;
+    const resetUrl = `${APP_URL}/reset-password?token=${resetToken}`;
+    const subject = 'Reset your Pathfindr password';
+    const body = `
+      <!DOCTYPE html>
+      <html>
+      <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="text-align: center; margin-bottom: 32px;">
+          <h1 style="color: #2563eb; font-size: 24px; margin: 0;">Pathfindr</h1>
+        </div>
+        <h2 style="color: #111827; font-size: 20px;">Reset your password</h2>
+        <p style="color: #4b5563; font-size: 16px; line-height: 1.5;">
+          We received a request to reset the password for your Pathfindr account. Click the button below to choose a new password:
+        </p>
+        <div style="text-align: center; margin: 32px 0;">
+          <a href="${resetUrl}"
+             style="background-color: #2563eb; color: white; padding: 12px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 16px; display: inline-block;">
+            Reset Password
+          </a>
+        </div>
+        <p style="color: #6b7280; font-size: 14px; line-height: 1.5;">
+          This link will expire in 1 hour. If you didn't request a password reset, you can safely ignore this email.
+        </p>
+        <p style="color: #9ca3af; font-size: 12px; margin-top: 32px; border-top: 1px solid #e5e7eb; padding-top: 16px;">
+          If the button doesn't work, copy and paste this URL into your browser:<br>
+          <a href="${resetUrl}" style="color: #2563eb;">${resetUrl}</a>
+        </p>
+      </body>
+      </html>
+    `;
+
+    if (!resendApiKey) {
+      console.log(`[DEV] Password reset link: ${resetUrl}`);
+      await ctx.runMutation(api.emailLogs.createLog, {
+        recipientEmail: user.email,
+        subject,
+        body: `Development link: ${resetUrl}`,
+        userId: user._id,
+        type: 'password_reset',
+        status: 'sent',
+      });
+      return { success: true };
+    }
+
+    const resend = new Resend(resendApiKey);
+    try {
+      await resend.emails.send({
+        from: 'Pathfindr <noreply@thepathfindr.com>',
+        to: user.email,
+        subject,
+        html: body,
+      });
+      await ctx.runMutation(api.emailLogs.createLog, {
+        recipientEmail: user.email,
+        subject,
+        body,
+        userId: user._id,
+        type: 'password_reset',
+        status: 'sent',
+      });
+    } catch (err) {
+      console.error('Failed to send password reset email:', err);
+      await ctx.runMutation(api.emailLogs.createLog, {
+        recipientEmail: user.email,
+        subject,
+        body: 'ERROR: Failed to send',
+        userId: user._id,
+        type: 'password_reset',
+        status: 'failed',
+        error: String(err),
+      });
+    }
+
+    return { success: true };
+  },
+});
+
+// ─── Reset Password ──────────────────────────────────────────
+
+export const resetPassword = action({
+  args: {
+    token: v.string(),
+    newPassword: v.string(),
+  },
+  handler: async (ctx, args): Promise<{ success: boolean }> => {
+    const passwordHash = await bcrypt.hash(args.newPassword, 10);
+
+    await ctx.runMutation(api.auth.resetUserPassword, {
+      token: args.token,
+      passwordHash,
+    });
+
+    return { success: true };
+  },
+});
+
 export const seedAdmin = action({
   args: {},
   handler: async (ctx): Promise<any> => {

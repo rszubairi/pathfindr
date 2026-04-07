@@ -112,7 +112,8 @@
       "Bash(sed -i '' 's/api\\\\.stripeActions\\\\.createCheckoutSession/api.xenditActions.createCheckoutSession/g' /Users/raheelzubairi/Documents/projects/pathfindr/apps/web/src/app/[lang]/pricing/page.tsx /Users/raheelzubairi/Documents/projects/pathfindr/apps/web/src/components/home/PricingSection.tsx)",
       "Bash(sed -i '' 's/api\\\\.stripeActions\\\\.createInternshipCheckoutSession/api.xenditActions.createInternshipCheckoutSession/g' \"/Users/raheelzubairi/Documents/projects/pathfindr/apps/web/src/app/[lang]/dashboard/internships/billing/page.tsx\")",
       "WebFetch(domain:medium.com)",
-      "WebFetch(domain:docs-surge.xendit.co)"
+      "WebFetch(domain:docs-surge.xendit.co)",
+      "Bash(grep -r \"Resend\\\\|sendEmail\\\\|nodemailer\" /Users/raheelzubairi/Documents/projects/pathfindr --include=\"*.ts\" --include=\"*.tsx\" ! -path \"*/node_modules/*\" ! -path \"*/.next/*\")"
     ]
   }
 }

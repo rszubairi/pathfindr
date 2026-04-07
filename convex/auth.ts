@@ -252,6 +252,53 @@ export const updateVerificationToken = mutation({
   },
 });
 
+export const setResetPasswordToken = mutation({
+  args: {
+    userId: v.id('users'),
+    token: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const tokenExpiry = Date.now() + 60 * 60 * 1000; // 1 hour
+    await ctx.db.patch(args.userId, {
+      resetPasswordToken: args.token,
+      resetPasswordTokenExpiry: tokenExpiry,
+      updatedAt: new Date().toISOString(),
+    });
+  },
+});
+
+export const resetUserPassword = mutation({
+  args: {
+    token: v.string(),
+    passwordHash: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_reset_password_token', (q) =>
+        q.eq('resetPasswordToken', args.token)
+      )
+      .first();
+
+    if (!user) {
+      throw new Error('Invalid or expired reset link');
+    }
+
+    if (user.resetPasswordTokenExpiry && Date.now() > user.resetPasswordTokenExpiry) {
+      throw new Error('Reset link has expired. Please request a new one.');
+    }
+
+    await ctx.db.patch(user._id, {
+      passwordHash: args.passwordHash,
+      resetPasswordToken: undefined,
+      resetPasswordTokenExpiry: undefined,
+      updatedAt: new Date().toISOString(),
+    });
+
+    return { email: user.email };
+  },
+});
+
 export const markProfileCompleted = mutation({
   args: { userId: v.id('users') },
   handler: async (ctx, args) => {
