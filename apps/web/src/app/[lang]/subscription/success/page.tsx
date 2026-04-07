@@ -13,8 +13,7 @@ import { CheckCircle2, BookOpen, Settings } from 'lucide-react';
 
 function SuccessContent() {
   const searchParams = useSearchParams();
-  // Xendit appends ?id=<invoice_id> to the success redirect URL
-  const sessionId = searchParams.get('id') ?? searchParams.get('session_id');
+  const externalId = searchParams.get('external_id');
   const verifySession = useAction(api.xenditActions.verifyCheckoutSession);
   const [sessionData, setSessionData] = useState<{
     status: string;
@@ -24,12 +23,12 @@ function SuccessContent() {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    if (!sessionId) return;
+    if (!externalId) return;
 
-    verifySession({ sessionId })
+    verifySession({ externalId })
       .then(setSessionData)
       .catch(() => setError(true));
-  }, [sessionId, verifySession]);
+  }, [externalId, verifySession]);
 
   if (error) {
     return (

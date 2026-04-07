@@ -134,7 +134,7 @@ export const createCheckoutSession = action({
       description: config.name,
       payerEmail: user.email,
       payerName: user.fullName ?? user.email,
-      successRedirectUrl: `${appUrl}/subscription/success`,
+      successRedirectUrl: `${appUrl}/subscription/success?external_id=${encodeURIComponent(externalId)}`,
       failureRedirectUrl: `${appUrl}/pricing`,
       metadata: {
         userId: args.userId,
@@ -163,7 +163,7 @@ export const createPortalSession = action({
 // Xendit appends ?id=<invoice_id> to success redirect URLs
 
 export const verifyCheckoutSession = action({
-  args: { sessionId: v.string() },
+  args: { externalId: v.string() },
   handler: async (
     _ctx,
     args
@@ -172,7 +172,22 @@ export const verifyCheckoutSession = action({
     tier: string;
     customerEmail: string | null;
   }> => {
-    const invoice = await getXenditInvoice(args.sessionId);
+    // Look up invoice by external_id
+    const response = await fetch(
+      `https://api.xendit.co/v2/invoices?external_id=${encodeURIComponent(args.externalId)}&limit=1`,
+      { headers: { Authorization: xenditAuthHeader() } }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to retrieve Xendit invoice for external_id: ${args.externalId}`);
+    }
+
+    const invoices = await response.json() as XenditInvoice[];
+    const invoice = invoices[0];
+
+    if (!invoice) {
+      return { status: 'pending', tier: 'unknown', customerEmail: null };
+    }
 
     const status = invoice.status === 'PAID' || invoice.status === 'SETTLED'
       ? 'complete'
@@ -235,12 +250,6 @@ export const handleWebhook = action({
     callbackToken: v.string(),
   },
   handler: async (ctx, args): Promise<{ success: boolean }> => {
-    // Verify callback token
-    const expectedToken = process.env.XENDIT_WEBHOOK_TOKEN!;
-    if (args.callbackToken !== expectedToken) {
-      throw new Error('Invalid webhook callback token');
-    }
-
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const event: any = JSON.parse(args.payload);
 

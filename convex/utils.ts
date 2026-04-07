@@ -3,7 +3,7 @@ export function getAppUrl() {
   if (!url) {
     // If we're running in a Convex action, we might want to know if it's a production deployment
     // but for now, we'll just default to localhost for dev and warn if it's missing.
-    return 'http://localhost:3000';
+    return 'http://www.thepathfindr.com';
   }
   return url.endsWith('/') ? url.slice(0, -1) : url;
 }
