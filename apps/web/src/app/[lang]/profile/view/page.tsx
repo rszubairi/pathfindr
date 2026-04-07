@@ -11,6 +11,7 @@ import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { useAuth } from '@/hooks/useAuth';
+import { useSubscription } from '@/hooks/useSubscription';
 import type { Id } from '@convex/_generated/dataModel';
 import {
   User,
@@ -67,6 +68,7 @@ export default function StudentProfileViewPage() {
   );
 
   const generateReferralCode = useMutation(api.referrals.generateReferralCode);
+  const { isSubscribed, tier } = useSubscription();
 
   // Auto-generate referral code if user doesn't have one
   useEffect(() => {
@@ -139,9 +141,17 @@ export default function StudentProfileViewPage() {
                   </div>
                 )}
                 <div className="min-w-0">
-                  <h1 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">
-                    {user.fullName}
-                  </h1>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h1 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">
+                      {user.fullName}
+                    </h1>
+                    {isSubscribed && tier && (
+                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold ${tier === 'expert' ? 'bg-purple-100 text-purple-700' : 'bg-primary-100 text-primary-700'}`}>
+                        <Sparkles className="w-3 h-3" />
+                        {tier.charAt(0).toUpperCase() + tier.slice(1)}
+                      </span>
+                    )}
+                  </div>
                   <p className="text-gray-500 text-sm truncate">{user.email}</p>
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2">
                     {profile.nationality && (

@@ -165,7 +165,7 @@ export const createPortalSession = action({
 export const verifyCheckoutSession = action({
   args: { externalId: v.string() },
   handler: async (
-    _ctx,
+    ctx,
     args
   ): Promise<{
     status: string;
@@ -189,11 +189,39 @@ export const verifyCheckoutSession = action({
       return { status: 'pending', tier: 'unknown', customerEmail: null };
     }
 
-    const status = invoice.status === 'PAID' || invoice.status === 'SETTLED'
+    const isPaid = invoice.status === 'PAID' || invoice.status === 'SETTLED';
+    const status = isPaid
       ? 'complete'
       : invoice.status === 'EXPIRED'
         ? 'expired'
         : 'open';
+
+    // If paid, ensure the subscription record exists in Convex immediately.
+    // The webhook may arrive later — this prevents a race condition where
+    // the user is redirected to /subscription/manage before the webhook fires.
+    if (isPaid) {
+      const userId = invoice.metadata?.userId;
+      const tier = invoice.metadata?.tier as 'pro' | 'expert' | undefined;
+      if (userId && (tier === 'pro' || tier === 'expert')) {
+        const config = getTierConfig(tier);
+        const now = new Date();
+        const oneYearLater = new Date(now);
+        oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
+
+        await ctx.runMutation(api.subscriptions.upsertSubscription, {
+          userId: userId as Id<'users'>,
+          tier,
+          status: 'active',
+          xenditCustomerId: userId,
+          xenditSubscriptionId: invoice.id,
+          xenditPlanId: tier,
+          currentPeriodStart: now.toISOString(),
+          currentPeriodEnd: oneYearLater.toISOString(),
+          cancelAtPeriodEnd: false,
+          applicationsLimit: config.applicationsLimit,
+        });
+      }
+    }
 
     return {
       status,
