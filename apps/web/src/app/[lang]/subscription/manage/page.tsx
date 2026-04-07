@@ -34,7 +34,7 @@ export default function ManageSubscriptionPage() {
     api.corporateDonations.getCompanyProfile,
     donatedBy ? { userId: donatedBy } : 'skip'
   );
-  const createPortal = useAction(api.stripeActions.createPortalSession);
+  const createPortal = useAction(api.xenditActions.createPortalSession);
   const claimReferralCoupon = useMutation(api.referrals.claimReferralCoupon);
   const [portalLoading, setPortalLoading] = useState(false);
   const [couponInput, setCouponInput] = useState('');

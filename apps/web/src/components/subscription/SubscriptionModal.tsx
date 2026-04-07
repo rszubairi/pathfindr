@@ -30,7 +30,7 @@ export function SubscriptionModal({
   const router = useRouter();
   const { user, isAuthenticated } = useAuth();
   const { tier: currentTier } = useSubscription();
-  const createCheckout = useAction(api.stripeActions.createCheckoutSession);
+  const createCheckout = useAction(api.xenditActions.createCheckoutSession);
   const [loadingTier, setLoadingTier] = useState<TierKey | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showCoupon, setShowCoupon] = useState(false);

@@ -31,7 +31,7 @@ export default function InternshipBillingPage() {
   const pendingInternships = (internships?.filter((i: any) => i.status === 'draft' || i.status === 'pending_payment') || []) as any[];
   const totalPrice = pendingInternships.length * 15;
 
-  const createCheckout = useAction(api.stripeActions.createInternshipCheckoutSession);
+  const createCheckout = useAction(api.xenditActions.createInternshipCheckoutSession);
 
   const handlePayment = async () => {
     if (!user?._id || !profile?._id || pendingInternships.length === 0) return;

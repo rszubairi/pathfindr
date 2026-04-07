@@ -3,35 +3,16 @@
 import { action } from './_generated/server';
 import { v } from 'convex/values';
 import { api } from './_generated/api';
-import Stripe from 'stripe';
 import { Resend } from 'resend';
 
 import { getAppUrl as getBaseAppUrl } from './utils';
-
-let _stripe: Stripe | null = null;
-function getStripe(): Stripe {
-  if (!_stripe) {
-    _stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-  }
-  return _stripe;
-}
 
 function getAppUrl(): string {
   return getBaseAppUrl();
 }
 
-function generateCouponCode(companyName: string): string {
-  const prefix = companyName
-    .replace(/[^a-zA-Z]/g, '')
-    .substring(0, 3)
-    .toUpperCase() || 'PFD';
-  const year = new Date().getFullYear();
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let random = '';
-  for (let i = 0; i < 6; i++) {
-    random += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return `${prefix}-${year}-${random}`;
+function xenditAuthHeader(): string {
+  return 'Basic ' + Buffer.from((process.env.XENDIT_SECRET_KEY ?? '') + ':').toString('base64');
 }
 
 // ─── Create Donation Checkout Session ───────────────────────
@@ -44,7 +25,6 @@ export const createDonationCheckoutSession = action({
     quantity: v.number(),
   },
   handler: async (ctx, args): Promise<{ sessionUrl: string }> => {
-    const stripe = getStripe();
     const appUrl = getAppUrl();
 
     const user = await ctx.runQuery(api.auth.getCurrentUser, {
@@ -52,56 +32,45 @@ export const createDonationCheckoutSession = action({
     });
     if (!user) throw new Error('User not found');
 
-    // Find or create Stripe customer
-    const customers = await stripe.customers.list({
-      email: user.email,
-      limit: 1,
+    const tierName = args.tier === 'pro' ? 'Pro' : 'Expert';
+    // MYR pricing: Pro RM 45/yr, Expert RM 225/yr
+    const unitAmountMyr = args.tier === 'pro' ? 45 : 225;
+    const totalAmount = unitAmountMyr * args.quantity;
+    const externalId = `donation-${args.companyId}-${Date.now()}`;
+
+    const response = await fetch('https://api.xendit.co/v2/invoices', {
+      method: 'POST',
+      headers: {
+        Authorization: xenditAuthHeader(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        external_id: externalId,
+        amount: totalAmount,
+        currency: 'MYR',
+        description: `Student ${tierName} Subscription Donation — ${args.quantity} subscription(s)`,
+        payer_email: user.email,
+        customer: { given_names: user.fullName ?? user.email, email: user.email },
+        success_redirect_url: `${appUrl}/dashboard/donations/success`,
+        failure_redirect_url: `${appUrl}/dashboard/donations/purchase`,
+        invoice_duration: 86400,
+        metadata: {
+          userId: args.userId,
+          companyId: args.companyId,
+          paymentType: 'corporate_donation',
+          tier: args.tier,
+          quantity: args.quantity.toString(),
+        },
+      }),
     });
 
-    let customerId: string;
-    if (customers.data.length > 0) {
-      customerId = customers.data[0].id;
-    } else {
-      const customer = await stripe.customers.create({
-        email: user.email,
-        name: user.fullName,
-        metadata: { userId: args.userId },
-      });
-      customerId = customer.id;
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(`Xendit invoice creation failed: ${error}`);
     }
 
-    const tierName = args.tier === 'pro' ? 'Pro' : 'Expert';
-    const unitAmount = args.tier === 'pro' ? 999 : 4999;
-
-    const session = await stripe.checkout.sessions.create({
-      mode: 'payment',
-      customer: customerId,
-      line_items: [
-        {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: `Student ${tierName} Subscription Donation`,
-              description: `Sponsor ${args.quantity} student ${tierName} subscription(s) for 1 year`,
-            },
-            unit_amount: unitAmount,
-          },
-          quantity: args.quantity,
-        },
-      ],
-      success_url: `${appUrl}/dashboard/donations/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${appUrl}/dashboard/donations/purchase`,
-      metadata: {
-        userId: args.userId,
-        companyId: args.companyId,
-        paymentType: 'corporate_donation',
-        tier: args.tier,
-        quantity: args.quantity.toString(),
-      },
-    });
-
-    if (!session.url) throw new Error('Failed to create checkout session');
-    return { sessionUrl: session.url };
+    const invoice = await response.json() as { invoice_url: string };
+    return { sessionUrl: invoice.invoice_url };
   },
 });
 
@@ -401,15 +370,29 @@ export const verifyDonationCheckoutSession = action({
     quantity: number;
     couponCode: string | null;
   }> => {
-    const stripe = getStripe();
-    const session = await stripe.checkout.sessions.retrieve(args.sessionId);
+    const response = await fetch(`https://api.xendit.co/v2/invoices/${args.sessionId}`, {
+      headers: { Authorization: xenditAuthHeader() },
+    });
 
-    // Look up the donation by checkout session ID
+    if (!response.ok) throw new Error(`Failed to retrieve Xendit invoice: ${args.sessionId}`);
+
+    const invoice = await response.json() as {
+      status: string;
+      metadata?: Record<string, string>;
+    };
+
+    const xenditStatus = invoice.status;
+    const status = xenditStatus === 'PAID' || xenditStatus === 'SETTLED'
+      ? 'complete'
+      : xenditStatus === 'EXPIRED'
+        ? 'expired'
+        : 'open';
+
     return {
-      status: session.status ?? 'unknown',
-      tier: session.metadata?.tier ?? 'unknown',
-      quantity: parseInt(session.metadata?.quantity || '0', 10),
-      couponCode: null, // Will be set after webhook processes
+      status,
+      tier: invoice.metadata?.tier ?? 'unknown',
+      quantity: parseInt(invoice.metadata?.quantity || '0', 10),
+      couponCode: null, // Set by webhook processing
     };
   },
 });

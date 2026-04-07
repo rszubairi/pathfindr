@@ -46,6 +46,7 @@
     "resend": "^6.9.3",
     "stripe": "^20.4.1",
     "tailwind-merge": "^2.5.5",
+    "xendit-node": "^7.0.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {

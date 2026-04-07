@@ -5,20 +5,20 @@ import { api } from './_generated/api';
 const http = httpRouter();
 
 http.route({
-  path: '/stripe-webhook',
+  path: '/xendit-webhook',
   method: 'POST',
   handler: httpAction(async (ctx, request) => {
     const payload = await request.text();
-    const signature = request.headers.get('stripe-signature');
+    const callbackToken = request.headers.get('x-callback-token');
 
-    if (!signature) {
-      return new Response('Missing stripe-signature header', { status: 400 });
+    if (!callbackToken) {
+      return new Response('Missing x-callback-token header', { status: 400 });
     }
 
     try {
-      const result = await ctx.runAction(api.stripeActions.handleWebhook, {
+      const result = await ctx.runAction(api.xenditActions.handleWebhook, {
         payload,
-        signature,
+        callbackToken,
       });
 
       return new Response(JSON.stringify(result), {
@@ -26,7 +26,7 @@ http.route({
         headers: { 'Content-Type': 'application/json' },
       });
     } catch (error) {
-      console.error('Webhook error:', error);
+      console.error('Xendit webhook error:', error);
       return new Response(
         JSON.stringify({ error: 'Webhook processing failed' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }

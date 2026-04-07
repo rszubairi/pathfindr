@@ -139,9 +139,10 @@ export const upsertSubscription = mutation({
       v.literal('past_due'),
       v.literal('incomplete')
     ),
-    stripeCustomerId: v.string(),
-    stripeSubscriptionId: v.string(),
-    stripePriceId: v.string(),
+    // These fields are provider-agnostic; they store Xendit IDs
+    xenditCustomerId: v.string(),
+    xenditSubscriptionId: v.string(),
+    xenditPlanId: v.string(),
     currentPeriodStart: v.string(),
     currentPeriodEnd: v.string(),
     cancelAtPeriodEnd: v.boolean(),
@@ -150,11 +151,11 @@ export const upsertSubscription = mutation({
   handler: async (ctx, args) => {
     const now = new Date().toISOString();
 
-    // Check if subscription already exists for this Stripe subscription
+    // Check if subscription already exists for this invoice/subscription ID
     const existing = await ctx.db
       .query('subscriptions')
       .withIndex('by_stripe_subscription_id', (q) =>
-        q.eq('stripeSubscriptionId', args.stripeSubscriptionId)
+        q.eq('stripeSubscriptionId', args.xenditSubscriptionId)
       )
       .first();
 
@@ -162,7 +163,7 @@ export const upsertSubscription = mutation({
       await ctx.db.patch(existing._id, {
         tier: args.tier,
         status: args.status,
-        stripePriceId: args.stripePriceId,
+        stripePriceId: args.xenditPlanId,
         currentPeriodStart: args.currentPeriodStart,
         currentPeriodEnd: args.currentPeriodEnd,
         cancelAtPeriodEnd: args.cancelAtPeriodEnd,
@@ -176,9 +177,9 @@ export const upsertSubscription = mutation({
       userId: args.userId,
       tier: args.tier,
       status: args.status,
-      stripeCustomerId: args.stripeCustomerId,
-      stripeSubscriptionId: args.stripeSubscriptionId,
-      stripePriceId: args.stripePriceId,
+      stripeCustomerId: args.xenditCustomerId,
+      stripeSubscriptionId: args.xenditSubscriptionId,
+      stripePriceId: args.xenditPlanId,
       currentPeriodStart: args.currentPeriodStart,
       currentPeriodEnd: args.currentPeriodEnd,
       cancelAtPeriodEnd: args.cancelAtPeriodEnd,

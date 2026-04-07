@@ -185,8 +185,8 @@ export const createDonation = mutation({
     quantityPurchased: v.number(),
     totalAmountPaid: v.number(),
     currency: v.string(),
-    stripePaymentIntentId: v.optional(v.string()),
-    stripeCheckoutSessionId: v.optional(v.string()),
+    xenditInvoiceId: v.optional(v.string()),
+    xenditExternalId: v.optional(v.string()),
     couponCode: v.string(),
   },
   handler: async (ctx, args) => {
@@ -201,8 +201,8 @@ export const createDonation = mutation({
       quantityRemaining: args.quantityPurchased,
       totalAmountPaid: args.totalAmountPaid,
       currency: args.currency,
-      stripePaymentIntentId: args.stripePaymentIntentId,
-      stripeCheckoutSessionId: args.stripeCheckoutSessionId,
+      stripePaymentIntentId: args.xenditInvoiceId, // field reused for Xendit invoice ID
+      stripeCheckoutSessionId: args.xenditExternalId, // field reused for Xendit external ID
       couponCode: args.couponCode,
       status: 'completed',
       createdAt: now,

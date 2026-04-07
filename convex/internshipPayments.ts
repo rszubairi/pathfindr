@@ -33,7 +33,7 @@ export const createPayment = mutation({
 export const markAsPaid = mutation({
   args: {
     paymentId: v.id('internshipPayments'),
-    stripePaymentIntentId: v.string(),
+    xenditInvoiceId: v.string(),
   },
   handler: async (ctx, args) => {
     const payment = await ctx.db.get(args.paymentId);
@@ -41,7 +41,7 @@ export const markAsPaid = mutation({
 
     await ctx.db.patch(args.paymentId, {
       status: 'completed',
-      stripePaymentIntentId: args.stripePaymentIntentId,
+      stripePaymentIntentId: args.xenditInvoiceId, // field reused for Xendit invoice ID
     });
 
     const now = new Date().toISOString();
