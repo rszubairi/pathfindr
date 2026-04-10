@@ -390,6 +390,30 @@ export const bulkCreate = mutation({
   },
 });
 
+// Internal mutation to close scholarships whose deadline has passed
+export const closeExpiredScholarships = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    const activeScholarships = await ctx.db
+      .query('scholarships')
+      .withIndex('by_status', (q) => q.eq('status', 'active'))
+      .collect();
+
+    let closed = 0;
+    for (const scholarship of activeScholarships) {
+      if (scholarship.deadline < today) {
+        await ctx.db.patch(scholarship._id, {
+          status: 'closed',
+          updatedAt: new Date().toISOString(),
+        });
+        closed++;
+      }
+    }
+    return closed;
+  },
+});
+
 // Internal mutation to expire featured status for scholarships
 export const expireFeatured = internalMutation({
   args: {},
