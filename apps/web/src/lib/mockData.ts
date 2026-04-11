@@ -385,7 +385,7 @@ export const filterScholarships = (
 
 // Export available filter options for UI
 export const filterOptions = {
-  countries: [...new Set(mockScholarships.flatMap(s => s.eligibleCountries))].sort(),
+  countries: [...new Set([...mockScholarships.flatMap(s => s.eligibleCountries), 'Russia'])].sort(),
   fields: [...new Set(mockScholarships.flatMap(s => s.eligibleFields))].sort(),
   providerTypes: ['government', 'university', 'corporate', 'ngo', 'foundation', 'individual'],
   currencies: [...new Set(mockScholarships.map(s => s.currency))].sort()
