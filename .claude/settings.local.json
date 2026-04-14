@@ -113,7 +113,11 @@
       "Bash(sed -i '' 's/api\\\\.stripeActions\\\\.createInternshipCheckoutSession/api.xenditActions.createInternshipCheckoutSession/g' \"/Users/raheelzubairi/Documents/projects/pathfindr/apps/web/src/app/[lang]/dashboard/internships/billing/page.tsx\")",
       "WebFetch(domain:medium.com)",
       "WebFetch(domain:docs-surge.xendit.co)",
-      "Bash(grep -r \"Resend\\\\|sendEmail\\\\|nodemailer\" /Users/raheelzubairi/Documents/projects/pathfindr --include=\"*.ts\" --include=\"*.tsx\" ! -path \"*/node_modules/*\" ! -path \"*/.next/*\")"
+      "Bash(grep -r \"Resend\\\\|sendEmail\\\\|nodemailer\" /Users/raheelzubairi/Documents/projects/pathfindr --include=\"*.ts\" --include=\"*.tsx\" ! -path \"*/node_modules/*\" ! -path \"*/.next/*\")",
+      "WebFetch(domain:zakat.mainpp.gov.my)",
+      "WebFetch(domain:yayasanhasanah.org)",
+      "WebFetch(domain:www.kuyp.edu.my)",
+      "WebFetch(domain:yayasanpelajaranjohor.gov.my)"
     ]
   }
 }
