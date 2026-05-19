@@ -128,6 +128,10 @@ export default function ScholarshipsPage() {
         newFilters.fields = newFilters.fields?.filter((f) => f !== value);
       } else if (filterType === 'providerTypes' && value) {
         newFilters.providerTypes = newFilters.providerTypes?.filter((t) => t !== value);
+      } else if (filterType === 'studyLevels' && value) {
+        newFilters.studyLevels = newFilters.studyLevels?.filter((l) => l !== value);
+      } else if (filterType === 'coverageType') {
+        delete newFilters.coverageType;
       } else if (filterType === 'minValue') {
         delete newFilters.minValue;
       } else if (filterType === 'maxValue') {

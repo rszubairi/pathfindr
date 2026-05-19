@@ -64,6 +64,8 @@ export interface ScholarshipFilters {
   minValue?: number;
   maxValue?: number;
   deadlineWithinMonths?: number;
+  studyLevels?: string[];
+  coverageType?: 'full' | 'partial';
   status?: string;
 }
 

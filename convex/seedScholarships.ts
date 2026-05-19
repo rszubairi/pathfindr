@@ -1,5 +1,298 @@
 import { mutation } from "./_generated/server";
 import { GCC_SCHOLARSHIPS } from "./seedDataScholarshipsGCC";
+import { MY_SCHOLARSHIPS } from "./seedDataScholarshipsMY";
+
+export const seedMYScholarships = mutation({
+  args: {},
+  handler: async (ctx) => {
+    let seeded = 0;
+    for (const scholarship of MY_SCHOLARSHIPS) {
+      const existing = await ctx.db
+        .query("scholarships")
+        .withSearchIndex("search_name", (q) => q.search("name", scholarship.name))
+        .filter((q) => q.eq(q.field("provider"), scholarship.provider))
+        .first();
+
+      if (!existing) {
+        await ctx.db.insert("scholarships", scholarship);
+        seeded++;
+        console.log(`Seeded: ${scholarship.name}`);
+      } else {
+        console.log(`Already exists: ${scholarship.name}`);
+      }
+    }
+    return `Malaysian scholarships seeded: ${seeded} added`;
+  },
+});
+
+// ─── University of Leicester International Scholarships ───────────────────────
+
+const LEICESTER_SCHOLARSHIPS = [
+  {
+    name: "International Citizens of Change Scholarship (Undergraduate)",
+    provider: "University of Leicester",
+    providerType: "university" as const,
+    value: 10000,
+    currency: "GBP",
+    eligibleFields: ["All Fields"],
+    eligibleCountries: ["All Countries"],
+    deadline: new Date("2026-09-01").toISOString(),
+    eligibilityCriteria: {
+      level: "Undergraduate",
+      feeStatus: "International-fee paying",
+      excludedPrograms: "Medicine, LLB Maitrise, STEM International Foundation, International Year 1 courses",
+      intake: "September 2026",
+      available: "10 scholarships",
+      valueNote: "Up to £10,000/year for up to 3 years",
+    },
+    description:
+      "The International Citizens of Change Scholarship offers up to £10,000 per year for up to 3 years to international undergraduate students at the University of Leicester. Ten scholarships are available for September 2026 entry. Excluded programmes include Medicine, LLB Maitrise, STEM International Foundation, and International Year 1 courses. Applicants must be international-fee paying students.",
+    applicationUrl: "https://le.ac.uk/study/international-students/scholarships",
+    status: "active" as const,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    name: "Global Excellence Scholarship (Postgraduate)",
+    provider: "University of Leicester",
+    providerType: "university" as const,
+    value: 7000,
+    currency: "GBP",
+    eligibleFields: ["All Fields"],
+    eligibleCountries: ["All Countries"],
+    deadline: new Date("2027-04-01").toISOString(),
+    eligibilityCriteria: {
+      level: "Postgraduate Taught",
+      feeStatus: "International-fee paying (excludes India-domiciled applicants)",
+      intake: "Academic cycle 2026–27; April 2027 start available for College of Business only",
+      available: "10 scholarships",
+      valueNote: "£7,000 tuition fee discount",
+    },
+    description:
+      "The Global Excellence Scholarship provides a £7,000 tuition fee discount to international postgraduate taught students at the University of Leicester. Ten scholarships are available for the 2026–27 academic cycle. India-domiciled applicants are not eligible. An April 2027 start is available for College of Business students only.",
+    applicationUrl: "https://le.ac.uk/study/international-students/scholarships",
+    status: "active" as const,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    name: "International Undergraduate Tuition Fee Waiver",
+    provider: "University of Leicester",
+    providerType: "university" as const,
+    value: 0,
+    currency: "GBP",
+    eligibleFields: ["All Fields"],
+    eligibleCountries: ["All Countries"],
+    deadline: new Date("2026-09-01").toISOString(),
+    eligibilityCriteria: {
+      level: "Undergraduate",
+      feeStatus: "International-fee paying",
+      excludedPrograms: "Medicine, LLB Maitrise, STEM International Foundation, International Year 1, programmes exceeding 3 years",
+      intake: "September 2026",
+      available: "30 waivers (150 total over 5 years)",
+      applicationOpens: "18 November 2025",
+      valueNote: "Full tuition fee waiver",
+    },
+    description:
+      "The International Undergraduate Tuition Fee Waiver provides a full tuition fee waiver to 30 international students for September 2026 entry (150 total over 5 years). Excluded programmes include Medicine, LLB Maitrise, STEM International Foundation, International Year 1, and programmes exceeding 3 years. Applications opened 18 November 2025.",
+    applicationUrl: "https://le.ac.uk/study/international-students/scholarships",
+    status: "active" as const,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    name: "International Merit Scholarship",
+    provider: "University of Leicester",
+    providerType: "university" as const,
+    value: 5000,
+    currency: "GBP",
+    eligibleFields: ["All Fields"],
+    eligibleCountries: ["All Countries"],
+    deadline: new Date("2026-12-31").toISOString(),
+    eligibilityCriteria: {
+      level: "Undergraduate or Postgraduate Taught",
+      feeStatus: "International-fee paying",
+      selection: "Automatic consideration upon submission of final results",
+      pathwayNote: "Also available to International Pathway Year students with 70%+ score",
+      valueNote: "£5,000/year tuition fee discount",
+    },
+    description:
+      "The International Merit Scholarship awards a £5,000 per year tuition fee discount to high-achieving international undergraduate and postgraduate taught students at the University of Leicester. Students are automatically considered upon submission of final results — no separate application required. International Pathway Year students achieving 70% or above are also eligible.",
+    applicationUrl: "https://le.ac.uk/study/international-students/scholarships",
+    status: "active" as const,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    name: "Chancellor's International Scholarship",
+    provider: "University of Leicester",
+    providerType: "university" as const,
+    value: 3000,
+    currency: "GBP",
+    eligibleFields: ["All Fields"],
+    eligibleCountries: ["All Countries"],
+    deadline: new Date("2026-12-31").toISOString(),
+    eligibilityCriteria: {
+      level: "Undergraduate or Postgraduate Taught",
+      feeStatus: "International-fee paying",
+      excludedPrograms: "Medicine, LLB Maitrise (UG); not available to India-domiciled PG applicants",
+      selection: "Automatic consideration with course offer",
+      valueNote: "£3,000/year tuition fee discount",
+    },
+    description:
+      "The Chancellor's International Scholarship provides a £3,000 per year tuition fee discount to international students meeting entry requirements at the University of Leicester. Students are automatically considered when receiving a course offer — no separate application needed. Excluded for undergraduates: Medicine and LLB Maitrise. India-domiciled postgraduate applicants are not eligible.",
+    applicationUrl: "https://le.ac.uk/study/international-students/scholarships",
+    status: "active" as const,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    name: "Africa Development Scholarship",
+    provider: "University of Leicester",
+    providerType: "university" as const,
+    value: 0,
+    currency: "GBP",
+    eligibleFields: ["All Fields"],
+    eligibleCountries: [
+      "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", "Cabo Verde",
+      "Cameroon", "Central African Republic", "Chad", "Comoros", "Congo",
+      "Democratic Republic of the Congo", "Djibouti", "Equatorial Guinea",
+      "Eritrea", "Eswatini", "Ethiopia", "Gabon", "Gambia", "Ghana", "Guinea",
+      "Guinea-Bissau", "Ivory Coast", "Kenya", "Lesotho", "Liberia",
+      "Madagascar", "Malawi", "Mali", "Mauritania", "Mauritius", "Mozambique",
+      "Namibia", "Niger", "Nigeria", "Rwanda", "Sao Tome and Principe",
+      "Senegal", "Seychelles", "Sierra Leone", "Somalia", "South Africa",
+      "South Sudan", "Sudan", "Tanzania", "Togo", "Uganda", "Zambia", "Zimbabwe",
+    ],
+    deadline: new Date("2026-09-01").toISOString(),
+    eligibilityCriteria: {
+      level: "Postgraduate",
+      region: "Sub-Saharan Africa",
+      intake: "September 2026",
+      available: "2 scholarships",
+      valueNote: "Full tuition fee waiver",
+    },
+    description:
+      "The Africa Development Scholarship offers a full tuition fee waiver to 2 postgraduate students from Sub-Saharan Africa for September 2026 entry at the University of Leicester. The scholarship aims to support academic talent from the region and foster development through education.",
+    applicationUrl: "https://le.ac.uk/study/international-students/scholarships",
+    status: "active" as const,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    name: "University of Leicester GREAT Scholarship 2026",
+    provider: "University of Leicester",
+    providerType: "university" as const,
+    value: 10000,
+    currency: "GBP",
+    eligibleFields: ["All Fields"],
+    eligibleCountries: ["Pakistan"],
+    deadline: new Date("2026-12-31").toISOString(),
+    eligibilityCriteria: {
+      level: "Postgraduate Taught (one-year courses only)",
+      nationality: "Pakistani applicants",
+      excludedPrograms: "PGCE",
+      available: "1 scholarship",
+      partners: "British Council and GREAT Britain Campaign",
+      valueNote: "£10,000 tuition fee discount",
+    },
+    description:
+      "The University of Leicester GREAT Scholarship 2026, offered in partnership with the British Council and GREAT Britain Campaign, provides a £10,000 tuition fee discount to one Pakistani student enrolling in a one-year postgraduate course (excluding PGCE). The scholarship supports Pakistan's brightest talents to study at the University of Leicester.",
+    applicationUrl: "https://le.ac.uk/study/international-students/scholarships",
+    status: "active" as const,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    name: "Leicester–King Power Thai Scholarship",
+    provider: "University of Leicester",
+    providerType: "university" as const,
+    value: 5000,
+    currency: "GBP",
+    eligibleFields: ["All Fields"],
+    eligibleCountries: ["Thailand"],
+    deadline: new Date("2026-09-01").toISOString(),
+    eligibilityCriteria: {
+      level: "Undergraduate or Postgraduate Taught",
+      domicile: "Thai-domiciled international students",
+      intake: "September 2026",
+      selection: "Automatic — no separate application required",
+      valueNote: "£5,000 tuition fee discount",
+    },
+    description:
+      "The Leicester–King Power Thai Scholarship offers a £5,000 tuition fee discount to Thai-domiciled international undergraduate and postgraduate taught students at the University of Leicester for September 2026 entry. No separate application is required — eligible students are automatically considered.",
+    applicationUrl: "https://le.ac.uk/study/international-students/scholarships",
+    status: "active" as const,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    name: "Sanctuary Scholarship – University of Leicester",
+    provider: "University of Leicester",
+    providerType: "university" as const,
+    value: 0,
+    currency: "GBP",
+    eligibleFields: ["All Fields"],
+    eligibleCountries: ["All Countries"],
+    deadline: new Date("2026-12-31").toISOString(),
+    eligibilityCriteria: {
+      level: "Undergraduate, Postgraduate Taught, or Distance Learning",
+      eligibility: "Individuals seeking asylum in the UK",
+      available: "Up to 4 scholarships",
+      valueNote: "Full tuition fee waiver plus support package",
+    },
+    description:
+      "The Sanctuary Scholarship at the University of Leicester provides a full tuition fee waiver plus a support package to individuals seeking asylum in the UK. Up to 4 scholarships are available across undergraduate, postgraduate taught, and distance learning levels. The scheme supports access to higher education for those affected by displacement and conflict.",
+    applicationUrl: "https://le.ac.uk/study/international-students/scholarships",
+    status: "active" as const,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    name: "Family Loyalty Discount – University of Leicester",
+    provider: "University of Leicester",
+    providerType: "university" as const,
+    value: 0,
+    currency: "GBP",
+    eligibleFields: ["All Fields"],
+    eligibleCountries: ["All Countries"],
+    deadline: new Date("2026-12-31").toISOString(),
+    eligibilityCriteria: {
+      level: "Undergraduate or Postgraduate",
+      eligibility: "Students with a family member currently studying at or graduated from the University of Leicester",
+      valueNote: "10% tuition fee discount per year",
+    },
+    description:
+      "The Family Loyalty Discount offers a 10% per year tuition fee reduction to undergraduate and postgraduate students who have a family member currently studying at or who has graduated from the University of Leicester.",
+    applicationUrl: "https://le.ac.uk/study/international-students/scholarships",
+    status: "active" as const,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+];
+
+export const seedLeicesterScholarships = mutation({
+  args: {},
+  handler: async (ctx) => {
+    let seeded = 0;
+    for (const scholarship of LEICESTER_SCHOLARSHIPS) {
+      const existing = await ctx.db
+        .query("scholarships")
+        .withSearchIndex("search_name", (q) => q.search("name", scholarship.name))
+        .filter((q) => q.eq(q.field("provider"), scholarship.provider))
+        .first();
+
+      if (!existing) {
+        await ctx.db.insert("scholarships", scholarship);
+        seeded++;
+        console.log(`Seeded: ${scholarship.name}`);
+      } else {
+        console.log(`Already exists: ${scholarship.name}`);
+      }
+    }
+    return `Leicester scholarships seeded: ${seeded} added`;
+  },
+});
 
 const MGIMO_SCHOLARSHIP = {
   name: "MGIMO University Government Scholarship",
@@ -196,6 +489,63 @@ const HASANAH_MICRO_GRANT_2026 = {
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
 };
+
+const READING_MALAYSIA_PHD_SCHOLARSHIP = {
+  name: "University of Reading Malaysia 10 PhD Scholarship Scheme",
+  provider: "University of Reading Malaysia (UoRM)",
+  providerType: "university" as const,
+  value: 2500,
+  currency: "MYR",
+  eligibleFields: [
+    "Built Environment",
+    "Business and Management",
+    "Psychology",
+  ],
+  eligibleCountries: ["All Countries"],
+  deadline: new Date("2026-10-15").toISOString(),
+  eligibilityCriteria: {
+    level: "PhD (Full-time)",
+    duration: "Minimum 3 years, maximum 4 years",
+    available: "Up to 5 scholarships per cycle (2 cycles per year)",
+    academicRequirement: "Master's degree or equivalent in a relevant field with minimum upper second-class Bachelor's honours; exceptional first-class Bachelor's holders may qualify for direct entry",
+    englishRequirement: "IELTS 7.0 or equivalent if English is not first language (waiver available for recent English-speaking country study/work)",
+    researchProposal: "Research proposal aligned with School research strengths with confirmed supervisory support required",
+    visaRequirement: "International applicants must obtain a valid Malaysian student visa before benefits activate",
+    recipientObligation: "Maximum 320 hours per annum (approx. 6 hours/week) contribution to School or University activities",
+    applicationCycles: "Cycle 1: July 1–15, 2026 | Cycle 2: October 1–15, 2026",
+    documentsNeeded: [
+      "PhD Scholarship Application Form (applicant and supervisor sections)",
+      "Current CV with academic qualifications, grades, and experience",
+      "Complete research proposal",
+      "PhD programme offer letter",
+    ],
+  },
+  description:
+    "The University of Reading Malaysia (UoRM) 10 PhD Scholarship Scheme offers up to 5 fully funded scholarships per cycle (2 cycles per year) for full-time PhD students in Built Environment, Business and Management, or Psychology. Benefits include a full tuition fee waiver, RM2,500 per annum research allowance for 3 years, and an allocated desktop workstation. Applicants must hold a Master's degree (or exceptional first-class Bachelor's) in a relevant field, have a confirmed supervisory arrangement, and submit a research proposal. English proficiency of IELTS 7.0 or equivalent is required unless English is the applicant's first language. International students must obtain a Malaysian student visa before benefits activate. Recipients are expected to contribute up to 320 hours per year to school or university activities. Application Cycle 1: July 1–15, 2026; Cycle 2: October 1–15, 2026.",
+  applicationUrl: "https://www.reading.edu.my/scholarships-and-aid/phd-scholarship",
+  status: "active" as const,
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+};
+
+export const seedReadingMalaysiaPhdScholarship = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const existing = await ctx.db
+      .query("scholarships")
+      .withSearchIndex("search_name", (q) =>
+        q.search("name", READING_MALAYSIA_PHD_SCHOLARSHIP.name)
+      )
+      .filter((q) => q.eq(q.field("provider"), READING_MALAYSIA_PHD_SCHOLARSHIP.provider))
+      .first();
+
+    if (!existing) {
+      await ctx.db.insert("scholarships", READING_MALAYSIA_PHD_SCHOLARSHIP);
+      return "University of Reading Malaysia PhD Scholarship seeded successfully";
+    }
+    return "University of Reading Malaysia PhD Scholarship already exists";
+  },
+});
 
 export const seedHasanahMicroGrant2026 = mutation({
   args: {},

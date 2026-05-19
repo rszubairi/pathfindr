@@ -52,6 +52,7 @@ import type * as seedData from "../seedData.js";
 import type * as seedDataBoardingSchools from "../seedDataBoardingSchools.js";
 import type * as seedDataSPM2025 from "../seedDataSPM2025.js";
 import type * as seedDataScholarshipsGCC from "../seedDataScholarshipsGCC.js";
+import type * as seedDataScholarshipsMY from "../seedDataScholarshipsMY.js";
 import type * as seedDataScraped from "../seedDataScraped.js";
 import type * as seedDataUniversities from "../seedDataUniversities.js";
 import type * as seedFeatured from "../seedFeatured.js";
@@ -117,6 +118,7 @@ declare const fullApi: ApiFromModules<{
   seedDataBoardingSchools: typeof seedDataBoardingSchools;
   seedDataSPM2025: typeof seedDataSPM2025;
   seedDataScholarshipsGCC: typeof seedDataScholarshipsGCC;
+  seedDataScholarshipsMY: typeof seedDataScholarshipsMY;
   seedDataScraped: typeof seedDataScraped;
   seedDataUniversities: typeof seedDataUniversities;
   seedFeatured: typeof seedFeatured;

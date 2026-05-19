@@ -32,6 +32,7 @@ export default defineSchema({
     internationalRanking: v.optional(v.number()),
     isFeatured: v.optional(v.boolean()),
     featuredUntil: v.optional(v.string()),
+    studyLevels: v.optional(v.array(v.string())),
   })
     .index('by_status', ['status'])
     .index('by_featured', ['isFeatured'])

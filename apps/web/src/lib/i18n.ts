@@ -621,6 +621,10 @@ const resources = {
           month: 'month',
           months: 'months',
           anyTime: 'Any time',
+          studyLevel: 'Study Level',
+          programmeCoverage: 'Programme Coverage',
+          fullScholarship: 'Full Scholarship',
+          partialScholarship: 'Partial Scholarship',
         }
       },
       boardingSchools: {
@@ -1290,6 +1294,10 @@ const resources = {
           month: 'bulan',
           months: 'bulan',
           anyTime: 'Bila-bila masa',
+          studyLevel: 'Tahap Pengajian',
+          programmeCoverage: 'Liputan Program',
+          fullScholarship: 'Biasiswa Penuh',
+          partialScholarship: 'Biasiswa Separa',
         }
       },
       boardingSchools: {
@@ -1959,6 +1967,10 @@ const resources = {
           month: '个月内',
           months: '个月内',
           anyTime: '随时',
+          studyLevel: '学习阶段',
+          programmeCoverage: '项目覆盖',
+          fullScholarship: '全额奖学金',
+          partialScholarship: '部分奖学金',
         }
       },
       boardingSchools: {
@@ -2575,6 +2587,10 @@ const resources = {
           maxValue: 'Valor máximo (USD)',
           deadline: 'Plazo de solicitud',
           anyTime: 'Cualquier momento',
+          studyLevel: 'Nivel de Estudio',
+          programmeCoverage: 'Cobertura del Programa',
+          fullScholarship: 'Beca Completa',
+          partialScholarship: 'Beca Parcial',
         }
       },
       boardingSchools: {
@@ -2884,6 +2900,10 @@ const resources = {
           maxValue: 'Valor Máximo (USD)',
           deadline: 'Prazo de Inscrição',
           anyTime: 'Qualquer momento',
+          studyLevel: 'Nível de Estudo',
+          programmeCoverage: 'Cobertura do Programa',
+          fullScholarship: 'Bolsa Integral',
+          partialScholarship: 'Bolsa Parcial',
         }
       },
       boardingSchools: {
@@ -3262,6 +3282,10 @@ const resources = {
           maxValue: 'Maximalwert (USD)',
           deadline: 'Bewerbungsfrist',
           anyTime: 'Jederzeit',
+          studyLevel: 'Studienstufe',
+          programmeCoverage: 'Programmförderung',
+          fullScholarship: 'Vollstipendium',
+          partialScholarship: 'Teilstipendium',
         }
       },
       boardingSchools: {
@@ -3646,6 +3670,10 @@ const resources = {
           maxValue: '最大金額 (USD)',
           deadline: '申請締切',
           anyTime: 'いつでも',
+          studyLevel: '学習レベル',
+          programmeCoverage: 'プログラムカバレッジ',
+          fullScholarship: '全額奨学金',
+          partialScholarship: '一部奨学金',
         }
       },
       boardingSchools: {
@@ -4030,6 +4058,10 @@ const resources = {
           maxValue: '최대 금액 (USD)',
           deadline: '지원 마감일',
           anyTime: '언제든지',
+          studyLevel: '학습 수준',
+          programmeCoverage: '프로그램 보장',
+          fullScholarship: '전액 장학금',
+          partialScholarship: '부분 장학금',
         }
       },
       boardingSchools: {
@@ -4414,6 +4446,10 @@ const resources = {
           maxValue: 'Giá trị tối đa (USD)',
           deadline: 'Hạn nộp hồ sơ',
           anyTime: 'Bất cứ lúc nào',
+          studyLevel: 'Trình độ học vấn',
+          programmeCoverage: 'Mức độ tài trợ',
+          fullScholarship: 'Học bổng toàn phần',
+          partialScholarship: 'Học bổng bán phần',
         }
       },
       boardingSchools: {
@@ -4798,6 +4834,10 @@ const resources = {
           maxValue: 'Nilai Maksimum (USD)',
           deadline: 'Tenggat Aplikasi',
           anyTime: 'Kapan saja',
+          studyLevel: 'Tingkat Studi',
+          programmeCoverage: 'Cakupan Program',
+          fullScholarship: 'Beasiswa Penuh',
+          partialScholarship: 'Beasiswa Parsial',
         }
       },
       boardingSchools: {
@@ -5182,6 +5222,10 @@ const resources = {
           maxValue: 'अधिकतम मूल्य (USD)',
           deadline: 'आवेदन डेडलाइन',
           anyTime: 'कभी भी',
+          studyLevel: 'अध्ययन स्तर',
+          programmeCoverage: 'कार्यक्रम कवरेज',
+          fullScholarship: 'पूर्ण छात्रवृत्ति',
+          partialScholarship: 'आंशिक छात्रवृत्ति',
         }
       },
       boardingSchools: {

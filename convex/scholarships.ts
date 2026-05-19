@@ -114,6 +114,8 @@ export const filter = query({
     minValue: v.optional(v.number()),
     maxValue: v.optional(v.number()),
     deadlineWithinMonths: v.optional(v.number()),
+    studyLevels: v.optional(v.array(v.string())),
+    coverageType: v.optional(v.union(v.literal('full'), v.literal('partial'))),
     status: v.optional(
       v.union(v.literal('active'), v.literal('closed'), v.literal('pending'))
     ),
@@ -153,6 +155,26 @@ export const filter = query({
     }
     if (args.maxValue !== undefined) {
       scholarships = scholarships.filter((s) => s.value <= args.maxValue!);
+    }
+
+    // Filter by study level — matches against studyLevels field or eligibilityCriteria.level
+    if (args.studyLevels && args.studyLevels.length > 0) {
+      scholarships = scholarships.filter((s) => {
+        const docLevels: string[] = (s as any).studyLevels || [];
+        const criteriaLevel: string = (s as any).eligibilityCriteria?.level || (s as any).eligibilityCriteria?.academicLevel || '';
+        return args.studyLevels!.some(
+          (l) =>
+            docLevels.some((dl) => dl.toLowerCase().includes(l.toLowerCase())) ||
+            criteriaLevel.toLowerCase().includes(l.toLowerCase())
+        );
+      });
+    }
+
+    // Filter by coverage type: full = value is 0 (fee waiver), partial = value > 0 (discount)
+    if (args.coverageType === 'full') {
+      scholarships = scholarships.filter((s) => s.value === 0);
+    } else if (args.coverageType === 'partial') {
+      scholarships = scholarships.filter((s) => s.value > 0);
     }
 
     // Filter by deadline

@@ -18,6 +18,8 @@ export function useScholarships(filters?: ScholarshipFilters) {
         minValue: filters.minValue,
         maxValue: filters.maxValue,
         deadlineWithinMonths: filters.deadlineWithinMonths,
+        studyLevels: filters.studyLevels,
+        coverageType: filters.coverageType,
       }
       : {}
   );
@@ -56,6 +58,8 @@ export function useScholarshipSearch(query: string, filters?: ScholarshipFilters
         minValue: filters.minValue,
         maxValue: filters.maxValue,
         deadlineWithinMonths: filters.deadlineWithinMonths,
+        studyLevels: filters.studyLevels,
+        coverageType: filters.coverageType,
       }
       : {}
   );

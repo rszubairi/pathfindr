@@ -80,6 +80,21 @@ export function ScholarshipFilters({
     onFiltersChange({ ...filters, providerTypes: newTypes });
   };
 
+  const handleStudyLevelToggle = (level: string) => {
+    const current = filters.studyLevels || [];
+    const next = current.includes(level)
+      ? current.filter((l) => l !== level)
+      : [...current, level];
+    onFiltersChange({ ...filters, studyLevels: next });
+  };
+
+  const handleCoverageTypeChange = (type: 'full' | 'partial' | null) => {
+    onFiltersChange({
+      ...filters,
+      coverageType: type === null || type === filters.coverageType ? undefined : type,
+    });
+  };
+
   const handleDeadlineChange = (months: number | null) => {
     onFiltersChange({
       ...filters,
@@ -102,6 +117,8 @@ export function ScholarshipFilters({
     (filters.countries?.length || 0) +
     (filters.fields?.length || 0) +
     (filters.providerTypes?.length || 0) +
+    (filters.studyLevels?.length || 0) +
+    (filters.coverageType ? 1 : 0) +
     (filters.deadlineWithinMonths ? 1 : 0) +
     (filters.minValue ? 1 : 0) +
     (filters.maxValue ? 1 : 0);
@@ -216,6 +233,54 @@ export function ScholarshipFilters({
               </label>
             );
           })}
+        </div>
+      </FilterSection>
+
+      {/* Study Level Filter */}
+      <FilterSection title={t('scholarships.filtersList.studyLevel')}>
+        <div className="space-y-2">
+          {['Diploma', 'Undergraduate', 'Postgraduate', 'PhD', 'Foundation'].map((level) => (
+            <label key={level} className="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+              <input
+                type="checkbox"
+                checked={filters.studyLevels?.includes(level) || false}
+                onChange={() => handleStudyLevelToggle(level)}
+                className="h-4 w-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+              />
+              <span className="ml-2 text-sm text-gray-700">{level}</span>
+            </label>
+          ))}
+        </div>
+      </FilterSection>
+
+      {/* Coverage Type Filter */}
+      <FilterSection title={t('scholarships.filtersList.programmeCoverage')}>
+        <div className="space-y-2">
+          {[
+            { value: 'full' as const, label: t('scholarships.filtersList.fullScholarship') },
+            { value: 'partial' as const, label: t('scholarships.filtersList.partialScholarship') },
+          ].map(({ value, label }) => (
+            <label key={value} className="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded">
+              <input
+                type="radio"
+                name="coverageType"
+                checked={filters.coverageType === value}
+                onChange={() => handleCoverageTypeChange(value)}
+                className="h-4 w-4 text-primary-600 border-gray-300 focus:ring-primary-500"
+              />
+              <span className="ml-2 text-sm text-gray-700">{label}</span>
+            </label>
+          ))}
+          <label className="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded">
+            <input
+              type="radio"
+              name="coverageType"
+              checked={!filters.coverageType}
+              onChange={() => handleCoverageTypeChange(null)}
+              className="h-4 w-4 text-primary-600 border-gray-300 focus:ring-primary-500"
+            />
+            <span className="ml-2 text-sm text-gray-700">{t('scholarships.filtersList.anyTime')}</span>
+          </label>
         </div>
       </FilterSection>
 

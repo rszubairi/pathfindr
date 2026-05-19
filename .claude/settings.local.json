@@ -117,7 +117,12 @@
       "WebFetch(domain:zakat.mainpp.gov.my)",
       "WebFetch(domain:yayasanhasanah.org)",
       "WebFetch(domain:www.kuyp.edu.my)",
-      "WebFetch(domain:yayasanpelajaranjohor.gov.my)"
+      "WebFetch(domain:yayasanpelajaranjohor.gov.my)",
+      "WebFetch(domain:le.ac.uk)",
+      "WebFetch(domain:www.reading.edu.my)",
+      "WebFetch(domain:unienrol.com)",
+      "WebFetch(domain:yayasankhazanah.com.my)",
+      "WebFetch(domain:www.khazanah.com.my)"
     ]
   }
 }
