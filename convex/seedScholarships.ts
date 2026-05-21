@@ -2,6 +2,73 @@ import { mutation } from "./_generated/server";
 import { GCC_SCHOLARSHIPS } from "./seedDataScholarshipsGCC";
 import { MY_SCHOLARSHIPS } from "./seedDataScholarshipsMY";
 
+const AAU_PHD_ECONOMICS_2026 = {
+  name: "PhD Position in Economics, Business, and Management – Aalborg University 2026",
+  provider: "Aalborg University Business School",
+  providerType: "university" as const,
+  value: 0,
+  currency: "DKK",
+  eligibleFields: [
+    "Economics",
+    "Business",
+    "Management",
+    "Econometrics",
+    "Regional Economics",
+    "Innovation Studies",
+    "International Business",
+  ],
+  eligibleCountries: ["All Countries"],
+  deadline: new Date("2026-08-09").toISOString(),
+  studyLevels: ["PhD"],
+  eligibilityCriteria: {
+    level: "PhD (3-year fully funded position)",
+    academicRequirement: "Master's degree in Economics, Business, Management, or related field",
+    preferredExperience: "Experience with econometric analyses or large datasets; proficiency in Stata, SAS, R, or Python",
+    englishRequirement: "Non-native English speakers must provide IELTS 7.0+, TOEFL paper 600+, or TOEFL internet 100+ if writing thesis in English",
+    danishLanguage: "Danish skills are valuable but not mandatory",
+    startDate: "November 1, 2026 (or soon after)",
+    duration: "3 years",
+    teachingObligation: "600 teaching hours over three years",
+    coursework: "30 ECTS PhD-level coursework required",
+    researchStay: "External research stay of 3–6 months at a foreign institution preferred",
+    salary: "Follows the collective agreement between the Danish Confederation of Professional Associations and the state",
+    referenceNumber: "2026/394",
+    interviewTimeline: "September 2026",
+    documentsNeeded: [
+      "Application letter explaining motivation and qualifications",
+      "Curriculum vitae",
+      "Bachelor's and Master's diplomas with grades",
+      "Project description",
+      "Language test results (if applicable)",
+      "Other relevant documents",
+    ],
+    contact: "Jacob Rubæk Holm | +45 9940 8247 | jrh@business.aau.dk",
+  },
+  description:
+    "Aalborg University Business School invites applications for a fully funded 3-year PhD position in Economics, Business, and Management (Ref: 2026/394), commencing November 1, 2026. The research focuses on regional differences in firm-level and aggregate productivity, with scope for original work in competitiveness, internationalisation, regional structural change, and innovation. Candidates must hold a Master's degree in a relevant field; experience with econometric tools (Stata, SAS, R, or Python) and large datasets is advantageous. Non-native English speakers writing in English must provide IELTS 7.0+ or equivalent. Obligations include 600 teaching hours over three years, 30 ECTS of PhD coursework, and a preferred external research stay of 3–6 months. Salary follows the Danish Confederation of Professional Associations collective agreement. Application deadline: 9 August 2026; interviews in September 2026.",
+  applicationUrl: "https://www.vacancies.aau.dk/phd-positions/show-vacancy/vacancyId/912720",
+  status: "active" as const,
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+};
+
+export const seedAAUPhdEconomics2026 = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const existing = await ctx.db
+      .query("scholarships")
+      .withSearchIndex("search_name", (q) => q.search("name", AAU_PHD_ECONOMICS_2026.name))
+      .filter((q) => q.eq(q.field("provider"), AAU_PHD_ECONOMICS_2026.provider))
+      .first();
+
+    if (!existing) {
+      await ctx.db.insert("scholarships", AAU_PHD_ECONOMICS_2026);
+      return "AAU PhD Economics 2026 seeded successfully";
+    }
+    return "AAU PhD Economics 2026 already exists";
+  },
+});
+
 export const seedMYScholarships = mutation({
   args: {},
   handler: async (ctx) => {
