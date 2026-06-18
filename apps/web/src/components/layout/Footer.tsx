@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
-import { GraduationCap, Facebook, Twitter, Instagram, Linkedin, Mail } from 'lucide-react';
+import { GraduationCap, Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
 
 export function Footer() {
   const { t, i18n } = useTranslation();
@@ -123,9 +123,20 @@ export function Footer() {
                 href="mailto:enquiries@thepathfindr.com"
                 className="flex items-center gap-2 text-sm text-gray-600 hover:text-primary-600 transition"
               >
-                <Mail className="h-4 w-4" />
+                <Mail className="h-4 w-4 shrink-0" />
                 enquiries@thepathfindr.com
               </a>
+              <a
+                href="tel:+60132993439"
+                className="flex items-center gap-2 text-sm text-gray-600 hover:text-primary-600 transition"
+              >
+                <Phone className="h-4 w-4 shrink-0" />
+                +60 13-299 3439
+              </a>
+              <p className="flex items-start gap-2 text-sm text-gray-600">
+                <MapPin className="h-4 w-4 shrink-0 mt-0.5" />
+                35-1 Jalan PJS 5/30, Petaling Jaya Commercial City, 46510 Petaling Jaya, Selangor
+              </p>
             </div>
           </div>
         </div>
