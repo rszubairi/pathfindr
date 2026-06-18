@@ -35,6 +35,7 @@ export function Footer() {
     { name: t('footer.links.knowledgeBase', { defaultValue: 'Knowledge Base' }), href: '/knowledge-base' },
     { name: t('footer.links.privacyPolicy', { defaultValue: 'Privacy Policy' }), href: '/privacy' },
     { name: t('footer.links.termsOfService', { defaultValue: 'Terms of Service' }), href: '/terms' },
+    { name: t('footer.links.refundPolicy', { defaultValue: 'Refund Policy' }), href: '/refund' },
   ];
 
   const socialLinks = [
@@ -119,11 +120,11 @@ export function Footer() {
             {/* Contact */}
             <div className="space-y-2">
               <a
-                href="mailto:hello@pathfindr.com"
+                href="mailto:enquiries@thepathfindr.com"
                 className="flex items-center gap-2 text-sm text-gray-600 hover:text-primary-600 transition"
               >
                 <Mail className="h-4 w-4" />
-                hello@pathfindr.com
+                enquiries@thepathfindr.com
               </a>
             </div>
           </div>

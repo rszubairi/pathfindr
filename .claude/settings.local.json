@@ -123,7 +123,10 @@
       "WebFetch(domain:unienrol.com)",
       "WebFetch(domain:yayasankhazanah.com.my)",
       "WebFetch(domain:www.khazanah.com.my)",
-      "WebFetch(domain:www.vacancies.aau.dk)"
+      "WebFetch(domain:www.vacancies.aau.dk)",
+      "Bash(mkdir -p /Users/raheelzubairi/Documents/projects/pathfindr/apps/web/src/app/\\\\[lang\\\\]/privacy)",
+      "Bash(mkdir -p /Users/raheelzubairi/Documents/projects/pathfindr/apps/web/src/app/\\\\[lang\\\\]/terms)",
+      "Bash(mkdir -p /Users/raheelzubairi/Documents/projects/pathfindr/apps/web/src/app/\\\\[lang\\\\]/refund)"
     ]
   }
 }

@@ -1,6 +1,30 @@
 import { mutation } from "./_generated/server";
 import { GCC_SCHOLARSHIPS } from "./seedDataScholarshipsGCC";
 import { MY_SCHOLARSHIPS } from "./seedDataScholarshipsMY";
+import { GLOBAL_SCHOLARSHIPS } from "./seedDataScholarshipsGlobal";
+
+export const seedGlobalScholarships = mutation({
+  args: {},
+  handler: async (ctx) => {
+    let seeded = 0;
+    for (const scholarship of GLOBAL_SCHOLARSHIPS) {
+      const existing = await ctx.db
+        .query("scholarships")
+        .withSearchIndex("search_name", (q) => q.search("name", scholarship.name))
+        .filter((q) => q.eq(q.field("provider"), scholarship.provider))
+        .first();
+
+      if (!existing) {
+        await ctx.db.insert("scholarships", scholarship);
+        seeded++;
+        console.log(`Seeded: ${scholarship.name}`);
+      } else {
+        console.log(`Already exists: ${scholarship.name}`);
+      }
+    }
+    return `Global scholarships seeded: ${seeded} added`;
+  },
+});
 
 const AAU_PHD_ECONOMICS_2026 = {
   name: "PhD Position in Economics, Business, and Management – Aalborg University 2026",
