@@ -281,8 +281,19 @@ export const generateAndSendInvoice = action({
     tier: v.union(v.literal('pro'), v.literal('expert')),
     periodStart: v.string(),
     periodEnd: v.string(),
+    xenditInvoiceId: v.optional(v.string()),
   },
   handler: async (ctx, args): Promise<{ invoiceNumber: string; success: boolean }> => {
+    // Deduplication: if we already have an invoice for this Xendit invoice, skip
+    if (args.xenditInvoiceId) {
+      const existing = await ctx.runQuery(api.invoices.getByXenditInvoiceId, {
+        xenditInvoiceId: args.xenditInvoiceId,
+      });
+      if (existing) {
+        return { invoiceNumber: existing.invoiceNumber, success: true };
+      }
+    }
+
     const user = await ctx.runQuery(api.auth.getCurrentUser, { userId: args.userId });
     if (!user) throw new Error('User not found');
 
@@ -306,6 +317,7 @@ export const generateAndSendInvoice = action({
       currency: 'MYR',
       periodStart: args.periodStart,
       periodEnd: args.periodEnd,
+      xenditInvoiceId: args.xenditInvoiceId,
       status: 'generated',
     });
 

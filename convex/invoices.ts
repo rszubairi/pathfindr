@@ -18,6 +18,16 @@ export const incrementCounter = mutation({
   },
 });
 
+export const getByXenditInvoiceId = query({
+  args: { xenditInvoiceId: v.string() },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query('invoices')
+      .withIndex('by_xendit_invoice_id', (q) => q.eq('xenditInvoiceId', args.xenditInvoiceId))
+      .first();
+  },
+});
+
 export const createInvoice = mutation({
   args: {
     userId: v.id('users'),
@@ -30,6 +40,7 @@ export const createInvoice = mutation({
     currency: v.string(),
     periodStart: v.string(),
     periodEnd: v.string(),
+    xenditInvoiceId: v.optional(v.string()),
     status: v.union(v.literal('generated'), v.literal('sent'), v.literal('failed')),
   },
   handler: async (ctx, args) => {

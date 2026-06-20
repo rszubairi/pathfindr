@@ -220,6 +220,17 @@ export const verifyCheckoutSession = action({
           cancelAtPeriodEnd: false,
           applicationsLimit: config.applicationsLimit,
         });
+
+        // Generate invoice immediately so it's ready on the success page.
+        // The webhook will also call this but the xenditInvoiceId dedup guard
+        // ensures only one invoice is ever created per payment.
+        await ctx.runAction(api.invoiceActions.generateAndSendInvoice, {
+          userId: userId as Id<'users'>,
+          tier,
+          periodStart: now.toISOString(),
+          periodEnd: oneYearLater.toISOString(),
+          xenditInvoiceId: invoice.id,
+        });
       }
     }
 
@@ -387,6 +398,7 @@ export const handleWebhook = action({
         tier,
         periodStart: now.toISOString(),
         periodEnd: oneYearLater.toISOString(),
+        xenditInvoiceId: event.id as string,
       });
     }
 

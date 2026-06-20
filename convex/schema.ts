@@ -498,12 +498,14 @@ export default defineSchema({
     currency: v.string(),
     periodStart: v.string(),
     periodEnd: v.string(),
+    xenditInvoiceId: v.optional(v.string()),
     pdfStorageId: v.optional(v.id('_storage')),
     status: v.union(v.literal('generated'), v.literal('sent'), v.literal('failed')),
     createdAt: v.string(),
   })
     .index('by_user_id', ['userId'])
     .index('by_invoice_number', ['invoiceNumber'])
+    .index('by_xendit_invoice_id', ['xenditInvoiceId'])
     .index('by_created_at', ['createdAt']),
 
   shortUrls: defineTable({
