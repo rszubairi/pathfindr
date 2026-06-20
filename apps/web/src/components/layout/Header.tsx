@@ -101,6 +101,7 @@ export function Header() {
   }, [mobileMenuOpen]);
 
   return (
+    <>
     <header
       className={cn(
         'sticky top-0 z-50 w-full transition-all duration-200',
@@ -272,7 +273,9 @@ export function Header() {
         </div>
       </nav>
 
-      {/* Mobile Menu */}
+    </header>
+
+      {/* Mobile Menu - rendered outside <header> to avoid backdrop-filter containing block issues */}
       {mobileMenuOpen && (
         <>
           {/* Backdrop */}
@@ -427,6 +430,6 @@ export function Header() {
           </div>
         </>
       )}
-    </header>
+    </>
   );
 }
