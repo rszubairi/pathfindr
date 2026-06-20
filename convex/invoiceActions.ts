@@ -348,10 +348,11 @@ export const generateAndSendInvoice = action({
     const blob = new Blob([new Uint8Array(pdfBuffer)], { type: 'application/pdf' });
     const pdfStorageId = await ctx.storage.store(blob);
 
+    // Mark as generated (PDF stored); status updates to 'sent' only after email succeeds
     await ctx.runMutation(api.invoices.updateInvoiceStatus, {
       invoiceId,
       pdfStorageId,
-      status: 'sent',
+      status: 'generated',
     });
 
     // Build email HTML
@@ -425,44 +426,55 @@ export const generateAndSendInvoice = action({
 </html>`;
 
     // Send email with PDF attachment
-    if (resendApiKey) {
-      try {
-        const resend = new Resend(resendApiKey);
-        await resend.emails.send({
-          from: 'Pathfindr <noreply@thepathfindr.com>',
-          to: user.email,
-          subject,
-          html: emailHtml,
-          attachments: [
-            {
-              filename: `${invoiceNumber}.pdf`,
-              content: pdfBuffer.toString('base64'),
-            },
-          ],
-        });
+    if (!resendApiKey) {
+      console.log(`[DEV] Invoice ${invoiceNumber} generated for ${user.email} — set RESEND_API_KEY to send email`);
+      return { invoiceNumber, success: true };
+    }
 
-        await ctx.runMutation(api.emailLogs.createLog, {
-          recipientEmail: user.email,
-          subject,
-          body: emailHtml,
-          userId: args.userId,
-          type: 'invoice',
-          status: 'sent',
-        });
-      } catch (err) {
-        console.error('Invoice email failed:', err);
-        await ctx.runMutation(api.emailLogs.createLog, {
-          recipientEmail: user.email,
-          subject,
-          body: 'ERROR: Failed to send',
-          userId: args.userId,
-          type: 'invoice',
-          status: 'failed',
-          error: String(err),
-        });
+    try {
+      const resend = new Resend(resendApiKey);
+      const sendResult = await resend.emails.send({
+        from: 'Pathfindr <noreply@thepathfindr.com>',
+        to: user.email,
+        subject,
+        html: emailHtml,
+        attachments: [
+          {
+            filename: `${invoiceNumber}.pdf`,
+            content: pdfBuffer.toString('base64'),
+          },
+        ],
+      });
+
+      if (sendResult.error) {
+        throw new Error(sendResult.error.message);
       }
-    } else {
-      console.log(`[DEV] Invoice ${invoiceNumber} generated for ${user.email} (no RESEND_API_KEY)`);
+
+      // Email sent — update invoice status and log success
+      await ctx.runMutation(api.invoices.updateInvoiceStatus, {
+        invoiceId,
+        status: 'sent',
+      });
+
+      await ctx.runMutation(api.emailLogs.createLog, {
+        recipientEmail: user.email,
+        subject,
+        body: emailHtml,
+        userId: args.userId,
+        type: 'invoice',
+        status: 'sent',
+      });
+    } catch (err) {
+      console.error('Invoice email failed:', err);
+      await ctx.runMutation(api.emailLogs.createLog, {
+        recipientEmail: user.email,
+        subject,
+        body: 'ERROR: Failed to send',
+        userId: args.userId,
+        type: 'invoice',
+        status: 'failed',
+        error: String(err),
+      });
     }
 
     return { invoiceNumber, success: true };
