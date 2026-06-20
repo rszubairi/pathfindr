@@ -483,6 +483,29 @@ export default defineSchema({
     .index('by_corporate_user', ['corporateUserId'])
     .index('by_scholarship', ['scholarshipId']),
 
+  invoiceCounter: defineTable({
+    currentNumber: v.number(),
+  }),
+
+  invoices: defineTable({
+    userId: v.id('users'),
+    invoiceNumber: v.string(),
+    invoiceSequence: v.number(),
+    customerName: v.string(),
+    customerEmail: v.string(),
+    tier: v.union(v.literal('pro'), v.literal('expert')),
+    amount: v.number(),
+    currency: v.string(),
+    periodStart: v.string(),
+    periodEnd: v.string(),
+    pdfStorageId: v.optional(v.id('_storage')),
+    status: v.union(v.literal('generated'), v.literal('sent'), v.literal('failed')),
+    createdAt: v.string(),
+  })
+    .index('by_user_id', ['userId'])
+    .index('by_invoice_number', ['invoiceNumber'])
+    .index('by_created_at', ['createdAt']),
+
   shortUrls: defineTable({
     shortCode: v.string(),
     targetPath: v.string(),

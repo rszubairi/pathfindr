@@ -382,9 +382,11 @@ export const handleWebhook = action({
         applicationsLimit: config.applicationsLimit,
       });
 
-      await ctx.runAction(api.notificationActions.sendPaymentSuccessEmail, {
+      await ctx.runAction(api.invoiceActions.generateAndSendInvoice, {
         userId: userId as Id<'users'>,
         tier,
+        periodStart: now.toISOString(),
+        periodEnd: oneYearLater.toISOString(),
       });
     }
 
