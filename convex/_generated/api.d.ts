@@ -36,6 +36,8 @@ import type * as internationalSchoolsSeed from "../internationalSchoolsSeed.js";
 import type * as internshipApplications from "../internshipApplications.js";
 import type * as internshipPayments from "../internshipPayments.js";
 import type * as internships from "../internships.js";
+import type * as invoiceActions from "../invoiceActions.js";
+import type * as invoices from "../invoices.js";
 import type * as kidProfiles from "../kidProfiles.js";
 import type * as leaderboard from "../leaderboard.js";
 import type * as notificationActions from "../notificationActions.js";
@@ -103,6 +105,8 @@ declare const fullApi: ApiFromModules<{
   internshipApplications: typeof internshipApplications;
   internshipPayments: typeof internshipPayments;
   internships: typeof internships;
+  invoiceActions: typeof invoiceActions;
+  invoices: typeof invoices;
   kidProfiles: typeof kidProfiles;
   leaderboard: typeof leaderboard;
   notificationActions: typeof notificationActions;

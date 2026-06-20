@@ -333,7 +333,7 @@ export const generateAndSendInvoice = action({
     }
 
     // Store PDF in Convex file storage for audit
-    const blob = new Blob([pdfBuffer], { type: 'application/pdf' });
+    const blob = new Blob([new Uint8Array(pdfBuffer)], { type: 'application/pdf' });
     const pdfStorageId = await ctx.storage.store(blob);
 
     await ctx.runMutation(api.invoices.updateInvoiceStatus, {
