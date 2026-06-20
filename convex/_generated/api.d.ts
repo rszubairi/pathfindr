@@ -25,7 +25,6 @@ import type * as corporateDonationActions from "../corporateDonationActions.js";
 import type * as corporateDonations from "../corporateDonations.js";
 import type * as courses from "../courses.js";
 import type * as crons from "../crons.js";
-import type * as devTools from "../devTools.js";
 import type * as emailLogs from "../emailLogs.js";
 import type * as enrollments from "../enrollments.js";
 import type * as http from "../http.js";
@@ -95,7 +94,6 @@ declare const fullApi: ApiFromModules<{
   corporateDonations: typeof corporateDonations;
   courses: typeof courses;
   crons: typeof crons;
-  devTools: typeof devTools;
   emailLogs: typeof emailLogs;
   enrollments: typeof enrollments;
   http: typeof http;
