@@ -5,7 +5,6 @@ import { v } from 'convex/values';
 import { api } from './_generated/api';
 import { Id } from './_generated/dataModel';
 import { Resend } from 'resend';
-import PDFDocument from 'pdfkit';
 
 // ─── Company Details ─────────────────────────────────────────
 const COMPANY = {
@@ -35,6 +34,9 @@ function formatDate(iso: string): string {
   });
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type PDFDocumentType = any;
+
 async function generateInvoicePdf(data: {
   invoiceNumber: string;
   invoiceDate: string;
@@ -46,8 +48,11 @@ async function generateInvoicePdf(data: {
   periodStart: string;
   periodEnd: string;
 }): Promise<Buffer> {
+  // Dynamic import so Next.js build never statically resolves this Node-only module
+  const { default: PDFDocument } = await import('pdfkit') as { default: new (opts: object) => PDFDocumentType };
+
   return new Promise((resolve, reject) => {
-    const doc = new PDFDocument({ margin: 50, size: 'A4' });
+    const doc: PDFDocumentType = new PDFDocument({ margin: 50, size: 'A4' });
     const chunks: Buffer[] = [];
 
     doc.on('data', (c: Buffer) => chunks.push(c));
