@@ -5,13 +5,14 @@ import { v } from 'convex/values';
 import { api } from './_generated/api';
 import { Id } from './_generated/dataModel';
 import { Resend } from 'resend';
+import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 
 // ─── Company Details ─────────────────────────────────────────
 const COMPANY = {
   name: 'Pathfindr',
   email: 'enquiries@thepathfindr.com',
   phone: '+60 13-299 3439',
-  address: '35-1 Jalan PJS 5/30, Petaling Jaya Commercial City,\n46510 Petaling Jaya, Selangor, Malaysia',
+  address: '35-1 Jalan PJS 5/30, Petaling Jaya Commercial City, 46510 Petaling Jaya, Selangor, Malaysia',
   website: 'www.thepathfindr.com',
 };
 
@@ -20,7 +21,7 @@ const TIER_CONFIG = {
   expert: { label: 'Expert Plan (Annual)', amount: 225, applicationsLimit: 20 },
 };
 
-// ─── PDF Generation ──────────────────────────────────────────
+// ─── Helpers ─────────────────────────────────────────────────
 
 function formatInvoiceNumber(seq: number): string {
   return `INV-${String(seq).padStart(4, '0')}`;
@@ -34,8 +35,12 @@ function formatDate(iso: string): string {
   });
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type PDFDocumentType = any;
+function hex(h: string): [number, number, number] {
+  const n = parseInt(h.replace('#', ''), 16);
+  return [(n >> 16) / 255, ((n >> 8) & 0xff) / 255, (n & 0xff) / 255];
+}
+
+// ─── PDF Generation (pdf-lib — no font files needed) ─────────
 
 async function generateInvoicePdf(data: {
   invoiceNumber: string;
@@ -48,234 +53,144 @@ async function generateInvoicePdf(data: {
   periodStart: string;
   periodEnd: string;
 }): Promise<Buffer> {
-  // Dynamic import so Next.js build never statically resolves this Node-only module
-  const { default: PDFDocument } = await import('pdfkit') as { default: new (opts: object) => PDFDocumentType };
+  const tierConf = TIER_CONFIG[data.tier];
 
-  return new Promise((resolve, reject) => {
-    const doc: PDFDocumentType = new PDFDocument({ margin: 50, size: 'A4' });
-    const chunks: Buffer[] = [];
+  const pdfDoc = await PDFDocument.create();
+  const page = pdfDoc.addPage([595, 842]); // A4
+  const { width, height } = page.getSize();
 
-    doc.on('data', (c: Buffer) => chunks.push(c));
-    doc.on('end', () => resolve(Buffer.concat(chunks)));
-    doc.on('error', reject);
+  const fontRegular = await pdfDoc.embedFont(StandardFonts.Helvetica);
+  const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
-    const primaryColor = '#2563EB';
-    const darkText = '#111827';
-    const mutedText = '#6B7280';
-    const lightBg = '#F3F4F6';
-    const borderColor = '#E5E7EB';
+  const primary = rgb(...hex('#2563EB'));
+  const white = rgb(1, 1, 1);
+  const dark = rgb(...hex('#111827'));
+  const muted = rgb(...hex('#6B7280'));
+  const lightBlue = rgb(...hex('#EFF6FF'));
+  const lightGreen = rgb(...hex('#DCFCE7'));
+  const green = rgb(...hex('#166534'));
+  const lightGray = rgb(...hex('#F3F4F6'));
+  const borderGray = rgb(...hex('#E5E7EB'));
 
-    const pageWidth = doc.page.width - 100; // content width with 50px margins on each side
+  const margin = 50;
+  const contentWidth = width - margin * 2;
 
-    // ── Header Bar ──────────────────────────────────────────
-    doc.rect(50, 40, pageWidth, 70).fill(primaryColor);
+  // ── Header bar ────────────────────────────────────────────
+  page.drawRectangle({ x: margin, y: height - 120, width: contentWidth, height: 70, color: primary });
 
-    doc
-      .fillColor('#FFFFFF')
-      .fontSize(26)
-      .font('Helvetica-Bold')
-      .text(COMPANY.name, 70, 58);
+  page.drawText(COMPANY.name, { x: 70, y: height - 70, font: fontBold, size: 22, color: white });
+  page.drawText('Your path to global educational opportunities', { x: 70, y: height - 90, font: fontRegular, size: 9, color: rgb(0.75, 0.85, 0.98) });
 
-    doc
-      .fontSize(9)
-      .font('Helvetica')
-      .text('Your path to global educational opportunities', 70, 87);
+  page.drawText(COMPANY.email, { x: width - margin - 200, y: height - 60, font: fontRegular, size: 8, color: rgb(0.75, 0.85, 0.98) });
+  page.drawText(COMPANY.phone, { x: width - margin - 200, y: height - 72, font: fontRegular, size: 8, color: rgb(0.75, 0.85, 0.98) });
+  page.drawText(COMPANY.website, { x: width - margin - 200, y: height - 84, font: fontRegular, size: 8, color: rgb(0.75, 0.85, 0.98) });
 
-    // ── Company Details (right side of header) ───────────────
-    doc
-      .fontSize(8)
-      .fillColor('#DBEAFE')
-      .text(COMPANY.email, 350, 50, { align: 'right', width: pageWidth - 300 })
-      .text(COMPANY.phone, 350, 62, { align: 'right', width: pageWidth - 300 })
-      .text(COMPANY.website, 350, 74, { align: 'right', width: pageWidth - 300 });
+  // ── INVOICE title ─────────────────────────────────────────
+  page.drawText('INVOICE', { x: margin, y: height - 155, font: fontBold, size: 26, color: primary });
 
-    doc.fillColor(darkText);
+  // Invoice meta
+  const metaLabelX = 350;
+  const metaValueX = 460;
+  const metaY = height - 155;
 
-    // ── INVOICE Title ────────────────────────────────────────
-    doc
-      .fontSize(28)
-      .font('Helvetica-Bold')
-      .fillColor(primaryColor)
-      .text('INVOICE', 50, 130);
+  page.drawText('Invoice Number:', { x: metaLabelX, y: metaY, font: fontBold, size: 8, color: dark });
+  page.drawText('Issue Date:', { x: metaLabelX, y: metaY - 14, font: fontBold, size: 8, color: dark });
+  page.drawText('Due Date:', { x: metaLabelX, y: metaY - 28, font: fontBold, size: 8, color: dark });
 
-    // Invoice meta (right side)
-    const metaX = 350;
-    doc
-      .fontSize(9)
-      .font('Helvetica-Bold')
-      .fillColor(darkText)
-      .text('Invoice Number:', metaX, 130)
-      .text('Issue Date:', metaX, 145)
-      .text('Due Date:', metaX, 160);
+  page.drawText(data.invoiceNumber, { x: metaValueX, y: metaY, font: fontRegular, size: 8, color: muted });
+  page.drawText(formatDate(data.invoiceDate), { x: metaValueX, y: metaY - 14, font: fontRegular, size: 8, color: muted });
+  page.drawText(formatDate(data.invoiceDate), { x: metaValueX, y: metaY - 28, font: fontRegular, size: 8, color: muted });
 
-    doc
-      .font('Helvetica')
-      .fillColor(mutedText)
-      .text(data.invoiceNumber, metaX + 90, 130, { align: 'right', width: pageWidth - metaX + 50 })
-      .text(formatDate(data.invoiceDate), metaX + 90, 145, { align: 'right', width: pageWidth - metaX + 50 })
-      .text(formatDate(data.invoiceDate), metaX + 90, 160, { align: 'right', width: pageWidth - metaX + 50 });
+  // PAID badge
+  page.drawRectangle({ x: metaLabelX, y: metaY - 55, width: 60, height: 16, color: lightGreen });
+  page.drawText('PAID', { x: metaLabelX + 17, y: metaY - 50, font: fontBold, size: 8, color: green });
 
-    // Status badge
-    doc.rect(metaX, 175, 80, 18).fill('#DCFCE7');
-    doc
-      .fontSize(8)
-      .font('Helvetica-Bold')
-      .fillColor('#166534')
-      .text('PAID', metaX + 27, 179);
+  // ── Divider ───────────────────────────────────────────────
+  page.drawLine({ start: { x: margin, y: height - 225 }, end: { x: width - margin, y: height - 225 }, thickness: 0.5, color: borderGray });
 
-    // ── Divider ──────────────────────────────────────────────
-    doc.moveTo(50, 205).lineTo(pageWidth + 50, 205).strokeColor(borderColor).lineWidth(1).stroke();
+  // ── Bill To / From ────────────────────────────────────────
+  const sectionY = height - 250;
 
-    // ── Bill To / From ───────────────────────────────────────
-    doc
-      .fontSize(8)
-      .font('Helvetica-Bold')
-      .fillColor(mutedText)
-      .text('BILL TO', 50, 220)
-      .text('FROM', 300, 220);
+  page.drawText('BILL TO', { x: margin, y: sectionY, font: fontBold, size: 8, color: muted });
+  page.drawText('FROM', { x: 310, y: sectionY, font: fontBold, size: 8, color: muted });
 
-    doc
-      .fontSize(10)
-      .font('Helvetica-Bold')
-      .fillColor(darkText)
-      .text(data.customerName, 50, 235)
-      .text(COMPANY.name, 300, 235);
+  page.drawText(data.customerName, { x: margin, y: sectionY - 16, font: fontBold, size: 10, color: dark });
+  page.drawText(COMPANY.name, { x: 310, y: sectionY - 16, font: fontBold, size: 10, color: dark });
 
-    doc
-      .fontSize(9)
-      .font('Helvetica')
-      .fillColor(mutedText)
-      .text(data.customerEmail, 50, 250)
-      .text(COMPANY.address, 300, 250, { width: 200 });
+  page.drawText(data.customerEmail, { x: margin, y: sectionY - 30, font: fontRegular, size: 9, color: muted });
 
-    // ── Items Table ──────────────────────────────────────────
-    const tableTop = 320;
+  // Company address (two lines)
+  const addrLine1 = '35-1 Jalan PJS 5/30, Petaling Jaya Commercial City,';
+  const addrLine2 = '46510 Petaling Jaya, Selangor, Malaysia';
+  page.drawText(addrLine1, { x: 310, y: sectionY - 30, font: fontRegular, size: 8, color: muted });
+  page.drawText(addrLine2, { x: 310, y: sectionY - 42, font: fontRegular, size: 8, color: muted });
 
-    // Table header
-    doc.rect(50, tableTop, pageWidth, 28).fill(primaryColor);
+  // ── Items table ───────────────────────────────────────────
+  const tableY = height - 355;
+  const tableHeaderH = 24;
+  const rowH = 44;
 
-    doc
-      .fontSize(9)
-      .font('Helvetica-Bold')
-      .fillColor('#FFFFFF')
-      .text('Description', 65, tableTop + 9)
-      .text('Subscription Period', 250, tableTop + 9)
-      .text('Amount', pageWidth - 30, tableTop + 9, { align: 'right', width: 80 });
+  // Header
+  page.drawRectangle({ x: margin, y: tableY, width: contentWidth, height: tableHeaderH, color: primary });
+  page.drawText('Description', { x: 65, y: tableY + 8, font: fontBold, size: 9, color: white });
+  page.drawText('Subscription Period', { x: 260, y: tableY + 8, font: fontBold, size: 9, color: white });
+  page.drawText('Amount', { x: width - margin - 70, y: tableY + 8, font: fontBold, size: 9, color: white });
 
-    // Table row
-    const rowTop = tableTop + 28;
-    const tierConf = TIER_CONFIG[data.tier];
+  // Row
+  const rowY = tableY - rowH;
+  page.drawRectangle({ x: margin, y: rowY, width: contentWidth, height: rowH, color: lightGray });
 
-    doc.rect(50, rowTop, pageWidth, 40).fill(lightBg);
+  page.drawText(tierConf.label, { x: 65, y: rowY + rowH - 14, font: fontBold, size: 9, color: dark });
+  page.drawText(`Up to ${tierConf.applicationsLimit} scholarship applications`, { x: 65, y: rowY + rowH - 28, font: fontRegular, size: 8, color: muted });
 
-    doc
-      .fontSize(9)
-      .font('Helvetica-Bold')
-      .fillColor(darkText)
-      .text(tierConf.label, 65, rowTop + 8);
+  page.drawText(formatDate(data.periodStart), { x: 260, y: rowY + rowH - 14, font: fontRegular, size: 8, color: muted });
+  page.drawText(`to ${formatDate(data.periodEnd)}`, { x: 260, y: rowY + rowH - 26, font: fontRegular, size: 8, color: muted });
 
-    doc
-      .font('Helvetica')
-      .fontSize(8)
-      .fillColor(mutedText)
-      .text(`Up to ${tierConf.applicationsLimit} scholarship applications`, 65, rowTop + 22);
+  const amountStr = `${data.currency.toUpperCase()} ${data.amount.toFixed(2)}`;
+  const amountW = fontBold.widthOfTextAtSize(amountStr, 9);
+  page.drawText(amountStr, { x: width - margin - amountW, y: rowY + rowH - 20, font: fontBold, size: 9, color: dark });
 
-    doc
-      .font('Helvetica')
-      .fontSize(9)
-      .fillColor(mutedText)
-      .text(
-        `${formatDate(data.periodStart)} –\n${formatDate(data.periodEnd)}`,
-        250,
-        rowTop + 8,
-        { width: 160 }
-      );
+  // ── Totals ────────────────────────────────────────────────
+  const totalsY = rowY - 55;
+  const totalsX = width - margin - 160;
 
-    doc
-      .font('Helvetica-Bold')
-      .fontSize(9)
-      .fillColor(darkText)
-      .text(
-        `${data.currency.toUpperCase()} ${data.amount.toFixed(2)}`,
-        pageWidth - 30,
-        rowTop + 15,
-        { align: 'right', width: 80 }
-      );
+  page.drawText('Subtotal', { x: totalsX, y: totalsY + 16, font: fontRegular, size: 9, color: muted });
+  const subtotalStr = `${data.currency.toUpperCase()} ${data.amount.toFixed(2)}`;
+  const subtotalW = fontRegular.widthOfTextAtSize(subtotalStr, 9);
+  page.drawText(subtotalStr, { x: width - margin - subtotalW, y: totalsY + 16, font: fontRegular, size: 9, color: muted });
 
-    // ── Totals ────────────────────────────────────────────────
-    const totalsTop = rowTop + 60;
-    const totalsX = pageWidth - 110;
+  page.drawLine({ start: { x: totalsX, y: totalsY + 10 }, end: { x: width - margin, y: totalsY + 10 }, thickness: 0.5, color: borderGray });
 
-    doc
-      .fontSize(9)
-      .font('Helvetica')
-      .fillColor(mutedText)
-      .text('Subtotal', totalsX, totalsTop)
-      .text(`${data.currency.toUpperCase()} ${data.amount.toFixed(2)}`, totalsX + 60, totalsTop, { align: 'right', width: 90 });
+  // Total box
+  page.drawRectangle({ x: totalsX - 8, y: totalsY - 18, width: width - margin - totalsX + 8, height: 24, color: primary });
+  page.drawText('TOTAL', { x: totalsX, y: totalsY - 12, font: fontBold, size: 10, color: white });
+  const totalStr = `${data.currency.toUpperCase()} ${data.amount.toFixed(2)}`;
+  const totalW = fontBold.widthOfTextAtSize(totalStr, 10);
+  page.drawText(totalStr, { x: width - margin - totalW, y: totalsY - 12, font: fontBold, size: 10, color: white });
 
-    doc
-      .moveTo(totalsX, totalsTop + 18)
-      .lineTo(pageWidth + 50, totalsTop + 18)
-      .strokeColor(borderColor)
-      .lineWidth(0.5)
-      .stroke();
+  // ── Notes ─────────────────────────────────────────────────
+  const notesY = totalsY - 60;
+  page.drawText('NOTES', { x: margin, y: notesY, font: fontBold, size: 8, color: muted });
+  page.drawText(
+    'Thank you for subscribing to Pathfindr! Your subscription is valid for one year from the issue date.',
+    { x: margin, y: notesY - 14, font: fontRegular, size: 8, color: muted }
+  );
+  page.drawText(
+    `For any queries, contact us at ${COMPANY.email} or ${COMPANY.phone}.`,
+    { x: margin, y: notesY - 26, font: fontRegular, size: 8, color: muted }
+  );
 
-    // Total box
-    doc.rect(totalsX - 10, totalsTop + 24, pageWidth - totalsX + 60, 28).fill(primaryColor);
-    doc
-      .fontSize(10)
-      .font('Helvetica-Bold')
-      .fillColor('#FFFFFF')
-      .text('TOTAL', totalsX, totalsTop + 31)
-      .text(
-        `${data.currency.toUpperCase()} ${data.amount.toFixed(2)}`,
-        totalsX + 60,
-        totalsTop + 31,
-        { align: 'right', width: 90 }
-      );
+  // ── Footer ────────────────────────────────────────────────
+  page.drawLine({ start: { x: margin, y: 60 }, end: { x: width - margin, y: 60 }, thickness: 0.5, color: borderGray });
+  const footerText = `${COMPANY.name}  •  ${COMPANY.email}  •  ${COMPANY.phone}  •  ${COMPANY.address}`;
+  const footerW = fontRegular.widthOfTextAtSize(footerText, 7);
+  page.drawText(footerText, { x: (width - footerW) / 2, y: 46, font: fontRegular, size: 7, color: muted });
 
-    // ── Notes ─────────────────────────────────────────────────
-    const notesTop = totalsTop + 80;
+  // Indicate the lightBlue variable is used (suppress unused var)
+  void lightBlue;
 
-    doc
-      .fontSize(8)
-      .font('Helvetica-Bold')
-      .fillColor(mutedText)
-      .text('NOTES', 50, notesTop);
-
-    doc
-      .fontSize(8)
-      .font('Helvetica')
-      .fillColor(mutedText)
-      .text(
-        'Thank you for subscribing to Pathfindr! Your subscription is valid for one year from the issue date above. ' +
-        'If you have any questions about this invoice, please contact us at enquiries@thepathfindr.com.',
-        50,
-        notesTop + 14,
-        { width: pageWidth }
-      );
-
-    // ── Footer ────────────────────────────────────────────────
-    doc
-      .moveTo(50, 750)
-      .lineTo(pageWidth + 50, 750)
-      .strokeColor(borderColor)
-      .lineWidth(1)
-      .stroke();
-
-    doc
-      .fontSize(7)
-      .font('Helvetica')
-      .fillColor(mutedText)
-      .text(
-        `${COMPANY.name}  •  ${COMPANY.email}  •  ${COMPANY.phone}  •  ${COMPANY.address.replace('\n', ', ')}`,
-        50,
-        758,
-        { align: 'center', width: pageWidth }
-      );
-
-    doc.end();
-  });
+  const pdfBytes = await pdfDoc.save();
+  return Buffer.from(pdfBytes);
 }
 
 // ─── Main Invoice Action ─────────────────────────────────────
@@ -289,7 +204,7 @@ export const generateAndSendInvoice = action({
     xenditInvoiceId: v.optional(v.string()),
   },
   handler: async (ctx, args): Promise<{ invoiceNumber: string; success: boolean }> => {
-    // Deduplication: if we already have an invoice for this Xendit invoice, skip
+    // Deduplication: skip if invoice already exists for this Xendit payment
     if (args.xenditInvoiceId) {
       const existing = await ctx.runQuery(api.invoices.getByXenditInvoiceId, {
         xenditInvoiceId: args.xenditInvoiceId,
@@ -306,11 +221,9 @@ export const generateAndSendInvoice = action({
     const tierConf = TIER_CONFIG[args.tier];
     const now = new Date().toISOString();
 
-    // Get next invoice number (atomic increment)
     const seq: number = await ctx.runMutation(api.invoices.incrementCounter, {});
     const invoiceNumber = formatInvoiceNumber(seq);
 
-    // Create invoice record (without PDF yet)
     const invoiceId: Id<'invoices'> = await ctx.runMutation(api.invoices.createInvoice, {
       userId: args.userId,
       invoiceNumber,
@@ -326,8 +239,10 @@ export const generateAndSendInvoice = action({
       status: 'generated',
     });
 
-    // Generate PDF
-    let pdfBuffer: Buffer;
+    // Generate PDF — failure does NOT block the email
+    let pdfBuffer: Buffer | null = null;
+    let pdfStorageId: Id<'_storage'> | undefined;
+
     try {
       pdfBuffer = await generateInvoicePdf({
         invoiceNumber,
@@ -340,27 +255,26 @@ export const generateAndSendInvoice = action({
         periodStart: args.periodStart,
         periodEnd: args.periodEnd,
       });
-    } catch (err) {
-      console.error('PDF generation failed:', err);
+
+      const blob = new Blob([new Uint8Array(pdfBuffer)], { type: 'application/pdf' });
+      pdfStorageId = await ctx.storage.store(blob);
+
       await ctx.runMutation(api.invoices.updateInvoiceStatus, {
         invoiceId,
-        status: 'failed',
+        pdfStorageId,
+        status: 'generated',
       });
-      return { invoiceNumber, success: false };
+    } catch (err) {
+      console.error('PDF generation failed:', err);
+      // Continue — email still goes out without attachment
     }
 
-    // Store PDF in Convex file storage for audit
-    const blob = new Blob([new Uint8Array(pdfBuffer)], { type: 'application/pdf' });
-    const pdfStorageId = await ctx.storage.store(blob);
+    if (!resendApiKey) {
+      console.log(`[DEV] Invoice ${invoiceNumber} for ${user.email} — set RESEND_API_KEY to send email`);
+      return { invoiceNumber, success: true };
+    }
 
-    // Mark as generated (PDF stored); status updates to 'sent' only after email succeeds
-    await ctx.runMutation(api.invoices.updateInvoiceStatus, {
-      invoiceId,
-      pdfStorageId,
-      status: 'generated',
-    });
-
-    // Build email HTML
+    // Build email
     const whatsappLink = 'https://chat.whatsapp.com/L8h933w4nVP8yB6jXm1T7H?mode=gi_t';
     const subject = `Your Pathfindr Invoice ${invoiceNumber} – ${tierConf.label}`;
     const emailHtml = `
@@ -369,18 +283,13 @@ export const generateAndSendInvoice = action({
 <head><meta charset="utf-8"/></head>
 <body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#F9FAFB;margin:0;padding:0;">
   <div style="max-width:600px;margin:32px auto;background:#FFFFFF;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.1);">
-    <!-- Header -->
     <div style="background:#2563EB;padding:28px 32px;">
       <h1 style="color:#fff;margin:0;font-size:22px;font-weight:700;">Pathfindr</h1>
       <p style="color:#BFDBFE;margin:4px 0 0;font-size:13px;">Your path to global educational opportunities</p>
     </div>
-
-    <!-- Body -->
     <div style="padding:32px;">
       <h2 style="color:#111827;font-size:18px;margin:0 0 8px;">Payment Confirmed!</h2>
-      <p style="color:#4B5563;font-size:14px;margin:0 0 24px;">Hi ${user.fullName}, thank you for subscribing to Pathfindr. Your invoice is attached to this email.</p>
-
-      <!-- Invoice Summary Card -->
+      <p style="color:#4B5563;font-size:14px;margin:0 0 24px;">Hi ${user.fullName}, thank you for subscribing to Pathfindr. ${pdfBuffer ? 'Your invoice is attached to this email.' : 'Your invoice details are below.'}</p>
       <div style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:8px;padding:20px;margin-bottom:24px;">
         <table style="width:100%;font-size:13px;color:#374151;border-collapse:collapse;">
           <tr>
@@ -401,8 +310,6 @@ export const generateAndSendInvoice = action({
           </tr>
         </table>
       </div>
-
-      <!-- What you get -->
       <h3 style="color:#111827;font-size:14px;margin:0 0 12px;">Your subscription includes:</h3>
       <ul style="color:#4B5563;font-size:13px;padding-left:20px;margin:0 0 24px;">
         <li style="margin-bottom:6px;">Up to <strong>${tierConf.applicationsLimit} scholarship applications</strong></li>
@@ -410,57 +317,41 @@ export const generateAndSendInvoice = action({
         <li style="margin-bottom:6px;">Priority internship applications</li>
         <li style="margin-bottom:6px;">Exclusive career development resources</li>
       </ul>
-
-      <!-- WhatsApp CTA -->
       <div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;padding:16px;margin-bottom:24px;">
         <p style="color:#166534;font-size:13px;font-weight:600;margin:0 0 8px;">Join our exclusive community</p>
         <p style="color:#4B5563;font-size:12px;margin:0 0 12px;">Connect with other students, get real-time updates and scholarship tips.</p>
         <a href="${whatsappLink}" style="display:inline-block;background:#25D366;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;font-size:12px;font-weight:600;">Join WhatsApp Group</a>
       </div>
-
-      <p style="color:#6B7280;font-size:12px;margin:0;">If you have any questions, reply to this email or contact us at <a href="mailto:${COMPANY.email}" style="color:#2563EB;">${COMPANY.email}</a> or call ${COMPANY.phone}.</p>
+      <p style="color:#6B7280;font-size:12px;margin:0;">Questions? Email <a href="mailto:${COMPANY.email}" style="color:#2563EB;">${COMPANY.email}</a> or call ${COMPANY.phone}.</p>
     </div>
-
-    <!-- Footer -->
     <div style="background:#F9FAFB;padding:16px 32px;border-top:1px solid #E5E7EB;text-align:center;">
-      <p style="color:#9CA3AF;font-size:11px;margin:0;">${COMPANY.name} • ${COMPANY.email} • ${COMPANY.phone}</p>
+      <p style="color:#9CA3AF;font-size:11px;margin:0;">${COMPANY.name}  •  ${COMPANY.email}  •  ${COMPANY.phone}</p>
       <p style="color:#9CA3AF;font-size:11px;margin:4px 0 0;">35-1 Jalan PJS 5/30, Petaling Jaya Commercial City, 46510 Petaling Jaya, Selangor, Malaysia</p>
     </div>
   </div>
 </body>
 </html>`;
 
-    // Send email with PDF attachment
-    if (!resendApiKey) {
-      console.log(`[DEV] Invoice ${invoiceNumber} generated for ${user.email} — set RESEND_API_KEY to send email`);
-      return { invoiceNumber, success: true };
-    }
-
     try {
       const resend = new Resend(resendApiKey);
-      const sendResult = await resend.emails.send({
+      const emailPayload: Parameters<typeof resend.emails.send>[0] = {
         from: 'Pathfindr <noreply@thepathfindr.com>',
         to: user.email,
         subject,
         html: emailHtml,
-        attachments: [
-          {
-            filename: `${invoiceNumber}.pdf`,
-            content: pdfBuffer.toString('base64'),
-          },
-        ],
-      });
+      };
 
-      if (sendResult.error) {
-        throw new Error(sendResult.error.message);
+      if (pdfBuffer) {
+        emailPayload.attachments = [{
+          filename: `${invoiceNumber}.pdf`,
+          content: pdfBuffer.toString('base64'),
+        }];
       }
 
-      // Email sent — update invoice status and log success
-      await ctx.runMutation(api.invoices.updateInvoiceStatus, {
-        invoiceId,
-        status: 'sent',
-      });
+      const sendResult = await resend.emails.send(emailPayload);
+      if (sendResult.error) throw new Error(sendResult.error.message);
 
+      await ctx.runMutation(api.invoices.updateInvoiceStatus, { invoiceId, status: 'sent' });
       await ctx.runMutation(api.emailLogs.createLog, {
         recipientEmail: user.email,
         subject,
