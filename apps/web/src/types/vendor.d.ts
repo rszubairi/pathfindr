@@ -6,3 +6,12 @@ declare module 'pdfkit' {
   const PDFDocument: any;
   export default PDFDocument;
 }
+
+declare module 'pdf-lib' {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  export const PDFDocument: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  export const StandardFonts: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  export function rgb(...args: number[]): any;
+}
