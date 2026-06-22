@@ -9,7 +9,8 @@ import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 
 // ─── Company Details ─────────────────────────────────────────
 const COMPANY = {
-  name: 'Pathfindr',
+  name: 'Data Analytech Sdn Bhd',
+  regNo: '202001002643 (1358962-U)',
   email: 'enquiries@thepathfindr.com',
   phone: '+60 13-299 3439',
   address: '35-1 Jalan PJS 5/30, Petaling Jaya Commercial City, 46510 Petaling Jaya, Selangor, Malaysia',
@@ -81,9 +82,9 @@ async function generateInvoicePdf(data: {
   page.drawText(COMPANY.name, { x: 70, y: height - 70, font: fontBold, size: 22, color: white });
   page.drawText('Your path to global educational opportunities', { x: 70, y: height - 90, font: fontRegular, size: 9, color: rgb(0.75, 0.85, 0.98) });
 
-  page.drawText(COMPANY.email, { x: width - margin - 200, y: height - 60, font: fontRegular, size: 8, color: rgb(0.75, 0.85, 0.98) });
-  page.drawText(COMPANY.phone, { x: width - margin - 200, y: height - 72, font: fontRegular, size: 8, color: rgb(0.75, 0.85, 0.98) });
-  page.drawText(COMPANY.website, { x: width - margin - 200, y: height - 84, font: fontRegular, size: 8, color: rgb(0.75, 0.85, 0.98) });
+  page.drawText(COMPANY.email, { x: width - margin - 200, y: height - 58, font: fontRegular, size: 8, color: rgb(0.75, 0.85, 0.98) });
+  page.drawText(COMPANY.phone, { x: width - margin - 200, y: height - 70, font: fontRegular, size: 8, color: rgb(0.75, 0.85, 0.98) });
+  page.drawText(`Reg: ${COMPANY.regNo}`, { x: width - margin - 200, y: height - 82, font: fontRegular, size: 7, color: rgb(0.75, 0.85, 0.98) });
 
   // ── INVOICE title ─────────────────────────────────────────
   page.drawText('INVOICE', { x: margin, y: height - 155, font: fontBold, size: 26, color: primary });
@@ -119,14 +120,15 @@ async function generateInvoicePdf(data: {
 
   page.drawText(data.customerEmail, { x: margin, y: sectionY - 30, font: fontRegular, size: 9, color: muted });
 
-  // Company address (two lines)
-  const addrLine1 = '35-1 Jalan PJS 5/30, Petaling Jaya Commercial City,';
-  const addrLine2 = '46510 Petaling Jaya, Selangor, Malaysia';
-  page.drawText(addrLine1, { x: 310, y: sectionY - 30, font: fontRegular, size: 8, color: muted });
-  page.drawText(addrLine2, { x: 310, y: sectionY - 42, font: fontRegular, size: 8, color: muted });
+  // Company details in FROM section
+  page.drawText(`Reg No: ${COMPANY.regNo}`, { x: 310, y: sectionY - 30, font: fontRegular, size: 8, color: muted });
+  page.drawText('35-1 Jalan PJS 5/30, Petaling Jaya Commercial City,', { x: 310, y: sectionY - 42, font: fontRegular, size: 8, color: muted });
+  page.drawText('46510 Petaling Jaya, Selangor, Malaysia', { x: 310, y: sectionY - 54, font: fontRegular, size: 8, color: muted });
+  page.drawText(COMPANY.email, { x: 310, y: sectionY - 66, font: fontRegular, size: 8, color: muted });
+  page.drawText(COMPANY.phone, { x: 310, y: sectionY - 78, font: fontRegular, size: 8, color: muted });
 
   // ── Items table ───────────────────────────────────────────
-  const tableY = height - 355;
+  const tableY = height - 390;
   const tableHeaderH = 24;
   const rowH = 44;
 
@@ -182,9 +184,12 @@ async function generateInvoicePdf(data: {
 
   // ── Footer ────────────────────────────────────────────────
   page.drawLine({ start: { x: margin, y: 60 }, end: { x: width - margin, y: 60 }, thickness: 0.5, color: borderGray });
-  const footerText = `${COMPANY.name}  •  ${COMPANY.email}  •  ${COMPANY.phone}  •  ${COMPANY.address}`;
-  const footerW = fontRegular.widthOfTextAtSize(footerText, 7);
-  page.drawText(footerText, { x: (width - footerW) / 2, y: 46, font: fontRegular, size: 7, color: muted });
+  const footerLine1 = `${COMPANY.name}  •  Reg No: ${COMPANY.regNo}  •  ${COMPANY.email}  •  ${COMPANY.phone}`;
+  const footerLine2 = COMPANY.address;
+  const footer1W = fontRegular.widthOfTextAtSize(footerLine1, 7);
+  const footer2W = fontRegular.widthOfTextAtSize(footerLine2, 7);
+  page.drawText(footerLine1, { x: (width - footer1W) / 2, y: 50, font: fontRegular, size: 7, color: muted });
+  page.drawText(footerLine2, { x: (width - footer2W) / 2, y: 38, font: fontRegular, size: 7, color: muted });
 
   // Indicate the lightBlue variable is used (suppress unused var)
   void lightBlue;
@@ -327,6 +332,7 @@ export const generateAndSendInvoice = action({
     <div style="background:#F9FAFB;padding:16px 32px;border-top:1px solid #E5E7EB;text-align:center;">
       <p style="color:#9CA3AF;font-size:11px;margin:0;">${COMPANY.name}  •  ${COMPANY.email}  •  ${COMPANY.phone}</p>
       <p style="color:#9CA3AF;font-size:11px;margin:4px 0 0;">35-1 Jalan PJS 5/30, Petaling Jaya Commercial City, 46510 Petaling Jaya, Selangor, Malaysia</p>
+      <p style="color:#9CA3AF;font-size:10px;margin:4px 0 0;">Company Registration No: ${COMPANY.regNo}</p>
     </div>
   </div>
 </body>

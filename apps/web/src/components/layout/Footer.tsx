@@ -144,9 +144,17 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-gray-200">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <p className="text-sm text-gray-500">
-              &copy; {currentYear} Pathfindr. {t('footer.allRightsReserved', { defaultValue: 'All rights reserved.' })}
-            </p>
+            <div className="space-y-1">
+              <p className="text-sm text-gray-500">
+                &copy; {currentYear} Pathfindr. {t('footer.allRightsReserved', { defaultValue: 'All rights reserved.' })}
+              </p>
+              <p className="text-xs text-gray-400 font-medium">
+                Data Analytech Sdn Bhd
+              </p>
+              <p className="text-xs text-gray-400">
+                Company Registration No: 202001002643 (1358962-U)
+              </p>
+            </div>
             <p className="text-sm text-gray-500">
               {t('footer.madeWith', { defaultValue: 'Made with' })} <span className="text-red-500">❤️</span> {t('footer.inSEA', { defaultValue: 'in Southeast Asia' })}
             </p>
