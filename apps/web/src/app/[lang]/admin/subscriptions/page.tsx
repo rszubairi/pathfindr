@@ -284,7 +284,7 @@ export default function AdminSubscriptionsPage() {
                         {formatCurrency(inv.amount, inv.currency)}
                       </TableCell>
                       <TableCell>
-                        <Badge variant={inv.status === 'failed' ? 'error' : 'success'} className="capitalize">
+                        <Badge variant={inv.status === 'failed' ? 'danger' : 'success'} className="capitalize">
                           {inv.status}
                         </Badge>
                       </TableCell>
