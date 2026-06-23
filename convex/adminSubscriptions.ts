@@ -43,21 +43,40 @@ export const getSubscriptionStats = query({
       .withIndex('by_status', (q) => q.eq('status', 'active'))
       .collect();
 
-    // Estimate revenue (assuming Pro = $199, Expert = $499)
-    // In a real app, we'd store the actual amount or fetch from Stripe
-    const totalRevenue = activeSubscriptions.reduce((acc, sub) => {
-      const amount = sub.tier === 'expert' ? 499 : 199;
-      return acc + amount;
-    }, 0);
+    const allInvoices = await ctx.db.query('invoices').collect();
+    const paidInvoices = allInvoices.filter(
+      (inv) => inv.status === 'generated' || inv.status === 'sent'
+    );
 
-    const avgCheckout = activeSubscriptions.length > 0 
-      ? totalRevenue / activeSubscriptions.length 
-      : 0;
+    const totalRevenue = paidInvoices.reduce((acc, inv) => acc + (inv.amount ?? 0), 0);
+    const avgCheckout = paidInvoices.length > 0 ? totalRevenue / paidInvoices.length : 0;
 
     return {
       totalActive: activeSubscriptions.length,
       totalRevenue,
       avgCheckout,
+      totalTransactions: paidInvoices.length,
     };
+  },
+});
+
+export const listAllInvoices = query({
+  args: {},
+  handler: async (ctx) => {
+    const invoices = await ctx.db
+      .query('invoices')
+      .order('desc')
+      .collect();
+
+    return await Promise.all(
+      invoices.map(async (inv) => {
+        const user = await ctx.db.get(inv.userId);
+        return {
+          ...inv,
+          userName: user?.fullName ?? inv.customerName,
+          userEmail: user?.email ?? inv.customerEmail,
+        };
+      })
+    );
   },
 });

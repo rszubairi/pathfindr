@@ -109,16 +109,16 @@ export const seedAdminUser = mutation({
   handler: async (ctx, args) => {
     const existing = await ctx.db
       .query('users')
-      .withIndex('by_email', (q) => q.eq('email', 'admin@pathfindr.com'))
+      .withIndex('by_email', (q) => q.eq('email', 'admin@thepathfindr.com'))
       .first();
 
     if (existing) {
-      await ctx.db.patch(existing._id, { role: 'admin', emailVerified: true });
+      await ctx.db.patch(existing._id, { role: 'admin', emailVerified: true, passwordHash: args.passwordHash });
       return { message: 'Updated existing admin user account to admin role.' };
     }
 
     const newId = await ctx.db.insert('users', {
-      email: 'admin@pathfindr.com',
+      email: 'admin@thepathfindr.com',
       passwordHash: args.passwordHash,
       fullName: 'System Admin',
       phone: '0000000000',
@@ -130,6 +130,18 @@ export const seedAdminUser = mutation({
     });
 
     return { message: 'Created new admin user successfully.' };
+  },
+});
+
+export const deleteOldAdmin = mutation({
+  handler: async (ctx) => {
+    const existing = await ctx.db
+      .query('users')
+      .withIndex('by_email', (q) => q.eq('email', 'admin@pathfindr.com'))
+      .first();
+    if (!existing) return { message: 'Old admin not found.' };
+    await ctx.db.delete(existing._id);
+    return { message: 'Deleted old admin@pathfindr.com user.' };
   },
 });
 

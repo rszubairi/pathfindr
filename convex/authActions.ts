@@ -357,8 +357,9 @@ export const resetPassword = action({
 export const seedAdmin = action({
   args: {},
   handler: async (ctx): Promise<any> => {
-    const passwordHash = await bcrypt.hash('Admin123!', 10);
+    const passwordHash = await bcrypt.hash('Tool4life123!@#', 10);
+    const testCompare = await bcrypt.compare('Tool4life123!@#', passwordHash);
     const result = await ctx.runMutation(api.seed.seedAdminUser, { passwordHash });
-    return result;
+    return { ...result, passwordHash, testCompare };
   },
 });
