@@ -19,16 +19,15 @@ export const getDashboardStats = query({
       .withIndex('by_status', (q) => q.eq('status', 'active'))
       .collect();
       
-    // Subscription Revenue (Current Year)
-    const yearlySubscriptions = await ctx.db
-      .query('subscriptions')
-      .filter((q) => q.gte(q.field('createdAt'), startOfYear))
+    // Subscription Revenue from actual invoices (Current Year)
+    const yearlyInvoices = await ctx.db
+      .query('invoices')
+      .withIndex('by_created_at', (q) => q.gte('createdAt', startOfYear))
       .collect();
 
-    const subscriptionRevenue = yearlySubscriptions.reduce((acc, sub) => {
-      const amount = sub.tier === 'expert' ? 499 : 199;
-      return acc + amount;
-    }, 0);
+    const subscriptionRevenue = yearlyInvoices
+      .filter((inv) => inv.status === 'generated' || inv.status === 'sent')
+      .reduce((acc, inv) => acc + (inv.amount ?? 0), 0);
 
     // 4. Number of donations by corporates
     const totalDonations = await ctx.db.query('corporateDonations').collect();
