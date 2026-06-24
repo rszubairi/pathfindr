@@ -507,4 +507,47 @@ export const spm2025Scholarships = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
+  {
+    name: "ASEAN Monash Malaysia Scholarship",
+    provider: "Monash University Malaysia",
+    providerType: "university" as const,
+    value: 0,
+    currency: "MYR",
+    eligibleFields: [
+      "Arts",
+      "Business",
+      "Engineering",
+      "Information Technology",
+      "Medicine",
+      "Pharmacy",
+      "Science",
+      "Social Sciences",
+    ],
+    eligibleCountries: [
+      "Brunei",
+      "Cambodia",
+      "Indonesia",
+      "Laos",
+      "Malaysia",
+      "Myanmar",
+      "Philippines",
+      "Singapore",
+      "Thailand",
+      "Timor-Leste",
+      "Vietnam",
+    ],
+    deadline: "2026-07-10T23:59:59.000Z",
+    eligibilityCriteria: {
+      requirements:
+        "Must be a citizen of an ASEAN member country. For postgraduate coursework: strong academic record and a valid offer of study from Monash University Malaysia. For graduate research: minimum Second Class Honours (H2A) or equivalent recognised by Monash University, plus English language proficiency (IELTS, TOEFL, PTE, or degree confirmation letter). Must be commencing full-time studies at Monash University Malaysia.",
+      timePeriod:
+        "July 2026 intake: 1 April – 15 April 2026. October 2026 intake: 1 April – 10 July 2026.",
+    },
+    description:
+      "The ASEAN Monash Malaysia Scholarship is offered by Monash University Malaysia to high-achieving students from ASEAN member countries commencing full-time postgraduate studies. The scholarship provides a 100% tuition fee waiver. For graduate research students (Master's by Research and PhD), an additional monthly stipend of MYR 2,950 is provided, covering up to 2 years for Master's and 3.5 years for PhD. Open to all nationalities from ASEAN, with no separate scholarship application form required for new applicants — simply apply for admission at Monash University Malaysia.",
+    applicationUrl: "https://www.monash.edu.my/mumgro/future-students/how-to-apply",
+    status: "active" as const,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
 ];
