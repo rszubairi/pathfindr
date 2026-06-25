@@ -207,6 +207,9 @@ export const generateAndSendInvoice = action({
     periodStart: v.string(),
     periodEnd: v.string(),
     xenditInvoiceId: v.optional(v.string()),
+    // Allow callers to override amount/currency (e.g. Stripe uses USD, Xendit uses MYR)
+    amountOverride: v.optional(v.number()),
+    currencyOverride: v.optional(v.string()),
   },
   handler: async (ctx, args): Promise<{ invoiceNumber: string; success: boolean }> => {
     // Deduplication: skip if invoice already exists for this Xendit payment
@@ -224,6 +227,8 @@ export const generateAndSendInvoice = action({
 
     const resendApiKey = process.env.RESEND_API_KEY;
     const tierConf = TIER_CONFIG[args.tier];
+    const amount = args.amountOverride ?? tierConf.amount;
+    const currency = args.currencyOverride ?? 'MYR';
     const now = new Date().toISOString();
 
     const seq: number = await ctx.runMutation(api.invoices.incrementCounter, {});
@@ -236,8 +241,8 @@ export const generateAndSendInvoice = action({
       customerName: user.fullName,
       customerEmail: user.email,
       tier: args.tier,
-      amount: tierConf.amount,
-      currency: 'MYR',
+      amount,
+      currency,
       periodStart: args.periodStart,
       periodEnd: args.periodEnd,
       xenditInvoiceId: args.xenditInvoiceId,
@@ -255,8 +260,8 @@ export const generateAndSendInvoice = action({
         customerName: user.fullName,
         customerEmail: user.email,
         tier: args.tier,
-        amount: tierConf.amount,
-        currency: 'MYR',
+        amount,
+        currency,
         periodStart: args.periodStart,
         periodEnd: args.periodEnd,
       });

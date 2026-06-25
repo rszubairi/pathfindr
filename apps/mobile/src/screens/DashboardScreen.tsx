@@ -1,11 +1,11 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Image, Alert, Linking } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { RootState } from '../store';
-import { useQuery } from 'convex/react';
+import { useQuery, useAction } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import type { Id } from '../../../../convex/_generated/dataModel';
 import { NotificationModal } from '../components/NotificationModal';
@@ -15,9 +15,12 @@ export function DashboardScreen() {
   const navigation = useNavigation<any>();
   const { user } = useSelector((state: RootState) => state.auth);
   const [isNotifVisible, setIsNotifVisible] = React.useState(false);
+  const [invoiceLoading, setInvoiceLoading] = useState(false);
   const { colors } = useTheme();
   const { t } = useTranslation();
   const styles = createStyles(colors);
+
+  const getInvoiceUrl = useAction(api.invoices.getInvoiceDownloadUrl);
 
   const notifications = useQuery(
     api.notifications.getScholarshipNotifications,
@@ -32,6 +35,23 @@ export function DashboardScreen() {
   );
 
   const upcomingScholarships = useQuery(api.scholarships.search, { searchQuery: '' });
+
+  const handleDownloadInvoice = async () => {
+    if (!user?.id) return;
+    setInvoiceLoading(true);
+    try {
+      const url = await getInvoiceUrl({ userId: user.id as Id<'users'> });
+      if (url) {
+        await Linking.openURL(url);
+      } else {
+        Alert.alert('Invoice not ready', 'Your invoice is still being generated. Please check your email or try again shortly.');
+      }
+    } catch {
+      Alert.alert('Error', 'Could not retrieve invoice. Please check your email.');
+    } finally {
+      setInvoiceLoading(false);
+    }
+  };
 
   const initials = user?.fullName
     ? user.fullName
@@ -114,6 +134,21 @@ export function DashboardScreen() {
                 </View>
               ))}
             </View>
+
+            <TouchableOpacity
+              style={styles.invoiceBtn}
+              onPress={handleDownloadInvoice}
+              disabled={invoiceLoading}
+            >
+              {invoiceLoading ? (
+                <ActivityIndicator size="small" color={colors.primary} />
+              ) : (
+                <>
+                  <Feather name="download" size={15} color={colors.primary} />
+                  <Text style={styles.invoiceBtnText}>Download Invoice</Text>
+                </>
+              )}
+            </TouchableOpacity>
           </View>
         ) : (
           <View style={styles.inactiveSubscriptionBox}>
@@ -412,6 +447,22 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
     color: '#fff',
     fontWeight: '600',
     fontSize: 16,
+  },
+  invoiceBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    marginTop: 12,
+    paddingVertical: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: colors.primary,
+  },
+  invoiceBtnText: {
+    color: colors.primary,
+    fontWeight: '600',
+    fontSize: 14,
   },
   featuresSection: {
     padding: 24,

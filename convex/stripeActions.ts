@@ -382,10 +382,16 @@ export const handleWebhook = action({
             applicationsLimit: getTierConfig(tier).applicationsLimit,
           });
 
-          // Send confirmation email
-          await ctx.runAction(api.notificationActions.sendPaymentSuccessEmail, {
+          // Generate invoice PDF and send confirmation email
+          const stripeAmounts: Record<string, number> = { pro: 9.99, expert: 49.99 };
+          await ctx.runAction(api.invoiceActions.generateAndSendInvoice, {
             userId: userId as Id<'users'>,
             tier,
+            periodStart: period.start,
+            periodEnd: period.end,
+            xenditInvoiceId: session.id, // Stripe session ID used as dedup key
+            amountOverride: stripeAmounts[tier],
+            currencyOverride: 'USD',
           });
         }
         break;
