@@ -40,6 +40,7 @@ import type * as invoiceActions from "../invoiceActions.js";
 import type * as invoices from "../invoices.js";
 import type * as kidProfiles from "../kidProfiles.js";
 import type * as leaderboard from "../leaderboard.js";
+import type * as migration from "../migration.js";
 import type * as notificationActions from "../notificationActions.js";
 import type * as notifications from "../notifications.js";
 import type * as partnerActions from "../partnerActions.js";
@@ -109,6 +110,7 @@ declare const fullApi: ApiFromModules<{
   invoices: typeof invoices;
   kidProfiles: typeof kidProfiles;
   leaderboard: typeof leaderboard;
+  migration: typeof migration;
   notificationActions: typeof notificationActions;
   notifications: typeof notifications;
   partnerActions: typeof partnerActions;

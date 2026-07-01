@@ -210,3 +210,17 @@ export const patchReferralReward = mutation({
     if (subscriptionId !== undefined) await ctx.db.patch(id, { subscriptionId });
   },
 });
+
+export const patchDonatedSubscription = mutation({
+  args: { id: v.id('donatedSubscriptions'), subscriptionId: v.id('subscriptions') },
+  handler: async (ctx, { id, subscriptionId }) => {
+    await ctx.db.patch(id, { subscriptionId });
+  },
+});
+
+export const exportReferralRewardsWithSub = query({
+  args: {},
+  handler: async (ctx) =>
+    ctx.db.query('referralRewards').filter(q => q.neq(q.field('subscriptionId'), undefined)).collect(),
+});
+
